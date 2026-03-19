@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Abogado Corporativo y M&A en CDMX | Ibarra Quezada Abogados</title>
+<meta name="description" content="Despacho boutique especializado en derecho corporativo, fusiones y adquisiciones (M&A) y contratos comerciales para startups y PyMEs en Ciudad de México. Primera consulta sin costo.">
+<meta name="keywords" content="abogado corporativo CDMX, abogado M&A México, asesoría legal startups, fusiones y adquisiciones PyMEs, contratos comerciales Ciudad de México, gobierno corporativo, due diligence México">
+<meta property="og:title" content="Ibarra Quezada Abogados — Derecho Corporativo y M&A en CDMX">
+<meta property="og:description" content="Despacho boutique para startups y PyMEs. Especialistas en M&A, contratos comerciales y gobierno corporativo. Primera consulta sin costo.">
+<meta property="og:url" content="https://www.ibarraquezada.com">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ibarra Quezada Abogados — Derecho Corporativo y M&A en CDMX">
+<meta name="twitter:description" content="Despacho boutique para startups y PyMEs en CDMX. M&A, contratos y gobierno corporativo.">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#CC1A27;
+  --red-dk:#A01420;
+  --red-lt:#F5E9EA;
+  --black:#0E0E0E;
+  --off-black:#181818;
+  --charcoal:#2A2A2A;
+  --gray:#6B6B6B;
+  --gray-lt:#AEAEAE;
+  --warm:#F4F3F1;
+  --white:#FFFFFF;
+  --border-light:rgba(0,0,0,0.08);
+  --border-dark:rgba(255,255,255,0.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',-apple-system,sans-serif;
+  --nav-h:64px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--sans);
+  background:var(--white);
+  color:var(--black);
+  overflow-x:hidden;
+}
+
+/* NAVIGATION */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  height:var(--nav-h);
+  z-index:1000;
+  display:flex;align-items:center;
+  padding:0 5%;
+  transition:background .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{
+  background:rgba(14,14,14,0.96);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-color:var(--border-dark);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;flex:1;
+}
+.logo-mark{
+  width:32px;height:32px;flex-shrink:0;
+}
+.logo-wordmark{
+  font-family:var(--sans);
+  font-weight:400;font-size:15px;
+  color:var(--white);
+  letter-spacing:.03em;
+}
+.logo-wordmark strong{font-weight:500}
+.nav-links{
+  display:flex;gap:32px;list-style:none;
+  align-items:center;
+}
+.nav-links a{
+  font-size:11px;font-weight:400;
+  color:rgba(255,255,255,.5);
+  text-decoration:none;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  transition:color .2s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:100%;
+  height:1px;background:var(--red);
+  transition:right .3s ease;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{right:0}
+.nav-cta{
+  margin-left:32px;
+  background:var(--red);color:var(--white);
+  border:none;padding:9px 22px;
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-radius:2px;cursor:pointer;
+  transition:background .2s;
+}
+.nav-cta:hover{background:var(--red-dk)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;margin-left:auto;padding:4px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--white);transition:.3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{
+  display:none;position:fixed;
+  top:var(--nav-h);left:0;right:0;bottom:0;
+  background:var(--off-black);
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:40px;z-index:999;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+}
+.mobile-menu.open{opacity:1;pointer-events:all}
+.mobile-menu a{
+  font-family:var(--serif);font-size:28px;
+  color:var(--white);text-decoration:none;
+  opacity:.7;transition:opacity .2s;
+}
+.mobile-menu a:hover{opacity:1}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  background:var(--black);
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 5% 0;
+  position:relative;
+  overflow:hidden;
+}
+.hero-bg-line{
+  position:absolute;
+  top:0;bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom, transparent, rgba(204,26,39,.15) 30%, rgba(204,26,39,.08) 70%, transparent);
+}
+.hero-bg-line:nth-child(1){left:33.33%}
+.hero-bg-line:nth-child(2){left:66.66%}
+.hero-noise{
+  position:absolute;inset:0;
+  opacity:.018;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+  pointer-events:none;
+}
+.hero-content{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr;
+  max-width:680px;
+  padding-top:calc(var(--nav-h) + 120px);
+  padding-bottom:80px;
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:12px;
+  font-size:10px;font-weight:500;
+  color:var(--red);
+  letter-spacing:.2em;text-transform:uppercase;
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp .8s .3s forwards;
+}
+.hero-eyebrow-line{width:32px;height:1px;background:var(--red)}
+.hero-headline{
+  font-family:var(--serif);
+  font-size:clamp(44px,5.5vw,72px);
+  font-weight:400;
+  color:var(--white);
+  line-height:1.1;
+  margin-bottom:28px;
+  opacity:0;animation:fadeUp .8s .45s forwards;
+}
+.hero-headline em{
+  font-style:italic;
+  color:rgba(255,255,255,.42);
+}
+.hero-headline .red-word{color:var(--red)}
+.hero-sub{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,.45);
+  line-height:1.8;
+  max-width:480px;
+  margin-bottom:40px;
+  opacity:0;animation:fadeUp .8s .6s forwards;
+}
+.hero-actions{
+  display:flex;gap:14px;align-items:center;
+  opacity:0;animation:fadeUp .8s .75s forwards;
+}
+.btn-primary{
+  background:var(--red);color:var(--white);
+  border:none;padding:13px 28px;
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  border-radius:2px;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:background .2s,transform .15s;
+}
+.btn-primary:hover{background:var(--red-dk);transform:translateY(-1px)}
+.btn-ghost{
+  background:transparent;color:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.18);
+  padding:12px 28px;
+  font-family:var(--sans);font-size:12px;font-weight:400;
+  letter-spacing:.08em;text-transform:uppercase;
+  border-radius:2px;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:border-color .2s,color .2s;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.4);color:var(--white)}
+
+.hero-right{
+  position:relative;
+  opacity:0;animation:fadeUp .8s .9s forwards;
+  border-radius:3px;
+  overflow:hidden;
+  min-height:320px;
+}
+.hero-img{
+  width:100%;height:100%;
+  display:block;
+}
+.hero-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(14,14,14,.55) 0%, transparent 60%),
+             linear-gradient(to top, rgba(14,14,14,.7) 0%, transparent 50%);
+}
+.hero-img-caption{
+  position:absolute;bottom:18px;left:20px;
+  font-size:10px;font-weight:500;
+  color:rgba(255,255,255,.35);
+  letter-spacing:.15em;text-transform:uppercase;
+}
+
+.hero-pills{
+  position:relative;z-index:2;
+  display:flex;flex-wrap:wrap;gap:10px;
+  padding:24px 0;
+  border-top:1px solid rgba(255,255,255,.07);
+  opacity:0;animation:fadeUp .8s 1.05s forwards;
+}
+.hero-pill{
+  font-size:11px;font-weight:400;
+  color:rgba(255,255,255,.45);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:2px;
+  padding:8px 16px;
+  letter-spacing:.05em;
+  transition:color .2s,border-color .2s;
+}
+.hero-pill:hover{color:rgba(255,255,255,.8);border-color:rgba(204,26,39,.4)}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* SECTIONS COMMON */
+section{padding:100px 5%}
+.section-header{margin-bottom:64px}
+.eyebrow{
+  font-size:10px;font-weight:500;
+  color:var(--red);
+  letter-spacing:.2em;text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--red)}
+h2.section-title{
+  font-family:var(--serif);
+  font-size:clamp(32px,3.5vw,48px);
+  font-weight:400;line-height:1.15;
+  color:var(--black);
+}
+h2.section-title em{font-style:italic;color:var(--gray)}
+.section-split{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;
+}
+
+/* PRACTICE AREAS */
+#practica{background:var(--warm)}
+.practice-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;
+  margin-top:0;
+}
+.practice-card{
+  background:var(--white);
+  padding:40px 36px;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:opacity .6s ease,transform .6s ease,background .3s;
+}
+.js-loaded .practice-card{opacity:0;transform:translateY(20px)}
+.practice-card.visible{opacity:1;transform:translateY(0)}
+.practice-card:hover{background:#FAFAFA}
+.practice-card::after{
+  content:'';position:absolute;
+  top:0;left:0;right:100%;height:2px;
+  background:var(--red);
+  transition:right .4s ease;
+}
+.practice-card:hover::after{right:0}
+.practice-num{
+  font-family:var(--serif);font-size:13px;
+  color:var(--red);margin-bottom:20px;
+  display:block;font-style:italic;
+}
+.practice-name{
+  font-family:var(--serif);font-size:22px;
+  font-weight:400;line-height:1.25;
+  color:var(--black);margin-bottom:16px;
+}
+.practice-desc{
+  font-size:13px;line-height:1.75;
+  color:var(--gray);font-weight:300;
+}
+.practice-tags{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-top:20px;
+}
+.ptag{
+  font-size:10px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--red);
+  background:var(--red-lt);
+  padding:3px 10px;border-radius:2px;
+}
+
+/* TRAYECTORIA */
+#trayectoria{background:var(--black);color:var(--white)}
+#trayectoria h2.section-title{color:var(--white)}
+#trayectoria h2.section-title em{color:rgba(255,255,255,.3)}
+.tray-intro{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,.5);
+  line-height:1.85;max-width:500px;
+}
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{
+  display:grid;grid-template-columns:80px 1fr;
+  gap:24px;
+  padding:28px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.js-loaded .timeline-item{opacity:0;transform:translateX(16px)}
+.timeline-item.visible{opacity:1;transform:translateX(0)}
+.tl-year{
+  font-family:var(--serif);font-size:13px;
+  color:var(--red);font-style:italic;
+  padding-top:3px;
+}
+.tl-body{}
+.tl-role{
+  font-size:14px;font-weight:500;
+  color:var(--white);margin-bottom:4px;
+}
+.tl-place{
+  font-size:12px;color:rgba(255,255,255,.4);
+  margin-bottom:8px;letter-spacing:.02em;
+}
+.tl-desc{
+  font-size:13px;color:rgba(255,255,255,.35);
+  line-height:1.7;font-weight:300;
+}
+
+/* EXPERIENCIA */
+#experiencia{background:var(--white)}
+.exp-cols{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:2px;margin-top:0;
+}
+.exp-col{
+  padding:36px 28px;
+  background:var(--warm);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.js-loaded .exp-col{opacity:0;transform:translateY(16px)}
+.exp-col.visible{opacity:1;transform:translateY(0)}
+.exp-icon{
+  width:32px;height:32px;margin-bottom:20px;
+}
+.exp-title{
+  font-family:var(--serif);font-size:17px;
+  color:var(--black);margin-bottom:10px;line-height:1.3;
+}
+.exp-list{
+  list-style:none;display:flex;flex-direction:column;gap:7px;
+}
+.exp-list li{
+  font-size:12px;color:var(--gray);
+  line-height:1.55;font-weight:300;
+  padding-left:14px;position:relative;
+}
+.exp-list li::before{
+  content:'';position:absolute;left:0;top:7px;
+  width:5px;height:1px;background:var(--red);
+}
+
+/* DIFERENCIADORES */
+.diff-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:40px;
+  margin-top:64px;
+  padding-top:48px;
+  border-top:1px solid var(--border-light);
+}
+.diff-item{}
+.diff-big{
+  font-family:var(--serif);font-size:48px;
+  font-weight:400;color:var(--red);
+  line-height:1;margin-bottom:8px;
+  display:block;
+}
+.diff-label{
+  font-size:12px;color:var(--gray);
+  font-weight:300;line-height:1.5;
+}
+
+/* INSIGHTS */
+#insights{background:var(--warm)}
+.insights-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:2px;margin-top:0;
+}
+.insight-card{
+  background:var(--white);
+  padding:32px;
+  display:flex;flex-direction:column;
+  cursor:pointer;
+  transition:opacity .5s ease,transform .5s ease,background .2s;
+}
+.js-loaded .insight-card{opacity:0;transform:translateY(20px)}
+.insight-card.visible{opacity:1;transform:translateY(0)}
+.insight-card:hover{background:#F8F7F5}
+.insight-cat{
+  font-size:10px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.15em;
+  color:var(--red);margin-bottom:16px;
+}
+.insight-title{
+  font-family:var(--serif);font-size:18px;
+  font-weight:400;line-height:1.4;
+  color:var(--black);margin-bottom:12px;flex:1;
+}
+.insight-excerpt{
+  font-size:12px;color:var(--gray);
+  line-height:1.7;font-weight:300;
+  margin-bottom:24px;
+}
+.insight-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:20px;
+  border-top:1px solid var(--border-light);
+}
+.insight-date{font-size:11px;color:var(--gray-lt)}
+.insight-arrow{
+  font-size:16px;color:var(--red);
+  transition:transform .2s;
+}
+.insight-card:hover .insight-arrow{transform:translate(4px,-2px)}
+
+/* CONTACTO */
+#contacto{background:var(--black);color:var(--white)}
+.contact-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:start;
+}
+#contacto h2.section-title{color:var(--white)}
+#contacto h2.section-title em{color:rgba(255,255,255,.3)}
+.contact-intro{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,.45);
+  line-height:1.85;margin-bottom:40px;
+}
+.contact-detail{
+  display:flex;flex-direction:column;gap:18px;
+}
+.contact-item{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:18px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.contact-item:last-child{border-bottom:none}
+.ci-label{
+  font-size:10px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.12em;
+  color:rgba(255,255,255,.3);
+  min-width:80px;padding-top:2px;
+}
+.ci-value{
+  font-size:14px;color:rgba(255,255,255,.7);
+  font-weight:300;text-decoration:none;
+  transition:color .2s;
+}
+.ci-value:hover{color:var(--white)}
+.contact-form{
+  display:flex;flex-direction:column;gap:16px;
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{
+  font-size:10px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:rgba(255,255,255,.3);
+}
+.form-group input,
+.form-group textarea,
+.form-group select{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:2px;
+  padding:12px 14px;
+  font-family:var(--sans);font-size:13px;
+  color:var(--white);font-weight:300;
+  outline:none;
+  transition:border-color .2s;
+  -webkit-appearance:none;
+}
+.form-group select{cursor:pointer}
+.form-group select option{background:var(--charcoal)}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+  border-color:rgba(204,26,39,.5);
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder{
+  color:rgba(255,255,255,.2);
+}
+.form-group textarea{resize:none;height:110px}
+.form-submit{
+  background:var(--red);color:var(--white);
+  border:none;padding:14px 32px;
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-radius:2px;cursor:pointer;
+  margin-top:4px;
+  transition:background .2s,transform .15s;
+  align-self:flex-start;
+}
+.form-submit:hover{background:var(--red-dk);transform:translateY(-1px)}
+.form-note{
+  font-size:11px;color:rgba(255,255,255,.2);
+  line-height:1.6;margin-top:8px;
+}
+
+/* FOOTER */
+footer{
+  background:var(--off-black);
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:40px 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+.footer-left{display:flex;align-items:center;gap:12px}
+.footer-copy{
+  font-size:11px;color:rgba(255,255,255,.25);
+  font-weight:300;
+}
+.footer-links{display:flex;gap:24px}
+.footer-links a{
+  font-size:11px;color:rgba(255,255,255,.3);
+  text-decoration:none;
+  transition:color .2s;
+}
+.footer-links a:hover{color:rgba(255,255,255,.7)}
+.footer-badge{
+  font-size:10px;color:rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.08);
+  padding:5px 12px;border-radius:2px;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  z-index:2;opacity:0;
+  animation:fadeUp .8s 1.4s forwards;
+}
+.scroll-hint span{
+  font-size:9px;color:rgba(255,255,255,.25);
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,rgba(204,26,39,.5),transparent);
+  animation:scrollDown 1.8s ease-in-out infinite;
+}
+@keyframes scrollDown{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+
+/* RED SECTION DIVIDER */
+.red-divider{height:3px;background:var(--red)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-content{padding-top:calc(var(--nav-h) + 80px)}
+  .hero-pills{gap:8px}
+  .section-split{grid-template-columns:1fr;gap:40px}
+  .exp-cols{grid-template-columns:1fr}
+  .diff-row{grid-template-columns:1fr 1fr}
+  .insights-grid{grid-template-columns:1fr}
+  .contact-wrap{grid-template-columns:1fr;gap:48px}
+  .form-row{grid-template-columns:1fr}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .mobile-menu{display:flex}
+}
+/* WHATSAPP FLOATING BUTTON */
+.wa-btn{
+  position:fixed;bottom:28px;right:28px;
+  z-index:9999;
+  width:56px;height:56px;
+  background:#25D366;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  cursor:pointer;
+  text-decoration:none;
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity .5s ease,transform .5s ease,box-shadow .2s;
+}
+.wa-btn.wa-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.wa-btn:hover{
+  transform:translateY(0) scale(1.08);
+  box-shadow:0 6px 28px rgba(37,211,102,.55);
+}
+.wa-btn .wa-tooltip{
+  position:absolute;right:68px;
+  background:var(--off-black);
+  color:rgba(255,255,255,.85);
+  font-family:var(--sans);font-size:11px;font-weight:400;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  padding:7px 12px;
+  border-radius:3px;
+  pointer-events:none;
+  opacity:0;
+  transform:translateX(6px);
+  transition:opacity .2s,transform .2s;
+}
+.wa-btn .wa-tooltip::after{
+  content:'';position:absolute;
+  right:-5px;top:50%;transform:translateY(-50%);
+  border:5px solid transparent;
+  border-right:none;
+  border-left-color:var(--off-black);
+}
+.wa-btn:hover .wa-tooltip{opacity:1;transform:translateX(0)}
+/* DIRECTOR PHOTO */
+.director-photo-wrap{
+  margin-bottom:28px;
+  display:flex;align-items:flex-start;gap:24px;
+}
+.director-photo{
+  width:110px;height:110px;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:center top;
+  flex-shrink:0;
+  border:2px solid rgba(204,26,39,.35);
+  box-shadow:0 0 0 4px rgba(204,26,39,.08);
+}
+@media(max-width:600px){
+  .director-photo{width:80px;height:80px}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "name": "Ibarra Quezada Abogados",
+  "description": "Despacho boutique especializado en derecho corporativo, M&A y contratos comerciales para startups y PyMEs en CDMX.",
+  "url": "https://www.ibarraquezada.com",
+  "telephone": "+525611259959",
+  "email": "contacto@ibarraquezada.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Ciudad de México",
+    "addressRegion": "CDMX",
+    "addressCountry": "MX"
+  },
+  "areaServed": "Ciudad de México",
+  "founder": {
+    "@type": "Person",
+    "name": "Juan Carlos Ibarra Quezada",
+    "jobTitle": "Director y Abogado Corporativo"
+  },
+  "knowsAbout": ["Derecho Corporativo", "M&A", "Fusiones y Adquisiciones",
+  "Contratos Comerciales", "Gobierno Corporativo", "Compliance", "Startups", "PyMEs"]
+}
+</script>
+</head>
+<body>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a class="wa-btn" href="https://wa.me/525611259959?text=Hola%2C%20me%20interesa%20una%20consulta%20inicial" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2.4C8.49 2.4 2.4 8.49 2.4 16c0 2.38.63 4.74 1.83 6.82L2.4 29.6l6.96-1.82A13.54 13.54 0 0 0 16 29.6c7.51 0 13.6-6.09 13.6-13.6S23.51 2.4 16 2.4z" fill="#25D366"/>
+    <path d="M22.7 19.47c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07a8.18 8.18 0 0 1-2.4-1.48 9 9 0 0 1-1.66-2.07c-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.8.37c-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.09 4.49.71.31 1.27.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" fill="#fff"/>
+  </svg>
+  <span class="wa-tooltip">Escríbenos por WhatsApp</span>
+</a>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg class="logo-mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="15" r="9.5" stroke="#CC1A27" stroke-width="2" stroke-dasharray="46 14" stroke-dashoffset="7"/>
+      <line x1="16" y1="1" x2="16" y2="29" stroke="#6B6B6B" stroke-width="2"/>
+      <line x1="16" y1="24.5" x2="16" y2="31" stroke="#CC1A27" stroke-width="2.5"/>
+    </svg>
+    <span class="logo-wordmark"><strong>Ibarra Quezada</strong> Abogados</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#practica">Práctica</a></li>
+    <li><a href="#trayectoria">Nosotros</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#insights">Insights</a></li>
+  </ul>
+  <button class="nav-cta" onclick="scrollToContact()">Contacto</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#practica" onclick="toggleMenu()">Práctica</a>
+  <a href="#trayectoria" onclick="toggleMenu()">Nosotros</a>
+  <a href="#experiencia" onclick="toggleMenu()">Experiencia</a>
+  <a href="#insights" onclick="toggleMenu()">Insights</a>
+  <a href="#contacto" onclick="toggleMenu()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-line"></div>
+  <div class="hero-bg-line"></div>
+  <div class="hero-noise"></div>
+
+  <!-- SVG background building illustration -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:1;" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1f0406"/>
+        <stop offset="60%" stop-color="#130e10"/>
+        <stop offset="100%" stop-color="#0e0e0e"/>
+      </linearGradient>
+      <linearGradient id="tower-main" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a2020"/>
+        <stop offset="100%" stop-color="#181212"/>
+      </linearGradient>
+      <linearGradient id="tower-left" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#222222"/>
+        <stop offset="100%" stop-color="#151515"/>
+      </linearGradient>
+      <linearGradient id="tower-right" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#201e1e"/>
+        <stop offset="100%" stop-color="#161414"/>
+      </linearGradient>
+      <linearGradient id="glow-overlay" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#CC1A27" stop-opacity=".08"/>
+        <stop offset="50%" stop-color="#CC1A27" stop-opacity=".04"/>
+        <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+      </linearGradient>
+      <!-- Fade left so text stays readable -->
+      <linearGradient id="fade-l" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#0e0e0e" stop-opacity="1"/>
+        <stop offset="28%" stop-color="#0e0e0e" stop-opacity=".5"/>
+        <stop offset="50%" stop-color="#0e0e0e" stop-opacity=".1"/>
+        <stop offset="100%" stop-color="#0e0e0e" stop-opacity="0"/>
+      </linearGradient>
+      <!-- Fade bottom -->
+      <linearGradient id="fade-b" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="70%" stop-color="transparent"/>
+        <stop offset="100%" stop-color="#0e0e0e"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Sky -->
+    <rect width="1400" height="900" fill="url(#sky-grad)"/>
+
+    <!-- Distant city silhouette (far back) -->
+    <rect x="500" y="560" width="30" height="340" fill="#181818"/>
+    <rect x="540" y="520" width="25" height="380" fill="#1a1a1a"/>
+    <rect x="580" y="540" width="40" height="360" fill="#181818"/>
+    <rect x="630" y="500" width="28" height="400" fill="#1c1c1c"/>
+    <rect x="670" y="530" width="35" height="370" fill="#191919"/>
+    <rect x="1200" y="500" width="40" height="400" fill="#181818"/>
+    <rect x="1250" y="480" width="30" height="420" fill="#1a1a1a"/>
+    <rect x="1290" y="510" width="50" height="390" fill="#181818"/>
+    <rect x="1350" y="470" width="50" height="430" fill="#1c1c1c"/>
+
+    <!-- LEFT TOWER — tall slim -->
+    <rect x="620" y="120" width="110" height="780" fill="url(#tower-left)"/>
+    <!-- window grid left tower -->
+    <g stroke="#ffffff" stroke-opacity=".055" stroke-width=".8">
+      <line x1="637" y1="120" x2="637" y2="900"/>
+      <line x1="654" y1="120" x2="654" y2="900"/>
+      <line x1="671" y1="120" x2="671" y2="900"/>
+      <line x1="688" y1="120" x2="688" y2="900"/>
+      <line x1="705" y1="120" x2="705" y2="900"/>
+      <line x1="722" y1="120" x2="722" y2="900"/>
+    </g>
+    <g stroke="#ffffff" stroke-opacity=".045" stroke-width=".6">
+      <line x1="620" y1="145" x2="730" y2="145"/>
+      <line x1="620" y1="168" x2="730" y2="168"/>
+      <line x1="620" y1="191" x2="730" y2="191"/>
+      <line x1="620" y1="214" x2="730" y2="214"/>
+      <line x1="620" y1="237" x2="730" y2="237"/>
+      <line x1="620" y1="260" x2="730" y2="260"/>
+      <line x1="620" y1="283" x2="730" y2="283"/>
+      <line x1="620" y1="306" x2="730" y2="306"/>
+      <line x1="620" y1="329" x2="730" y2="329"/>
+      <line x1="620" y1="352" x2="730" y2="352"/>
+      <line x1="620" y1="375" x2="730" y2="375"/>
+      <line x1="620" y1="398" x2="730" y2="398"/>
+      <line x1="620" y1="421" x2="730" y2="421"/>
+      <line x1="620" y1="444" x2="730" y2="444"/>
+      <line x1="620" y1="467" x2="730" y2="467"/>
+      <line x1="620" y1="490" x2="730" y2="490"/>
+      <line x1="620" y1="513" x2="730" y2="513"/>
+      <line x1="620" y1="536" x2="730" y2="536"/>
+    </g>
+    <!-- accent line top left tower -->
+    <rect x="620" y="120" width="110" height="2.5" fill="#CC1A27" opacity=".5"/>
+
+    <!-- MAIN CENTER TOWER — widest, tallest -->
+    <rect x="800" y="30" width="280" height="870" fill="url(#tower-main)"/>
+    <!-- Glass facade grid main -->
+    <g stroke="#CC1A27" stroke-opacity=".14" stroke-width=".8">
+      <line x1="828" y1="30" x2="828" y2="900"/>
+      <line x1="856" y1="30" x2="856" y2="900"/>
+      <line x1="884" y1="30" x2="884" y2="900"/>
+      <line x1="912" y1="30" x2="912" y2="900"/>
+      <line x1="940" y1="30" x2="940" y2="900"/>
+      <line x1="968" y1="30" x2="968" y2="900"/>
+      <line x1="996" y1="30" x2="996" y2="900"/>
+      <line x1="1024" y1="30" x2="1024" y2="900"/>
+      <line x1="1052" y1="30" x2="1052" y2="900"/>
+    </g>
+    <g stroke="#CC1A27" stroke-opacity=".1" stroke-width=".6">
+      <line x1="800" y1="60" x2="1080" y2="60"/>
+      <line x1="800" y1="90" x2="1080" y2="90"/>
+      <line x1="800" y1="120" x2="1080" y2="120"/>
+      <line x1="800" y1="150" x2="1080" y2="150"/>
+      <line x1="800" y1="180" x2="1080" y2="180"/>
+      <line x1="800" y1="210" x2="1080" y2="210"/>
+      <line x1="800" y1="240" x2="1080" y2="240"/>
+      <line x1="800" y1="270" x2="1080" y2="270"/>
+      <line x1="800" y1="300" x2="1080" y2="300"/>
+      <line x1="800" y1="330" x2="1080" y2="330"/>
+      <line x1="800" y1="360" x2="1080" y2="360"/>
+      <line x1="800" y1="390" x2="1080" y2="390"/>
+      <line x1="800" y1="420" x2="1080" y2="420"/>
+      <line x1="800" y1="450" x2="1080" y2="450"/>
+      <line x1="800" y1="480" x2="1080" y2="480"/>
+      <line x1="800" y1="510" x2="1080" y2="510"/>
+      <line x1="800" y1="540" x2="1080" y2="540"/>
+      <line x1="800" y1="570" x2="1080" y2="570"/>
+      <line x1="800" y1="600" x2="1080" y2="600"/>
+      <line x1="800" y1="630" x2="1080" y2="630"/>
+      <line x1="800" y1="660" x2="1080" y2="660"/>
+      <line x1="800" y1="690" x2="1080" y2="690"/>
+      <line x1="800" y1="720" x2="1080" y2="720"/>
+      <line x1="800" y1="750" x2="1080" y2="750"/>
+      <line x1="800" y1="780" x2="1080" y2="780"/>
+      <line x1="800" y1="810" x2="1080" y2="810"/>
+      <line x1="800" y1="840" x2="1080" y2="840"/>
+      <line x1="800" y1="870" x2="1080" y2="870"/>
+    </g>
+    <!-- glow overlay main tower -->
+    <rect x="800" y="30" width="280" height="870" fill="url(#glow-overlay)"/>
+    <!-- Red accent top main -->
+    <rect x="800" y="30" width="280" height="3" fill="#CC1A27" opacity=".8"/>
+    <!-- subtle red glow at top -->
+    <rect x="800" y="30" width="280" height="60" fill="#CC1A27" opacity=".04"/>
+
+    <!-- RIGHT TOWER -->
+    <rect x="1090" y="180" width="180" height="720" fill="url(#tower-right)"/>
+    <g stroke="#ffffff" stroke-opacity=".05" stroke-width=".7">
+      <line x1="1108" y1="180" x2="1108" y2="900"/>
+      <line x1="1126" y1="180" x2="1126" y2="900"/>
+      <line x1="1144" y1="180" x2="1144" y2="900"/>
+      <line x1="1162" y1="180" x2="1162" y2="900"/>
+      <line x1="1180" y1="180" x2="1180" y2="900"/>
+      <line x1="1198" y1="180" x2="1198" y2="900"/>
+      <line x1="1216" y1="180" x2="1216" y2="900"/>
+      <line x1="1234" y1="180" x2="1234" y2="900"/>
+      <line x1="1252" y1="180" x2="1252" y2="900"/>
+    </g>
+    <g stroke="#ffffff" stroke-opacity=".04" stroke-width=".5">
+      <line x1="1090" y1="206" x2="1270" y2="206"/>
+      <line x1="1090" y1="232" x2="1270" y2="232"/>
+      <line x1="1090" y1="258" x2="1270" y2="258"/>
+      <line x1="1090" y1="284" x2="1270" y2="284"/>
+      <line x1="1090" y1="310" x2="1270" y2="310"/>
+      <line x1="1090" y1="336" x2="1270" y2="336"/>
+      <line x1="1090" y1="362" x2="1270" y2="362"/>
+      <line x1="1090" y1="388" x2="1270" y2="388"/>
+      <line x1="1090" y1="414" x2="1270" y2="414"/>
+      <line x1="1090" y1="440" x2="1270" y2="440"/>
+      <line x1="1090" y1="466" x2="1270" y2="466"/>
+      <line x1="1090" y1="492" x2="1270" y2="492"/>
+      <line x1="1090" y1="518" x2="1270" y2="518"/>
+      <line x1="1090" y1="544" x2="1270" y2="544"/>
+      <line x1="1090" y1="570" x2="1270" y2="570"/>
+      <line x1="1090" y1="596" x2="1270" y2="596"/>
+    </g>
+    <rect x="1090" y="180" width="180" height="2.5" fill="#CC1A27" opacity=".4"/>
+
+    <!-- LIT WINDOWS — main tower, red-tinted -->
+    <rect x="831" y="63" width="22" height="24" fill="#CC1A27" opacity=".5"/>
+    <rect x="859" y="63" width="22" height="24" fill="#CC1A27" opacity=".3"/>
+    <rect x="915" y="93" width="22" height="24" fill="#CC1A27" opacity=".4"/>
+    <rect x="971" y="63" width="22" height="24" fill="#CC1A27" opacity=".35"/>
+    <rect x="999" y="93" width="22" height="24" fill="#CC1A27" opacity=".25"/>
+    <rect x="859" y="123" width="22" height="24" fill="#CC1A27" opacity=".22"/>
+    <rect x="943" y="153" width="22" height="24" fill="#CC1A27" opacity=".2"/>
+    <!-- warm-lit windows -->
+    <rect x="831" y="183" width="22" height="24" fill="#f0d080" opacity=".28"/>
+    <rect x="887" y="213" width="22" height="24" fill="#f0d080" opacity=".22"/>
+    <rect x="971" y="183" width="22" height="24" fill="#f0d080" opacity=".25"/>
+    <rect x="1027" y="153" width="22" height="24" fill="#f0d080" opacity=".2"/>
+    <rect x="1055" y="213" width="22" height="24" fill="#f0d080" opacity=".18"/>
+    <!-- left tower windows -->
+    <rect x="640" y="148" width="14" height="18" fill="#f0d080" opacity=".2"/>
+    <rect x="657" y="171" width="14" height="18" fill="#f0d080" opacity=".16"/>
+    <rect x="674" y="148" width="14" height="18" fill="#CC1A27" opacity=".3"/>
+    <rect x="708" y="194" width="14" height="18" fill="#f0d080" opacity=".18"/>
+    <!-- right tower windows -->
+    <rect x="1111" y="209" width="14" height="20" fill="#f0d080" opacity=".2"/>
+    <rect x="1147" y="235" width="14" height="20" fill="#CC1A27" opacity=".3"/>
+    <rect x="1183" y="209" width="14" height="20" fill="#f0d080" opacity=".18"/>
+    <rect x="1219" y="261" width="14" height="20" fill="#f0d080" opacity=".15"/>
+
+    <!-- Fade overlays -->
+    <rect width="1400" height="900" fill="url(#fade-l)"/>
+    <rect width="1400" height="900" fill="url(#fade-b)"/>
+  </svg>
+
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-line"></span>
+        Despacho Corporativo · México
+      </div>
+      <h1 class="hero-headline">
+        Asesoría legal<br/>
+        para empresas<br/>
+        <em>que crecen.</em>
+      </h1>
+      <p class="hero-sub">
+        Soluciones corporativas, M&amp;A y contratos comerciales para startups y PyMEs con visión internacional. Enfoque boutique. Ejecución de primer nivel.
+      </p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn-primary">Agenda una consulta</a>
+        <a href="#practica" class="btn-ghost">Ver áreas de práctica</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-pills">
+    <span class="hero-pill">Corporativo &amp; Societario</span>
+    <span class="hero-pill">Fusiones &amp; Adquisiciones</span>
+    <span class="hero-pill">Contratos Comerciales</span>
+    <span class="hero-pill">Gobierno Corporativo</span>
+    <span class="hero-pill">Compliance</span>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<div class="red-divider"></div>
+
+<!-- PRÁCTICA -->
+<section id="practica">
+  <div class="section-header">
+    <div class="eyebrow">Áreas de práctica</div>
+    <h2 class="section-title">Soluciones legales <em>estratégicas</em><br/>para negocios que escalan</h2>
+  </div>
+  <div class="practice-grid">
+    <div class="practice-card reveal">
+      <span class="practice-num">01</span>
+      <div class="practice-name">Derecho Corporativo<br/>y Societario</div>
+      <p class="practice-desc">Constitución, reestructura y operación de sociedades mercantiles. Pactos de accionistas, asambleas, órganos de gobierno y documentación societaria. Asesoría estratégica para empresas en todas sus etapas de desarrollo.</p>
+      <div class="practice-tags">
+        <span class="ptag">Constitución</span>
+        <span class="ptag">Pacto de accionistas</span>
+        <span class="ptag">Reestructura</span>
+        <span class="ptag">Gobierno societario</span>
+      </div>
+    </div>
+    <div class="practice-card reveal">
+      <span class="practice-num">02</span>
+      <div class="practice-name">Contratos Comerciales<br/>y de Servicios</div>
+      <p class="practice-desc">Diseño, revisión y negociación de contratos comerciales complejos: distribución, agencia, intermediación, servicios logísticos, franquicias y acuerdos marco. Protección de los intereses del cliente desde el primer borrador.</p>
+      <div class="practice-tags">
+        <span class="ptag">Redlining</span>
+        <span class="ptag">Negociación</span>
+        <span class="ptag">Templates a medida</span>
+      </div>
+    </div>
+    <div class="practice-card reveal">
+      <span class="practice-num">03</span>
+      <div class="practice-name">Gobierno Corporativo<br/>y Estructura Societaria</div>
+      <p class="practice-desc">Diseño e implementación de estructuras de gobierno para empresas en crecimiento. Asambleas, minutas, actualización de estatutos y protocolos internos de toma de decisiones. Para empresas que ya operan y necesitan formalizar cómo se gobiernan.</p>
+      <div class="practice-tags">
+        <span class="ptag">Asambleas de accionistas y consejo</span>
+        <span class="ptag">Actualización de estatutos</span>
+        <span class="ptag">Minutas y acuerdos corporativos</span>
+        <span class="ptag">Protocolos de decisión</span>
+        <span class="ptag">Legal ops para escala</span>
+        <span class="ptag">Órganos de gobierno</span>
+      </div>
+    </div>
+    <div class="practice-card reveal">
+      <span class="practice-num">04</span>
+      <div class="practice-name">Compliance y<br/>Protección de Datos</div>
+      <p class="practice-desc">Diagnóstico y cumplimiento normativo en LFPDPPP, LFRIORPI y regulación sectorial. Políticas internas, avisos de privacidad, gestión de riesgos legales y acompañamiento ante autoridades. Legaltech aplicado a compliance.</p>
+      <div class="practice-tags">
+        <span class="ptag">LFPDPPP</span>
+        <span class="ptag">PLD/AML</span>
+        <span class="ptag">Políticas internas</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAYECTORIA -->
+<section id="trayectoria">
+  <div class="section-split">
+    <div>
+      <div class="eyebrow" style="color:var(--red)">Quiénes somos</div>
+      <h2 class="section-title" style="color:var(--white)">Un despacho con<br/><em style="color:rgba(255,255,255,.3)">experiencia real.</em></h2>
+      <p class="tray-intro" style="margin-top:24px">
+        Ibarra Quezada Abogados nació de la convicción de que las empresas medianas y en crecimiento merecen el mismo nivel de asesoría legal que reciben las grandes corporaciones, sin la burocracia ni los costos de una firma de escala.
+      </p>
+      <p class="tray-intro" style="margin-top:16px">
+        Combinamos la precisión técnica de la práctica corporativa de alto nivel con la agilidad y visión estratégica que requieren los fundadores, directores y CFOs que toman decisiones importantes todos los días.
+      </p>
+      <div style="margin-top:40px;padding:24px;border:1px solid rgba(255,255,255,.1);border-radius:3px;border-left:3px solid var(--red)">
+        <p style="font-family:var(--serif);font-size:18px;font-style:italic;color:rgba(255,255,255,.7);line-height:1.6;font-weight:400">"El derecho corporativo no es un obstáculo para los negocios. Es la arquitectura que los hace posibles."</p>
+        <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:12px;letter-spacing:.05em">— Juan Carlos Ibarra Quezada, Director del despacho</p>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,.25);margin-bottom:24px">Semblanza</div>
+
+      <!-- Director photo -->
+      <div class="director-photo-wrap">
+        <img src="data:image/jpeg;base64,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" alt="Juan Carlos Ibarra Quezada — Abogado Corporativo y M&amp;A, CDMX" class="director-photo"/>
+        <p style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4);line-height:1.75;padding-top:4px;">
+          Juan Carlos Ibarra Quezada<br/>
+          <span style="color:var(--red);font-size:11px;letter-spacing:.06em;text-transform:uppercase;">Director · Abogado Corporativo &amp; M&amp;A</span>
+        </p>
+      </div>
+      <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.85;margin-bottom:20px;">
+        Juan Carlos Ibarra Quezada es abogado corporativo con más de una década de experiencia en transacciones de M&amp;A, estructuración societaria y contratos comerciales complejos.
+      </p>
+      <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.85;margin-bottom:20px;">
+        Ha asesorado a empresas en los sectores de logística internacional, tecnología, retail y servicios profesionales, tanto en operaciones domésticas como en transacciones con contraparte extranjera.
+      </p>
+      <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.85;margin-bottom:20px;">
+        Su práctica combina la disciplina técnica de la asesoría corporativa de alto nivel con un enfoque directo y orientado a resultados, diseñado para los ritmos y exigencias del mundo empresarial real.
+      </p>
+      <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.85;">
+        Fundó Ibarra Quezada Abogados con la convicción de que las empresas en crecimiento merecen el mismo estándar de asesoría legal que las grandes corporaciones, sin la burocracia de una firma de escala.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCIA -->
+<section id="experiencia">
+  <div class="section-header">
+    <div class="eyebrow">Experiencia transaccional</div>
+    <h2 class="section-title">Lo que sabemos <em>hacer</em></h2>
+  </div>
+  <div class="exp-cols">
+    <div class="exp-col reveal">
+      <svg class="exp-icon" viewBox="0 0 32 32" fill="none">
+        <rect x="3" y="8" width="26" height="18" rx="2" stroke="#CC1A27" stroke-width="1.5"/>
+        <path d="M9 8V6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2" stroke="#CC1A27" stroke-width="1.5"/>
+        <path d="M3 16h26" stroke="#CC1A27" stroke-width="1" opacity=".4"/>
+        <circle cx="16" cy="16" r="3" fill="#CC1A27" opacity=".3" stroke="#CC1A27" stroke-width="1.5"/>
+      </svg>
+      <div class="exp-title">M&amp;A · Transacciones corporativas</div>
+      <ul class="exp-list">
+        <li>Compraventas de acciones y activos</li>
+        <li>Due diligence legal integral</li>
+        <li>Negociación y redacción de SPA/APA</li>
+        <li>Estructuras de financiamiento transaccional</li>
+        <li>Pactos de accionistas post-cierre</li>
+        <li>Adquisiciones en sectores logística, tech y retail</li>
+      </ul>
+    </div>
+    <div class="exp-col reveal">
+      <svg class="exp-icon" viewBox="0 0 32 32" fill="none">
+        <path d="M6 4h14l7 7v17H6V4z" stroke="#CC1A27" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M20 4v7h7" stroke="#CC1A27" stroke-width="1.5"/>
+        <path d="M10 14h12M10 18h12M10 22h8" stroke="#CC1A27" stroke-width="1" opacity=".5"/>
+      </svg>
+      <div class="exp-title">Contratos · Documentación comercial</div>
+      <ul class="exp-list">
+        <li>Contratos de prestación de servicios</li>
+        <li>Intermediación y agencia comercial</li>
+        <li>Contratos de transporte y logística</li>
+        <li>Acuerdos de distribución y franquicia</li>
+        <li>NDAs y acuerdos de confidencialidad</li>
+        <li>Reconocimientos de adeudo y convenios</li>
+      </ul>
+    </div>
+    <div class="exp-col reveal">
+      <svg class="exp-icon" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="12" stroke="#CC1A27" stroke-width="1.5"/>
+        <path d="M16 8v8l5 3" stroke="#CC1A27" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="16" cy="16" r="2" fill="#CC1A27"/>
+      </svg>
+      <div class="exp-title">Compliance · Gobierno corporativo</div>
+      <ul class="exp-list">
+        <li>Políticas internas y manuales de control</li>
+        <li>Cumplimiento LFPDPPP</li>
+        <li>Programas PLD/AML para empresas</li>
+        <li>Minutas de asambleas y consejo</li>
+        <li>Poderes notariales y actas corporativas</li>
+        <li>Análisis regulatorio sectorial</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="diff-row">
+    <div class="diff-item reveal">
+      <span class="diff-big">12+</span>
+      <div class="diff-label">Años de experiencia acumulada en derecho corporativo, M&amp;A y gestión legal empresarial</div>
+    </div>
+    <div class="diff-item reveal">
+      <span class="diff-big">Corp.</span>
+      <div class="diff-label">Especialización en derecho corporativo y transaccional. Documentación de alto nivel para operaciones complejas</div>
+    </div>
+    <div class="diff-item reveal">
+      <span class="diff-big">AI</span>
+      <div class="diff-label">Integración de herramientas de inteligencia artificial para revisión de contratos, investigación y eficiencia operativa</div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;flex-wrap:wrap;gap:20px">
+    <div>
+      <div class="eyebrow">Insights legales</div>
+      <h2 class="section-title">Ideas que <em>informan</em><br/>decisiones de negocio</h2>
+    </div>
+    <a href="#" class="btn-ghost" style="color:var(--gray);border-color:rgba(0,0,0,.15);font-size:11px">Ver todos →</a>
+  </div>
+  <div class="insights-grid">
+    <div class="insight-card reveal" onclick="openInsight(1)" style="cursor:pointer;">
+      <div class="insight-cat">M&amp;A · Startups</div>
+      <div class="insight-title">5 cláusulas que toda PyME debe negociar antes de vender acciones</div>
+      <a class="insight-read-link" href="/insights/5-clausulas-pyme-venta-acciones" onclick="openInsight(1);return false;">Leer artículo →</a>
+      <p class="insight-excerpt">El precio no es lo único que importa en una transacción de M&amp;A. Las representations &amp; warranties, los earn-outs y los mecanismos de ajuste pueden valer más que el múltiplo.</p>
+      <div class="insight-footer">
+        <span class="insight-date">Mar 2026</span>
+        <span class="insight-arrow">↗</span>
+      </div>
+    </div>
+    <div class="insight-card reveal" onclick="openInsight(2)" style="cursor:pointer;">
+      <div class="insight-cat">IA + Derecho</div>
+      <div class="insight-title">Cómo uso inteligencia artificial para revisar contratos en la práctica real</div>
+      <a class="insight-read-link" href="/insights/ia-revision-contratos-practica-real" onclick="openInsight(2);return false;">Leer artículo →</a>
+      <p class="insight-excerpt">No es ciencia ficción. Con los prompts correctos y una metodología estructurada, la revisión de contratos con IA puede reducir el tiempo de análisis en más del 60%.</p>
+      <div class="insight-footer">
+        <span class="insight-date">Feb 2026</span>
+        <span class="insight-arrow">↗</span>
+      </div>
+    </div>
+    <div class="insight-card reveal" onclick="openInsight(3)" style="cursor:pointer;">
+      <div class="insight-cat">Corporativo · PyMEs</div>
+      <div class="insight-title">La reforma a la jornada de 40 horas: lo que tu empresa necesita hacer ahora</div>
+      <a class="insight-read-link" href="/insights/reforma-jornada-40-horas-empresas" onclick="openInsight(3);return false;">Leer artículo →</a>
+      <p class="insight-excerpt">El Congreso avanza en la reducción de la semana laboral. Las implicaciones para contratos colectivos, costos operativos y estructura de turnos ya son una realidad que anticipar.</p>
+      <div class="insight-footer">
+        <span class="insight-date">Ene 2026</span>
+        <span class="insight-arrow">↗</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contact-wrap">
+    <div>
+      <div class="eyebrow" style="color:var(--red)">Contacto</div>
+      <h2 class="section-title">Hablemos de<br/><em>tu próximo paso.</em></h2>
+      <p class="contact-intro" style="margin-top:24px">
+        La primera conversación no tiene costo. Cuéntanos qué necesitas —desde la revisión de un contrato hasta la estructuración de una transacción— y te diremos con claridad qué podemos hacer por ti.
+      </p>
+      <div class="contact-detail">
+        <div class="contact-item">
+          <span class="ci-label">Email</span>
+          <a id="contact-email" class="ci-value" href="#"></a>
+        </div>
+        <div class="contact-item">
+          <span class="ci-label">Teléfono</span>
+          <a href="tel:+525611259959" class="ci-value">56 1125 9959</a>
+        </div>
+        <div class="contact-item">
+          <span class="ci-label">LinkedIn</span>
+          <a href="https://linkedin.com/in/ibarraquezada" class="ci-value" target="_blank">linkedin.com/in/ibarraquezada</a>
+        </div>
+        <div class="contact-item">
+          <span class="ci-label">Web</span>
+          <a href="https://ibarraquezada.com" class="ci-value" target="_blank">ibarraquezada.com</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" name="_cc" value="jcibarra1996@gmail.com"/>
+        <input type="hidden" name="_subject" value="Consulta desde ibarraquezada.com"/>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="from_name" name="nombre" placeholder="Tu nombre" required/>
+          </div>
+          <div class="form-group">
+            <label>Empresa</label>
+            <input type="text" id="company" name="empresa" placeholder="Nombre de tu empresa"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="reply_to" name="email" placeholder="correo@empresa.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Área de interés</label>
+          <select id="area" name="area">
+            <option value="">Selecciona una opción</option>
+            <option>M&amp;A / Compraventa de empresa</option>
+            <option>Contratos comerciales</option>
+            <option>Gobierno corporativo</option>
+            <option>Compliance / Protección de datos</option>
+            <option>Otro asunto legal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cuéntanos brevemente tu caso</label>
+          <textarea id="message" name="mensaje" placeholder="Describe en pocas líneas qué necesitas. Toda la información es confidencial." required></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="submitBtn">Enviar mensaje →</button>
+        <p class="form-note">Confidencialidad garantizada. Respondemos en menos de 24 horas en días hábiles.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHT MODALS -->
+<div id="modal-insight-1" class="legal-modal" style="display:none;">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <h2 class="modal-title">5 cláusulas que toda PyME debe negociar antes de vender acciones</h2>
+  <div class="modal-body">
+    <p style="color:var(--red);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;">M&amp;A · Startups · Mar 2026</p>
+    <p>Cuando un fundador recibe una oferta de compra, el impulso natural es enfocarse en el precio. Es comprensible: es el número más visible, el que aparece en los titulares. Pero en la práctica, el precio es solo el punto de partida. Lo que realmente define el valor que recibirás —y los riesgos que asumes después del cierre— está en el cuerpo del contrato.</p>
+    <h3>1. Representations &amp; Warranties</h3>
+    <p>Las declaraciones y garantías son afirmaciones que haces sobre el estado de tu empresa: que los estados financieros son correctos, que no hay litigios pendientes, que los contratos clave están vigentes. Si alguna de estas declaraciones resulta incorrecta, el comprador puede reclamarte la diferencia. Negocia el alcance, las excepciones y los límites de responsabilidad con cuidado.</p>
+    <h3>2. Earn-out</h3>
+    <p>Un earn-out es un mecanismo por el que parte del precio de venta queda condicionada al desempeño futuro de la empresa. Es común en empresas en crecimiento donde hay incertidumbre sobre el valor real. El riesgo: si el comprador tiene control operativo después del cierre, puede tomar decisiones que afecten negativamente las métricas del earn-out. Define con precisión las reglas del juego.</p>
+    <h3>3. Mecanismo de ajuste de precio</h3>
+    <p>El precio se negocia con base en cifras de una fecha determinada (closing accounts). Si al momento del cierre el capital de trabajo es diferente al proyectado, se aplica un ajuste. Estos mecanismos pueden resultar en pagos adicionales o en devoluciones. Asegúrate de entender el mecanismo: locked-box vs. completion accounts tienen implicaciones muy distintas.</p>
+    <h3>4. Non-compete y non-solicitation</h3>
+    <p>El comprador querrá proteger su inversión prohibiéndote competir y llevarte empleados clave. La duración, el alcance geográfico y la definición de "competencia" son negociables. Cláusulas demasiado amplias pueden limitarte seriamente en tu siguiente proyecto.</p>
+    <h3>5. Indemnización y sus límites</h3>
+    <p>Si una declaración resulta incorrecta, la indemnización es el mecanismo para compensar al comprador. Negocia un tope (cap) —usualmente un porcentaje del precio— y un período de prescripción. Sin estos límites, tu exposición puede ser prácticamente ilimitada.</p>
+    <p style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light);font-size:12px;color:var(--gray);">¿Estás evaluando una transacción? Contáctanos para una revisión preliminar sin costo.</p>
+  </div>
+</div>
+
+<div id="modal-insight-2" class="legal-modal" style="display:none;">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <h2 class="modal-title">Cómo uso inteligencia artificial para revisar contratos en la práctica real</h2>
+  <div class="modal-body">
+    <p style="color:var(--red);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;">IA + Derecho · Feb 2026</p>
+    <p>La inteligencia artificial no va a reemplazar al abogado. Pero el abogado que sabe usarla va a desplazar al que no. Esta es la realidad que he comprobado en mi práctica diaria, y aquí te explico cómo funciona en términos concretos.</p>
+    <h3>El problema real de la revisión de contratos</h3>
+    <p>Un contrato de 40 páginas puede tomar entre 3 y 6 horas de revisión cuidadosa. En ese tiempo, el abogado identifica riesgos, inconsistencias, cláusulas abusivas y omisiones. Es trabajo de alto valor, pero también altamente rutinario en su estructura.</p>
+    <h3>Qué puede hacer la IA</h3>
+    <p>Con los prompts correctos, un modelo de lenguaje avanzado puede: identificar cláusulas de penalidad desproporcionadas, señalar ausencias de limitaciones de responsabilidad, detectar inconsistencias entre cláusulas, y generar un resumen ejecutivo con los puntos críticos. Todo en minutos.</p>
+    <h3>Mi flujo de trabajo</h3>
+    <p>Primero cargo el contrato completo y pido un análisis estructural: tipo de contrato, partes, objeto, obligaciones principales. Luego hago preguntas específicas sobre los riesgos más comunes para ese tipo de documento. Finalmente, genero una tabla de redlines con los cambios que propongo. La revisión final siempre es mía.</p>
+    <h3>Lo que la IA no puede hacer</h3>
+    <p>No puede ponderar el contexto de negocio. No conoce la relación entre las partes ni el historial de la operación. No puede negociar. La IA es una herramienta de eficiencia, no de criterio jurídico. Ese criterio sigue siendo el valor del abogado.</p>
+    <p style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light);font-size:12px;color:var(--gray);">Usamos estas metodologías en todos nuestros proyectos para darte mayor velocidad sin sacrificar calidad.</p>
+  </div>
+</div>
+
+<div id="modal-insight-3" class="legal-modal" style="display:none;">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <h2 class="modal-title">La reforma a la jornada de 40 horas: lo que tu empresa necesita hacer ahora</h2>
+  <div class="modal-body">
+    <p style="color:var(--red);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;">Corporativo · PyMEs · Ene 2026</p>
+    <p>La reducción de la jornada laboral máxima de 48 a 40 horas semanales es uno de los cambios laborales más significativos de los últimos años en México. Aunque su implementación será gradual, las empresas deben prepararse desde ahora para evitar contingencias legales y operativas.</p>
+    <h3>¿Qué cambia exactamente?</h3>
+    <p>La reforma modifica el artículo 61 de la Ley Federal del Trabajo. La jornada máxima diurna pasa de 8 a 8 horas en promedio semanal, con un tope de 40 horas. Las horas entre 40 y 48 que antes eran ordinarias ahora serán extraordinarias, lo que implica un sobrecosto salarial del 100%.</p>
+    <h3>Impacto en tu nómina</h3>
+    <p>Si tus colaboradores trabajan actualmente 48 horas, las 8 horas adicionales tendrán que pagarse como tiempo extra. Dependiendo del tamaño de tu plantilla, esto puede representar un incremento significativo en el costo laboral. El cálculo debe hacerse contrato por contrato.</p>
+    <h3>Contratos colectivos</h3>
+    <p>Las empresas con contrato colectivo de trabajo deben revisar si sus cláusulas actuales son compatibles con la reforma. En muchos casos, será necesario renegociar condiciones antes de que la ley entre en vigor plenamente.</p>
+    <h3>Qué hacer hoy</h3>
+    <p>Audita tus contratos individuales y colectivos. Revisa tus políticas internas de control de asistencia. Calcula el impacto económico de la transición. Y si tienes trabajadores con esquemas especiales (jornada reducida, home office, por proyecto), analiza caso por caso.</p>
+    <p style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light);font-size:12px;color:var(--gray);">Si quieres una revisión de tus contratos laborales a la luz de esta reforma, estamos disponibles para una consulta inicial.</p>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);"></div>
+
+<div id="modal-privacy" class="legal-modal" style="display:none;">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <h2 class="modal-title">Aviso de Privacidad Simplificado</h2>
+  <div class="modal-body">
+    <h3>Identidad y Domicilio del Responsable</h3>
+    <p>Ibarra Quezada Abogados (en adelante "El Despacho"), con domicilio en Ciudad de México, es responsable del tratamiento de sus datos personales.</p>
+
+    <h3>Finalidades del Tratamiento</h3>
+    <p>Los datos que recabamos serán utilizados para las siguientes <strong>finalidades primarias:</strong></p>
+    <ul>
+      <li>Proveer los servicios legales solicitados.</li>
+      <li>Atender consultas, dudas o solicitudes de asesoría a través de nuestros formularios de contacto.</li>
+      <li>Formalizar la relación contractual en caso de contratar nuestros servicios.</li>
+    </ul>
+    <p>De manera <strong>secundaria,</strong> utilizaremos su información para:</p>
+    <ul>
+      <li>Envío de boletines informativos o actualizaciones legales.</li>
+    </ul>
+
+    <h3>Datos Personales Recabados</h3>
+    <p>Para las finalidades anteriores, podremos recabar: nombre completo, correo electrónico, teléfono y datos relacionados con su situación jurídica específica.</p>
+
+    <h3>Derechos ARCO</h3>
+    <p>Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los utilizamos y las condiciones del uso que les damos (Acceso). Asimismo, es su derecho solicitar la corrección de su información (Rectificación); que la eliminemos de nuestros registros (Cancelación); así como oponerse al uso de sus datos para fines específicos (Oposición). Para el ejercicio de cualquiera de los derechos ARCO, deberá enviar una solicitud al correo: <span id="arco-email"></span></p>
+
+    <h3>Cambios al Aviso de Privacidad</h3>
+    <p>El presente aviso puede sufrir modificaciones derivadas de requerimientos legales o de nuestras propias necesidades por los servicios que ofrecemos. Dichos cambios estarán disponibles en este sitio web.</p>
+  </div>
+</div>
+
+<div id="modal-terms" class="legal-modal" style="display:none;">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <h2 class="modal-title">Términos y Condiciones de Uso</h2>
+  <div class="modal-body">
+    <h3>1. Aceptación de los Términos</h3>
+    <p>Al acceder y utilizar el sitio web ibarraquezada.com, el usuario acepta cumplir con los presentes Términos y Condiciones. Si no está de acuerdo con ellos, deberá abstenerse de utilizar el sitio.</p>
+
+    <h3>2. No Relación Abogado-Cliente</h3>
+    <p>El uso de la información contenida en este sitio, así como el envío de consultas a través de formularios de contacto o correos electrónicos, no establece una relación formal abogado-cliente entre el usuario e Ibarra Quezada Abogados. Dicha relación solo se perfeccionará mediante la firma de un contrato de prestación de servicios profesionales.</p>
+
+    <h3>3. Propiedad Intelectual</h3>
+    <p>Todo el contenido, diseño, logotipos, textos y material gráfico en este sitio son propiedad exclusiva de El Despacho o cuenta con las licencias correspondientes. Queda prohibida su reproducción total o parcial sin autorización previa y por escrito.</p>
+
+    <h3>4. Exclusión de Responsabilidad</h3>
+    <p>La información publicada en este sitio tiene fines meramente informativos y de carácter general. No constituye asesoría legal personalizada. El Despacho no se hace responsable por decisiones tomadas por el usuario basadas en el contenido de esta web sin haber consultado previamente a un profesional.</p>
+
+    <h3>5. Uso del Sitio</h3>
+    <p>El usuario se compromete a utilizar el sitio de forma lícita, sin incurrir en actividades que puedan dañar la infraestructura tecnológica de El Despacho o afectar los derechos de terceros.</p>
+
+    <h3>6. Legislación y Jurisdicción</h3>
+    <p>Para la interpretación y cumplimiento de estos términos, las partes se someten a la legislación vigente en la Ciudad de México, renunciando a cualquier otro fuero que pudiera corresponderles por razón de sus domicilios presentes o futuros.</p>
+  </div>
+</div>
+
+<style>
+.insight-read-link{
+  display:inline-block;
+  font-size:11px;font-weight:500;
+  color:var(--red);
+  text-decoration:none;
+  letter-spacing:.06em;
+  margin-bottom:14px;
+  transition:opacity .2s;
+}
+.insight-read-link:hover{opacity:.7}
+.legal-modal{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:2001;
+  background:var(--white);
+  width:min(720px,92vw);
+  max-height:82vh;
+  border-radius:4px;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 32px 80px rgba(0,0,0,.35);
+}
+.modal-close{
+  position:absolute;top:16px;right:20px;
+  background:none;border:none;
+  font-size:16px;color:var(--gray);
+  cursor:pointer;z-index:1;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  transition:background .2s,color .2s;
+}
+.modal-close:hover{background:var(--warm);color:var(--black)}
+.modal-title{
+  font-family:var(--serif);font-size:20px;font-weight:400;
+  color:var(--black);padding:28px 40px 20px;
+  border-bottom:1px solid var(--border-light);
+  flex-shrink:0;
+}
+.modal-body{
+  overflow-y:auto;padding:24px 40px 36px;
+  font-size:13px;line-height:1.8;color:#444;
+}
+.modal-body h3{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--red);margin:24px 0 8px;
+}
+.modal-body h3:first-child{margin-top:0}
+.modal-body p{margin-bottom:10px}
+.modal-body ul{padding-left:18px;margin-bottom:10px}
+.modal-body ul li{margin-bottom:4px}
+</style>
+<footer>
+  <div class="footer-left">
+    <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="15" r="9.5" stroke="#CC1A27" stroke-width="2" stroke-dasharray="46 14" stroke-dashoffset="7"/>
+      <line x1="16" y1="1" x2="16" y2="29" stroke="#6B6B6B" stroke-width="2"/>
+      <line x1="16" y1="24.5" x2="16" y2="31" stroke="#CC1A27" stroke-width="2.5"/>
+    </svg>
+    <span class="footer-copy">© 2026 Ibarra Quezada Abogados S.C. · Todos los derechos reservados</span>
+  </div>
+  <div class="footer-links">
+    <a href="#" onclick="openModal('privacy');return false;">Aviso de privacidad</a>
+    <a href="#" onclick="openModal('terms');return false;">Términos de uso</a>
+    <a href="https://linkedin.com/in/ibarraquezada" target="_blank">LinkedIn</a>
+  </div>
+  <div class="footer-badge">Oficinas en Ciudad de México · Querétaro · Cancún</div>
+</footer>
+
+<script data-cfasync="false">
+// ── Email (built in JS so Cloudflare can't encode it) ──────────────────
+const _e = 'juan' + '@' + 'ibarraquezada' + '.com';
+const _e2 = 'jcibarra1996' + '@' + 'gmail' + '.com';
+const emailEl = document.getElementById('contact-email');
+if(emailEl){ emailEl.href = 'mailto:' + _e; emailEl.textContent = _e; }
+const arcoEl = document.getElementById('arco-email');
+if(arcoEl){ arcoEl.innerHTML = '<a href="mailto:'+_e+'" style="color:#CC1A27">'+_e+'</a>'; }
+
+// ── Modal functions ────────────────────────────────────────────────────
+function _showModal(id){
+  ['modal-overlay','modal-privacy','modal-terms',
+   'modal-insight-1','modal-insight-2','modal-insight-3']
+    .forEach(function(i){ document.getElementById(i).style.display='none'; });
+  document.getElementById('modal-overlay').style.display='block';
+  var m = document.getElementById(id);
+  if(m){ m.style.display='flex'; }
+  document.body.style.overflow='hidden';
+}
+window.openModal = function(type){
+  if(type==='privacy') _showModal('modal-privacy');
+  else if(type==='terms') _showModal('modal-terms');
+};
+window.openInsight = function(n){ _showModal('modal-insight-'+n); };
+window.closeModal = function(){
+  ['modal-overlay','modal-privacy','modal-terms',
+   'modal-insight-1','modal-insight-2','modal-insight-3']
+    .forEach(function(i){ document.getElementById(i).style.display='none'; });
+  document.body.style.overflow='';
+};
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+// ── Form submit (Formspree) ────────────────────────────────────────────
+window.handleFormSubmit = function(e){
+  var form = document.getElementById('contactForm');
+  var action = form.getAttribute('action');
+  if(!action || action.indexOf('YOUR_FORM_ID') !== -1){
+    // Formspree not configured yet — use mailto fallback
+    e.preventDefault();
+    var nombre = document.getElementById('from_name').value;
+    var empresa = document.getElementById('company').value || '—';
+    var email = document.getElementById('reply_to').value;
+    var area = document.getElementById('area').value || '—';
+    var msg = document.getElementById('message').value;
+    var subj = encodeURIComponent('Consulta desde ibarraquezada.com — '+area);
+    var body = encodeURIComponent('Nombre: '+nombre+'\nEmpresa: '+empresa+'\nCorreo: '+email+'\nÁrea: '+area+'\n\n'+msg);
+    window.location.href = 'mailto:'+_e+'?cc='+_e2+'&subject='+subj+'&body='+body;
+  }
+  // If Formspree IS configured, let the form submit normally (no e.preventDefault)
+};
+
+// ── Scroll animations ──────────────────────────────────────────────────
+document.body.classList.add('js-loaded');
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var siblings = Array.from(e.target.parentNode.children).filter(function(c){
+        return c.classList.contains('reveal')||c.classList.contains('timeline-item')||c.classList.contains('diff-item');
+      });
+      var idx = siblings.indexOf(e.target);
+      setTimeout(function(){ e.target.classList.add('visible'); }, idx*80);
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.timeline-item,.diff-item').forEach(function(el){ observer.observe(el); });
+
+// ── Nav scroll ────────────────────────────────────────────────────────
+window.addEventListener('scroll',function(){
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>50);
+});
+
+// ── Mobile menu ────────────────────────────────────────────────────────
+window.toggleMenu = function(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+};
+window.scrollToContact = function(){
+  document.getElementById('contacto').scrollIntoView({behavior:'smooth'});
+};
+
+// ── WhatsApp button fade-in ────────────────────────────────────────────
+setTimeout(function(){
+  var wa = document.querySelector('.wa-btn');
+  if(wa) wa.classList.add('wa-visible');
+}, 2000);
+</script>
