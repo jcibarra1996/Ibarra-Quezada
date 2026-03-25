@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoría Legal Express | Ibarra Quezada</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+      line-height: 1.6; 
+      color: #333; 
+      background: #fff; 
+    }
+    
+    .container { 
+      max-width: 650px; 
+      margin: 0 auto; 
+      padding: 40px 20px; 
+    }
+    
+    .logo-container { 
+      text-align: center; 
+      margin-bottom: 50px; 
+    }
+    
+    .logo-container img {
+      max-width: 280px;
+      width: 100%;
+      height: auto;
+    }
+    
+    header { 
+      text-align: center; 
+      margin-bottom: 40px; 
+      border-bottom: 3px solid #CC2233; 
+      padding-bottom: 30px; 
+    }
+    
+    header h1 { 
+      font-size: 28px; 
+      color: #CC2233; 
+      margin-bottom: 10px; 
+      font-weight: 700;
+    }
+    
+    header p { 
+      color: #666; 
+      font-size: 16px; 
+    }
+    
+    .benefit { 
+      background: #f5f5f5; 
+      padding: 15px 20px; 
+      margin: 15px 0; 
+      border-left: 4px solid #CC2233; 
+      border-radius: 4px;
+    }
+    
+    .benefit strong { 
+      color: #CC2233; 
+      font-weight: 600;
+    }
+    
+    .benefit p {
+      margin-top: 8px;
+      color: #666;
+    }
+    
+    form { 
+      background: white; 
+      padding: 30px; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      margin: 30px 0; 
+    }
+    
+    label { 
+      display: block; 
+      margin-top: 15px; 
+      font-weight: 600; 
+      color: #333; 
+      font-size: 14px;
+    }
+    
+    input, select { 
+      width: 100%; 
+      padding: 10px; 
+      margin-top: 5px; 
+      border: 1px solid #ddd; 
+      border-radius: 4px; 
+      font-size: 14px;
+      font-family: inherit;
+    }
+    
+    input:focus, select:focus { 
+      outline: none; 
+      border-color: #CC2233; 
+      box-shadow: 0 0 0 3px rgba(204, 34, 51, 0.1); 
+    }
+    
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 20px; 
+      background: #CC2233; 
+      color: white; 
+      font-size: 16px; 
+      font-weight: 600; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    button:hover { 
+      background: #a01a28; 
+    }
+    
+    .disclaimer { 
+      font-size: 12px; 
+      color: #999; 
+      text-align: center; 
+      margin-top: 20px; 
+      line-height: 1.5;
+    }
+    
+    .success { 
+      display: none; 
+      background: #e8f5e9; 
+      padding: 20px; 
+      border-radius: 4px; 
+      color: #2e7d32; 
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .success strong {
+      color: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <img src="https://raw.githubusercontent.com/jcibarra1996/Ibarra-Quezada/main/startup-audit/logo-iq.png" alt="Ibarra Quezada" style="max-width: 280px;">
+    </div>
+
+    <header>
+      <h1>Auditoría Legal Express</h1>
+      <p>48 horas. Gratis. Sin compromisos.</p>
+    </header>
+
+    <p style="font-size: 16px; margin-bottom: 20px;">
+      Revisamos tu startup en 2 días y te entregamos un reporte de 2 páginas con los riesgos legales más críticos que debes resolver primero.
+    </p>
+
+    <div class="benefit">
+      <strong>✓ Revisión completa</strong>
+      <p>Estructura legal, contratos, IP, cumplimiento fiscal y regulatorio.</p>
+    </div>
+
+    <div class="benefit">
+      <strong>✓ Priorización clara</strong>
+      <p>Te decimos qué resolver primero y por qué.</p>
+    </div>
+
+    <div class="benefit">
+      <strong>✓ Acceso a paquetes pagados</strong>
+      <p>Si quieres continuar, tenemos opciones de asesoría a medida.</p>
+    </div>
+
+    <form action="https://formspree.io/f/xnjoqpvj" method="POST">
+      <label for="nombre">Nombre*</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="email">Email*</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="empresa">Nombre de la empresa*</label>
+      <input type="text" id="empresa" name="empresa" required>
+
+      <label for="sector">Sector/Industria*</label>
+      <select id="sector" name="sector" required>
+        <option value="">Selecciona...</option>
+        <option value="SaaS">SaaS / Software</option>
+        <option value="E-commerce">E-commerce</option>
+        <option value="Fintech">Fintech</option>
+        <option value="Healthtech">Healthtech</option>
+        <option value="Logística">Logística</option>
+        <option value="Consultoría">Consultoría</option>
+        <option value="Educación">Educación</option>
+        <option value="Otro">Otro</option>
+      </select>
+
+      <label for="etapa">Etapa del startup*</label>
+      <select id="etapa" name="etapa" required>
+        <option value="">Selecciona...</option>
+        <option value="Idea">Idea / Pre-MVP</option>
+        <option value="MVP">MVP / Primeros usuarios</option>
+        <option value="Traction">Traction / Primeros ingresos</option>
+        <option value="Escala">Escalando / Preparando inversión</option>
+      </select>
+
+      <label for="mensaje">Cuéntanos más (opcional)</label>
+      <textarea id="mensaje" name="mensaje" rows="4" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit;"></textarea>
+
+      <button type="submit">Enviar mi auditoría</button>
+    </form>
+
+    <div class="disclaimer">
+      <strong>Tiempos:</strong> Recibirás tu auditoría en máximo 48 horas. Respuesta inicial en 24h.<br>
+      <strong>Confidencialidad:</strong> Todo es privado y confidencial. No compartimos datos.<br>
+      <strong>Email:</strong> juan@ibarraquezada.com
+    </div>
+
+  </div>
+</body>
+</html>
