@@ -1,8 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/lib/supabase";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-export default function ContractsPage() {
+const statusVariant: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  active: "default",
+  pending: "outline",
+  expired: "destructive",
+  cancelled: "secondary",
+};
+
+export default async function ContractsPage() {
+  const { data: contracts, error } = await supabase
+    .from("contracts")
+    .select("*")
+    .order("expiration_date", { ascending: true });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -10,29 +23,33 @@ export default function ContractsPage() {
         <Button size="sm">Nuevo contrato</Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            Lista de contratos
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Conecta Supabase para visualizar los contratos.
-          </p>
-        </CardContent>
-      </Card>
+      {error && (
+        <p className="text-sm text-destructive">Error al cargar contratos: {error.message}</p>
+      )}
 
-      {/* Example row */}
-      <Card>
-        <CardContent className="pt-6 flex items-center justify-between">
-          <div className="space-y-1">
-            <p className="text-sm font-medium">Contrato de ejemplo</p>
-            <p className="text-xs text-muted-foreground">Vence: 2026-12-31</p>
-          </div>
-          <Badge variant="outline">activo</Badge>
-        </CardContent>
-      </Card>
+      {!error && contracts?.length === 0 && (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground">No hay contratos registrados aún.</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {contracts?.map((contract) => (
+        <Card key={contract.id}>
+          <CardContent className="pt-6 flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-sm font-medium">{contract.name}</p>
+              <p className="text-xs text-muted-foreground">
+                Vence: {new Date(contract.expiration_date).toLocaleDateString("es-MX")}
+              </p>
+            </div>
+            <Badge variant={statusVariant[contract.status] ?? "outline"}>
+              {contract.status}
+            </Badge>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
