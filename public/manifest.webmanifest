@@ -1,0 +1,10 @@
+{
+  "name": "IQ TaskForge",
+  "short_name": "Hoy",
+  "description": "Single-player, anti-TDAH. Trabajo o Casa. Nada más.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "orientation": "portrait"
+}

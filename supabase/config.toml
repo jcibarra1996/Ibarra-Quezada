@@ -1,0 +1,30 @@
+project_id = "iq-taskforge"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[functions]
+[functions.morning-plan]
+verify_jwt = false
+
+[functions.evening-reminder]
+verify_jwt = false
+
+[functions.ghost-tasks]
+verify_jwt = false
+
+[functions.weekly-reward]
+verify_jwt = false
+
+[functions.complete-task]
+verify_jwt = false

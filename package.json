@@ -1,0 +1,33 @@
+{
+  "name": "iq-taskforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Single-player, anti-TDAH gamified task app (Trabajo/Casa) with WhatsApp nudges.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.1",
+    "canvas-confetti": "^1.9.4",
+    "framer-motion": "^12.42.2",
+    "next": "16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.6.4",
+    "@types/node": "^20.14.9",
+    "@types/react": "^19.2.3",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "16.2.10",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.3"
+  }
+}
