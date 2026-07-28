@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Salida generada por filtro_red.py
+Red_Priorizada_IQ.xlsx
