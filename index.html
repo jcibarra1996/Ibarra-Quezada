@@ -50,8 +50,8 @@
 </script>
 
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='24' fill='%23F4F0E9'/%3E%3Cpath fill-rule='evenodd' fill='%23C94827' d='M60,14 A46,46 0 1,1 60,106 A46,46 0 1,1 60,14 Z M60,32 A28,28 0 1,1 60,88 A28,28 0 1,1 60,32 Z'/%3E%3Cpath fill='none' stroke='%23C94827' stroke-width='14' stroke-linecap='round' d='M60,54 C60,70 48,74 50,86 C52,96 68,98 88,92'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='24' fill='%23F4F0E9'/%3E%3Cpath fill-rule='evenodd' fill='%23C94827' d='M60,14 A46,46 0 1,1 60,106 A46,46 0 1,1 60,14 Z M60,32 A28,28 0 1,1 60,88 A28,28 0 1,1 60,32 Z'/%3E%3Cpath fill='none' stroke='%23C94827' stroke-width='14' stroke-linecap='round' d='M60,54 C60,70 48,74 50,86 C52,96 68,98 88,92'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -130,9 +130,7 @@
     border-bottom: 1px solid rgba(176, 123, 58, 0.2);
     box-shadow: 0 4px 30px rgba(0,0,0,0.06);
   }
-  .nav-logo svg { height: 40px; width: auto; display: block; }
-  .brand-mark--nav text { fill: var(--verde-oscuro); }
-  nav.scrolled .brand-mark--nav text { fill: var(--verde-oscuro); }
+  .nav-logo-img { height: 52px; width: auto; display: block; }
   .nav-links { display: flex; gap: 40px; list-style: none; }
   .nav-links a {
     font-family: 'Montserrat', sans-serif;
@@ -796,8 +794,7 @@
     gap: 60px;
     border-top: 1px solid rgba(255,255,255,0.05);
   }
-  .footer-brand svg { height: 64px; width: auto; display: block; }
-  .brand-mark--footer text { fill: var(--crema); }
+  .footer-logo-img { height: 96px; width: auto; display: block; }
   .footer-brand p {
     font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.8; font-weight: 300; margin-top: 24px;
     max-width: 280px;
@@ -1013,15 +1010,6 @@
 }
 
 
-/* LOGO IMPROVEMENTS */
-.nav-logo svg {
-  height: 44px;
-  width: auto;
-  display: block;
-}
-
-/* When nav is scrolled (light bg) - logo looks natural */
-/* When nav NOT scrolled (transparent) - logo on white hero bg - still fine */
 
 /* Footer logo: invert to show on dark green/black bg */
 .ft-brand img {
@@ -1130,20 +1118,7 @@
 <!-- NAV -->
 <nav id="mainNav">
   <div class="nav-logo">
-    <svg class="brand-mark brand-mark--nav" viewBox="0 0 300 70" role="img" aria-label="Ibarra Quezada Abogados" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="iqGradNav" x1="10%" y1="0%" x2="95%" y2="100%">
-          <stop offset="0%" stop-color="#F26C2E"/>
-          <stop offset="55%" stop-color="#C94827"/>
-          <stop offset="100%" stop-color="#8F2926"/>
-        </linearGradient>
-      </defs>
-      <svg width="66" height="66" y="2" viewBox="0 0 120 120">
-        <path fill="url(#iqGradNav)" fill-rule="evenodd" d="M60,8 A52,52 0 1,1 60,112 A52,52 0 1,1 60,8 Z M60,26 A34,34 0 1,1 60,94 A34,34 0 1,1 60,26 Z"/>
-        <path fill="none" stroke="url(#iqGradNav)" stroke-width="16" stroke-linecap="round" d="M58,50 C58,72 42,76 44,92 C46,104 68,108 94,108"/>
-      </svg>
-      <text x="90" y="43" font-family="'Playfair Display', serif" font-size="24" font-weight="600" letter-spacing="1" textLength="192" lengthAdjust="spacingAndGlyphs">IBARRA QUEZADA</text>
-    </svg>
+    <img src="assets/logo-principal.png" alt="Ibarra Quezada Abogados" class="nav-logo-img">
   </div>
   <ul class="nav-links">
     <li><a href="#servicios">Servicios</a></li>
@@ -1645,21 +1620,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">
-    <svg class="brand-mark brand-mark--footer" viewBox="0 0 220 150" role="img" aria-label="Ibarra Quezada Abogados" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="iqGradFooter" x1="10%" y1="0%" x2="95%" y2="100%">
-          <stop offset="0%" stop-color="#F26C2E"/>
-          <stop offset="55%" stop-color="#C94827"/>
-          <stop offset="100%" stop-color="#8F2926"/>
-        </linearGradient>
-      </defs>
-      <svg x="70" y="0" width="80" height="80" viewBox="0 0 120 120">
-        <path fill="url(#iqGradFooter)" fill-rule="evenodd" d="M60,8 A52,52 0 1,1 60,112 A52,52 0 1,1 60,8 Z M60,26 A34,34 0 1,1 60,94 A34,34 0 1,1 60,26 Z"/>
-        <path fill="none" stroke="url(#iqGradFooter)" stroke-width="16" stroke-linecap="round" d="M58,50 C58,72 42,76 44,92 C46,104 68,108 94,108"/>
-      </svg>
-      <text x="110" y="110" text-anchor="middle" font-family="'Playfair Display', serif" font-size="20" font-weight="600" letter-spacing="1" textLength="160" lengthAdjust="spacingAndGlyphs">IBARRA QUEZADA</text>
-      <text x="110" y="130" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="10" font-weight="500" letter-spacing="4" textLength="110" lengthAdjust="spacingAndGlyphs">ABOGADOS</text>
-    </svg>
+    <img src="assets/logo-negativo.png" alt="Ibarra Quezada Abogados" class="footer-logo-img">
     <p>La firma especializada en derecho corporativo, contratos y consultoría laboral en México. Protegemos y fortalecemos la operación legal de tu empresa.</p>
   </div>
   <div>
