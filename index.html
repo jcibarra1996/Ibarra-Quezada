@@ -41,7 +41,7 @@
 
 <!-- Schema.org FAQ -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto tiempo toma constituir una empresa?","acceptedAnswer":{"@type":"Answer","text":"El trámite completo (estatutos, firma ante notario e inscripción en el Registro Público de Comercio) toma típicamente entre 10 y 15 días hábiles una vez definida la estructura societaria. En Ibarra Quezada coordinamos todo el proceso con honorarios transparentes desde el inicio."}},{"@type":"Question","name":"¿Qué obligaciones laborales tengo al contratar a mi primer empleado?","acceptedAnswer":{"@type":"Answer","text":"Debes formalizar el contrato individual de trabajo, inscribir al trabajador ante el IMSS, cumplir con el reparto de utilidades cuando aplique y observar la normatividad de seguridad e higiene, incluida la NOM-035."}},{"@type":"Question","name":"¿Qué es el REPSE y quién debe registrarse?","acceptedAnswer":{"@type":"Answer","text":"El Registro de Prestadoras de Servicios Especializados (REPSE) es obligatorio para toda empresa que preste personal para realizar servicios distintos al objeto social de su cliente. No contar con él impide deducir el gasto y genera responsabilidad solidaria laboral."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto tiempo toma constituir una empresa?","acceptedAnswer":{"@type":"Answer","text":"El trámite completo (estatutos, firma ante notario e inscripción en el Registro Público de Comercio) toma típicamente entre 10 y 15 días hábiles una vez definida la estructura societaria. En Ibarra Quezada coordinamos todo el proceso con honorarios transparentes desde el inicio."}},{"@type":"Question","name":"¿Qué obligaciones laborales tengo al contratar a mi primer empleado?","acceptedAnswer":{"@type":"Answer","text":"Debes formalizar el contrato individual de trabajo, inscribir al trabajador ante el IMSS, cumplir con el reparto de utilidades cuando aplique y observar la normatividad de seguridad e higiene, incluida la NOM-035."}},{"@type":"Question","name":"¿Qué es el REPSE y quién debe registrarse?","acceptedAnswer":{"@type":"Answer","text":"El Registro de Prestadoras de Servicios Especializados (REPSE) es obligatorio para toda empresa que preste personal para realizar servicios distintos al objeto social de su cliente. No contar con él impide deducir el gasto y genera responsabilidad solidaria laboral."}},{"@type":"Question","name":"¿Qué debe incluir un contrato mercantil para ser válido y efectivo?","acceptedAnswer":{"@type":"Answer","text":"Más allá de la firma de las partes, un contrato efectivo debe definir con claridad el objeto, las condiciones de pago, las causales de terminación, la confidencialidad y el mecanismo de resolución de controversias. Un contrato incompleto no es inválido, pero deja vacíos que suelen convertirse en litigio."}},{"@type":"Question","name":"¿Cómo protejo a mi empresa antes de firmar un contrato importante?","acceptedAnswer":{"@type":"Answer","text":"Antes de firmar, es importante que un abogado revise el documento — no después de que surja un conflicto. Identificamos cláusulas riesgosas, negociamos términos desfavorables y verificamos que el contrato refleje realmente el acuerdo comercial alcanzado."}},{"@type":"Question","name":"¿Ofrecen servicios para empresas internacionales?","acceptedAnswer":{"@type":"Answer","text":"Sí. Asesoramos a empresas extranjeras que buscan constituirse u operar localmente, así como a empresas en expansión hacia Estados Unidos y Latinoamérica, atendiendo la estructura corporativa, contractual y regulatoria del lado local de la operación."}}]}
 </script>
 
 <!-- Schema.org BreadcrumbList -->
@@ -136,6 +136,15 @@
   }
   .nav-cta:hover { background: var(--dorado) !important; color: var(--blanco) !important; }
   .nav-cta::after { display: none !important; }
+  /* Sobre el hero, el panel oscuro de la derecha volvía ilegibles los links del nav.
+     Un scrim + texto claro los mantiene legibles sobre cualquier fondo, en ambos lados. */
+  @media (min-width: 1025px) {
+    nav:not(.scrolled) {
+      background: linear-gradient(180deg, rgba(26,26,26,0.45) 0%, rgba(26,26,26,0.12) 75%, transparent 100%);
+    }
+    nav:not(.scrolled) .nav-links a { color: var(--crema); }
+    nav:not(.scrolled) .nav-links a:hover { color: var(--dorado-palo); }
+  }
 
   /* HERO */
   .hero {
@@ -296,7 +305,7 @@
   .hero-stat-label {
     font-size: 10px; font-weight: 400;
     letter-spacing: 2.5px; text-transform: uppercase;
-    color: rgba(244,240,233,0.5); margin-top: 8px;
+    color: rgba(244,240,233,0.8); margin-top: 8px;
   }
 
   /* SCROLL INDICATOR */
@@ -310,6 +319,28 @@
     background: linear-gradient(to bottom, var(--dorado), transparent);
     animation: scrollPulse 2s ease-in-out infinite;
   }
+  /* En pantallas bajas el indicador quedaba atravesando el botón principal */
+  @media (max-height: 820px) {
+    .scroll-indicator { display: none; }
+  }
+  /* En tablet/móvil el panel del hero se oculta — sin esto la primera pantalla
+     quedaba en blanco, sin una gota de color de marca */
+  .hero-mobile-band { display: none; }
+  @media (max-width: 1024px) {
+    .hero-mobile-band {
+      display: block; height: 200px; margin-bottom: 32px;
+      position: relative; overflow: hidden;
+      background-image: url('assets/img/hero-panel.jpg');
+      background-size: cover; background-position: center 25%;
+    }
+    .hero-mobile-band::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde) 50%, #F26C2E 100%);
+      mix-blend-mode: multiply; opacity: 0.62;
+    }
+  }
+  @media (max-width: 640px) { .hero-mobile-band { height: 160px; } }
   .scroll-text {
     font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
     color: var(--gris-claro); writing-mode: vertical-rl;
@@ -373,6 +404,7 @@
     position: relative; overflow: hidden;
     cursor: pointer;
     transition: all 0.4s ease;
+    display: flex; flex-direction: column;
   }
   .servicio-card::before {
     content: '';
@@ -414,7 +446,7 @@
     line-height: 1.9; font-weight: 300;
   }
   .servicio-link {
-    margin-top: 28px; display: inline-flex; align-items: center; gap: 8px;
+    margin-top: auto; padding-top: 28px; display: inline-flex; align-items: center; gap: 8px;
     font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
     color: var(--verde); text-decoration: none;
     transition: color 0.3s, gap 0.3s;
@@ -467,7 +499,6 @@
     transition: color 0.3s;
   }
   .step:hover .step-num { color: var(--dorado); }
-  .step-content {}
   .step-title {
     font-family: 'Playfair Display', serif;
     font-size: 22px; font-weight: 400;
@@ -598,30 +629,26 @@
     cursor: default;
   }
   .sector-item:hover { background: var(--crema); }
-  .sector-icon { width: 32px; height: 32px; margin-bottom: 20px; color: var(--dorado); opacity: 0.85; display: block; }
+  .sector-icon { width: 32px; height: 32px; margin: 0 auto 20px; color: var(--dorado); opacity: 0.85; display: block; }
   .sector-name {
     font-family: 'Playfair Display', serif;
     font-size: 20px; font-weight: 400; color: var(--verde-oscuro);
     margin-bottom: 12px;
   }
-  .sector-desc { font-size: 11px; color: var(--gris-claro); line-height: 1.7; font-weight: 300; }
+  .sector-desc { font-size: 11px; color: var(--gris); line-height: 1.7; font-weight: 300; }
 
-  /* INSIGHT STRIP */
+  /* INSIGHT STRIP — franja estática, no marquesina: una marquesina animada
+     lee a publicidad de sección amarilla, no a despacho establecido */
   .insight-strip {
-    background: var(--dorado);
-    padding: 24px 60px;
-    display: flex; align-items: center; gap: 60px;
+    background: var(--verde-oscuro);
+    padding: 22px 60px;
+    display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
   .insight-strip-text {
     font-family: 'Playfair Display', serif;
-    font-size: 20px; font-style: italic; font-weight: 300;
-    color: var(--blanco); white-space: nowrap;
-    animation: marquee 20s linear infinite;
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    font-size: 14px; font-style: italic; font-weight: 300;
+    color: var(--crema); text-align: center; letter-spacing: 0.3px;
   }
 
   /* SOBRE IBARRA QUEZADA */
@@ -636,7 +663,6 @@
     align-items: center;
     margin-top: 60px;
   }
-  .nosotros-content {}
   .nosotros-content p {
     font-size: 14px; color: var(--gris);
     line-height: 1.9; font-weight: 300; margin-bottom: 24px;
@@ -650,29 +676,15 @@
     font-family: 'Playfair Display', serif;
     font-size: 18px; font-weight: 500; color: var(--verde-oscuro);
   }
-  .value-desc { font-size: 11px; color: var(--gris-claro); line-height: 1.7; font-weight: 300; }
+  .value-desc { font-size: 11px; color: var(--gris); line-height: 1.7; font-weight: 300; }
   .nosotros-visual {
     position: relative;
   }
   .nosotros-img-frame {
     width: 100%; padding-bottom: 120%;
-    background: var(--verde);
+    background-image: url('assets/img/nosotros-fundador.jpg');
+    background-size: cover; background-position: center 15%;
     position: relative; overflow: hidden;
-  }
-  .nosotros-img-pattern {
-    position: absolute; inset: 0;
-    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 40px),
-                      repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 40px);
-  }
-  .nosotros-img-text {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: 16px;
-  }
-  .nosotros-tagline {
-    font-family: 'Playfair Display', serif;
-    font-size: 48px; font-weight: 300; font-style: italic;
-    color: rgba(244,240,233,0.15); text-align: center; line-height: 1.2;
-    padding: 0 40px; user-select: none;
   }
   .nosotros-float-card {
     position: absolute; bottom: -30px; right: -30px;
@@ -685,7 +697,10 @@
     background-image: url('assets/icon-mark-white.png');
     background-size: contain; background-repeat: no-repeat; background-position: left center;
   }
-  .nosotros-float-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 8px; }
+  .nosotros-float-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.92); margin-top: 8px; }
+  @media (max-width: 480px) {
+    .nosotros-float-card { bottom: 0; right: 0; width: 180px; padding: 24px 28px; }
+  }
 
   /* RECURSOS */
   #recursos {
@@ -799,7 +814,7 @@
   .contacto-actions { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
   .btn-gold {
     background: var(--dorado);
-    color: var(--blanco);
+    color: var(--verde-oscuro);
     padding: 18px 48px;
     font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
     border: none; cursor: pointer; text-decoration: none; display: inline-block;
@@ -829,7 +844,7 @@
   .contacto-map {
     margin: 52px auto 0; max-width: 720px;
     border: 1px solid rgba(244,240,233,0.15);
-    filter: grayscale(0.3) contrast(1.05);
+    filter: grayscale(1) invert(0.92) hue-rotate(180deg) brightness(0.9) contrast(0.9);
   }
   .contacto-map iframe { display: block; width: 100%; height: 280px; border: 0; }
 
@@ -841,9 +856,9 @@
     gap: 60px;
     border-top: 1px solid rgba(255,255,255,0.05);
   }
-  .footer-logo-img { height: 96px; width: auto; display: block; }
+  .footer-logo-img { height: 44px; width: auto; display: block; }
   .footer-brand p {
-    font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.8; font-weight: 300; margin-top: 24px;
+    font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.8; font-weight: 300; margin-top: 24px;
     max-width: 280px;
   }
   .footer-col-title {
@@ -852,7 +867,7 @@
   }
   .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
   .footer-links a {
-    font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none;
+    font-size: 12px; color: rgba(255,255,255,0.72); text-decoration: none;
     transition: color 0.3s; font-weight: 300;
   }
   .footer-links a:hover { color: var(--dorado-palo); }
@@ -862,10 +877,10 @@
     border-top: 1px solid rgba(255,255,255,0.05);
     display: flex; justify-content: space-between; align-items: center;
   }
-  .footer-copy { font-size: 10px; color: rgba(255,255,255,0.2); font-weight: 300; letter-spacing: 1px; }
+  .footer-copy { font-size: 10px; color: rgba(255,255,255,0.55); font-weight: 300; letter-spacing: 1px; }
   .footer-logo-text {
     font-family: 'Playfair Display', serif;
-    font-size: 13px; color: rgba(255,255,255,0.2); letter-spacing: 4px; text-transform: uppercase; font-weight: 300;
+    font-size: 13px; color: rgba(255,255,255,0.55); letter-spacing: 4px; text-transform: uppercase; font-weight: 300;
   }
 
   /* MODAL */
@@ -923,6 +938,14 @@
   .form-input:focus, .form-textarea:focus, .form-select:focus { border-bottom-color: var(--dorado); }
   .form-textarea { resize: vertical; min-height: 100px; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+  .form-consent {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 24px; cursor: pointer;
+  }
+  .form-consent input { margin-top: 3px; flex-shrink: 0; accent-color: var(--verde); }
+  .form-consent span { font-size: 12px; color: var(--gris); line-height: 1.6; font-weight: 300; }
+  .form-consent a { color: var(--verde); text-decoration: underline; }
+  .form-consent a:hover { color: var(--dorado); }
   .form-submit {
     width: 100%; background: var(--verde); color: var(--crema);
     padding: 18px; border: none; cursor: pointer;
@@ -1068,15 +1091,6 @@
 
 
 
-/* Footer logo: invert to show on dark green/black bg */
-.ft-brand img {
-  height: 36px;
-  width: auto;
-  /* Filter to make copper+green logo visible on dark bg */
-  filter: brightness(0) invert(0.85) sepia(0.3) saturate(1.2);
-  opacity: 0.75;
-}
-
 /* Hero panel logo stat block: hide logo, show stats cleanly */
 
 /* Logo in mobile nav context: if we ever show it there, ensure visibility */
@@ -1114,6 +1128,31 @@
     <div class="modal-body" id="modalBody"></div>
   </div>
 
+  <!-- Modal: Aviso de Privacidad -->
+  <div class="modal" id="modalPrivacidad" style="display:none">
+    <div class="modal-header">
+      <div class="modal-eyebrow">Protección de datos</div>
+      <div class="modal-title">Aviso de <em style="font-style:italic;color:var(--dorado-palo)">Privacidad</em></div>
+      <button class="modal-close" onclick="closeAllModals()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Responsable.</strong> Ibarra Quezada Abogados, con domicilio en Avenida Córdoba 434, Valle Dorado, Tlalnepantla de Baz, Estado de México, es responsable del tratamiento de los datos personales que nos proporcionas a través de este sitio, conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).</p>
+      <h4>Datos que recabamos</h4>
+      <p>A través de nuestro formulario de contacto recabamos: nombre, empresa (opcional), correo electrónico, teléfono (opcional) y la descripción de tu situación o necesidad legal.</p>
+      <h4>Finalidades</h4>
+      <ul class="modal-list">
+        <li>Responder a tu solicitud de contacto o asesoría</li>
+        <li>Evaluar y, en su caso, dar seguimiento a un posible asunto legal</li>
+        <li>Comunicarnos contigo por correo electrónico o teléfono</li>
+      </ul>
+      <p>No utilizamos tus datos con fines de mercadotecnia ni los transferimos a terceros, salvo obligación legal.</p>
+      <h4>Derechos ARCO</h4>
+      <p>Puedes acceder, rectificar o cancelar tus datos personales, u oponerte a su tratamiento, enviando tu solicitud a <a href="mailto:juan@ibarraquezada.com" style="color:var(--verde)">juan@ibarraquezada.com</a>. Responderemos en un plazo razonable conforme a la ley aplicable.</p>
+      <h4>Cambios a este aviso</h4>
+      <p>Este aviso puede actualizarse. La versión vigente siempre estará disponible en esta página.</p>
+    </div>
+  </div>
+
   <!-- Modal: Contacto -->
   <div class="modal" id="modalContacto" style="display:none">
     <div class="modal-header">
@@ -1132,7 +1171,7 @@
         </div>
         <div class="form-grid">
           <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" name="email" placeholder="tu@correo.com" required></div>
-          <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" name="telefono" placeholder="56 1125 9959"></div>
+          <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" name="telefono" placeholder="55 0000 0000"></div>
         </div>
         <div class="form-group">
           <label class="form-label">Área de interés</label>
@@ -1148,6 +1187,10 @@
           </select>
         </div>
         <div class="form-group"><label class="form-label">Cuéntanos sobre tu caso</label><textarea class="form-textarea" name="mensaje" placeholder="Describe brevemente tu situación o necesidad legal..."></textarea></div>
+        <label class="form-consent">
+          <input type="checkbox" name="consentimiento" id="consentimiento" required>
+          <span>He leído y acepto el <a href="#" onclick="event.stopPropagation();closeAllModals();openPrivacidad();return false;">Aviso de Privacidad</a>.</span>
+        </label>
         <button type="submit" class="form-submit" id="formSubmitBtn">Enviar mensaje →</button>
       </form>
       <div id="formSuccess" style="display:none;text-align:center;padding:36px 0;">
@@ -1193,9 +1236,10 @@
 <section class="hero" id="inicio">
   <div class="hero-bg"></div>
   <div class="hero-texture"></div>
-  <div class="hero-line-v"></div>
+  <div class="hero-vline"></div>
 
   <div class="hero-content">
+    <div class="hero-mobile-band" aria-hidden="true"></div>
     <div class="hero-eyebrow"><span>Corporativo · Contratos · Laboral · Legal Tech</span></div>
     <h1>Blindaje legal<br>para decisiones<br><em>irreversibles.</em></h1>
     <p class="hero-subtitle">Leemos la letra chica antes de que la firmes.</p>
@@ -1515,10 +1559,7 @@
 
 <!-- MARQUEE -->
 <div class="insight-strip">
-  <div class="insight-strip-text">
-    Derecho Corporativo &nbsp;·&nbsp; Contratos Mercantiles &nbsp;·&nbsp; Consultoría Laboral &nbsp;·&nbsp; Constitución de Empresas &nbsp;·&nbsp; Gobierno Corporativo &nbsp;·&nbsp; REPSE &nbsp;·&nbsp; Cumplimiento Normativo &nbsp;·&nbsp; Due Diligence &nbsp;·&nbsp; Fusiones y Adquisiciones &nbsp;·&nbsp; Legal Ops &nbsp;·&nbsp; Legal Tech & IA &nbsp;·&nbsp; NOM-035 &nbsp;·&nbsp;&nbsp;&nbsp;
-    Derecho Corporativo &nbsp;·&nbsp; Contratos Mercantiles &nbsp;·&nbsp; Consultoría Laboral &nbsp;·&nbsp; Constitución de Empresas &nbsp;·&nbsp; Gobierno Corporativo &nbsp;·&nbsp; REPSE &nbsp;·&nbsp; Cumplimiento Normativo &nbsp;·&nbsp; Due Diligence &nbsp;·&nbsp; Fusiones y Adquisiciones &nbsp;·&nbsp; Legal Ops &nbsp;·&nbsp; Legal Tech & IA &nbsp;·&nbsp; NOM-035
-  </div>
+  <div class="insight-strip-text">Derecho Corporativo &nbsp;·&nbsp; Contratos Mercantiles &amp; Civiles &nbsp;·&nbsp; Consultoría Laboral &nbsp;·&nbsp; Gobierno Corporativo &nbsp;·&nbsp; Fusiones &amp; Adquisiciones &nbsp;·&nbsp; Legal Ops &amp; IA</div>
 </div>
 
 <!-- NOSOTROS -->
@@ -1553,12 +1594,7 @@
     </div>
 
     <div class="nosotros-visual">
-      <div class="nosotros-img-frame">
-        <div class="nosotros-img-pattern"></div>
-        <div class="nosotros-img-text">
-          <div class="nosotros-tagline">Negocios<br>con<br>certeza.</div>
-        </div>
-      </div>
+      <div class="nosotros-img-frame" role="img" aria-label="Retrato del socio fundador de Ibarra Quezada Abogados"></div>
       <div class="nosotros-float-card">
         <div class="nosotros-float-num"></div>
         <div class="nosotros-float-label">Un solo equipo, todas tus áreas legales</div>
@@ -1724,7 +1760,7 @@
   </div>
 </footer>
 <div class="footer-bottom">
-  <div class="footer-copy">© 2026 Ibarra Quezada Abogados · Todos los derechos reservados</div>
+  <div class="footer-copy">© 2026 Ibarra Quezada Abogados · Todos los derechos reservados · <a href="#" onclick="openPrivacidad();return false;" style="color:inherit;text-decoration:underline">Aviso de Privacidad</a></div>
   <div class="footer-logo-text">Ibarra Quezada Abogados · Corporativo · Contractual · Laboral</div>
 </div>
 
@@ -1782,6 +1818,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModa
 
 // CONTACTO
 function openContacto() { showModal('modalContacto'); }
+function openPrivacidad() { showModal('modalPrivacidad'); }
 
 // Formspree submit handler
 document.addEventListener('DOMContentLoaded', function() {
