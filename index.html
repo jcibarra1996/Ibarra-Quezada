@@ -244,9 +244,17 @@
   }
   .hero-visual-inner {
     position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde) 50%, #F26C2E 100%);
+    background-image: url('assets/img/hero-panel.jpg');
+    background-size: cover; background-position: center;
     display: flex; align-items: center; justify-content: center;
     flex-direction: column; gap: 0;
+  }
+  .hero-visual-inner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde) 50%, #F26C2E 100%);
+    mix-blend-mode: multiply;
+    opacity: 0.62;
   }
   .hero-visual-pattern {
     position: absolute; inset: 0;
@@ -339,12 +347,20 @@
     background: var(--blanco);
   }
   .servicios-header {
-    max-width: 600px; margin-bottom: 80px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 48px; margin-bottom: 80px;
   }
+  .servicios-header-text { max-width: 600px; }
   .servicios-header p {
     font-size: 14px; color: var(--gris);
     line-height: 1.8; margin-top: 24px; font-weight: 300;
   }
+  .servicios-header-visual {
+    flex: 0 0 300px; aspect-ratio: 4 / 5;
+    background-image: url('assets/img/servicios-header.jpg');
+    background-size: cover; background-position: center;
+  }
+  @media (max-width: 1100px) { .servicios-header-visual { display: none; } }
   .servicios-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -412,6 +428,15 @@
     color: var(--crema);
     overflow: hidden;
   }
+  #metodologia::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url('assets/img/metodologia-fondo.jpg');
+    background-size: cover; background-position: center;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+  #metodologia > * { position: relative; z-index: 1; }
   #metodologia .section-label { color: var(--dorado-palo); }
   #metodologia .section-label::before { background: var(--dorado-palo); }
   #metodologia .section-title { color: var(--crema); }
@@ -528,25 +553,20 @@
       transparent 1px, transparent 25px
     );
   }
-  .area-visual-icon {
-    font-family: 'Playfair Display', serif;
-    font-size: 120px; font-weight: 300; font-style: italic;
-    color: rgba(244,240,233,0.1); user-select: none; position: relative; z-index: 2;
-  }
   .area-visual-badge {
     position: absolute; bottom: 32px; right: 32px;
     background: var(--dorado); color: var(--blanco);
     padding: 12px 20px; font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
     font-weight: 600;
   }
-  /* Cada área con su propio tratamiento — no el mismo bloque repetido 4 veces */
-  [data-panel="0"] .area-visual { background: var(--verde); }
-  [data-panel="1"] .area-visual { background: var(--verde-claro); }
+  /* Cada área con su propia fotografía — no el mismo bloque repetido 4 veces */
+  [data-panel="0"] .area-visual { background-image: url('assets/img/areas-panel-0.jpg'); background-size: cover; background-position: center; }
+  [data-panel="1"] .area-visual { background-image: url('assets/img/areas-panel-1.jpg'); background-size: cover; background-position: center; }
   [data-panel="1"] .area-visual-pattern { background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 25px); }
   [data-panel="1"] .area-visual-badge { background: var(--verde-oscuro); }
-  [data-panel="2"] .area-visual { background: var(--verde-oscuro); }
+  [data-panel="2"] .area-visual { background-image: url('assets/img/areas-panel-2.jpg'); background-size: cover; background-position: center; }
   [data-panel="2"] .area-visual-pattern { background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 32px); }
-  [data-panel="3"] .area-visual { background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%); }
+  [data-panel="3"] .area-visual { background-image: url('assets/img/areas-panel-3.jpg'); background-size: cover; background-position: center; }
   [data-panel="3"] .area-visual-pattern { background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 18px); }
   [data-panel="3"] .area-visual-badge { background: var(--verde-oscuro); }
 
@@ -556,7 +576,13 @@
     background: var(--blanco);
     border-top: 1px solid var(--crema-oscura);
   }
-  .sectores-header { text-align: center; margin-bottom: 80px; }
+  .sectores-header { text-align: center; margin-bottom: 56px; }
+  .sectores-banda {
+    height: 240px; margin-bottom: 80px;
+    background-image: url('assets/img/sectores-banda.jpg');
+    background-size: cover; background-position: center;
+  }
+  @media (max-width: 640px) { .sectores-banda { height: 160px; } }
   .sectores-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -672,6 +698,10 @@
     border: 1px solid var(--crema-oscura); padding: 40px 32px;
     cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
   }
+  .recurso-thumb {
+    height: 160px; margin: -40px -32px 28px;
+    background-size: cover; background-position: center;
+  }
   .recurso-card::after {
     content: '';
     position: absolute; bottom: 0; left: 0; right: 0;
@@ -709,6 +739,12 @@
   .faq-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
   .faq-sidebar { position: sticky; top: 120px; }
   .faq-sidebar p { font-size: 13px; color: var(--gris); line-height: 1.8; margin-top: 24px; font-weight: 300; }
+  .faq-sidebar-img {
+    margin-top: 40px; height: 360px;
+    background-image: url('assets/img/faq-columna.jpg');
+    background-size: cover; background-position: center;
+  }
+  @media (max-width: 1024px) { .faq-sidebar-img { display: none; } }
   .faq-list { display: flex; flex-direction: column; }
   .faq-item {
     border-bottom: 1px solid var(--crema-oscura);
@@ -736,6 +772,12 @@
     padding: 120px 60px;
     background: var(--verde-oscuro);
     position: relative; overflow: hidden;
+  }
+  .contacto-photo {
+    position: absolute; inset: 0;
+    background-image: url('assets/img/contacto-fondo.jpg');
+    background-size: cover; background-position: center;
+    opacity: 0.14;
   }
   .contacto-bg {
     position: absolute; inset: 0;
@@ -966,6 +1008,15 @@
   background: var(--verde-oscuro);
   display: grid;
   grid-template-columns: repeat(3,1fr);
+  position: relative; overflow: hidden;
+}
+.strip-valor::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url('assets/img/strip-valor-textura.jpg');
+  background-size: cover; background-position: center;
+  opacity: 0.07;
+  pointer-events: none;
 }
 .val-item {
   padding: 56px 48px;
@@ -1204,9 +1255,12 @@
 
 <section id="servicios">
   <div class="servicios-header fade-up">
-    <div class="section-label">Lo que hacemos</div>
-    <h2 class="section-title">El respaldo legal<br>que tu empresa <em>necesita</em></h2>
-    <p>Cada decisión de negocio tiene una cara legal: cómo te constituyes, qué firmas, a quién contratas, con quién te fusionas. Diseñamos cada servicio para que esa cara legal juegue a tu favor, no en tu contra.</p>
+    <div class="servicios-header-text">
+      <div class="section-label">Lo que hacemos</div>
+      <h2 class="section-title">El respaldo legal<br>que tu empresa <em>necesita</em></h2>
+      <p>Cada decisión de negocio tiene una cara legal: cómo te constituyes, qué firmas, a quién contratas, con quién te fusionas. Diseñamos cada servicio para que esa cara legal juegue a tu favor, no en tu contra.</p>
+    </div>
+    <div class="servicios-header-visual" aria-hidden="true"></div>
   </div>
 
   <div class="servicios-grid">
@@ -1345,7 +1399,6 @@
     </div>
     <div class="area-visual">
       <div class="area-visual-pattern"></div>
-      <div class="area-visual-icon">✦</div>
       <div class="area-visual-badge">Startups</div>
     </div>
   </div>
@@ -1365,7 +1418,6 @@
     </div>
     <div class="area-visual">
       <div class="area-visual-pattern"></div>
-      <div class="area-visual-icon">◈</div>
       <div class="area-visual-badge">PyMEs</div>
     </div>
   </div>
@@ -1384,7 +1436,6 @@
     </div>
     <div class="area-visual">
       <div class="area-visual-pattern"></div>
-      <div class="area-visual-icon">◇</div>
       <div class="area-visual-badge">Corporativo</div>
     </div>
   </div>
@@ -1404,7 +1455,6 @@
     </div>
     <div class="area-visual">
       <div class="area-visual-pattern"></div>
-      <div class="area-visual-icon">◯</div>
       <div class="area-visual-badge">Laboral</div>
     </div>
   </div>
@@ -1416,6 +1466,8 @@
     <div class="section-label" style="justify-content:center">A quién servimos</div>
     <h2 class="section-title">Empresas de todos los<br><em>sectores productivos</em></h2>
   </div>
+
+  <div class="sectores-banda" aria-hidden="true"></div>
 
   <div class="sectores-grid">
     <div class="sector-item fade-up">
@@ -1524,6 +1576,7 @@
 
   <div class="recursos-grid">
     <div class="recurso-card fade-up" onclick="openRecurso('constitucion')">
+      <div class="recurso-thumb" style="background-image:url('assets/img/recursos-card-1.jpg')" aria-hidden="true"></div>
       <div class="recurso-tag">Corporativo <span class="recurso-date">· Mayo 2026</span></div>
       <div class="recurso-title">S.A. de C.V. vs. S. de R.L.: ¿qué figura conviene a tu empresa?</div>
       <div class="recurso-desc">Elegir mal la figura societaria hoy se paga en costos fiscales y de gobierno corporativo mañana. Comparamos las opciones más comunes.</div>
@@ -1531,6 +1584,7 @@
     </div>
 
     <div class="recurso-card fade-up" onclick="openRecurso('repse')">
+      <div class="recurso-thumb" style="background-image:url('assets/img/recursos-card-2.jpg')" aria-hidden="true"></div>
       <div class="recurso-tag">Laboral <span class="recurso-date">· Agosto 2026</span></div>
       <div class="recurso-title">REPSE: qué es y cómo cumplir si subcontratas servicios especializados</div>
       <div class="recurso-desc">Si subcontratas servicios especializados y no estás registrado en el REPSE, puedes perder la deducibilidad del gasto sin saberlo. Esto es lo que debes revisar.</div>
@@ -1538,6 +1592,7 @@
     </div>
 
     <div class="recurso-card fade-up" onclick="openRecurso('clausulas')">
+      <div class="recurso-thumb" style="background-image:url('assets/img/recursos-card-3.jpg')" aria-hidden="true"></div>
       <div class="recurso-tag">Contratos <span class="recurso-date">· Septiembre 2026</span></div>
       <div class="recurso-title">5 cláusulas que no pueden faltar en un contrato mercantil</div>
       <div class="recurso-desc">La mayoría de los conflictos comerciales no nacen de la mala fe, sino de contratos ambiguos. Estas son las cláusulas que revisamos primero.</div>
@@ -1553,6 +1608,7 @@
       <div class="section-label">Preguntas frecuentes</div>
       <h2 class="section-title">Todo lo que<br>quieres <em>saber</em></h2>
       <p>Respondemos las dudas más frecuentes de fundadores, directores y equipos de RH cuando empiezan a buscar asesoría legal corporativa y laboral seria.</p>
+      <div class="faq-sidebar-img" aria-hidden="true"></div>
     </div>
     <div class="faq-list">
       <div class="faq-item">
@@ -1585,6 +1641,7 @@
 
 <!-- CTA CONTACTO -->
 <section id="contacto">
+  <div class="contacto-photo"></div>
   <div class="contacto-bg"></div>
   <div class="contacto-content">
     <div class="section-label contacto-eyebrow" style="justify-content:center">Da el primer paso</div>
