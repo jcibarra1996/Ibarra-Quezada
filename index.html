@@ -12,8 +12,8 @@
 <meta name="author" content="Ibarra Quezada Abogados">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://ibarraquezada.com/">
-<meta name="geo.region" content="MX-CMX">
-<meta name="geo.placename" content="CDMX">
+<meta name="geo.region" content="MX-MEX">
+<meta name="geo.placename" content="Tlalnepantla de Baz">
 <meta name="language" content="es-MX">
 
 <!-- Open Graph -->
@@ -36,7 +36,7 @@
 
 <!-- Schema.org LegalService -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://ibarraquezada.com","logo":"https://ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"juan@ibarraquezada.com","address":{"@type":"PostalAddress","streetAddress":"CDMX","addressLocality":"CDMX","addressRegion":"CDMX","postalCode":"06600","addressCountry":"MX"},"geo":{"@type":"GeoCoordinates","latitude":19.4326,"longitude":-99.1332},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho Corporativo","Contratos Mercantiles","Consultoría Laboral","Gobierno Corporativo","Cumplimiento Normativo","Fusiones y Adquisiciones","Legal Operations","Legal Tech"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/ibarraquezada"]}
+{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://ibarraquezada.com","logo":"https://ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"juan@ibarraquezada.com","address":{"@type":"PostalAddress","streetAddress":"Avenida Córdoba 434, Valle Dorado","addressLocality":"Tlalnepantla de Baz","addressRegion":"MEX","addressCountry":"MX"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho Corporativo","Contratos Mercantiles","Consultoría Laboral","Gobierno Corporativo","Cumplimiento Normativo","Fusiones y Adquisiciones","Legal Operations","Legal Tech"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/ibarraquezada","https://www.linkedin.com/company/ibarra-quezada-abogados/"]}
 </script>
 
 <!-- Schema.org FAQ -->
@@ -89,31 +89,8 @@
     font-family: 'Montserrat', sans-serif;
     background: var(--crema);
     color: var(--negro);
-    cursor: none;
     overflow-x: hidden;
   }
-
-  /* CURSOR */
-  .cursor {
-    width: 10px; height: 10px;
-    background: var(--dorado);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid var(--verde);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.18s ease;
-    opacity: 0.7;
-  }
-  .cursor-ring.hover { transform: translate(-50%, -50%) scale(1.8); opacity: 0.3; border-color: var(--dorado); }
 
   /* NAV */
   nav {
@@ -196,6 +173,7 @@
     margin-bottom: 32px;
     display: flex; align-items: center; gap: 16px;
   }
+  .hero-eyebrow span { min-width: 0; }
   .hero-eyebrow::before {
     content: '';
     width: 40px; height: 1px;
@@ -281,15 +259,15 @@
     );
   }
   .hero-visual-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 180px; font-weight: 300;
-    color: rgba(255,255,255,0.04);
-    line-height: 1;
     position: absolute;
-    right: -30px; top: 50%;
+    right: -60px; top: 50%;
+    width: 480px; height: 480px;
     transform: translateY(-50%);
-    letter-spacing: -10px;
-    white-space: nowrap;
+    background-image: url('assets/icon-mark-white.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.05;
     user-select: none;
   }
   .hero-stat-block {
@@ -389,6 +367,15 @@
   }
   .servicio-card:hover { background: var(--crema); }
   .servicio-card:hover::before { height: 100%; }
+  /* Gobierno Corporativo & Cumplimiento: tratamiento propio, con más gravitas institucional */
+  .servicio-card--featured { background: var(--verde-oscuro); }
+  .servicio-card--featured:hover { background: var(--verde-oscuro); }
+  .servicio-card--featured .servicio-icon { color: var(--dorado-palo); opacity: 1; }
+  .servicio-card--featured .servicio-num { color: rgba(244,240,233,0.08); }
+  .servicio-card--featured .servicio-title { color: var(--crema); }
+  .servicio-card--featured .servicio-desc { color: rgba(244,240,233,0.6); }
+  .servicio-card--featured .servicio-link { color: var(--dorado-palo); }
+  .servicio-card--featured:hover .servicio-link { color: var(--dorado); }
   .servicio-icon {
     width: 48px; height: 48px; margin-bottom: 28px;
     color: var(--dorado); opacity: 0.8;
@@ -552,6 +539,16 @@
     padding: 12px 20px; font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
     font-weight: 600;
   }
+  /* Cada área con su propio tratamiento — no el mismo bloque repetido 4 veces */
+  [data-panel="0"] .area-visual { background: var(--verde); }
+  [data-panel="1"] .area-visual { background: var(--verde-claro); }
+  [data-panel="1"] .area-visual-pattern { background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 25px); }
+  [data-panel="1"] .area-visual-badge { background: var(--verde-oscuro); }
+  [data-panel="2"] .area-visual { background: var(--verde-oscuro); }
+  [data-panel="2"] .area-visual-pattern { background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 32px); }
+  [data-panel="3"] .area-visual { background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%); }
+  [data-panel="3"] .area-visual-pattern { background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 18px); }
+  [data-panel="3"] .area-visual-badge { background: var(--verde-oscuro); }
 
   /* CLIENTES / SECTORES */
   #sectores {
@@ -575,7 +572,7 @@
     cursor: default;
   }
   .sector-item:hover { background: var(--crema); }
-  .sector-emoji { font-size: 32px; margin-bottom: 20px; display: block; }
+  .sector-icon { width: 32px; height: 32px; margin-bottom: 20px; color: var(--dorado); opacity: 0.85; display: block; }
   .sector-name {
     font-family: 'Playfair Display', serif;
     font-size: 20px; font-weight: 400; color: var(--verde-oscuro);
@@ -658,8 +655,9 @@
     width: 220px;
   }
   .nosotros-float-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 56px; font-weight: 300; color: var(--blanco); line-height: 1;
+    width: 48px; height: 48px;
+    background-image: url('assets/icon-mark-white.png');
+    background-size: contain; background-repeat: no-repeat; background-position: left center;
   }
   .nosotros-float-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 8px; }
 
@@ -689,6 +687,7 @@
     display: flex; align-items: center; gap: 10px;
   }
   .recurso-tag::before { content: ''; width: 20px; height: 1px; background: var(--dorado); }
+  .recurso-date { color: var(--gris-claro); font-weight: 500; }
   .recurso-title {
     font-family: 'Playfair Display', serif;
     font-size: 24px; font-weight: 400; color: var(--verde-oscuro);
@@ -785,6 +784,12 @@
   .info-val { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--crema); font-weight: 300; }
   .info-val a { color: var(--crema); text-decoration: none; transition: color 0.3s; }
   .info-val a:hover { color: var(--dorado-palo); }
+  .contacto-map {
+    margin: 52px auto 0; max-width: 720px;
+    border: 1px solid rgba(244,240,233,0.15);
+    filter: grayscale(0.3) contrast(1.05);
+  }
+  .contacto-map iframe { display: block; width: 100%; height: 280px; border: 0; }
 
   /* FOOTER */
   footer {
@@ -921,6 +926,7 @@
     .areas-tabs { flex-wrap: wrap; }
     .nosotros-values { grid-template-columns: 1fr; }
     .form-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
   }
 
 /* HAMBURGER */
@@ -939,7 +945,7 @@
   font-family:'Playfair Display',serif; font-size:26px; font-weight:300;
   color:var(--crema); padding:16px 0;
   border-bottom:1px solid rgba(255,255,255,.08); transition:color .3s;
-  display:block;
+  display:block; text-decoration:none;
 }
 .mobile-nav a:hover { color:var(--dorado-palo); }
 .mobile-nav-close {
@@ -1028,9 +1034,6 @@
 </head>
 <body>
 
-<!-- CURSOR -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 <!-- MOBILE OVERLAY -->
 <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileNav()"></div>
 
@@ -1068,7 +1071,7 @@
       <button class="modal-close" onclick="closeAllModals()">✕</button>
     </div>
     <div class="modal-body">
-      <p>Cuéntanos brevemente tu situación. Juan Carlos revisa cada mensaje personalmente y te responde en 24 a 48 horas.</p>
+      <p>Cuéntanos brevemente tu situación. En Ibarra Quezada revisamos cada mensaje a detalle y te respondemos en 24 a 48 horas.</p>
       <form id="contactForm" action="https://formspree.io/juan@ibarraquezada.com" method="POST">
         <input type="hidden" name="_subject" value="Nueva consulta — Ibarra Quezada Abogados">
         <input type="hidden" name="_next" value="">
@@ -1098,7 +1101,7 @@
       </form>
       <div id="formSuccess" style="display:none;text-align:center;padding:36px 0;">
         <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:300;color:var(--verde-oscuro);margin-bottom:14px;">Mensaje enviado ✓</div>
-        <p style="color:var(--gris);font-size:13px;line-height:1.8;">Gracias por escribirnos.<br>Juan Carlos revisará tu mensaje y te contactará pronto.</p>
+        <p style="color:var(--gris);font-size:13px;line-height:1.8;">Gracias por escribirnos.<br>Revisaremos tu mensaje y te contactaremos pronto.</p>
       </div>
     </div>
   </div>
@@ -1142,7 +1145,7 @@
   <div class="hero-line-v"></div>
 
   <div class="hero-content">
-    <div class="hero-eyebrow">Corporativo · Contratos · Laboral · Legal Tech</div>
+    <div class="hero-eyebrow"><span>Corporativo · Contratos · Laboral · Legal Tech</span></div>
     <h1>Certeza legal<br>para decisiones<br>que no <em>esperan.</em></h1>
     <p class="hero-subtitle">El socio legal detrás de las decisiones que hacen crecer tu empresa.</p>
     <p class="hero-desc">El despacho de fundadores y directores que no tienen tiempo de descifrar letra chica: estructuramos, protegemos y ponemos a trabajar la parte legal de tu empresa.</p>
@@ -1155,7 +1158,7 @@
   <div class="hero-visual">
     <div class="hero-visual-inner">
       <div class="hero-visual-pattern"></div>
-      <div class="hero-visual-text">IQ</div>
+      <div class="hero-visual-text"></div>
       <div class="hero-stat-block">
         <div class="hero-stat">
           <div class="hero-stat-num">6</div>
@@ -1236,7 +1239,7 @@
       <a href="#" class="servicio-link" onclick="openServicio('laboral');return false;">Conocer más →</a>
     </div>
 
-    <div class="servicio-card fade-up" onclick="openServicio('gobierno')">
+    <div class="servicio-card servicio-card--featured fade-up" onclick="openServicio('gobierno')">
       <div class="servicio-num">04</div>
       <svg class="servicio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 6l9-4 9 4v6c0 5.5-3.8 10.7-9 12C6.8 22.7 3 17.5 3 12V6z"/><path d="M9 12l2 2 4-4"/></svg>
       <div class="servicio-title">Gobierno Corporativo & Cumplimiento Regulatorio</div>
@@ -1420,42 +1423,42 @@
 
   <div class="sectores-grid">
     <div class="sector-item fade-up">
-      <span class="sector-emoji">💻</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M2 20h20"/><path d="M9 20l1-4h4l1 4"/></svg>
       <div class="sector-name">Tecnología & Startups</div>
       <div class="sector-desc">Estructura societaria ágil y contratos que escalan con tu negocio, sin frenar la velocidad que te trajo hasta aquí.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🏭</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 21V10l6 4v-4l6 4V8l6 4v9z"/><path d="M3 21h18"/><path d="M7 21v-3M11 21v-3M15 21v-3"/></svg>
       <div class="sector-name">Manufactura & Industrial</div>
       <div class="sector-desc">Cumplimiento laboral, contratos de suministro y relaciones sindicales, manejados por quien entiende la operación de piso.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🛍️</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
       <div class="sector-name">Retail & Consumo</div>
       <div class="sector-desc">Contratos con proveedores y personal en punto de venta, listos para operaciones que no admiten vacíos legales.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🧑‍💼</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg>
       <div class="sector-name">Servicios Profesionales</div>
       <div class="sector-desc">Contratos claros y estructuras societarias sólidas para despachos, consultoras y firmas que venden su credibilidad.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🏗️</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 21V9l8-6 8 6v12"/><path d="M9 21v-6h6v6"/></svg>
       <div class="sector-name">Construcción & Inmobiliario</div>
       <div class="sector-desc">Contratos de obra, arrendamiento y cumplimiento regulatorio para desarrolladores y constructoras que no pueden parar.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🍽️</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2a2 2 0 0 1 0 4h-2"/><path d="M7 3c0 1-.8 1.2-.8 2.2S7 7 7 8M11 3c0 1-.8 1.2-.8 2.2S11 7 11 8"/></svg>
       <div class="sector-name">Alimentos & Bebidas</div>
       <div class="sector-desc">Contratos de franquicia y relaciones laborales operativas para restaurantes y productores que crecen rápido.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🚚</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="7" width="14" height="9"/><path d="M15 10h4l3 3v3h-7z"/><circle cx="5.5" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
       <div class="sector-name">Logística & Comercio Exterior</div>
       <div class="sector-desc">Contratos internacionales y cumplimiento aduanero para empresas de transporte y comercio exterior.</div>
     </div>
     <div class="sector-item fade-up">
-      <span class="sector-emoji">🏥</span>
+      <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
       <div class="sector-name">Salud & Ciencias de la Vida</div>
       <div class="sector-desc">Regulación especializada y relaciones laborales sensibles, resueltas para clínicas, laboratorios y empresas de salud.</div>
     </div>
@@ -1509,7 +1512,7 @@
         </div>
       </div>
       <div class="nosotros-float-card">
-        <div class="nosotros-float-num">IQ</div>
+        <div class="nosotros-float-num"></div>
         <div class="nosotros-float-label">Un solo equipo, todas tus áreas legales</div>
       </div>
     </div>
@@ -1525,21 +1528,21 @@
 
   <div class="recursos-grid">
     <div class="recurso-card fade-up" onclick="openRecurso('constitucion')">
-      <div class="recurso-tag">Corporativo</div>
+      <div class="recurso-tag">Corporativo <span class="recurso-date">· Mayo 2026</span></div>
       <div class="recurso-title">S.A. de C.V. vs. S. de R.L.: ¿qué figura conviene a tu empresa?</div>
       <div class="recurso-desc">Elegir mal la figura societaria hoy se paga en costos fiscales y de gobierno corporativo mañana. Comparamos las opciones más comunes.</div>
       <a href="#" class="recurso-link" onclick="openRecurso('constitucion');return false;">Leer artículo →</a>
     </div>
 
     <div class="recurso-card fade-up" onclick="openRecurso('repse')">
-      <div class="recurso-tag">Laboral</div>
+      <div class="recurso-tag">Laboral <span class="recurso-date">· Agosto 2026</span></div>
       <div class="recurso-title">REPSE: qué es y cómo cumplir si subcontratas servicios especializados</div>
       <div class="recurso-desc">Si subcontratas servicios especializados y no estás registrado en el REPSE, puedes perder la deducibilidad del gasto sin saberlo. Esto es lo que debes revisar.</div>
       <a href="#" class="recurso-link" onclick="openRecurso('repse');return false;">Leer artículo →</a>
     </div>
 
     <div class="recurso-card fade-up" onclick="openRecurso('clausulas')">
-      <div class="recurso-tag">Contratos</div>
+      <div class="recurso-tag">Contratos <span class="recurso-date">· Septiembre 2026</span></div>
       <div class="recurso-title">5 cláusulas que no pueden faltar en un contrato mercantil</div>
       <div class="recurso-desc">La mayoría de los conflictos comerciales no nacen de la mala fe, sino de contratos ambiguos. Estas son las cláusulas que revisamos primero.</div>
       <a href="#" class="recurso-link" onclick="openRecurso('clausulas');return false;">Leer artículo →</a>
@@ -1605,13 +1608,26 @@
         <div class="info-val"><a href="tel:+525611259959">56 1125 9959</a></div>
       </div>
       <div class="info-item">
-        <div class="info-label">Ciudad</div>
-        <div class="info-val">CDMX</div>
+        <div class="info-label">Dirección</div>
+        <div class="info-val">Av. Córdoba 434, Valle Dorado<br>Tlalnepantla de Baz</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">LinkedIn</div>
+        <div class="info-val"><a href="https://www.linkedin.com/company/ibarra-quezada-abogados/" target="_blank" rel="noopener">Ibarra Quezada Abogados</a></div>
       </div>
       <div class="info-item">
         <div class="info-label">Instagram</div>
         <div class="info-val"><a href="https://www.instagram.com/ibarraquezada" target="_blank" rel="noopener">@ibarraquezada</a></div>
       </div>
+    </div>
+    <div class="contacto-map">
+      <iframe
+        src="https://maps.google.com/maps?q=Avenida%20C%C3%B3rdoba%20434%2C%20Valle%20Dorado%2C%20Tlalnepantla%20de%20Baz&t=&z=15&ie=UTF8&iwloc=&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Ubicación de Ibarra Quezada Abogados"
+        aria-label="Mapa con la ubicación de Ibarra Quezada Abogados">
+      </iframe>
     </div>
   </div>
 </section>
@@ -1648,7 +1664,8 @@
     <ul class="footer-links">
       <li><a href="mailto:juan@ibarraquezada.com">juan@ibarraquezada.com</a></li>
       <li><a href="tel:+525611259959">56 1125 9959</a></li>
-            <li><a href="#">Instagram</a></li>
+      <li><a href="https://www.linkedin.com/company/ibarra-quezada-abogados/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://www.instagram.com/ibarraquezada" target="_blank" rel="noopener">Instagram</a></li>
       <li><a href="#" onclick="openContacto();return false;">Contáctanos</a></li>
     </ul>
   </div>
@@ -1671,22 +1688,6 @@ function closeMobileNav(){
   document.getElementById('mobileOverlay').classList.remove('open');
   document.body.style.overflow='';
 }
-
-// CURSOR
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
-(function animRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx+'px'; ring.style.top = ry+'px';
-  requestAnimationFrame(animRing);
-})();
-document.querySelectorAll('a, button, .servicio-card, .faq-q, .recurso-card, .sector-item, .step, .area-tab').forEach(el => {
-  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-});
 
 // NAV SCROLL
 window.addEventListener('scroll', () => {
