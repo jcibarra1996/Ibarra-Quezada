@@ -607,7 +607,17 @@
     if (alpha<=0) return;
     ctx.font = '13px "VT323"';
     var padX = 8, padY = 5;
-    var w = Math.min(ctx.measureText(text).width + padX*2, 168);
+    var maxW = 168;
+    var full = String(text);
+    var display = full;
+    while (display.length > 1 && ctx.measureText(display).width + padX*2 > maxW){
+      display = display.slice(0, display.length - 1);
+    }
+    if (display !== full){
+      display = display.replace(/\s+$/, '') + '…';
+    }
+    text = display;
+    var w = Math.min(ctx.measureText(text).width + padX*2, maxW);
     var h = 22;
     var bx = cx - w/2, by = topY - h - 10;
     ctx.save();
@@ -754,10 +764,15 @@
     return keys;
   }
 
+  // Espacio real es chico (la oficina de JC es de 4x7 casilleros), así que
+  // solo entran físicamente hasta 4 a la vez, bien separados y sin pisar el
+  // escritorio de JC; el resto de los relevantes sigue "en la mira" (puede
+  // hablar) pero se queda en su propio escritorio.
   var GATHER_SPOTS = [
-    { x: 60, y: 330 }, { x: 135, y: 330 }, { x: 210, y: 330 },
-    { x: 60, y: 360 }, { x: 135, y: 360 }, { x: 210, y: 360 }
+    { x: 55, y: 300 }, { x: 215, y: 300 },
+    { x: 75, y: 365 }, { x: 195, y: 365 }
   ];
+  var GATHER_LIMIT = GATHER_SPOTS.length;
 
   function sendEveryoneHome(instant){
     var moveFn = instant ? snapCharTo : walkCharTo;
@@ -770,15 +785,14 @@
 
   function gatherAroundJc(keys, instant){
     var moveFn = instant ? snapCharTo : walkCharTo;
-    var i = 0;
-    keys.forEach(function(key){
+    var visitors = keys.slice(0, GATHER_LIMIT);
+    visitors.forEach(function(key, i){
       var ch = findChar(key);
       if (!ch) return;
-      var spot = GATHER_SPOTS[i % GATHER_SPOTS.length];
-      i++;
+      var spot = GATHER_SPOTS[i];
       moveFn(ch, spot.x, spot.y);
     });
-    visiting = keys.slice();
+    visiting = visitors;
   }
 
   // populate legend
@@ -883,21 +897,9 @@
           applyActivity(targetKey, entrada.mensaje);
         }
       });
-      var ultima = historial[historial.length - 1];
-      if (ultima && !ultima.error){
-        if (ultima.agente === 'equipo'){
-          var relevantes = detectRelevant(ultima.respuesta);
-          spotlightKeys = relevantes;
-          gatherAroundJc(relevantes, true);
-          snapCharTo(jc, JC_HOME.x, JC_HOME.y);
-        } else {
-          spotlightKeys = [ultima.agente];
-          var spot = jcSpotFor(ultima.agente);
-          snapCharTo(jc, spot.x, spot.y);
-        }
-        jc.lines = [shortTask(ultima.mensaje)];
-        jc.bubbleAt = (window.performance ? performance.now() : Date.now());
-      }
+      // El historial es solo texto: al cargar la p&aacute;gina todos
+      // arrancan en su propio escritorio, no en la &uacute;ltima posici&oacute;n
+      // de la &uacute;ltima orden real.
     }
 
     fetch('/historial')
@@ -996,7 +998,6 @@
     drawPlant(2*30+18, 2*30+22);
     drawCooler(2*30+15, 9*30+8);
     drawPlant(4*30+10, 9*30+10);
-    drawFrame(4*30+15, 10*30-18, 'JC', '#2B2B2E');
 
     drawChair(JC_DESK.x, JC_HOME.y-6);
     TEAM.forEach(function(ch){
