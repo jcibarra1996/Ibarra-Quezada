@@ -279,7 +279,7 @@
   <div class="console">
     <div class="console__screen">
       <div class="console__canvaswrap">
-        <canvas id="scene" width="660" height="420" aria-label="Vista de arriba del despacho: la oficina privada de Gustavo y el area abierta con el resto del equipo"></canvas>
+        <canvas id="scene" width="660" height="420" aria-label="Vista de arriba del despacho: la oficina privada de Gustavo, la oficina de JC, y el area abierta con el resto del equipo"></canvas>
         <div class="scanlines"></div>
       </div>
     </div>
@@ -350,9 +350,16 @@
   for (var r4=1;r4<=6;r4++){ for (var c4=1;c4<=7;c4++){ map[r4][c4]=2; } }
   map[7][4]=3; map[7][5]=3;
 
+  // oficina de JC, en espejo abajo a la izquierda
+  for (var c5=1;c5<=7;c5++){ map[8][c5]=1; }
+  for (var r5=9;r5<=12;r5++){ map[r5][8]=1; }
+  for (var r6=9;r6<=12;r6++){ for (var c6=1;c6<=7;c6++){ map[r6][c6]=4; } }
+  map[8][4]=3; map[8][5]=3;
+
   var PALETTE = {
     floorA:'#DCC79B', floorB:'#D2BB8A',
     officeA:'#B23A46', officeB:'#A2323D',
+    jcOfficeA:'#3A383E', jcOfficeB:'#332F35',
     wallFace:'#4A3B2E', wallTop:'#EFE6D6', wallBase:'#382C21',
     doorFace:'#7A4A2A', doorFrame:'#3A2A18'
   };
@@ -378,6 +385,10 @@
     } else if (tile===2){
       var shade = ((x+y)%2===0) ? PALETTE.officeA : PALETTE.officeB;
       ctx.fillStyle = shade;
+      ctx.fillRect(px,py,TILE,TILE);
+    } else if (tile===4){
+      var shadeJc = ((x+y)%2===0) ? PALETTE.jcOfficeA : PALETTE.jcOfficeB;
+      ctx.fillStyle = shadeJc;
       ctx.fillRect(px,py,TILE,TILE);
     } else {
       var shadeB = ((x+y)%2===0) ? PALETTE.floorA : PALETTE.floorB;
@@ -405,15 +416,15 @@
     ctx.fillStyle = '#2F6E40';
     ctx.beginPath(); ctx.ellipse(cx-5,cy-6,6,8,0,0,Math.PI*2); ctx.fill();
   }
-  function drawFrame(cx,cy){
+  function drawFrame(cx,cy,label,plateColor){
     ctx.fillStyle = '#3A2A18';
     ctx.fillRect(cx-13,cy-11,26,20);
-    ctx.fillStyle = '#CC2233';
+    ctx.fillStyle = plateColor || '#CC2233';
     ctx.fillRect(cx-10,cy-8,20,14);
     ctx.fillStyle = '#F4EDE0';
     ctx.font = '9px "Press Start 2P"';
     ctx.textAlign = 'center';
-    ctx.fillText('IQ', cx, cy+3);
+    ctx.fillText(label || 'IQ', cx, cy+3);
   }
   function drawCooler(cx,cy){
     ctx.fillStyle = '#8FB6C9';
@@ -668,6 +679,65 @@
     return null;
   }
 
+  // ---------- JC (vos) ----------
+  // Estilo de traje oscuro inspirado en tu foto, en el mismo lenguaje visual
+  // pixel-art/Among Us que el resto del equipo (no un retrato literal).
+  // Tiene su propia oficina, en espejo con la de Gustavo pero abajo.
+  var JC_DESK = { x: 4*30+15, y: 10*30 };
+  var JC_HOME = { x: JC_DESK.x, y: 11*30+21 };
+  var JC_DOOR = { x: 4.5*30, y: 8*30+15 };
+  var GUSTAVO_DOOR = { x: 4.5*30, y: 7*30+15 };
+
+  var jc = {
+    name: 'JC',
+    color: '#2B2B2E',
+    dark: '#C9A227',
+    accessory: 'tie',
+    seed: 9.9,
+    x: JC_HOME.x, y: JC_HOME.y,
+    path: [],
+    blinkAt: 2000 + Math.random()*4000
+  };
+
+  function roomOf(x, y){
+    if (x < 250 && y < 210) return 'gustavo';
+    if (x < 250 && y > 250 && y < 390) return 'jc';
+    return 'bullpen';
+  }
+
+  function doorFor(room){
+    if (room === 'gustavo') return GUSTAVO_DOOR;
+    if (room === 'jc') return JC_DOOR;
+    return null;
+  }
+
+  function jcSpotFor(key){
+    if (key === 'equipo'){
+      var g = findChar('gustavo');
+      return g ? { x: g.deskX, y: g.deskY + 46 } : JC_HOME;
+    }
+    var ch = findChar(key);
+    return ch ? { x: ch.deskX, y: ch.deskY + 46 } : JC_HOME;
+  }
+
+  function walkJcTo(x, y){
+    var path = [];
+    var startRoom = roomOf(jc.x, jc.y);
+    var endRoom = roomOf(x, y);
+    if (startRoom !== endRoom){
+      var d1 = doorFor(startRoom);
+      if (d1) path.push(d1);
+      var d2 = doorFor(endRoom);
+      if (d2 && (!d1 || d2.x !== d1.x || d2.y !== d1.y)) path.push(d2);
+    }
+    path.push({ x: x, y: y });
+    jc.path = path;
+  }
+
+  function snapJcTo(x, y){
+    jc.x = x; jc.y = y; jc.path = [];
+  }
+
   // populate legend
   var legendEl = document.getElementById('legend');
   TEAM.forEach(function(ch){
@@ -770,6 +840,11 @@
           applyActivity(targetKey, entrada.mensaje);
         }
       });
+      var ultima = historial[historial.length - 1];
+      if (ultima && !ultima.error){
+        var spot = jcSpotFor(ultima.agente);
+        snapJcTo(spot.x, spot.y);
+      }
     }
 
     fetch('/historial')
@@ -788,6 +863,8 @@
       sendBtn.disabled = true; input.disabled = true; targetSel.disabled = true;
       addLine('orders__line--you', '<b>T&uacute; &rarr; ' + escapeHtml(label) + ':</b> ' + escapeHtml(msg));
       var pending = addLine('', '<i>Pensando… (Claude Code est&aacute; leyendo/escribiendo archivos reales, puede tardar varios minutos)</i>');
+      var spot = jcSpotFor(target);
+      walkJcTo(spot.x, spot.y);
 
       try {
         var res = await fetch('/orden', {
@@ -821,7 +898,27 @@
 
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  var lastFrameT = null;
+
+  function updateJc(t){
+    var dt = lastFrameT === null ? 16 : (t - lastFrameT);
+    lastFrameT = t;
+    if (!jc.path.length) return;
+    var next = jc.path[0];
+    var dx = next.x - jc.x, dy = next.y - jc.y;
+    var dist = Math.sqrt(dx*dx + dy*dy);
+    var step = 90 * (dt/1000);
+    if (dist <= step){
+      jc.x = next.x; jc.y = next.y;
+      jc.path.shift();
+    } else {
+      jc.x += dx/dist*step;
+      jc.y += dy/dist*step;
+    }
+  }
+
   function render(t){
+    updateJc(t);
     drawMapBase();
 
     drawRug(4.5*30+15, 4*30+15, 5.6*30, 3.6*30);
@@ -829,18 +926,29 @@
     drawPlant(2*30+18, 2*30+22);
     drawCooler(2*30+15, 9*30+8);
     drawPlant(4*30+10, 9*30+10);
+    drawFrame(4*30+15, 10*30-18, 'JC', '#2B2B2E');
 
+    drawChair(JC_DESK.x, JC_HOME.y-6);
     TEAM.forEach(function(ch){
       drawChair(ch.deskX, ch.seatY-6);
     });
 
+    var jcAtDesk = roomOf(jc.x, jc.y) === 'jc';
+    if (jcAtDesk) drawCharacter(jc.x, jc.y, jc, t);
     TEAM.forEach(function(ch){
       drawCharacter(ch.deskX, ch.seatY, ch, t);
     });
 
+    drawDesk(JC_DESK.x, JC_DESK.y, {monitors:2, glow:'#F5D98A', extra:'briefcase', w:30*3.4});
     TEAM.forEach(function(ch){
       drawDesk(ch.deskX, ch.deskY, {monitors:ch.monitors, glow:ch.glow, extra:ch.extra, w: ch.key==='gustavo'? 30*3.4 : 30*2.6});
     });
+
+    if (!jcAtDesk) drawCharacter(jc.x, jc.y, jc, t);
+    drawNameplate(jc.x, jc.y+16, 'JC');
+    if (!jc.blinkUntil || t > jc.blinkUntil + 4000){
+      if (t > jc.blinkAt){ jc.blinkUntil = t + 140; jc.blinkAt = t + 3500 + Math.random()*4500; }
+    }
 
     TEAM.forEach(function(ch){
       drawNameplate(ch.deskX, ch.seatY+16, ch.name);
