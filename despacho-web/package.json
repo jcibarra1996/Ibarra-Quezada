@@ -1,0 +1,13 @@
+{
+  "name": "despacho-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Consola local del Despacho Virtual: conecta el panel visual con Claude Code corriendo de verdad sobre este repo.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
