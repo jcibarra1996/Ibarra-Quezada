@@ -20,6 +20,26 @@ const PORT = process.env.DESPACHO_PORT || 4173;
 // en una llamada HTTP. Ver despacho-web/README.md para el detalle de riesgo.
 const PERMISSION_MODE = process.env.DESPACHO_PERMISSION_MODE || 'acceptEdits';
 
+// Cuánto acceso a git tienen los agentes, además de leer/editar archivos:
+//   'full'   -> pueden hacer add, commit Y push directo a la rama (sin que
+//               nadie revise antes de que llegue a GitHub)
+//   'commit' -> pueden add/commit local, pero el push lo hacés vos a mano
+//   'none'   -> nada de git, solo edición de archivos (el default original)
+// Ver despacho-web/README.md para el detalle de riesgo de cada nivel.
+const GIT_ACCESS = process.env.DESPACHO_GIT_ACCESS || 'full';
+
+const GIT_ALLOWED_TOOLS = {
+  full: ['Bash(git *)'],
+  commit: [
+    'Bash(git add:*)',
+    'Bash(git commit:*)',
+    'Bash(git status:*)',
+    'Bash(git diff:*)',
+    'Bash(git log:*)',
+  ],
+  none: [],
+}[GIT_ACCESS] || [];
+
 const AGENTES = [
   'gustavo',
   'mauricio',
@@ -38,6 +58,20 @@ const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(PUBLIC_DIR));
 
+function instruccionGit() {
+  if (GIT_ACCESS === 'full') {
+    return 'Si haces un cambio real, además de editar el archivo dejá un commit de git ' +
+      '(add + commit, mensaje corto y claro) y pusheálo a la rama actual: tenés permiso ' +
+      'para correr git de punta a punta, nadie más lo va a revisar antes de que llegue a GitHub.';
+  }
+  if (GIT_ACCESS === 'commit') {
+    return 'Si haces un cambio real, además de editar el archivo dejá un commit de git local ' +
+      '(add + commit, mensaje corto y claro). No hagas push: eso lo hace un humano a mano.';
+  }
+  return 'No tenés acceso a git en esta sesión: si haces un cambio, dejalo editado en el ' +
+    'archivo nada más, sin intentar commitear.';
+}
+
 function construirPrompt(target, message) {
   if (target === 'equipo') {
     return [
@@ -45,6 +79,8 @@ function construirPrompt(target, message) {
       'procedimiento para la siguiente orden del equipo:',
       '',
       message,
+      '',
+      instruccionGit(),
     ].join('\n');
   }
 
@@ -57,6 +93,7 @@ function construirPrompt(target, message) {
     '',
     'Si de verdad haces un cambio en algún archivo del repositorio, dilo',
     'explícitamente en tu respuesta, nombrando el archivo.',
+    instruccionGit(),
   ].join('\n');
 }
 
@@ -86,14 +123,20 @@ function archivosDesdeStatus(lineas) {
 
 function correrClaude(prompt) {
   return new Promise((resolve, reject) => {
+    // El prompt va pegado a -p, antes de cualquier otra bandera: --allowedTools
+    // es variádica y si el prompt quedara después se lo comería como si fuera
+    // otro nombre de herramienta más.
     const args = [
       '-p',
+      prompt,
       '--permission-mode',
       PERMISSION_MODE,
       '--permission-prompts',
       'none',
-      prompt,
     ];
+    if (GIT_ALLOWED_TOOLS.length) {
+      args.push('--allowedTools', GIT_ALLOWED_TOOLS.join(' '));
+    }
 
     const proc = spawn('claude', args, {
       cwd: PROJECT_ROOT,
@@ -209,5 +252,6 @@ app.listen(PORT, () => {
   console.log('');
   console.log(`  Proyecto: ${PROJECT_ROOT}`);
   console.log(`  Modo de permisos de Claude Code: ${PERMISSION_MODE}`);
+  console.log(`  Acceso a git de los agentes: ${GIT_ACCESS}`);
   console.log('');
 });

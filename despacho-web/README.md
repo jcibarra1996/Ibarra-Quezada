@@ -72,16 +72,34 @@ comando sin que nadie lo revise antes. Solo usalo si confiás en las
 instrucciones que le vas a dar y entendés que no hay red de seguridad
 interactiva.
 
-En cualquiera de los dos modos: **todo cambio queda en tu working tree como
-cualquier edición manual** — nada se commitea ni se pushea solo. Revisá
-`git status` / `git diff` antes de commitear lo que haga un agente, igual
-que revisarías tu propio trabajo.
+## ⚠️ Riesgo aparte: acceso a git (`DESPACHO_GIT_ACCESS`)
+
+Por default (`full`), además de editar archivos, los agentes tienen permiso
+explícito de correr `git add`, `git commit` **y `git push`** a la rama
+actual — de punta a punta, sin que nadie revise el cambio antes de que
+llegue a GitHub. Esto es más riesgoso que solo editar archivos: un commit
+mal hecho o un push a destiempo quedan en el remoto sin que lo hayas visto
+primero. Podés bajarle el nivel:
+
+```
+DESPACHO_GIT_ACCESS=commit npm run despacho   # add + commit local, sin push
+DESPACHO_GIT_ACCESS=none npm run despacho     # nada de git, solo editar archivos
+```
+
+Con `full` o `commit`, el acceso está acotado a comandos `git` únicamente
+(vía `--allowedTools`) — no habilita otros comandos de shell. Eso sigue
+dependiendo del `DESPACHO_PERMISSION_MODE` de arriba: cualquier cosa que no
+sea edición de archivos o git queda denegada automáticamente salvo que
+actives `bypassPermissions`.
 
 ## Variables de entorno opcionales
 
 - `DESPACHO_PORT` — puerto del servidor (default `4173`).
 - `DESPACHO_PERMISSION_MODE` — modo de permisos pasado a `claude -p`
   (default `acceptEdits`; ver riesgo arriba).
+- `DESPACHO_GIT_ACCESS` — cuánto git pueden usar los agentes: `full`
+  (default, add+commit+push), `commit` (add+commit local, sin push) o
+  `none` (nada de git). Ver riesgo arriba.
 - `DESPACHO_TIMEOUT_MS` — tiempo máximo de espera por orden antes de matar
   el proceso de `claude` (default 10 minutos, en milisegundos).
 
