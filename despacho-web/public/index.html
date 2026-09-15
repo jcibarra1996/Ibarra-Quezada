@@ -672,6 +672,7 @@
     ch.seed = i * 1.7 + 1;
     ch.bubbleAt = -99999;
     ch.blinkAt = 3000 + Math.random()*4000;
+    ch.x = ch.deskX; ch.y = ch.seatY; ch.path = [];
   });
 
   function findChar(key){
@@ -690,14 +691,22 @@
 
   var jc = {
     name: 'JC',
-    color: '#2B2B2E',
-    dark: '#C9A227',
+    color: '#FF7A1A',
+    dark: '#B34700',
     accessory: 'tie',
     seed: 9.9,
     x: JC_HOME.x, y: JC_HOME.y,
     path: [],
+    lines: [],
+    bubbleAt: -99999,
     blinkAt: 2000 + Math.random()*4000
   };
+
+  // null = todos charlan su cháchara de espera; un array = solo esas claves
+  // (y JC) muestran globo — el resto se queda en silencio.
+  var spotlightKeys = null;
+  var visiting = [];
+  var jcReturnTimer = null;
 
   function roomOf(x, y){
     if (x < 250 && y < 210) return 'gustavo';
@@ -712,17 +721,15 @@
   }
 
   function jcSpotFor(key){
-    if (key === 'equipo'){
-      var g = findChar('gustavo');
-      return g ? { x: g.deskX, y: g.deskY + 46 } : JC_HOME;
-    }
+    if (key === 'equipo') return JC_HOME;
     var ch = findChar(key);
-    return ch ? { x: ch.deskX, y: ch.deskY + 46 } : JC_HOME;
+    // al lado del escritorio, no encima del personaje sentado
+    return ch ? { x: ch.deskX + 28, y: ch.seatY } : JC_HOME;
   }
 
-  function walkJcTo(x, y){
+  function walkCharTo(entity, x, y){
     var path = [];
-    var startRoom = roomOf(jc.x, jc.y);
+    var startRoom = roomOf(entity.x, entity.y);
     var endRoom = roomOf(x, y);
     if (startRoom !== endRoom){
       var d1 = doorFor(startRoom);
@@ -731,11 +738,47 @@
       if (d2 && (!d1 || d2.x !== d1.x || d2.y !== d1.y)) path.push(d2);
     }
     path.push({ x: x, y: y });
-    jc.path = path;
+    entity.path = path;
   }
 
-  function snapJcTo(x, y){
-    jc.x = x; jc.y = y; jc.path = [];
+  function snapCharTo(entity, x, y){
+    entity.x = x; entity.y = y; entity.path = [];
+  }
+
+  function detectRelevant(text){
+    var keys = [];
+    TEAM.forEach(function(ch){
+      var re = new RegExp('\\b' + ch.name + '\\b', 'i');
+      if (re.test(text || '')) keys.push(ch.key);
+    });
+    return keys;
+  }
+
+  var GATHER_SPOTS = [
+    { x: 60, y: 330 }, { x: 135, y: 330 }, { x: 210, y: 330 },
+    { x: 60, y: 360 }, { x: 135, y: 360 }, { x: 210, y: 360 }
+  ];
+
+  function sendEveryoneHome(instant){
+    var moveFn = instant ? snapCharTo : walkCharTo;
+    visiting.forEach(function(key){
+      var ch = findChar(key);
+      if (ch) moveFn(ch, ch.deskX, ch.seatY);
+    });
+    visiting = [];
+  }
+
+  function gatherAroundJc(keys, instant){
+    var moveFn = instant ? snapCharTo : walkCharTo;
+    var i = 0;
+    keys.forEach(function(key){
+      var ch = findChar(key);
+      if (!ch) return;
+      var spot = GATHER_SPOTS[i % GATHER_SPOTS.length];
+      i++;
+      moveFn(ch, spot.x, spot.y);
+    });
+    visiting = keys.slice();
   }
 
   // populate legend
@@ -842,8 +885,18 @@
       });
       var ultima = historial[historial.length - 1];
       if (ultima && !ultima.error){
-        var spot = jcSpotFor(ultima.agente);
-        snapJcTo(spot.x, spot.y);
+        if (ultima.agente === 'equipo'){
+          var relevantes = detectRelevant(ultima.respuesta);
+          spotlightKeys = relevantes;
+          gatherAroundJc(relevantes, true);
+          snapCharTo(jc, JC_HOME.x, JC_HOME.y);
+        } else {
+          spotlightKeys = [ultima.agente];
+          var spot = jcSpotFor(ultima.agente);
+          snapCharTo(jc, spot.x, spot.y);
+        }
+        jc.lines = [shortTask(ultima.mensaje)];
+        jc.bubbleAt = (window.performance ? performance.now() : Date.now());
       }
     }
 
@@ -863,8 +916,14 @@
       sendBtn.disabled = true; input.disabled = true; targetSel.disabled = true;
       addLine('orders__line--you', '<b>T&uacute; &rarr; ' + escapeHtml(label) + ':</b> ' + escapeHtml(msg));
       var pending = addLine('', '<i>Pensando… (Claude Code est&aacute; leyendo/escribiendo archivos reales, puede tardar varios minutos)</i>');
+
+      if (jcReturnTimer){ clearTimeout(jcReturnTimer); jcReturnTimer = null; }
+      sendEveryoneHome(false);
+      spotlightKeys = target === 'equipo' ? [] : [target];
       var spot = jcSpotFor(target);
-      walkJcTo(spot.x, spot.y);
+      walkCharTo(jc, spot.x, spot.y);
+      jc.lines = [shortTask(msg)];
+      jc.bubbleAt = (window.performance ? performance.now() : Date.now());
 
       try {
         var res = await fetch('/orden', {
@@ -881,6 +940,16 @@
           pending.innerHTML = renderRespuesta(entrada);
           var targetKey = target === 'equipo' ? 'gustavo' : target;
           applyActivity(targetKey, msg);
+          if (target === 'equipo'){
+            var relevantes = detectRelevant(entrada.respuesta);
+            spotlightKeys = relevantes;
+            gatherAroundJc(relevantes, false);
+          } else {
+            jcReturnTimer = setTimeout(function(){
+              walkCharTo(jc, JC_HOME.x, JC_HOME.y);
+              jcReturnTimer = null;
+            }, 5000);
+          }
         }
         log.scrollTop = log.scrollHeight;
       } catch(e){
@@ -900,25 +969,26 @@
 
   var lastFrameT = null;
 
-  function updateJc(t){
-    var dt = lastFrameT === null ? 16 : (t - lastFrameT);
-    lastFrameT = t;
-    if (!jc.path.length) return;
-    var next = jc.path[0];
-    var dx = next.x - jc.x, dy = next.y - jc.y;
+  function updateMovement(entity, dt){
+    if (!entity.path.length) return;
+    var next = entity.path[0];
+    var dx = next.x - entity.x, dy = next.y - entity.y;
     var dist = Math.sqrt(dx*dx + dy*dy);
     var step = 90 * (dt/1000);
     if (dist <= step){
-      jc.x = next.x; jc.y = next.y;
-      jc.path.shift();
+      entity.x = next.x; entity.y = next.y;
+      entity.path.shift();
     } else {
-      jc.x += dx/dist*step;
-      jc.y += dy/dist*step;
+      entity.x += dx/dist*step;
+      entity.y += dy/dist*step;
     }
   }
 
   function render(t){
-    updateJc(t);
+    var dt = lastFrameT === null ? 16 : (t - lastFrameT);
+    lastFrameT = t;
+    updateMovement(jc, dt);
+    TEAM.forEach(function(ch){ updateMovement(ch, dt); });
     drawMapBase();
 
     drawRug(4.5*30+15, 4*30+15, 5.6*30, 3.6*30);
@@ -936,7 +1006,7 @@
     var jcAtDesk = roomOf(jc.x, jc.y) === 'jc';
     if (jcAtDesk) drawCharacter(jc.x, jc.y, jc, t);
     TEAM.forEach(function(ch){
-      drawCharacter(ch.deskX, ch.seatY, ch, t);
+      drawCharacter(ch.x, ch.y, ch, t);
     });
 
     drawDesk(JC_DESK.x, JC_DESK.y, {monitors:2, glow:'#F5D98A', extra:'briefcase', w:30*3.4});
@@ -949,20 +1019,30 @@
     if (!jc.blinkUntil || t > jc.blinkUntil + 4000){
       if (t > jc.blinkAt){ jc.blinkUntil = t + 140; jc.blinkAt = t + 3500 + Math.random()*4500; }
     }
+    if (jc.lines.length){
+      var jcAlpha = (t < jc.bubbleAt) ? 0 : 1;
+      var jcShow = (t - jc.bubbleAt) % 8200;
+      if (jcShow >= 0 && jcShow < 400) jcAlpha = jcShow/400;
+      else if (jcShow >= 3400 && jcShow < 3800) jcAlpha = 1 - (jcShow-3400)/400;
+      if (jcAlpha > 0) drawBubble(jc.x, jc.y-16, jc.lines[0], jcAlpha);
+    }
 
     TEAM.forEach(function(ch){
-      drawNameplate(ch.deskX, ch.seatY+16, ch.name);
-      var cycle = 8200;
-      var show = ((t - ch.bubbleAt) % cycle);
-      var alpha = 0;
-      if (show >= 0 && show < 400) alpha = show/400;
-      else if (show >= 400 && show < 3400) alpha = 1;
-      else if (show >= 3400 && show < 3800) alpha = 1 - (show-3400)/400;
-      if (t < ch.bubbleAt) alpha = 0;
-      if (alpha > 0){
-        var idx = Math.floor((t - ch.bubbleAt) / cycle) % ch.lines.length;
-        if (idx < 0) idx = 0;
-        drawBubble(ch.deskX, ch.deskY-16, ch.lines[idx], alpha);
+      drawNameplate(ch.x, ch.y+16, ch.name);
+      var enMira = spotlightKeys === null || spotlightKeys.indexOf(ch.key) !== -1;
+      if (enMira){
+        var cycle = 8200;
+        var show = ((t - ch.bubbleAt) % cycle);
+        var alpha = 0;
+        if (show >= 0 && show < 400) alpha = show/400;
+        else if (show >= 400 && show < 3400) alpha = 1;
+        else if (show >= 3400 && show < 3800) alpha = 1 - (show-3400)/400;
+        if (t < ch.bubbleAt) alpha = 0;
+        if (alpha > 0){
+          var idx = Math.floor((t - ch.bubbleAt) / cycle) % ch.lines.length;
+          if (idx < 0) idx = 0;
+          drawBubble(ch.x, ch.y-16, ch.lines[idx], alpha);
+        }
       }
       if (!ch.blinkUntil || t > ch.blinkUntil + 4000){
         if (t > ch.blinkAt){ ch.blinkUntil = t + 140; ch.blinkAt = t + 3500 + Math.random()*4500; }
