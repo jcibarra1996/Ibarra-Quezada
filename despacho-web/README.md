@@ -92,6 +92,18 @@ dependiendo del `DESPACHO_PERMISSION_MODE` de arriba: cualquier cosa que no
 sea edición de archivos o git queda denegada automáticamente salvo que
 actives `bypassPermissions`.
 
+## Riesgo aparte: los agentes pueden buscar en internet
+
+`WebFetch` y `WebSearch` están siempre permitidos (vía `--allowedTools`),
+sin importar `DESPACHO_GIT_ACCESS` — CLAUDE.md les exige a los agentes
+verificar leyes y normas contra la fuente real en vez de inventar o
+adivinar, y eso no funciona si no pueden buscar. El riesgo es bajo (son
+búsquedas de lectura, no acciones), pero sigue siendo tráfico saliente que
+un agente dispara solo, sin que lo apruebes antes cada vez. No hay forma de
+desactivar esto por separado del resto — si te preocupa, corré con
+`DESPACHO_PERMISSION_MODE` en un modo más restrictivo o revisá el código de
+`server.js` antes de correrlo.
+
 ## Variables de entorno opcionales
 
 - `DESPACHO_PORT` — puerto del servidor (default `4173`).
