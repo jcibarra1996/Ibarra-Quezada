@@ -56,6 +56,12 @@ de entrada, peso equivalente entre ellos):
   contratos concretos, no plantillas genéricas).
 - **paulina** — Consultoría y Cumplimiento Laboral (REPSE, NOM-035).
 
+**Especialista de línea secundaria** (upsell posterior a un cliente ya
+activo, nunca puerta de entrada):
+
+- **santiago** — Legal Ops y LegalTech (automatización de procesos legales,
+  gestión documental, eficiencia operativa).
+
 **Equipo de operación del despacho**:
 
 - **mauricio** — Growth y marketing B2B de bajo presupuesto (canales,

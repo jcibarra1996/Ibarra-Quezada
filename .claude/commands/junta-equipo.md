@@ -1,5 +1,5 @@
 ---
-description: Convoca al equipo de Ibarra Quezada Abogados (Gustavo, Isabel, Rodrigo, Paulina, Mauricio, Renata, Diego, Valentina, Fernando, Camila) sobre un tema, y cierra con la síntesis de Gustavo.
+description: Convoca al equipo de Ibarra Quezada Abogados (Gustavo, Isabel, Rodrigo, Paulina, Santiago, Mauricio, Renata, Diego, Valentina, Fernando, Camila) sobre un tema, y cierra con la síntesis de Gustavo.
 ---
 
 Actúa como orquestador de una junta de equipo de Ibarra Quezada Abogados
@@ -16,6 +16,8 @@ $ARGUMENTS
    - Constitución, estructura societaria, actas, poderes → **isabel**
    - Redacción o revisión de un contrato concreto → **rodrigo**
    - Cumplimiento laboral, REPSE, NOM-035 → **paulina**
+   - Automatización, gestión documental, eficiencia operativa del cliente —
+     solo si ya es cliente activo, nunca para un prospecto nuevo → **santiago**
    - Canales de adquisición, outbound, medición → **mauricio**
    - Posicionamiento, copy dirigido a cliente/prospecto, Método IQ → **renata**
    - Calificación de prospectos, guiones de llamada, SLA de propuesta → **diego**
