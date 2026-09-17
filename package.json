@@ -1,0 +1,9 @@
+{
+  "name": "ibarra-quezada",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio web de Ibarra Quezada Abogados y la consola local del Despacho Virtual.",
+  "scripts": {
+    "despacho": "npm --prefix despacho-web install && npm --prefix despacho-web start"
+  }
+}
