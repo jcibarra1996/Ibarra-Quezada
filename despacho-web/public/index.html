@@ -678,20 +678,24 @@
       lines:['En espera…','Lista para pedirle algo…'] },
 
     { key:'isabel', name:'ISABEL', role:'Constitución y estructuración', color:'#3F5D8A', dark:'#243A5C', accessory:'glasses',
-      deskX:300, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#AAB8F2', extra:'books', w:TILE*2.2,
+      deskX:300, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#AAB8F2', extra:'books', w:70,
       lines:['En espera…','Lista si hay junta de equipo…'] },
 
     { key:'rodrigo', name:'RODRIGO', role:'Contratos mercantiles y civiles', color:'#A9702E', dark:'#6B4419', accessory:'tie',
-      deskX:400, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#E8C99A', extra:'clipboard', w:TILE*2.2,
+      deskX:375, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#E8C99A', extra:'clipboard', w:70,
       lines:['En espera…','Listo si hay junta de equipo…'] },
 
     { key:'paulina', name:'PAULINA', role:'Cumplimiento laboral (REPSE, NOM-035)', color:'#4C9A62', dark:'#2E6B3F', accessory:'ponytail',
-      deskX:500, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#A8E0B8', extra:'mug', w:TILE*2.2,
+      deskX:450, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#A8E0B8', extra:'mug', w:70,
       lines:['En espera…','Lista si hay junta de equipo…'] },
 
     { key:'santiago', name:'SANTIAGO', role:'Legal Ops y LegalTech (upsell)', color:'#2FB6C4', dark:'#1B7580', accessory:'headset',
-      deskX:600, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#A8ECF2', extra:'clipboard', w:TILE*2.2,
-      lines:['En espera…','Listo si hay junta de equipo…'] }
+      deskX:525, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#A8ECF2', extra:'clipboard', w:70,
+      lines:['En espera…','Listo si hay junta de equipo…'] },
+
+    { key:'daniela', name:'DANIELA', role:'Fusiones y adquisiciones (upsell)', color:'#8A3F5D', dark:'#5C2438', accessory:'bow',
+      deskX:600, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#F2A8C6', extra:'briefcase', w:70,
+      lines:['En espera…','Lista si hay junta de equipo…'] }
   ];
 
   TEAM.forEach(function(ch, i){
@@ -1018,10 +1022,10 @@
     ctx.font = '9px "Press Start 2P"';
     ctx.fillStyle = 'rgba(244,237,224,0.55)';
     ctx.textAlign = 'center';
-    ctx.fillText('LÍNEAS DE ENTRADA', 400, 12*30+15);
+    ctx.fillText('LÍNEAS DE ENTRADA', 375, 12*30+15);
     ctx.font = '8px "Press Start 2P"';
     ctx.fillStyle = 'rgba(168,236,242,0.6)';
-    ctx.fillText('UPSELL', 600, 12*30+15);
+    ctx.fillText('UPSELL', 562, 12*30+15);
 
     drawChair(JC_DESK.x, JC_HOME.y-6);
     TEAM.forEach(function(ch){
