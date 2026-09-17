@@ -3,10 +3,14 @@
 Cada especialista construyó las plantillas de su área. Esta carpeta es la
 entrega pulida y lista para JC, organizada por quién la produce.
 
-- `fernando/` — banco de plantillas de contrato por línea de servicio.
-  **Sin redacción sustantiva todavía**: JC no ha compartido sus documentos
-  base reales, y Fernando decidió correctamente no inventar un formato
-  genérico. Queda solo estructura e inventario de lo pendiente.
+- `fernando/` — banco de plantillas de contrato por línea de servicio. JC
+  ya compartió cinco documentos reales (compraventa de activos, contrato
+  de prestación de servicios, convenio de reconocimiento de adeudo y
+  cesión de deuda, convenio de terminación, y resoluciones unánimes de
+  aumento de capital); Fernando extrajo su estructura y lenguaje de
+  cláusula y genericó los datos específicos de cada caso. Sigue sin
+  documento base real para cumplimiento laboral (REPSE/NOM-035), acta
+  constitutiva, poderes y actas de asamblea ordinaria.
 - `renata/` — one-pager de propuesta de valor y email de seguimiento
   post-diagnóstico, listos para usar.
 - `diego/` — guion de llamada de descubrimiento (SPIN + BANT) y plantilla
@@ -40,20 +44,30 @@ Confirmé además que:
 - Ningún documento nombra el empleo actual de JC.
 - La Carta de Honorarios y el checklist de Valentina usan formato mexicano
   (declaraciones, cláusulas, jurisdicción CDMX), sin terminología de
-  common law.
+  common law. Lo mismo confirmé en los cuatro contratos y la plantilla de
+  resoluciones de accionistas que Fernando genericó a partir de los
+  documentos reales de JC.
+- Los cinco documentos reales que compartió JC tenían nombres de partes,
+  montos, domicilios y folios mercantiles de operaciones y clientes
+  reales; verifiqué que ninguno de esos datos quedó en las plantillas
+  genericadas, solo la estructura y el lenguaje de cláusula.
 
 ## Qué queda a decisión de JC
 
-1. **Compartir sus documentos reales de contrato** (acta constitutiva,
-   contrato de prestación de servicios u otro mercantil/civil,
-   subcontratación REPSE o política NOM-035) para que Fernando pueda
-   redactar la parte sustantiva del banco. Sin esto, esa carpeta se queda
-   en estructura, no en contenido.
+1. **Compartir documentos base para lo que sigue pendiente**: acta
+   constitutiva, poderes, actas de asamblea ordinaria (para Constitución),
+   un NDA standalone y un contrato de distribución o comisión mercantil
+   (para Contratos), y algo de REPSE o NOM-035 (para Cumplimiento
+   Laboral, que sigue sin ningún documento base). Sin esto, esas partes
+   del banco se quedan en estructura, no en contenido.
 2. **Definir el esquema de honorarios real** (montos, si es pago único,
    por hora o por destajo) para completar la Carta de Honorarios caso por
    caso; la plantilla no fija un monto por diseño.
-3. **Revisar y aprobar** el tono y el contenido de las cinco carpetas ya
-   redactadas antes de que cualquiera se use con un prospecto real.
+3. **Revisar y aprobar** el tono y el contenido legal de todo lo ya
+   redactado antes de que cualquiera se use con un prospecto o cliente
+   real; genericé la estructura de sus propios documentos, pero la
+   responsabilidad de que el criterio legal siga siendo correcto para cada
+   caso nuevo es de JC.
 
 No hay trabajo especulativo aquí que no sirva para mover una llamada o una
 propuesta enviada: cada plantilla corresponde a un paso concreto del flujo

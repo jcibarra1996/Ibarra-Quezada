@@ -1,8 +1,19 @@
-# Contratos Mercantiles y Civiles — pendiente
+# Contratos Mercantiles y Civiles — estado
 
-Sin documento base real de JC todavía. No hay plantilla sustantiva en este
-archivo a propósito — ver `plantillas/fernando/README.md`.
+Ya tengo documentos base reales de JC para esta línea, genericados en esta
+misma carpeta:
 
-Cuando JC comparta un contrato de prestación de servicios, NDA u otro
-contrato mercantil o civil real que use como base, la estructura de
-cláusulas y declaraciones de ese documento reemplaza este marcador.
+- `compraventa-de-activos-acciones.md`
+- `contrato-prestacion-servicios.md`
+- `convenio-reconocimiento-adeudo-cesion-deuda.md`
+- `convenio-terminacion-contrato.md`
+
+Sigue pendiente, sin documento base real de JC todavía:
+
+- NDA / convenio de confidencialidad como documento independiente (hay
+  cláusulas de confidencialidad dentro de los convenios de arriba, pero no
+  un NDA standalone)
+- Contrato de distribución o comisión mercantil
+
+Cuando JC comparta alguno de esos documentos, se agrega a esta carpeta con
+el mismo tratamiento: estructura real, datos específicos genericados.
