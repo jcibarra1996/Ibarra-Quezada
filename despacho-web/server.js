@@ -42,6 +42,11 @@ const GIT_ALLOWED_TOOLS = {
 
 const AGENTES = [
   'gustavo',
+  'isabel',
+  'rodrigo',
+  'paulina',
+  'santiago',
+  'daniela',
   'mauricio',
   'renata',
   'diego',
