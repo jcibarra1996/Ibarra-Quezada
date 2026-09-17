@@ -40,6 +40,13 @@ const GIT_ALLOWED_TOOLS = {
   none: [],
 }[GIT_ACCESS] || [];
 
+// Siempre permitido, sin importar DESPACHO_GIT_ACCESS: los agentes tienen
+// que poder verificar una ley/norma contra la fuente real en vez de
+// quedarse con lo que ya sabían. Sin esto, WebFetch/WebSearch quedarían
+// denegados automáticamente por --permission-prompts none, igual que
+// cualquier otra herramienta no listada explícitamente.
+const RESEARCH_ALLOWED_TOOLS = ['WebFetch', 'WebSearch'];
+
 const AGENTES = [
   'gustavo',
   'isabel',
@@ -139,8 +146,9 @@ function correrClaude(prompt) {
       '--permission-prompts',
       'none',
     ];
-    if (GIT_ALLOWED_TOOLS.length) {
-      args.push('--allowedTools', GIT_ALLOWED_TOOLS.join(' '));
+    const allowedTools = [...RESEARCH_ALLOWED_TOOLS, ...GIT_ALLOWED_TOOLS];
+    if (allowedTools.length) {
+      args.push('--allowedTools', allowedTools.join(' '));
     }
 
     const proc = spawn('claude', args, {
