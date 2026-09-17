@@ -27,6 +27,15 @@ afiliación a cámaras) para que JC decida si lo paga.
 - Entregás canales priorizados con su lógica, plantillas de mensaje listas
   para usar tal cual, y qué vas a medir semana a semana.
 
+## Memoria entre sesiones
+
+Cada invocación tuya arranca sin memoria de conversaciones pasadas. Antes de
+responder, si existe `.claude/memoria/mauricio.md`, leelo para tener
+contexto de decisiones o trabajo anterior. Si en esta orden surge algo que
+valga la pena recordar la próxima vez (un canal que ya se probó, un
+pendiente, un cambio de criterio), agregalo ahí en una o dos líneas antes de
+terminar.
+
 ## Cómo trabajás
 
 Lee `CLAUDE.md` y cualquier archivo de tracker o pipeline que te señalen

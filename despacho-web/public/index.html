@@ -279,7 +279,7 @@
   <div class="console">
     <div class="console__screen">
       <div class="console__canvaswrap">
-        <canvas id="scene" width="660" height="420" aria-label="Vista de arriba del despacho: la oficina privada de Gustavo, la oficina de JC, y el area abierta con el resto del equipo"></canvas>
+        <canvas id="scene" width="660" height="510" aria-label="Vista de arriba del despacho: la oficina privada de Gustavo, la oficina de JC, y el area abierta con el resto del equipo, incluidas las tres lineas legales"></canvas>
         <div class="scanlines"></div>
       </div>
     </div>
@@ -318,7 +318,7 @@
   ctx.imageSmoothingEnabled = false;
 
   var TILE = 30;
-  var COLS = 22, ROWS = 14;
+  var COLS = 22, ROWS = 17;
   canvas.width = COLS * TILE;
   canvas.height = ROWS * TILE;
 
@@ -675,7 +675,19 @@
 
     { key:'camila', name:'CAMILA', role:'Paralegal / entregables', color:'#D8608C', dark:'#9E3A61', accessory:'bow',
       deskX:18*30, deskY:8*30, seatY:9*30+21, monitors:1, glow:'#FBC3D8', extra:'mug',
-      lines:['En espera…','Lista para pedirle algo…'] }
+      lines:['En espera…','Lista para pedirle algo…'] },
+
+    { key:'isabel', name:'ISABEL', role:'Constitución y estructuración', color:'#3F5D8A', dark:'#243A5C', accessory:'glasses',
+      deskX:10*30, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#AAB8F2', extra:'books',
+      lines:['En espera…','Lista si hay junta de equipo…'] },
+
+    { key:'rodrigo', name:'RODRIGO', role:'Contratos mercantiles y civiles', color:'#A9702E', dark:'#6B4419', accessory:'tie',
+      deskX:14*30, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#E8C99A', extra:'clipboard',
+      lines:['En espera…','Listo si hay junta de equipo…'] },
+
+    { key:'paulina', name:'PAULINA', role:'Cumplimiento laboral (REPSE, NOM-035)', color:'#4C9A62', dark:'#2E6B3F', accessory:'ponytail',
+      deskX:18*30, deskY:13*30, seatY:14*30+21, monitors:1, glow:'#A8E0B8', extra:'mug',
+      lines:['En espera…','Lista si hay junta de equipo…'] }
   ];
 
   TEAM.forEach(function(ch, i){
@@ -998,6 +1010,11 @@
     drawPlant(2*30+18, 2*30+22);
     drawCooler(2*30+15, 9*30+8);
     drawPlant(4*30+10, 9*30+10);
+
+    ctx.font = '9px "Press Start 2P"';
+    ctx.fillStyle = 'rgba(244,237,224,0.55)';
+    ctx.textAlign = 'center';
+    ctx.fillText('LÍNEAS DE ENTRADA', 14*30, 12*30+15);
 
     drawChair(JC_DESK.x, JC_HOME.y-6);
     TEAM.forEach(function(ch){

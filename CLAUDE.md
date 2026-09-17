@@ -44,8 +44,20 @@ vigente).
 
 ## El equipo (`.claude/agents/`)
 
-- **gustavo** — Socio, coordinador. Único punto de contacto formal entre el
-  equipo y JC. Cierra decisiones y junta de equipo con síntesis.
+**Gustavo** — Socio, coordinador. Único punto de contacto formal entre el
+equipo y JC. Cierra decisiones y junta de equipo con síntesis.
+
+**Especialistas de línea** (sustancia legal de cada una de las tres líneas
+de entrada, peso equivalente entre ellos):
+
+- **isabel** — Constitución y Estructuración Corporativa (actas
+  constitutivas, estructuras societarias, poderes).
+- **rodrigo** — Contratos Mercantiles y Civiles (redacción y revisión de
+  contratos concretos, no plantillas genéricas).
+- **paulina** — Consultoría y Cumplimiento Laboral (REPSE, NOM-035).
+
+**Equipo de operación del despacho**:
+
 - **mauricio** — Growth y marketing B2B de bajo presupuesto (canales,
   outbound, medición).
 - **renata** — Marketing jurídico y posicionamiento (copy de materiales
@@ -63,6 +75,14 @@ vigente).
 
 Cuando un tema toca a varios de ellos, usa `/junta-equipo` (ver
 `.claude/commands/junta-equipo.md`) en vez de invocar a uno solo.
+
+### Memoria entre sesiones
+
+Cada agente arranca cada invocación sin memoria de conversaciones pasadas
+(son procesos nuevos, no una sesión continua). Para no perder contexto entre
+sesiones, cada uno lee y actualiza su propio archivo en
+`.claude/memoria/<agente>.md` — decisiones, pendientes y cambios de criterio
+que valga la pena recordar la próxima vez, en una o dos líneas por entrada.
 
 ## Reglas de tono para el copy del sitio (`index.html` y afines)
 
