@@ -702,6 +702,56 @@
     .nosotros-float-card { bottom: 0; right: 0; width: 180px; padding: 24px 28px; }
   }
 
+  /* BROCHURE */
+  #brochure {
+    padding: 100px 60px;
+    background: var(--crema-oscura);
+  }
+  .brochure-grid {
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 420px;
+    gap: 72px; align-items: center;
+  }
+  .brochure-desc {
+    font-size: 13px; font-weight: 300; line-height: 1.9;
+    color: var(--gris); max-width: 480px; margin: 24px 0 36px;
+  }
+  .brochure-meta { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 36px; }
+  .brochure-meta-item {
+    font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gris-claro); display: flex; align-items: center; gap: 8px;
+  }
+  .brochure-meta-item svg { width: 15px; height: 15px; stroke: var(--dorado); flex-shrink: 0; }
+  .brochure-visual {
+    position: relative; height: 340px; overflow: hidden;
+    background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde) 55%, var(--dorado) 140%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brochure-visual::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px,
+      transparent 1px, transparent 20px
+    );
+  }
+  .brochure-visual-mark {
+    width: 110px; height: 110px;
+    background-image: url('assets/icon-mark-white.png');
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    position: relative; z-index: 2; opacity: 0.92;
+  }
+  .brochure-visual-tag {
+    position: absolute; bottom: 28px; left: 28px; z-index: 2;
+    font-size: 10px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase;
+    color: rgba(244,240,233,0.85);
+  }
+  @media (max-width: 1024px) {
+    .brochure-grid { grid-template-columns: 1fr; gap: 48px; }
+    .brochure-visual { order: -1; height: 220px; }
+  }
+
   /* RECURSOS */
   #recursos {
     padding: 120px 60px;
@@ -970,7 +1020,7 @@
     .nav-links { gap: 24px; }
     .hero-content { padding: 120px 32px 80px; }
     .hero-visual { display: none; }
-    #servicios, #metodologia, #areas, #sectores, #nosotros, #recursos, #faq, #contacto { padding: 80px 32px; }
+    #servicios, #metodologia, #areas, #sectores, #nosotros, #brochure, #recursos, #faq, #contacto { padding: 80px 32px; }
     .servicios-grid { grid-template-columns: 1fr 1fr; }
     .metodologia-grid { grid-template-columns: 1fr; }
     .metodologia-visual { position: static; }
@@ -1594,6 +1644,32 @@
   </div>
 </section>
 
+<!-- BROCHURE -->
+<section id="brochure">
+  <div class="brochure-grid">
+    <div class="brochure-content fade-up">
+      <div class="section-label">Recurso descargable</div>
+      <h2 class="section-title">Llévate nuestro<br><em>brochure</em> contigo</h2>
+      <p class="brochure-desc">El perfil completo de la firma en un solo documento: áreas de práctica, metodología de trabajo y a quién servimos. Ideal para compartir con tu equipo o revisar con calma antes de escribirnos.</p>
+      <div class="brochure-meta">
+        <div class="brochure-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          PDF · 13 páginas
+        </div>
+        <div class="brochure-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Descarga directa, sin registro
+        </div>
+      </div>
+      <a href="assets/Ibarra-Quezada-Brochure.pdf" class="btn-primary" download="Ibarra-Quezada-Brochure.pdf"><span>Descargar brochure →</span></a>
+    </div>
+    <div class="brochure-visual" aria-hidden="true">
+      <div class="brochure-visual-mark"></div>
+      <div class="brochure-visual-tag">Perfil de la firma</div>
+    </div>
+  </div>
+</section>
+
 <!-- INSIGHTS / RECURSOS -->
 <section id="recursos">
   <div class="recursos-header fade-up">
@@ -1739,6 +1815,7 @@
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#metodologia">Metodología</a></li>
       <li><a href="#sectores">Clientes</a></li>
+      <li><a href="assets/Ibarra-Quezada-Brochure.pdf" download="Ibarra-Quezada-Brochure.pdf">Brochure (PDF)</a></li>
       <li><a href="#recursos">Insights</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
