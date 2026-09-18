@@ -1,0 +1,134 @@
+/* Ibarra Quezada Abogados — hoja de estilos compartida para artículos de Insights.
+   Reutiliza la paleta y tipografía del sitio principal (index.html). */
+
+:root {
+  --verde: #8f2926;        /* Deep Burgundy */
+  --verde-claro: #c94827;  /* Burnt Orange */
+  --verde-oscuro: #1a1a1a; /* Graphite */
+  --dorado: #f26c2e;       /* Copper Orange */
+  --dorado-claro: #c94827; /* Burnt Orange */
+  --dorado-palo: #f5a879;  /* Copper claro */
+  --crema: #f4f0e9;        /* Ivory */
+  --crema-oscura: #e9e1d2; /* Ivory oscuro */
+  --blanco: #ffffff;
+  --gris: #6b6660;
+  --gris-claro: #9c968d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--crema);
+  color: var(--verde-oscuro);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+/* NAV */
+.iq-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 60px;
+  border-bottom: 1px solid var(--crema-oscura);
+}
+.iq-nav-logo img { height: 40px; width: auto; display: block; }
+.iq-nav-back {
+  font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--verde); text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+  transition: color 0.3s;
+}
+.iq-nav-back:hover { color: var(--dorado); }
+
+/* ARTICLE */
+.iq-article {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 72px 24px 96px;
+}
+.iq-breadcrumb {
+  font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gris-claro); margin-bottom: 28px;
+}
+.iq-breadcrumb a { color: var(--gris-claro); text-decoration: none; }
+.iq-breadcrumb a:hover { color: var(--dorado); }
+.iq-eyebrow {
+  font-size: 9px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--dorado); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.iq-eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--dorado); }
+.iq-eyebrow .iq-date { color: var(--gris-claro); font-weight: 500; }
+.iq-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4.4vw, 48px); font-weight: 400;
+  line-height: 1.2; color: var(--verde-oscuro);
+  margin-bottom: 36px;
+}
+.iq-lede {
+  font-family: 'Playfair Display', serif;
+  font-size: 21px; font-weight: 400; font-style: italic;
+  line-height: 1.65; color: var(--verde-oscuro);
+  border-left: 2px solid var(--dorado);
+  padding-left: 24px;
+  margin-bottom: 44px;
+}
+.iq-note {
+  background: var(--blanco);
+  border: 1px solid var(--crema-oscura);
+  padding: 28px 32px;
+  font-size: 13px; font-weight: 300; line-height: 1.9; color: var(--gris);
+  margin-bottom: 44px;
+}
+.iq-note strong { color: var(--verde-oscuro); font-weight: 600; }
+.iq-cta {
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  padding-top: 12px; border-top: 1px solid var(--crema-oscura);
+}
+.btn-primary {
+  background: var(--verde); color: var(--crema);
+  padding: 16px 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  border: none; cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none; display: inline-block;
+}
+.btn-primary:hover { background: var(--dorado); }
+.btn-secondary {
+  color: var(--verde);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  text-decoration: none; display: flex; align-items: center; gap: 10px;
+  transition: color 0.3s; border-bottom: 1px solid var(--verde); padding-bottom: 4px;
+}
+.btn-secondary:hover { color: var(--dorado); border-color: var(--dorado); }
+
+@media (max-width: 640px) {
+  .iq-nav { padding: 18px 20px; }
+  .iq-article { padding: 48px 20px 72px; }
+  .iq-lede { font-size: 18px; padding-left: 18px; }
+}
+
+/* FOOTER — versión compacta, coherente con index.html */
+footer {
+  background: var(--verde-oscuro);
+  color: var(--crema);
+  padding: 56px 60px 28px;
+  display: flex; flex-wrap: wrap; gap: 48px; justify-content: space-between;
+}
+.footer-brand { max-width: 320px; }
+.footer-logo-img { height: 40px; width: auto; display: block; margin-bottom: 16px; }
+.footer-brand p { font-size: 12px; font-weight: 300; line-height: 1.8; color: rgba(244,240,233,0.7); }
+.footer-col-title {
+  font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--dorado-palo); margin-bottom: 18px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { color: rgba(244,240,233,0.8); text-decoration: none; font-size: 12px; transition: color 0.3s; }
+.footer-links a:hover { color: var(--dorado); }
+@media (max-width: 640px) {
+  footer { padding: 40px 20px 24px; flex-direction: column; gap: 32px; }
+}
