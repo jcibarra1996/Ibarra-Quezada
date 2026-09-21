@@ -6,6 +6,36 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://ibarraquezada.com/derecho-corporativo/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ibarraquezada.com/contratos-mercantiles/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ibarraquezada.com/consultoria-laboral/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ibarraquezada.com/gobierno-corporativo-cumplimiento/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ibarraquezada.com/fusiones-adquisiciones/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://ibarraquezada.com/legal-ops-legal-tech/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://ibarraquezada.com/insights/sa-de-cv-vs-s-de-rl/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
