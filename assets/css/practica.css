@@ -1,0 +1,499 @@
+/* ═══════════════════════════════════════════════════════════════
+   Ibarra Quezada Abogados — hoja de estilos compartida
+   para las páginas individuales de área de práctica.
+   Reutiliza el sistema visual de index.html (paleta, tipografía,
+   nav, botones, FAQ, footer) para que cada página se sienta como
+   un capítulo de la misma firma, no como un microsite aparte.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --verde: #211f1b;
+  --verde-oscuro: #15130f;
+  --dorado: #a85a2e;
+  --dorado-claro: #c17640;
+  --dorado-palo: #d5a077;
+  --crema: #f6f1e6;
+  --crema-oscura: #eae2d0;
+  --blanco: #ffffff;
+  --negro: #15130f;
+  --gris: #67615a;
+  --gris-claro: #948d81;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; overflow-x: hidden; scroll-padding-top: 100px; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--crema);
+  color: var(--negro);
+  overflow-x: hidden;
+}
+
+/* NAV — idéntico a la home */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 28px 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.4s ease;
+  background: rgba(245, 240, 232, 0.97);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(176, 123, 58, 0.2);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+}
+.nav-logo-img { height: 52px; width: auto; display: block; }
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--verde-oscuro); text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--dorado);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--dorado); }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.current { color: var(--dorado); }
+.nav-links a.current::after { width: 100%; }
+.nav-cta {
+  background: var(--verde);
+  color: var(--crema) !important;
+  padding: 10px 24px;
+  border-radius: 1px;
+  letter-spacing: 2px !important;
+  transition: background 0.3s !important;
+}
+.nav-cta:hover { background: var(--dorado) !important; color: var(--blanco) !important; }
+.nav-cta::after { display: none !important; }
+
+/* HAMBURGER / MOBILE NAV — idéntico a la home */
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
+.hamburger span { width:24px; height:1.5px; background:var(--verde-oscuro); transition:all .3s; display:block; }
+.mobile-nav {
+  position:fixed; top:0; right:0; bottom:0;
+  width:min(320px,85vw); background:var(--verde-oscuro);
+  z-index:200; transform:translateX(100%); transition:transform .4s ease;
+  display:flex; flex-direction:column; padding:80px 40px 40px;
+}
+.mobile-nav.open { transform:translateX(0); }
+.mobile-nav a {
+  font-family:'Playfair Display',serif; font-size:26px; font-weight:300;
+  color:var(--crema); padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.08); transition:color .3s;
+  display:block; text-decoration:none;
+}
+.mobile-nav a:hover { color:var(--dorado-palo); }
+.mobile-nav-close {
+  position:absolute; top:20px; right:20px; font-size:24px;
+  color:rgba(244,240,233,.4); cursor:pointer; background:none; border:none;
+  width:40px; height:40px; display:flex; align-items:center; justify-content:center;
+  transition:color .3s;
+}
+.mobile-nav-close:hover { color:var(--dorado-palo); }
+.mobile-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,.6);
+  z-index:190; display:none; backdrop-filter:blur(4px);
+}
+.mobile-overlay.open { display:block; }
+@media (max-width:768px) {
+  .hamburger { display:flex; }
+  .nav-links { display:none !important; }
+}
+
+/* BREADCRUMB */
+.practica-breadcrumb {
+  padding: 128px 60px 0;
+  font-size: 11px; color: var(--gris-claro); font-weight: 400;
+  letter-spacing: 0.3px;
+}
+.practica-breadcrumb a { color: var(--gris); text-decoration: none; transition: color 0.3s; }
+.practica-breadcrumb a:hover { color: var(--dorado); }
+
+/* HERO DE PRÁCTICA */
+.practica-hero {
+  position: relative;
+  padding: 48px 60px 100px;
+  overflow: hidden;
+  background: var(--crema);
+}
+.practica-hero-num {
+  position: absolute;
+  top: 10px; right: 60px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 300;
+  font-size: clamp(140px, 20vw, 260px);
+  line-height: 1;
+  color: rgba(168,90,46,0.08);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+.practica-hero-inner { position: relative; z-index: 1; max-width: 760px; }
+.hero-eyebrow {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--dorado);
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 16px;
+}
+.hero-eyebrow::before { content: ''; width: 40px; height: 1px; background: var(--dorado); }
+.practica-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 5.6vw, 68px);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--verde-oscuro);
+  margin-bottom: 24px;
+}
+.practica-hero-sub {
+  font-size: 15px; font-weight: 300;
+  line-height: 1.85; color: var(--gris);
+  max-width: 560px; margin-bottom: 40px;
+}
+.practica-hero-rule {
+  width: 60px; height: 2px; background: var(--dorado);
+  margin-bottom: 28px;
+}
+.hero-actions { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+
+/* BOTONES — idénticos a la home */
+.btn-primary {
+  background: var(--verde);
+  color: var(--crema);
+  padding: 16px 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  border: none; cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none; display: inline-block;
+  position: relative; overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--dorado);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-secondary {
+  color: var(--verde);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  text-decoration: none; display: flex; align-items: center; gap: 10px;
+  transition: color 0.3s; border-bottom: 1px solid var(--verde); padding-bottom: 4px;
+}
+.btn-secondary:hover { color: var(--dorado); border-color: var(--dorado); }
+.btn-gold {
+  background: var(--dorado);
+  color: var(--verde-oscuro);
+  padding: 18px 48px;
+  font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  border: none; cursor: pointer; text-decoration: none; display: inline-block;
+  transition: background 0.3s;
+}
+.btn-gold:hover { background: var(--dorado-claro); }
+.btn-outline-light {
+  border: 1px solid rgba(244,240,233,0.3);
+  color: var(--crema);
+  padding: 18px 48px;
+  font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  text-decoration: none; display: inline-block;
+  transition: all 0.3s;
+}
+.btn-outline-light:hover { border-color: var(--dorado); color: var(--dorado); }
+
+/* SECTION BASE — idéntico a la home */
+section { position: relative; }
+.section-label {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--dorado); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.section-label::before { content: ''; width: 30px; height: 1px; background: var(--dorado); }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4.4vw, 52px);
+  font-weight: 300; line-height: 1.15;
+  color: var(--verde-oscuro);
+}
+.section-title em { font-style: italic; color: var(--dorado); }
+
+/* PROBLEMA */
+.section-problema { padding: 100px 60px; background: var(--blanco); border-top: 1px solid var(--crema-oscura); }
+.problema-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 48px; align-items: start; }
+.problema-intro p { font-size: 14px; color: var(--gris); line-height: 1.9; font-weight: 300; }
+.trigger-list { list-style: none; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--crema-oscura); }
+.trigger-list li {
+  font-size: 13px; color: var(--verde); font-weight: 400;
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--crema-oscura);
+  line-height: 1.6;
+}
+.trigger-list li::before { content: ''; width: 20px; height: 1px; background: var(--dorado); flex-shrink: 0; margin-top: 9px; }
+
+/* SERVICIOS DE LA PRÁCTICA — filas numeradas, igual a la home */
+.section-servicios-practica { padding: 100px 60px; background: var(--crema); }
+.servicios-practica-list { display: flex; flex-direction: column; border-top: 1px solid var(--crema-oscura); margin-top: 48px; }
+.servicio-practica-row {
+  display: grid; grid-template-columns: 90px 1fr;
+  gap: 32px; padding: 32px 0;
+  border-bottom: 1px solid var(--crema-oscura);
+}
+.servicio-practica-num {
+  font-family: 'Playfair Display', serif;
+  font-weight: 300; font-size: 32px; line-height: 1;
+  color: var(--dorado);
+}
+.servicio-practica-text {
+  font-size: 13.5px; color: var(--verde); font-weight: 400; line-height: 1.7;
+}
+@media (max-width: 700px) {
+  .servicio-practica-row { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ENFOQUE IQ — bloque oscuro, igual a la metodología de la home */
+.section-enfoque {
+  padding: 110px 60px;
+  background: var(--verde-oscuro);
+  color: var(--crema);
+  overflow: hidden;
+  position: relative;
+}
+.section-enfoque::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 20px);
+  pointer-events: none;
+}
+.section-enfoque > * { position: relative; z-index: 1; }
+.section-enfoque .section-label { color: var(--dorado-palo); }
+.section-enfoque .section-label::before { background: var(--dorado-palo); }
+.section-enfoque .section-title { color: var(--crema); }
+.section-enfoque .section-title em { color: var(--dorado-palo); }
+.enfoque-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 64px; }
+.enfoque-step {
+  padding: 0 28px 0 0;
+  border-left: 1px solid rgba(244,240,233,0.12);
+  padding-left: 28px;
+}
+.enfoque-step:first-child { border-left: none; padding-left: 0; }
+.enfoque-step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px; font-weight: 300;
+  color: rgba(168,90,46,0.5);
+  line-height: 1; margin-bottom: 16px;
+}
+.enfoque-step-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 400;
+  color: var(--crema); margin-bottom: 12px;
+}
+.enfoque-step-desc { font-size: 11.5px; font-weight: 300; line-height: 1.85; color: rgba(244,240,233,0.6); }
+@media (max-width: 900px) {
+  .enfoque-steps { grid-template-columns: 1fr 1fr; gap: 40px 28px; }
+  .enfoque-step { border-left: none; padding-left: 0; }
+}
+@media (max-width: 560px) {
+  .enfoque-steps { grid-template-columns: 1fr; }
+}
+
+/* TIPO DE CLIENTE — grid tipo sectores de la home */
+.section-cliente { padding: 100px 60px; background: var(--blanco); border-top: 1px solid var(--crema-oscura); }
+.cliente-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  background: var(--crema-oscura); margin-top: 48px;
+}
+.cliente-item { background: var(--blanco); padding: 40px 32px; transition: background 0.3s; }
+.cliente-item:hover { background: var(--crema); }
+.cliente-num {
+  font-family: 'Playfair Display', serif; font-weight: 300;
+  font-size: 13px; letter-spacing: 1px; color: var(--dorado); margin-bottom: 16px;
+}
+.cliente-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 400; color: var(--verde-oscuro);
+  margin-bottom: 10px; line-height: 1.25;
+}
+.cliente-desc { font-size: 11.5px; color: var(--gris); line-height: 1.7; font-weight: 300; }
+@media (max-width: 900px) { .cliente-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .cliente-grid { grid-template-columns: 1fr; } }
+
+/* FAQ — idéntico a la home */
+.section-faq { padding: 100px 60px; background: var(--crema); }
+.faq-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
+.faq-sidebar { position: sticky; top: 120px; }
+.faq-sidebar p { font-size: 13px; color: var(--gris); line-height: 1.8; margin-top: 24px; font-weight: 300; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--crema-oscura); overflow: hidden; }
+.faq-q {
+  padding: 26px 0; display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; transition: color 0.3s;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 400; color: var(--verde-oscuro);
+  line-height: 1.3;
+}
+.faq-q:hover { color: var(--dorado); }
+.faq-icon { color: var(--dorado); font-size: 20px; flex-shrink: 0; margin-left: 20px; transition: transform 0.3s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.3s;
+  font-size: 13px; color: var(--gris); line-height: 1.9; font-weight: 300;
+}
+.faq-item.open .faq-a { max-height: 320px; padding-bottom: 24px; }
+@media (max-width: 1024px) { .faq-grid { grid-template-columns: 1fr; } }
+
+/* CTA FINAL */
+.section-cta-final {
+  padding: 110px 60px;
+  background: var(--verde-oscuro);
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+.section-cta-final::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 30px);
+}
+.cta-final-content { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+.section-cta-final .section-label { justify-content: center; color: var(--dorado-palo); }
+.section-cta-final .section-label::before { background: var(--dorado-palo); }
+.section-cta-final .section-title { color: var(--crema); }
+.section-cta-final .section-title em { color: var(--dorado-palo); }
+.cta-final-signature {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 300;
+  font-size: 15px; color: var(--dorado-palo);
+  margin: 20px 0 44px;
+}
+.cta-final-actions { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+
+/* INSIGHTS RELACIONADOS — mismas tarjetas que la home */
+.section-insights-relacionados { padding: 100px 60px; background: var(--blanco); }
+.recursos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+.recurso-card {
+  border: 1px solid var(--crema-oscura); padding: 40px 32px;
+  cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
+  display: block; color: inherit; text-decoration: none;
+}
+.recurso-thumb { height: 160px; margin: -40px -32px 28px; background-size: cover; background-position: center; }
+.recurso-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--dorado);
+  transform: scaleX(0); transition: transform 0.3s;
+  transform-origin: left;
+}
+.recurso-card:hover { border-color: rgba(168,90,46,0.3); background: var(--crema); }
+.recurso-card:hover::after { transform: scaleX(1); }
+.recurso-tag {
+  font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--dorado); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.recurso-tag::before { content: ''; width: 20px; height: 1px; background: var(--dorado); }
+.recurso-date { color: var(--gris-claro); font-weight: 500; }
+.recurso-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 400; color: var(--verde-oscuro);
+  margin-bottom: 14px; line-height: 1.3;
+}
+.recurso-desc { font-size: 12px; color: var(--gris); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
+.recurso-link {
+  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--verde); text-decoration: none; display: flex; align-items: center; gap: 8px;
+  transition: color 0.3s, gap 0.3s;
+}
+.recurso-card:hover .recurso-link { color: var(--dorado); gap: 14px; }
+@media (max-width: 900px) { .recursos-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .recursos-grid { grid-template-columns: 1fr; } }
+
+/* OTRAS PRÁCTICAS — enlaces internos cruzados */
+.section-otras-practicas { padding: 80px 60px 100px; background: var(--crema); border-top: 1px solid var(--crema-oscura); }
+.otras-practicas-list { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+.otra-practica-link {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--verde); text-decoration: none;
+  padding: 14px 22px; border: 1px solid var(--crema-oscura);
+  transition: all 0.3s;
+}
+.otra-practica-link:hover { border-color: var(--dorado); color: var(--dorado); background: var(--blanco); }
+
+/* FOOTER — idéntico a la home */
+footer {
+  background: var(--negro);
+  padding: 60px;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.footer-logo-img { height: 44px; width: auto; display: block; }
+.footer-brand p {
+  font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.8; font-weight: 300; margin-top: 24px;
+  max-width: 280px;
+}
+.footer-col-title {
+  font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--dorado); margin-bottom: 24px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a {
+  font-size: 12px; color: rgba(255,255,255,0.72); text-decoration: none;
+  transition: color 0.3s; font-weight: 300;
+}
+.footer-links a:hover { color: var(--dorado-palo); }
+.footer-bottom {
+  background: var(--negro);
+  padding: 20px 60px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 10px; color: rgba(255,255,255,0.55); font-weight: 300; letter-spacing: 1px; }
+.footer-logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px; color: rgba(255,255,255,0.55); letter-spacing: 4px; text-transform: uppercase; font-weight: 300;
+}
+
+/* ANIMACIONES */
+.fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE GENERAL */
+@media (max-width: 1024px) {
+  nav { padding: 24px 32px; }
+  .nav-links { gap: 24px; }
+  .practica-breadcrumb { padding: 112px 32px 0; }
+  .practica-hero { padding: 32px 32px 72px; }
+  .practica-hero-num { right: 32px; }
+  .section-problema, .section-servicios-practica, .section-enfoque, .section-cliente,
+  .section-faq, .section-cta-final, .section-insights-relacionados, .section-otras-practicas {
+    padding: 72px 32px;
+  }
+  .problema-grid { grid-template-columns: 1fr; gap: 40px; }
+  footer { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { padding: 20px 32px; }
+}
+@media (max-width: 640px) {
+  footer { grid-template-columns: 1fr; gap: 40px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+  .btn-primary, .btn-secondary, .btn-gold, .btn-outline-light {
+    width: 100%; box-sizing: border-box; text-align: center; justify-content: center;
+    white-space: normal;
+  }
+  .cta-final-actions { flex-direction: column; align-items: stretch; }
+}
