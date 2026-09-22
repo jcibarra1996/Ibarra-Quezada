@@ -97,6 +97,10 @@ activo, nunca puerta de entrada):
 
 - **mauricio** — Growth y marketing B2B de bajo presupuesto (canales,
   outbound, medición).
+- **ximena** — Prospección: radar semanal de empresas del ICP a las que una
+  causa pública (reforma, movimiento corporativo, vencimiento regulatorio)
+  les vuelve urgente una decisión jurídica. Nunca contacta prospectos ella
+  misma.
 - **renata** — Marketing jurídico y posicionamiento (copy de materiales
   para clientes, segmentación, Método IQ).
 - **diego** — Ventas B2B (calificación BANT, guiones SPIN, SLA de

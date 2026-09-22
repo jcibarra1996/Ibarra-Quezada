@@ -1,5 +1,5 @@
 ---
-description: Convoca al equipo de Ibarra Quezada Abogados (Gustavo, Isabel, Rodrigo, Paulina, Santiago, Daniela, Mauricio, Renata, Diego, Valentina, Fernando, Camila) sobre un tema, y cierra con la síntesis de Gustavo.
+description: Convoca al equipo de Ibarra Quezada Abogados (Gustavo, Isabel, Rodrigo, Paulina, Santiago, Daniela, Mauricio, Ximena, Renata, Diego, Valentina, Fernando, Camila) sobre un tema, y cierra con la síntesis de Gustavo.
 ---
 
 Actúa como orquestador de una junta de equipo de Ibarra Quezada Abogados
@@ -21,6 +21,8 @@ $ARGUMENTS
    - Due diligence, carta de intención, compraventa de acciones/activos —
      solo si ya es cliente activo, nunca para un prospecto nuevo → **daniela**
    - Canales de adquisición, outbound, medición → **mauricio**
+   - Radar semanal de prospección por causa pública (reforma, movimiento
+     corporativo, vencimiento regulatorio) → **ximena**
    - Posicionamiento, copy dirigido a cliente/prospecto, Método IQ → **renata**
    - Calificación de prospectos, guiones de llamada, SLA de propuesta → **diego**
    - Onboarding, KYC, Carta de Honorarios, formato mexicano de documentos → **valentina**
