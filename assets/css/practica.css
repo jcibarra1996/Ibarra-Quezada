@@ -9,15 +9,16 @@
 :root {
   --verde: #211f1b;
   --verde-oscuro: #15130f;
-  --dorado: #a85a2e;
+  --dorado: #a85a2e;       /* acento de marca: botones, hovers, líneas, texto grande sobre fondo claro */
+  --dorado-texto: #914c25; /* copper oscurecido para eyebrows/labels/números pequeños sobre fondo claro */
   --dorado-claro: #c17640;
-  --dorado-palo: #d5a077;
+  --dorado-palo: #d5a077;  /* copper claro para texto de acento sobre fondo oscuro */
   --crema: #f6f1e6;
   --crema-oscura: #eae2d0;
   --blanco: #ffffff;
   --negro: #15130f;
   --gris: #67615a;
-  --gris-claro: #948d81;
+  --gris-claro: #6f6759;   /* oscurecido para pasar AA en texto pequeño (antes #948d81) */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -94,7 +95,7 @@ nav {
 .mobile-nav a:hover { color:var(--dorado-palo); }
 .mobile-nav-close {
   position:absolute; top:20px; right:20px; font-size:24px;
-  color:rgba(244,240,233,.4); cursor:pointer; background:none; border:none;
+  color:rgba(244,240,233,.6); cursor:pointer; background:none; border:none;
   width:40px; height:40px; display:flex; align-items:center; justify-content:center;
   transition:color .3s;
 }
@@ -141,7 +142,7 @@ nav {
 .hero-eyebrow {
   font-size: 10px; font-weight: 600;
   letter-spacing: 4px; text-transform: uppercase;
-  color: var(--dorado);
+  color: var(--dorado-texto);
   margin-bottom: 28px;
   display: flex; align-items: center; gap: 16px;
 }
@@ -219,7 +220,7 @@ section { position: relative; }
 .section-label {
   font-size: 9px; font-weight: 600;
   letter-spacing: 4px; text-transform: uppercase;
-  color: var(--dorado); margin-bottom: 20px;
+  color: var(--dorado-texto); margin-bottom: 20px;
   display: flex; align-items: center; gap: 16px;
 }
 .section-label::before { content: ''; width: 30px; height: 1px; background: var(--dorado); }
@@ -448,7 +449,7 @@ footer {
 }
 .footer-col-title {
   font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--dorado); margin-bottom: 24px;
+  color: var(--dorado-palo); margin-bottom: 24px;
 }
 .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .footer-links a {
