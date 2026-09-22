@@ -30,6 +30,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://ibarraquezada.com/"},{"@type":"ListItem","position":2,"name":"Servicios","item":"https://ibarraquezada.com/#servicios"},{"@type":"ListItem","position":3,"name":"Automatización Legal","item":"https://ibarraquezada.com/automatizacion-legal/"}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿El despacho utiliza inteligencia artificial en su trabajo?","acceptedAnswer":{"@type":"Answer","text":"Sí, como apoyo dentro del proceso legal, no como sustituto de él. La usamos en tareas puntuales de generación y organización documental; el criterio jurídico y la decisión final son siempre de un abogado."}},{"@type":"Question","name":"¿Implementan estas soluciones dentro de despachos o áreas legales de empresas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Diseñamos e implementamos estas soluciones dentro del área legal de la empresa o del despacho, adaptadas a cómo ya trabaja el equipo, no como una plataforma genérica externa."}},{"@type":"Question","name":"¿Cómo se cotiza una solución de automatización legal?","acceptedAnswer":{"@type":"Answer","text":"Depende del proceso que se va a ordenar y de su complejidad. Partimos de un diagnóstico inicial para definir el alcance antes de proponer honorarios."}}]}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -165,25 +168,50 @@
 </section>
 
 <section class="section-formas">
-  <div class="fade-up">
+  <div class="fade-up" style="max-width:640px">
     <div class="section-label">Cómo empezar</div>
     <h2 class="section-title">Tres formas de <em>empezar</em></h2>
+    <p style="font-size:14px;color:var(--gris);line-height:1.9;font-weight:300;margin-top:20px">Soluciones jurídicas diseñadas desde la práctica legal, no adaptadas de otra industria.</p>
   </div>
   <div class="formas-grid">
     <div class="forma-item fade-up">
-      <div class="forma-eyebrow">Opción 01</div>
+      <div class="forma-eyebrow">Solución 01</div>
       <div class="forma-name">IQ Contract Flow</div>
       <div class="forma-desc">Para empresas que necesitan generar, aprobar, firmar y controlar contratos con un proceso común.</div>
     </div>
     <div class="forma-item fade-up">
-      <div class="forma-eyebrow">Opción 02</div>
+      <div class="forma-eyebrow">Solución 02</div>
       <div class="forma-name">IQ Radar</div>
       <div class="forma-desc">Para empresas que necesitan ordenar documentos existentes y dar seguimiento a vencimientos, renovaciones y obligaciones.</div>
     </div>
     <div class="forma-item fade-up">
-      <div class="forma-eyebrow">Opción 03</div>
+      <div class="forma-eyebrow">Solución 03</div>
       <div class="forma-name">IQ Legal Intake</div>
       <div class="forma-desc">Para equipos que reciben solicitudes de distintas áreas y necesitan clasificarlas, priorizarlas y asignarlas con claridad.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section-faq" id="faq">
+  <div class="faq-grid">
+    <div class="faq-sidebar fade-up">
+      <div class="section-label">Preguntas frecuentes</div>
+      <h2 class="section-title">Dudas sobre <em>automatización</em></h2>
+      <p>Preguntas que directores y responsables de área legal nos hacen antes de ordenar un proceso.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿El despacho utiliza inteligencia artificial en su trabajo? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Sí, como apoyo dentro del proceso legal, no como sustituto de él. La usamos en tareas puntuales de generación y organización documental; el criterio jurídico y la decisión final son siempre de un abogado.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Implementan estas soluciones dentro de despachos o áreas legales de empresas? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Sí. Diseñamos e implementamos estas soluciones dentro del área legal de la empresa o del despacho, adaptadas a cómo ya trabaja el equipo, no como una plataforma genérica externa.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">¿Cómo se cotiza una solución de automatización legal? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Depende del proceso que se va a ordenar y de su complejidad. Partimos de un diagnóstico inicial para definir el alcance antes de proponer honorarios.</div>
+      </div>
     </div>
   </div>
 </section>
