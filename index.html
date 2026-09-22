@@ -36,7 +36,7 @@
 
 <!-- Schema.org LegalService -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://ibarraquezada.com","logo":"https://ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"juan@ibarraquezada.com","address":{"@type":"PostalAddress","streetAddress":"Avenida Córdoba 434, Valle Dorado","addressLocality":"Tlalnepantla de Baz","addressRegion":"MEX","addressCountry":"MX"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho Corporativo","Contratos Mercantiles","Consultoría Laboral","Gobierno Corporativo","Cumplimiento Normativo","Fusiones y Adquisiciones","Automatización Legal"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/IbarraQuezadaAbogados","https://www.linkedin.com/company/ibarra-quezada-abogados/"]}
+{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://ibarraquezada.com","logo":"https://ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"juan@ibarraquezada.com","founder":{"@type":"Person","name":"Juan Carlos Ibarra Quezada","jobTitle":"Socio Fundador"},"address":{"@type":"PostalAddress","streetAddress":"Avenida Córdoba 434, Valle Dorado","addressLocality":"Tlalnepantla de Baz","addressRegion":"MEX","addressCountry":"MX"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho Corporativo","Contratos Mercantiles","Consultoría Laboral","Gobierno Corporativo","Cumplimiento Normativo","Fusiones y Adquisiciones","Automatización Legal"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/IbarraQuezadaAbogados","https://www.linkedin.com/company/ibarra-quezada-abogados/"]}
 </script>
 
 <!-- Schema.org FAQ -->
@@ -691,6 +691,60 @@
     .nosotros-float-card { bottom: 0; right: 0; width: 180px; padding: 24px 28px; }
   }
 
+  /* SOBRE EL SOCIO */
+  #socio {
+    padding: 120px 60px;
+    background: var(--verde-oscuro);
+  }
+  #socio .section-label { color: var(--dorado-palo); }
+  #socio .section-label::before { background: var(--dorado-palo); }
+  #socio .section-title { color: var(--crema); }
+  #socio .section-title em { color: var(--dorado-palo); }
+  .socio-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .socio-img-frame {
+    width: 100%; padding-bottom: 125%;
+    background-image: url('assets/img/nosotros-fundador.jpg');
+    background-size: cover; background-position: center 15%;
+  }
+  .socio-role {
+    font-size: 12px; color: var(--dorado-palo);
+    letter-spacing: 0.5px; font-weight: 300;
+    margin: 16px 0 32px;
+  }
+  .socio-bio {
+    font-size: 14px; color: rgba(244,240,233,0.7);
+    line-height: 1.9; font-weight: 300;
+    max-width: 620px;
+  }
+  .socio-areas-label {
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--dorado-palo); margin: 40px 0 20px;
+  }
+  .socio-areas {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px 32px;
+  }
+  .socio-area-item {
+    font-size: 13px; color: var(--crema); font-weight: 300;
+    line-height: 1.6; padding-left: 18px; position: relative;
+  }
+  .socio-area-item::before {
+    content: ''; position: absolute; left: 0; top: 7px;
+    width: 6px; height: 6px; background: var(--dorado);
+  }
+  @media (max-width: 900px) {
+    .socio-grid { grid-template-columns: 1fr; gap: 48px; }
+    .socio-img-frame { max-width: 320px; margin: 0 auto; padding-bottom: 100%; }
+  }
+  @media (max-width: 480px) {
+    .socio-areas { grid-template-columns: 1fr; }
+  }
+
   /* RECURSOS */
   #recursos {
     padding: 120px 60px;
@@ -965,7 +1019,7 @@
     .nav-links { gap: 24px; }
     .hero-content { padding: 120px 32px 80px; }
     .hero-visual { display: none; }
-    #servicios, #metodologia, #areas, #sectores, #nosotros, #recursos, #faq, #contacto { padding: 80px 32px; }
+    #servicios, #metodologia, #areas, #sectores, #nosotros, #socio, #recursos, #faq, #contacto { padding: 80px 32px; }
     .metodologia-grid { grid-template-columns: 1fr; }
     .metodologia-visual { position: static; }
     .nosotros-grid { grid-template-columns: 1fr; }
@@ -1618,6 +1672,26 @@
   </div>
 </section>
 
+<!-- SOBRE EL SOCIO -->
+<section id="socio">
+  <div class="socio-grid">
+    <div class="socio-img-frame" role="img" aria-label="Retrato de Juan Carlos Ibarra Quezada, socio fundador de Ibarra Quezada Abogados"></div>
+    <div class="socio-content">
+      <div class="section-label fade-up">Sobre el socio</div>
+      <h2 class="section-title fade-up">Juan Carlos <em>Ibarra Quezada</em></h2>
+      <div class="socio-role fade-up">Socio Fundador · Abogado Corporativo &amp; Legal Engineer</div>
+      <p class="socio-bio fade-up">Con más de seis años en áreas legales de retail, logística y ecommerce, y en consultoría de M&amp;A y due diligence, JC identificó un patrón: el problema legal costoso rara vez nace de un juicio, sino de una cláusula mal redactada o una estructura armada sin asesoría desde el inicio. Esa experiencia lo llevó a fundar Ibarra Quezada Abogados bajo una premisa concreta: la mejor defensa legal es la que se construye antes de que exista el conflicto.</p>
+      <div class="socio-areas-label fade-up">Áreas de enfoque</div>
+      <div class="socio-areas fade-up">
+        <div class="socio-area-item">Cumplimiento normativo y prevención de lavado de dinero</div>
+        <div class="socio-area-item">Fusiones, adquisiciones y due diligence corporativo</div>
+        <div class="socio-area-item">Propiedad intelectual y gobierno corporativo</div>
+        <div class="socio-area-item">Legal tech e inteligencia artificial aplicada al derecho</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- INSIGHTS / RECURSOS -->
 <section id="recursos">
   <div class="recursos-header fade-up">
@@ -1762,6 +1836,7 @@
     <div class="footer-col-title">Firma</div>
     <ul class="footer-links">
       <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#socio">El Socio</a></li>
       <li><a href="#metodologia">Metodología</a></li>
       <li><a href="#sectores">Clientes</a></li>
       <li><a href="assets/Ibarra-Quezada-Brochure.pdf" download="Ibarra-Quezada-Brochure.pdf">Brochure (PDF)</a></li>
