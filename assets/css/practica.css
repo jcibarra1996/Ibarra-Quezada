@@ -303,7 +303,7 @@ section { position: relative; }
   font-size: 19px; font-weight: 400;
   color: var(--crema); margin-bottom: 12px;
 }
-.enfoque-step-desc { font-size: 11.5px; font-weight: 300; line-height: 1.85; color: rgba(244,240,233,0.6); }
+.enfoque-step-desc { font-size: 11.5px; font-weight: 300; line-height: 1.85; color: rgba(244,240,233,0.78); }
 @media (max-width: 900px) {
   .enfoque-steps { grid-template-columns: 1fr 1fr; gap: 40px 28px; }
   .enfoque-step { border-left: none; padding-left: 0; }
@@ -554,7 +554,7 @@ footer {
   font-size: 24px; font-weight: 400; color: var(--crema);
   margin-bottom: 16px; line-height: 1.2;
 }
-.forma-desc { font-size: 12.5px; color: rgba(244,240,233,0.6); line-height: 1.8; font-weight: 300; }
+.forma-desc { font-size: 12.5px; color: rgba(244,240,233,0.78); line-height: 1.8; font-weight: 300; }
 @media (max-width: 1024px) { .section-formas { padding: 72px 32px; } }
 @media (max-width: 900px) {
   .formas-grid { grid-template-columns: 1fr; }
