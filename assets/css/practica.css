@@ -497,3 +497,66 @@ footer {
   }
   .cta-final-actions { flex-direction: column; align-items: stretch; }
 }
+
+/* SOLUCIONES — grid numerado, mismo patrón visual que cliente-grid */
+.solucion-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  background: var(--crema-oscura); margin-top: 48px;
+}
+.solucion-item { background: var(--blanco); padding: 40px 32px; transition: background 0.3s; }
+.solucion-item:hover { background: var(--crema); }
+.solucion-num {
+  font-family: 'Playfair Display', serif; font-weight: 300;
+  font-size: 13px; letter-spacing: 1px; color: var(--dorado); margin-bottom: 16px;
+}
+.solucion-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; font-weight: 400; color: var(--verde-oscuro);
+  margin-bottom: 10px; line-height: 1.25;
+}
+.solucion-desc { font-size: 11.5px; color: var(--gris); line-height: 1.75; font-weight: 300; }
+@media (max-width: 900px) { .solucion-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .solucion-grid { grid-template-columns: 1fr; } }
+
+/* SECCIÓN DE CONFIANZA — bloque centrado */
+.section-confianza {
+  padding: 100px 60px; background: var(--crema);
+  border-top: 1px solid var(--crema-oscura); text-align: center;
+}
+.confianza-inner { max-width: 720px; margin: 0 auto; }
+.confianza-text { font-size: 14px; color: var(--gris); line-height: 1.9; font-weight: 300; margin-top: 24px; }
+@media (max-width: 1024px) { .section-confianza { padding: 72px 32px; } }
+
+/* TRES FORMAS DE EMPEZAR — banda oscura de tres columnas */
+.section-formas { padding: 100px 60px; background: var(--verde-oscuro); position: relative; overflow: hidden; }
+.section-formas::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 20px);
+  pointer-events: none;
+}
+.section-formas > * { position: relative; z-index: 1; }
+.section-formas .section-label { justify-content: center; color: var(--dorado-palo); }
+.section-formas .section-label::before { background: var(--dorado-palo); }
+.section-formas .section-title { color: var(--crema); text-align: center; }
+.formas-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  margin-top: 64px; border: 1px solid rgba(244,240,233,0.12);
+}
+.forma-item { padding: 48px 36px; border-right: 1px solid rgba(244,240,233,0.12); }
+.forma-item:last-child { border-right: none; }
+.forma-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--dorado-palo); margin-bottom: 16px;
+}
+.forma-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 400; color: var(--crema);
+  margin-bottom: 16px; line-height: 1.2;
+}
+.forma-desc { font-size: 12.5px; color: rgba(244,240,233,0.6); line-height: 1.8; font-weight: 300; }
+@media (max-width: 1024px) { .section-formas { padding: 72px 32px; } }
+@media (max-width: 900px) {
+  .formas-grid { grid-template-columns: 1fr; }
+  .forma-item { border-right: none; border-bottom: 1px solid rgba(244,240,233,0.12); }
+  .forma-item:last-child { border-bottom: none; }
+}

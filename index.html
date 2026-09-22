@@ -36,7 +36,7 @@
 
 <!-- Schema.org LegalService -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://ibarraquezada.com","logo":"https://ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"juan@ibarraquezada.com","address":{"@type":"PostalAddress","streetAddress":"Avenida Córdoba 434, Valle Dorado","addressLocality":"Tlalnepantla de Baz","addressRegion":"MEX","addressCountry":"MX"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho Corporativo","Contratos Mercantiles","Consultoría Laboral","Gobierno Corporativo","Cumplimiento Normativo","Fusiones y Adquisiciones","Legal Operations","Legal Tech"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/IbarraQuezadaAbogados","https://www.linkedin.com/company/ibarra-quezada-abogados/"]}
+{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://ibarraquezada.com","logo":"https://ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"juan@ibarraquezada.com","address":{"@type":"PostalAddress","streetAddress":"Avenida Córdoba 434, Valle Dorado","addressLocality":"Tlalnepantla de Baz","addressRegion":"MEX","addressCountry":"MX"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho Corporativo","Contratos Mercantiles","Consultoría Laboral","Gobierno Corporativo","Cumplimiento Normativo","Fusiones y Adquisiciones","Automatización Legal"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/IbarraQuezadaAbogados","https://www.linkedin.com/company/ibarra-quezada-abogados/"]}
 </script>
 
 <!-- Schema.org FAQ -->
@@ -1213,18 +1213,18 @@
         </div>
         <div class="form-group">
           <label class="form-label">Área de interés</label>
-          <select class="form-select" name="area">
+          <select class="form-select" name="area" id="areaSelect" onchange="updateMensajeField()">
             <option value="">Seleccione...</option>
             <option>Constitución & Derecho Corporativo</option>
             <option>Contratos Mercantiles &amp; Civiles</option>
             <option>Consultoría Laboral</option>
             <option>Gobierno Corporativo &amp; Cumplimiento</option>
             <option>Fusiones &amp; Adquisiciones</option>
-            <option>Legal Ops &amp; Tecnología</option>
+            <option>Automatización Legal</option>
             <option>Otro</option>
           </select>
         </div>
-        <div class="form-group"><label class="form-label">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" placeholder="Describa brevemente su situación o necesidad legal..."></textarea></div>
+        <div class="form-group"><label class="form-label" id="mensajeLabel">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" id="mensajeField" placeholder="Describa brevemente su situación o necesidad legal..."></textarea></div>
         <label class="form-consent">
           <input type="checkbox" name="consentimiento" id="consentimiento" required>
           <span>He leído y acepto el <a href="#" onclick="event.stopPropagation();closeAllModals();openPrivacidad();return false;">Aviso de Privacidad</a>.</span>
@@ -1268,7 +1268,7 @@
 
   <div class="hero-content">
     <div class="hero-mobile-band" aria-hidden="true"></div>
-    <div class="hero-eyebrow"><span>Corporativo · Contratos · Laboral · Legal Tech</span></div>
+    <div class="hero-eyebrow"><span>Corporativo · Contratos · Laboral · Automatización Legal</span></div>
     <h1>Protegemos las decisiones<br>que cambian <em>el rumbo.</em></h1>
     <p class="hero-subtitle">Estructuramos, negociamos y protegemos las operaciones que definen el rumbo de una empresa.</p>
     <div class="hero-actions">
@@ -1429,10 +1429,10 @@
     <div class="servicio-row fade-up" onclick="openServicio('legaltech')">
       <div class="servicio-row-num">06</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Legal Ops, Legal Tech & IA</div>
+        <div class="servicio-row-title">Automatización de procesos legales</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Para departamentos legales y despachos que buscan modernizar cómo trabajan: rediseño de procesos y herramientas a la medida (CLMS, trackers de litigio, vaults de due diligence). Trabajamos de forma remota con equipos legales en México y otros países de la región.</p>
-          <a href="/legal-ops-legal-tech/" class="servicio-row-link" onclick="openServicio('legaltech');return false;">Conocer más →</a>
+          <p class="servicio-row-desc">Convertimos procesos legales repetitivos en flujos claros, controlados y medibles. Diseñamos automatizaciones para generar, revisar, aprobar, firmar y dar seguimiento a contratos, sin que su equipo dependa de correos, archivos dispersos o recordatorios manuales.</p>
+          <a href="/automatizacion-legal/" class="servicio-row-link" onclick="openServicio('legaltech');return false;">Automatice un proceso legal →</a>
         </div>
       </div>
     </div>
@@ -1640,7 +1640,7 @@
 
 <!-- MARQUEE -->
 <div class="insight-strip">
-  <div class="insight-strip-text">Derecho Corporativo &nbsp;·&nbsp; Contratos Mercantiles &amp; Civiles &nbsp;·&nbsp; Consultoría Laboral &nbsp;·&nbsp; Gobierno Corporativo &nbsp;·&nbsp; Fusiones &amp; Adquisiciones &nbsp;·&nbsp; Legal Ops &amp; IA</div>
+  <div class="insight-strip-text">Derecho Corporativo &nbsp;·&nbsp; Contratos Mercantiles &amp; Civiles &nbsp;·&nbsp; Consultoría Laboral &nbsp;·&nbsp; Gobierno Corporativo &nbsp;·&nbsp; Fusiones &amp; Adquisiciones &nbsp;·&nbsp; Automatización Legal</div>
 </div>
 
 <!-- NOSOTROS -->
@@ -1827,7 +1827,7 @@
       <li><a href="/consultoria-laboral/">Consultoría Laboral</a></li>
       <li><a href="/gobierno-corporativo-cumplimiento/">Gobierno Corporativo</a></li>
       <li><a href="/fusiones-adquisiciones/">M&A</a></li>
-      <li><a href="/legal-ops-legal-tech/">Legal Ops & IA</a></li>
+      <li><a href="/automatizacion-legal/">Automatización Legal</a></li>
     </ul>
   </div>
   <div>
@@ -1910,8 +1910,32 @@ function closeAllModals() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
 
 // CONTACTO
-function openContacto() { showModal('modalContacto'); }
+const MENSAJE_DEFAULT = { label: 'Cuéntenos sobre su caso', placeholder: 'Describa brevemente su situación o necesidad legal...' };
+const MENSAJE_AUTOMATIZACION = { label: '¿Qué proceso busca automatizar?', placeholder: 'Por favor, no incluya información confidencial ni documentos en este formulario.' };
+function updateMensajeField() {
+  const area = document.getElementById('areaSelect');
+  const label = document.getElementById('mensajeLabel');
+  const field = document.getElementById('mensajeField');
+  if (!area || !label || !field) return;
+  const copy = area.value === 'Automatización Legal' ? MENSAJE_AUTOMATIZACION : MENSAJE_DEFAULT;
+  label.textContent = copy.label;
+  field.placeholder = copy.placeholder;
+}
+function openContacto(presetArea) {
+  showModal('modalContacto');
+  const area = document.getElementById('areaSelect');
+  if (area) area.value = presetArea || '';
+  updateMensajeField();
+}
 function openPrivacidad() { showModal('modalPrivacidad'); }
+
+// Preselección de área desde otras páginas (?area=automatizacion-legal#contacto)
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('area') === 'automatizacion-legal') {
+    document.addEventListener('DOMContentLoaded', function () { openContacto('Automatización Legal'); });
+  }
+})();
 
 // Formspree submit handler
 document.addEventListener('DOMContentLoaded', function() {
@@ -2061,26 +2085,23 @@ const serviciosData = {
     `
   },
   legaltech: {
-    eyebrow: 'Legal Ops & Tecnología',
-    title: 'Legal Ops, Legal Tech & IA',
+    eyebrow: 'Automatización Legal',
+    title: 'Automatización de procesos legales',
     body: `
-      <p>La función legal ya no se mide solo por el conocimiento jurídico, sino por qué tan rápido y con cuánto control opera. Ayudamos a áreas legales internas y despachos a dejar de ahogarse en trabajo repetitivo.</p>
-      <h4>¿Qué hacemos?</h4>
+      <p>Convertimos procesos legales repetitivos en flujos claros, controlados y medibles.</p>
+      <p>Diseñamos automatizaciones para generar, revisar, aprobar, firmar y dar seguimiento a contratos, sin que su equipo dependa de correos, archivos dispersos o recordatorios manuales.</p>
+      <h4>Qué podemos automatizar</h4>
       <ul class="modal-list">
-        <li>Diagnóstico y rediseño de procesos legales (legal operations)</li>
-        <li>Automatización de generación, revisión y firma de contratos</li>
-        <li>Implementación de inteligencia artificial para análisis y revisión documental</li>
-        <li>Bases de conocimiento y plantillas inteligentes reutilizables</li>
-        <li>Tableros de control para gestión de riesgo y cumplimiento</li>
-        <li>Capacitación a equipos legales en herramientas de IA</li>
+        <li>Contratos en flujo: generación, revisión, aprobación, firma y archivo</li>
+        <li>Aprobaciones por riesgo, para que cada excepción llegue al responsable correcto</li>
+        <li>Radar contractual: vencimientos, renovaciones y obligaciones</li>
+        <li>Solicitudes legales internas de ventas, RH, compras y dirección</li>
+        <li>Onboarding de proveedores y colaboradores</li>
+        <li>Revisión documental asistida, con validación jurídica final</li>
       </ul>
-      <h4>Herramientas a la medida</h4>
-      <p>No vendemos licencias de software genérico. Diseñamos e implementamos la herramienta puntual que su equipo necesita: CLMS para el ciclo de vida de contratos, trackers de litigio, vaults de due diligence, calendarios de vencimientos y repositorios corporativos con control de versiones.</p>
-      <h4>Para quién es</h4>
-      <p>Empresas con áreas legales internas que quieren reducir tiempos de respuesta, y despachos que buscan escalar sin simplemente sumar más horas facturables.</p>
-      <h4>Nuestro enfoque</h4>
-      <p>No implementamos tecnología por moda. Empezamos por entender el proceso real, identificamos dónde se pierde tiempo y solo después recomendamos las herramientas — de IA o no — que realmente resuelven el problema.</p>
-      <div class="modal-cta"><a href="/legal-ops-legal-tech/" class="btn-secondary" style="margin-right:auto">Ver página completa →</a><a href="#" class="btn-primary" onclick="closeAllModals();openContacto();return false;"><span>Modernizar mi área legal →</span></a></div>
+      <h4>Tecnología con criterio jurídico</h4>
+      <p>La automatización reduce tareas repetitivas y mejora la trazabilidad. Las decisiones jurídicas, las excepciones relevantes y la validación final permanecen bajo control humano.</p>
+      <div class="modal-cta"><a href="/automatizacion-legal/" class="btn-secondary" style="margin-right:auto">Ver soluciones →</a><a href="#" class="btn-primary" onclick="closeAllModals();openContacto('Automatización Legal');return false;"><span>Automatice un proceso legal →</span></a></div>
     `
   }
 };
