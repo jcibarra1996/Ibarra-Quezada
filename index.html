@@ -510,16 +510,15 @@
   }
   .metodologia-intro { max-width: 640px; margin: 24px 0 0; display: flex; flex-direction: column; gap: 16px; }
   .metodologia-intro p { font-size: 14px; font-weight: 300; line-height: 1.9; color: rgba(244,240,233,0.7); }
-  .metodologia-pillars { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+  .metodologia-pillars { display: flex; flex-direction: column; margin-top: 8px; }
   .pillar {
-    display: flex; align-items: center; gap: 16px;
-    padding: 16px 20px;
-    border: 1px solid rgba(168,90,46,0.15);
-    transition: border-color 0.3s;
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(244,240,233,0.1);
   }
-  .pillar:hover { border-color: rgba(168,90,46,0.5); }
-  .pillar-dot { width: 6px; height: 6px; background: var(--dorado); flex-shrink: 0; }
-  .pillar-text { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--crema); font-weight: 400; }
+  .pillar:first-child { border-top: none; padding-top: 0; }
+  .pillar-dot { width: 4px; height: 4px; margin-top: 8px; background: var(--dorado); flex-shrink: 0; }
+  .pillar-text { font-size: 13px; line-height: 1.7; color: rgba(244,240,233,0.85); font-weight: 300; }
 
   /* ÁREAS */
   #areas {
@@ -1294,9 +1293,9 @@
     <div class="hero-mobile-band" aria-hidden="true"></div>
     <div class="hero-eyebrow"><span>Corporativo · Contratos · Laboral · Automatización Legal</span></div>
     <h1>Protegemos las decisiones<br>que cambian <em>el rumbo.</em></h1>
-    <p class="hero-subtitle">Estructuramos, negociamos y protegemos las operaciones que definen el rumbo de una empresa, con procesos y herramientas que ya forman parte de cómo trabajamos, no una capa aparte.</p>
+    <p class="hero-subtitle">Estructuramos, negociamos y protegemos las operaciones que definen el rumbo de una empresa, con procesos y herramientas que ya forman parte de cómo trabajamos.</p>
     <div class="hero-actions">
-      <a href="#" class="btn-primary" onclick="openContacto();return false;"><span>Hablemos de su situación legal</span></a>
+      <a href="#" class="btn-primary" onclick="openContacto();return false;"><span>Preparemos su siguiente decisión</span></a>
       <a href="#servicios" class="btn-secondary">Ver áreas de práctica →</a>
     </div>
   </div>
@@ -1353,7 +1352,7 @@
     <div class="servicios-header-text">
       <div class="section-label">Lo que hacemos</div>
       <h2 class="section-title">El respaldo legal<br>que su empresa <em>necesita</em></h2>
-      <p>Cada decisión de negocio tiene una cara legal: cómo se constituye, qué firma, a quién contrata, con quién se fusiona. Diseñamos cada servicio para que esa cara legal juegue a su favor, no en su contra.</p>
+      <p>Cada decisión de negocio tiene una cara legal: cómo se constituye, qué firma, a quién contrata, con quién se fusiona. Cada servicio existe para resolver esa cara legal antes de que la decisión se vuelva irreversible.</p>
     </div>
     <div class="servicios-header-visual" aria-hidden="true"></div>
   </div>
@@ -1475,9 +1474,8 @@
       <div class="metodologia-quote">"En cada encargo usamos la tecnología para ganar profundidad y velocidad en la revisión; el contexto, la estrategia y la responsabilidad de la recomendación permanecen siempre en manos de un abogado."</div>
       <div class="metodologia-pillars">
         <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Seis áreas de práctica. Un mismo criterio jurídico.</div></div>
-        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Un abogado responsable acompaña el asunto de principio a fin.</div></div>
-        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Honorarios definidos desde el mandato inicial, no en la factura final</div></div>
-        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Prevenir el conflicto, no solo responder cuando ya ocurrió</div></div>
+        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Honorarios definidos desde el mandato inicial, no en la factura final.</div></div>
+        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">El conflicto más costoso casi nunca empieza en un juicio: empieza en una cláusula que nadie revisó a tiempo.</div></div>
       </div>
     </div>
   </div>
@@ -1650,20 +1648,20 @@
 
       <div class="nosotros-values">
         <div class="value-item">
-          <div class="value-title">Especialización</div>
-          <div class="value-desc">100% dedicados a derecho corporativo, contractual y laboral. Conocemos su operación, no solo su expediente.</div>
+          <div class="value-title">Un solo abogado</div>
+          <div class="value-desc">El socio fundador acompaña su asunto de principio a fin, sin relevos entre asociados.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Estrategia</div>
-          <div class="value-desc">Traducimos riesgos contractuales en decisiones comerciales claras.</div>
+          <div class="value-title">Letra chica revisada</div>
+          <div class="value-desc">Leemos cada cláusula antes de que la firme, no después de que le cueste.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Eficiencia</div>
-          <div class="value-desc">Definimos responsables, alcance y siguientes pasos desde el inicio.</div>
+          <div class="value-title">Contexto de negocio</div>
+          <div class="value-desc">Entendemos qué financia, qué protege y qué arriesga la operación detrás del contrato.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Confianza</div>
-          <div class="value-desc">Le explicamos qué conviene hacer, qué no y por qué, antes de comprometer recursos.</div>
+          <div class="value-title">Recomendación clara</div>
+          <div class="value-desc">Cada análisis termina en qué conviene hacer, no en un reporte técnico por interpretar.</div>
         </div>
       </div>
 
