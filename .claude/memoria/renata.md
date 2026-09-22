@@ -12,3 +12,13 @@ segmentación van acá.
   genérico; vale la pena reusarlo en futuro copy sobre IA del despacho.
   Entregué el texto en la respuesta (no edité el HTML) porque JC pidió
   copy listo para pegar él mismo.
+
+- 22-sep-2026: junta con Mauricio sobre "el marketing se ve genérico".
+  Variante concreta que apliqué: los H2 de "El problema" y "FAQ" en las
+  6 páginas de práctica eran texto idéntico en las seis
+  ("¿Cuándo necesita este tipo de asesoría?" / "Dudas comunes"). Los
+  reescribí con una palabra final distinta por página (estructura,
+  contrato, laboral, gobierno, firmar, proceso), manteniendo el mismo
+  ritmo de frase para no romper el sistema de marca. Detalle a cuidar la
+  próxima vez que se agregue una página nueva: escribir el H2 específico
+  desde el inicio, no copiar el genérico y prometerse variarlo después.
