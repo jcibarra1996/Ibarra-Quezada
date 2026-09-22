@@ -510,16 +510,15 @@
   }
   .metodologia-intro { max-width: 640px; margin: 24px 0 0; display: flex; flex-direction: column; gap: 16px; }
   .metodologia-intro p { font-size: 14px; font-weight: 300; line-height: 1.9; color: rgba(244,240,233,0.7); }
-  .metodologia-pillars { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+  .metodologia-pillars { display: flex; flex-direction: column; margin-top: 8px; }
   .pillar {
-    display: flex; align-items: center; gap: 16px;
-    padding: 16px 20px;
-    border: 1px solid rgba(168,90,46,0.15);
-    transition: border-color 0.3s;
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(244,240,233,0.1);
   }
-  .pillar:hover { border-color: rgba(168,90,46,0.5); }
-  .pillar-dot { width: 6px; height: 6px; background: var(--dorado); flex-shrink: 0; }
-  .pillar-text { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--crema); font-weight: 400; }
+  .pillar:first-child { border-top: none; padding-top: 0; }
+  .pillar-dot { width: 4px; height: 4px; margin-top: 8px; background: var(--dorado); flex-shrink: 0; }
+  .pillar-text { font-size: 13px; line-height: 1.7; color: rgba(244,240,233,0.85); font-weight: 300; }
 
   /* ÁREAS */
   #areas {
@@ -1294,9 +1293,9 @@
     <div class="hero-mobile-band" aria-hidden="true"></div>
     <div class="hero-eyebrow"><span>Corporativo · Contratos · Laboral · Automatización Legal</span></div>
     <h1>Protegemos las decisiones<br>que cambian <em>el rumbo.</em></h1>
-    <p class="hero-subtitle">Estructuramos, negociamos y protegemos las operaciones que definen el rumbo de una empresa, con procesos y herramientas que ya forman parte de cómo trabajamos, no una capa aparte.</p>
+    <p class="hero-subtitle">Diseñamos la estructura jurídica detrás de las decisiones que hacen crecer, transforman o escalan una empresa.</p>
     <div class="hero-actions">
-      <a href="#" class="btn-primary" onclick="openContacto();return false;"><span>Hablemos de su situación legal</span></a>
+      <a href="#" class="btn-primary" onclick="openContacto();return false;"><span>Preparemos su siguiente decisión</span></a>
       <a href="#servicios" class="btn-secondary">Ver áreas de práctica →</a>
     </div>
   </div>
@@ -1344,16 +1343,16 @@
     <div class="val-eyebrow">Automatización</div>
     <div class="val-statement">Procesos legales,<br>sin fricción operativa.</div>
     <div class="val-rule"></div>
-    <div class="val-desc">Contratos, aprobaciones y vencimientos con un proceso definido y trazable, siempre bajo el criterio y la supervisión de un abogado.</div>
+    <div class="val-desc">Contratos, aprobaciones y vencimientos siguen un proceso definido, con el mismo criterio jurídico de siempre.</div>
   </div>
 </div>
 
 <section id="servicios">
   <div class="servicios-header fade-up">
     <div class="servicios-header-text">
-      <div class="section-label">Lo que hacemos</div>
-      <h2 class="section-title">El respaldo legal<br>que su empresa <em>necesita</em></h2>
-      <p>Cada decisión de negocio tiene una cara legal: cómo se constituye, qué firma, a quién contrata, con quién se fusiona. Diseñamos cada servicio para que esa cara legal juegue a su favor, no en su contra.</p>
+      <div class="section-label">Áreas de práctica</div>
+      <h2 class="section-title">De la decisión<br>a la <em>estructura</em></h2>
+      <p>Constituir una empresa, firmar un contrato, entrar a un nuevo mercado o vender el negocio son, antes que nada, decisiones de negocio. Nuestro trabajo es darles la estructura jurídica que permite ejecutarlas.</p>
     </div>
     <div class="servicios-header-visual" aria-hidden="true"></div>
   </div>
@@ -1365,7 +1364,7 @@
       <div class="servicio-row-main">
         <div class="servicio-row-title">Constitución y Estructuración Corporativa</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Constituimos su sociedad (S.A. de C.V., S. de R.L., SAPI) y diseñamos la estructura societaria y los convenios entre socios que evitan conflictos cuando el negocio crece. Reglas claras desde el día uno.</p>
+          <p class="servicio-row-desc">La forma en que se constituye una empresa determina cómo crece, cómo se financia y quién decide qué el día que las cosas se complican. Diseñamos esa arquitectura societaria —S.A. de C.V., S. de R.L., SAPI— y los convenios entre socios antes de que el negocio la necesite.</p>
           <a href="/derecho-corporativo/" class="servicio-row-link" onclick="openServicio('corporativo');return false;">Conocer más →</a>
         </div>
       </div>
@@ -1376,7 +1375,7 @@
       <div class="servicio-row-main">
         <div class="servicio-row-title">Contratos Mercantiles & Civiles</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Redactamos, negociamos y revisamos los contratos que sostienen su operación: servicios, distribución, arrendamiento, licencias, confidencialidad. Contratos alineados con la operación, el riesgo y la posición negociadora de su empresa.</p>
+          <p class="servicio-row-desc">Cada relación comercial —con un proveedor, un distribuidor, un cliente clave— funciona de cierta manera en la práctica. Convertimos esa forma de operar en acuerdos que se pueden hacer cumplir: servicios, distribución, arrendamiento, licencias, confidencialidad.</p>
           <a href="/contratos-mercantiles/" class="servicio-row-link" onclick="openServicio('contratos');return false;">Conocer más →</a>
         </div>
       </div>
@@ -1387,7 +1386,7 @@
       <div class="servicio-row-main">
         <div class="servicio-row-title">Consultoría y Cumplimiento Laboral</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Contratos de trabajo, reglamentos internos, NOM-035 y REPSE. Construimos el expediente laboral que protege a su empresa antes de que un conflicto se convierta en un problema costoso.</p>
+          <p class="servicio-row-desc">Contratar, organizar y hacer crecer un equipo tiene reglas específicas en México: contratos de trabajo, reglamentos internos, NOM-035, REPSE. Construimos esa estructura laboral al mismo tiempo que la empresa construye su equipo, no después.</p>
           <a href="/consultoria-laboral/" class="servicio-row-link" onclick="openServicio('laboral');return false;">Conocer más →</a>
         </div>
       </div>
@@ -1398,7 +1397,7 @@
       <div class="servicio-row-main">
         <div class="servicio-row-title">Gobierno Corporativo & Cumplimiento Regulatorio</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Diseñamos consejos, comités y políticas de compliance y protección de datos, con auditorías legales que anticipan lo que un inversionista o regulador va a preguntar.</p>
+          <p class="servicio-row-desc">Un consejo, un comité, una política de datos: la forma en que una empresa se gobierna es parte de su arquitectura, no un trámite aparte. La diseñamos para que resista la pregunta de un inversionista o un regulador.</p>
           <a href="/gobierno-corporativo-cumplimiento/" class="servicio-row-link" onclick="openServicio('gobierno');return false;">Conocer más →</a>
         </div>
       </div>
@@ -1409,7 +1408,7 @@
       <div class="servicio-row-main">
         <div class="servicio-row-title">Fusiones, Adquisiciones & Due Diligence</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Due diligence legal, pactos de accionistas y estructuración de operaciones de inversión. Le acompañamos para que compre, venda o se fusione sabiendo exactamente qué está firmando.</p>
+          <p class="servicio-row-desc">Comprar, vender o fusionar una empresa es una de las decisiones que más cambia su trayectoria. Estructuramos la operación —due diligence, pactos de accionistas, términos de la transacción— para que mueva el negocio hacia adelante, no hacia un conflicto.</p>
           <a href="/fusiones-adquisiciones/" class="servicio-row-link" onclick="openServicio('ma');return false;">Conocer más →</a>
         </div>
       </div>
@@ -1420,7 +1419,7 @@
       <div class="servicio-row-main">
         <div class="servicio-row-title">Automatización Legal</div>
         <div class="servicio-row-body">
-          <p class="servicio-row-desc">Diseñamos flujos para que contratos, aprobaciones, documentos y obligaciones avancen con orden, trazabilidad y responsables claros. La tecnología reduce fricción operativa; el abogado conserva el criterio y la supervisión de cada decisión.</p>
+          <p class="servicio-row-desc">Las empresas que crecen dejan de poder operar por correo y carpetas compartidas. Diseñamos cómo se generan, aprueban y dan seguimiento sus contratos y documentos para que la estructura legal avance al ritmo del negocio.</p>
           <a href="/automatizacion-legal/" class="servicio-row-link">Conocer Automatización Legal →</a>
         </div>
       </div>
@@ -1435,8 +1434,8 @@
   <h2 class="section-title">Nuestra <em>metodología</em></h2>
   <div class="metodologia-intro">
     <p>Cada asunto empieza por entender la decisión, la operación y el nivel de riesgo de su empresa. No revisamos documentos aislados: revisamos lo que esos documentos deben hacer funcionar.</p>
-    <p>Combinamos la experiencia de nuestros abogados con herramientas de análisis asistido por inteligencia artificial para revisar información, contrastar versiones e identificar con mayor rapidez los puntos que requieren atención.</p>
-    <p>La tecnología no sustituye el criterio jurídico. Un abogado responsable interpreta cada hallazgo, prioriza los riesgos y construye una recomendación alineada con la realidad comercial de su negocio.</p>
+    <p>Combinamos criterio jurídico y análisis técnico para revisar información, contrastar versiones y llegar más rápido a lo que realmente importa.</p>
+    <p>El criterio final —qué hacer, qué riesgo asumir, qué estructura construir— es siempre de un abogado que entiende la operación, no solo el documento.</p>
   </div>
 
   <div class="metodologia-grid">
@@ -1452,7 +1451,7 @@
         <div class="step-num">02</div>
         <div class="step-content">
           <div class="step-title">Auditoría</div>
-          <div class="step-desc">Revisamos documentos, antecedentes y riesgos con una metodología jurídica reforzada por tecnología de análisis, para detectar lo relevante sin perder tiempo en lo repetitivo.</div>
+          <div class="step-desc">Revisamos documentos, antecedentes y riesgos con el mismo estándar sin importar el tamaño del asunto, para detectar lo que realmente importa.</div>
         </div>
       </div>
       <div class="step">
@@ -1472,12 +1471,11 @@
     </div>
 
     <div class="metodologia-visual">
-      <div class="metodologia-quote">"En cada encargo usamos la tecnología para ganar profundidad y velocidad en la revisión; el contexto, la estrategia y la responsabilidad de la recomendación permanecen siempre en manos de un abogado."</div>
+      <div class="metodologia-quote">"El derecho pone los límites. El criterio decide qué construir dentro de ellos."</div>
       <div class="metodologia-pillars">
         <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Seis áreas de práctica. Un mismo criterio jurídico.</div></div>
-        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Un abogado responsable acompaña el asunto de principio a fin.</div></div>
-        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Honorarios definidos desde el mandato inicial, no en la factura final</div></div>
-        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Prevenir el conflicto, no solo responder cuando ya ocurrió</div></div>
+        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">Honorarios definidos desde el mandato inicial, no en la factura final.</div></div>
+        <div class="pillar"><div class="pillar-dot"></div><div class="pillar-text">La mayoría de los conflictos no empiezan en un juicio. Empiezan en una cláusula que nadie diseñó con cuidado.</div></div>
       </div>
     </div>
   </div>
@@ -1640,30 +1638,30 @@
 <!-- NOSOTROS -->
 <section id="nosotros">
   <div class="section-label fade-up">La firma</div>
-  <h2 class="section-title fade-up">Una firma que se adapta a la velocidad y precisión que requiere su negocio</h2>
+  <h2 class="section-title fade-up">El derecho, pensado como<br><em>infraestructura de negocio</em></h2>
 
   <div class="nosotros-grid">
     <div class="nosotros-content">
       <p>Las empresas no pueden detener una operación mientras la información se dispersa, las versiones se multiplican o las decisiones esperan una revisión tardía.</p>
-      <p>En Ibarra Quezada combinamos criterio jurídico, conocimiento de negocio y herramientas de trabajo que nos permiten responder con orden, profundidad y oportunidad.</p>
-      <p>No se trata de hacer lo legal automático. Se trata de que lo legal acompañe a la empresa cuando importa: antes de firmar, contratar, invertir, crecer o resolver.</p>
+      <p>En Ibarra Quezada el derecho funciona como la estructura que sostiene esa operación: no un freno, sino el sistema que permite construir, moverse y decidir con criterio.</p>
+      <p>No se trata de automatizar lo legal. Se trata de que la estructura jurídica se mueva al mismo ritmo que el negocio: cuando constituye, contrata, invierte, crece o se transforma.</p>
 
       <div class="nosotros-values">
         <div class="value-item">
-          <div class="value-title">Especialización</div>
-          <div class="value-desc">100% dedicados a derecho corporativo, contractual y laboral. Conocemos su operación, no solo su expediente.</div>
+          <div class="value-title">Contexto de negocio</div>
+          <div class="value-desc">Entendemos qué financia, qué protege y qué arriesga la operación detrás del contrato.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Estrategia</div>
-          <div class="value-desc">Traducimos riesgos contractuales en decisiones comerciales claras.</div>
+          <div class="value-title">Estructura, no litigio</div>
+          <div class="value-desc">Nuestro trabajo construye, no litiga. Si un asunto escala a juicio, lo decimos desde el inicio y coordinamos abogados litigantes externos.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Eficiencia</div>
-          <div class="value-desc">Definimos responsables, alcance y siguientes pasos desde el inicio.</div>
+          <div class="value-title">Rigor de corporativo grande</div>
+          <div class="value-desc">Aplicamos el mismo estándar de análisis que exige una empresa con departamento legal propio, calibrado a su escala.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Confianza</div>
-          <div class="value-desc">Le explicamos qué conviene hacer, qué no y por qué, antes de comprometer recursos.</div>
+          <div class="value-title">Diseño, no plantilla</div>
+          <div class="value-desc">Cada estructura se construye para la operación que existe, no se copia de un precedente parecido.</div>
         </div>
       </div>
 
@@ -1674,7 +1672,7 @@
       <div class="nosotros-img-frame" role="img" aria-label="Retrato del socio fundador de Ibarra Quezada Abogados"></div>
       <div class="nosotros-float-card">
         <div class="nosotros-float-num"></div>
-        <div class="nosotros-float-label">Un solo equipo, todas sus áreas legales</div>
+        <div class="nosotros-float-label">Un mismo criterio, todas las áreas</div>
       </div>
     </div>
   </div>
@@ -1827,7 +1825,7 @@
 <footer>
   <div class="footer-brand">
     <img src="assets/logo-negativo.png" alt="Ibarra Quezada Abogados" class="footer-logo-img">
-    <p>El despacho especializado en derecho corporativo, contratos, cumplimiento laboral y automatización legal. Procesos claros y documentación ordenada antes de firmar.</p>
+    <p>Estructura jurídica para negocios que están construyendo lo que sigue.</p>
   </div>
   <div>
     <div class="footer-col-title">Servicios</div>
