@@ -61,15 +61,16 @@
     /* Paleta Ibarra Quezada Abogados — carbón + ivory dominantes, copper como único acento */
     --verde: #211f1b;        /* Carbón — color primario de texto/UI (ya no burgundy) */
     --verde-oscuro: #15130f; /* Carbón profundo — fondos oscuros */
-    --dorado: #a85a2e;       /* Burnt Copper — único acento de marca */
+    --dorado: #a85a2e;       /* Burnt Copper — acento de marca: botones, hovers, líneas, iconos, texto grande sobre fondo claro (≥18px) */
+    --dorado-texto: #914c25; /* Copper oscurecido — eyebrows/labels/números pequeños sobre fondo claro (mismo acento, contraste AA a tamaño de texto pequeño) */
     --dorado-claro: #c17640; /* Copper medio — hover del acento */
-    --dorado-palo: #d5a077;  /* Copper claro — texto de acento sobre fondo oscuro */
+    --dorado-palo: #d5a077;  /* Copper claro — texto de acento (eyebrows, labels) sobre fondo oscuro */
     --crema: #f6f1e6;        /* Ivory cálido */
     --crema-oscura: #eae2d0; /* Ivory oscuro — líneas y retículas */
     --blanco: #ffffff;
     --negro: #15130f;        /* Carbón profundo */
-    --gris: #67615a;         /* Gris mineral — texto de cuerpo */
-    --gris-claro: #948d81;   /* Gris mineral claro */
+    --gris: #67615a;         /* Gris mineral — texto de cuerpo sobre fondo claro */
+    --gris-claro: #6f6759;   /* Gris mineral secundario — labels/metadata/caption sobre fondo claro (oscurecido para pasar AA en texto pequeño; antes #948d81) */
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -348,7 +349,7 @@
   .section-label {
     font-size: 9px; font-weight: 600;
     letter-spacing: 4px; text-transform: uppercase;
-    color: var(--dorado); margin-bottom: 20px;
+    color: var(--dorado-texto); margin-bottom: 20px;
     display: flex; align-items: center; gap: 16px;
   }
   .section-label::before {
@@ -539,7 +540,7 @@
   }
   .area-tab.active { color: var(--verde); border-bottom-color: var(--dorado); }
   .area-tab:hover { color: var(--verde); }
-  .area-tab-num { color: var(--dorado); margin-right: 4px; }
+  .area-tab-num { color: var(--dorado-texto); margin-right: 4px; }
 
   .area-panel { display: none; }
   .area-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
@@ -617,7 +618,7 @@
   .sector-item:hover { background: var(--crema); }
   .sector-num {
     font-family: 'Playfair Display', serif; font-weight: 300;
-    font-size: 13px; letter-spacing: 1px; color: var(--dorado);
+    font-size: 13px; letter-spacing: 1px; color: var(--dorado-texto);
     margin-bottom: 18px;
   }
   .sector-name {
@@ -687,7 +688,7 @@
     background-image: url('assets/icon-mark-white.png');
     background-size: contain; background-repeat: no-repeat; background-position: left center;
   }
-  .nosotros-float-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.92); margin-top: 8px; }
+  .nosotros-float-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.98); margin-top: 8px; }
   @media (max-width: 480px) {
     .nosotros-float-card { bottom: 0; right: 0; width: 180px; padding: 24px 28px; }
   }
@@ -914,7 +915,7 @@
   }
   .footer-col-title {
     font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--dorado); margin-bottom: 24px;
+    color: var(--dorado-palo); margin-bottom: 24px;
   }
   .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
   .footer-links a {
@@ -1069,7 +1070,7 @@
 .mobile-nav a:hover { color:var(--dorado-palo); }
 .mobile-nav-close {
   position:absolute; top:20px; right:20px; font-size:24px;
-  color:rgba(244,240,233,.4); cursor:pointer; background:none; border:none;
+  color:rgba(244,240,233,.6); cursor:pointer; background:none; border:none;
   width:40px; height:40px; display:flex; align-items:center; justify-content:center;
   transition:color .3s;
 }
@@ -1109,7 +1110,7 @@
 .val-eyebrow {
   font-size: 9px; font-weight: 700;
   letter-spacing: 3.5px; text-transform: uppercase;
-  color: var(--dorado); margin-bottom: 20px;
+  color: var(--dorado-palo); margin-bottom: 20px;
   display: flex; align-items: center; gap: 10px;
 }
 .val-eyebrow::before { content:''; width:20px; height:1px; background:var(--dorado); flex-shrink:0; }
@@ -1128,7 +1129,7 @@
 }
 .val-desc {
   font-size: 12px; font-weight: 300;
-  color: rgba(244,240,233,.45);
+  color: rgba(244,240,233,.72);
   line-height: 1.85;
 }
 @media (max-width:768px) {
