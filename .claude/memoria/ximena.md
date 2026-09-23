@@ -152,6 +152,47 @@ exacto, detalle de "lunes a sábado"). Usé el título/empresa/fecha del
 listado de búsqueda como señal, sin poder citar el horario textual exacto
 de cada vacante.
 
+## Actualización 2026-09-23 — contacto de empresa agregado al radar 2026-09-23-v2
+
+JC se quejó de que el radar `2026-09-23-v2.md` no traía teléfono/correo de
+las empresas (solo el decisor, mayormente pendiente). Cambio de criterio
+desde esta orden, vale para todas las corridas futuras: **el contacto de
+la empresa (teléfono y/o correo del sitio propio) es el dato OBLIGATORIO
+de cada fila, no el decisor** — el decisor+LinkedIn es dato adicional que
+suma, nunca sustituto. Actualicé el mismo archivo en el lugar (no creé un
+v3) agregando la columna "Contacto de la empresa" a las tres tablas, y
+recorregí la etiqueta de LinkedIn de "confirmado" a "encontrado por
+búsqueda, sin poder abrir la página para confirmarlo" en las dos filas
+que la tenían mal etiquetada (De Aguiar Dental Studio, Bucio Casco).
+
+Resultado sobre las mismas 16 empresas: **7 con teléfono/correo real
+verificado** (De Aguiar Dental Studio, Bucio Casco y Asociados, Lafayette
+Repostería —solo correo—, Contadores Mismo Lenguaje, Dental Network,
+Distribuidora Moldemania, Súper Soya). **4 con sitio web propio
+confirmado pero sin teléfono/correo publicado en él** (Comercializadora
+Delibanez, Método Escala Negocios, Diseño y Construcción OSCARQ, Grupo
+Sickse —esta última sí con dirección física confirmada—). **5 sin sitio
+web ni contacto encontrado pese a varias búsquedas** (DIMA Diseño y
+Manufactura, OZKEN, Bespoke Advertising, Ideas y Soluciones S.A. de C.V.
+—nombre demasiado genérico, no pude confirmar cuál empresa específica—,
+JAYOL S.A. de C.V. —sí confirmé que es real vía RFC en facturas públicas
+de Iztacalco, pero no tiene sitio ni contacto indexado—).
+
+**Limitación técnica nueva de esta corrida:** WebFetch estuvo bloqueado
+por la política de red del proxy para casi todos los dominios
+COMERCIALES que probé (plasticosdima.com, buciocasco.com, moldemania.com,
+el.metodoescala.com, quiminet.com, facebook.com...) — confirmado
+probando cada uno directamente, no es un fallo puntual. `dof.gob.mx` sí
+funcionó sin problema, así que el bloqueo parece ser por dominio
+comercial, no por política general. Por eso todo el dato de contacto de
+esta corrida salió de fragmentos de WebSearch (que a veces cita
+directorios de terceros con el teléfono/correo de la empresa), nunca de
+haber abierto yo misma la página de contacto. Si en la próxima corrida
+WebFetch vuelve a funcionar contra dominios comerciales, vale la pena
+reintentar los 9 casos pendientes/parciales directamente en su sitio
+(quedaron listados arriba con su dominio) antes de repetir el mismo
+patrón de búsqueda por WebSearch.
+
 ## Detonantes verificados (reusar como base, revalidar fecha si pasa mucho tiempo)
 
 - Jornada 46h: reforma LFT, DOF 1-may-2026 (leído directo del DOF el
