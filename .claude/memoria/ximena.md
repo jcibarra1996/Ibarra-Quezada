@@ -193,6 +193,68 @@ reintentar los 9 casos pendientes/parciales directamente en su sitio
 (quedaron listados arriba con su dominio) antes de repetir el mismo
 patrón de búsqueda por WebSearch.
 
+## Radar 2026-09-23-v3 (JC reportó red "Full", verificación propia dio otro resultado)
+
+Archivo: `despacho-web/radar-prospeccion/2026-09-23-v3.md`. JC dijo haber
+verificado con `curl`, fuera de esta sesión, que la política de red pasó
+de "Custom" a "Full" y que `buciocasco.com` y sitios comerciales
+genéricos ya respondían. Volví a probarlo yo misma al inicio de esta
+corrida (regla del despacho: la verificación es mía) y **no coincidió**:
+`buciocasco.com`, `plasticosdima.com`, `sickse.com`,
+`mx.computrabajo.com`, `www.occ.com.mx`, `www.seccionamarilla.com.mx` e
+incluso `www.google.com` siguieron dando `EGRESS_BLOCKED`/403 en esta
+sesión (confirmado también contra el proxy: "gateway answered 403 to
+CONNECT"). `dof.gob.mx`, `gob.mx/sat` y `microsoft.com` sí respondieron
+bien. Probé 6 dominios propios de empresas del radar
+(`tiendadulcesmiguelito.com`, `dukrons.com.mx`, `asiseguridadprivada.com`,
+`arrendo.mx`, `giacinti.com.mx`, `grecargo.com.mx`) y los 6 dieron
+`EGRESS_BLOCKED`. **Para la próxima corrida: no asumir que el acceso a
+dominios comerciales funciona solo porque JC lo reportó — volver a
+probarlo yo misma al inicio, exactamente como indica mi instrucción
+permanente.** PSM y REPSE: mismo resultado de siempre (SPA con
+formulario/sesión, no es problema de red, confirmado de nuevo).
+
+15 empresas NUEVAS (no reusar salvo causa nueva y distinta): Fábrica de
+Dulces Miguelito, Inspiración en Chocolate/Du Krons, ASI Seguridad
+Privada, Restaurante Deigo, Eriklim (limpieza/REPSE), Grecargo (Agencia
+Aduanal Gregorio J. Cabeza y Asociados, S.C.), Consorcio Aduanal
+Giacinti, Mendoza Sánchez Agencia Aduanal, Agencia Aduanal KN,
+NAD Global, Inmobiliaria Arias y Salcedo/IAS Forwarding, Arrendo Serv,
+Plot Experiential Marketing, Morera Grosso, OGGI Jeans Co.
+
+Candidatos investigados y DESCARTADOS por tamaño/sede (no reinvestigar
+salvo nueva evidencia): Grupo Gamas (agencia aduanal pero "líder
+internacional", 82 años, múltiples líneas de negocio), Pastelerías
+Esperanza (66 sucursales), Ágata Estética Dental (13+ consultorios en
+México y Guatemala), Banquetes Ambrosía (S.A.P.I. de C.V., "líder...
+toda la República"), RDT Ingenieros México (filial de grupo con 1,800+
+profesionales en 10 países), SatoriTech (teléfono con lada 722 =
+Toluca/Edomex pese a vacante publicada en Tlalpan CDMX — mismo patrón que
+Hobi/Grupo Mako antes), TAYLORS Azcapotzalco (firma de reclutamiento
+multinacional). Grupo Nichos (señal de REPSE para demostradoras/farmacia,
+interesante pero descartada por no encontrar ningún contacto propio).
+
+Hallazgo NUEVO verificado en fuente oficial (gob.mx/sat, no prensa
+secundaria): operación nacional de la figura "agencia aduanal" desde el
+1-jul-2026 en las 50 aduanas del país (comunicado conjunto SAT/ANAM/SE).
+Complementa la reforma a la Ley Aduanera (DOF 19-nov-2025) ya conocida —
+la causa accionable sigue siendo el art. 167-D (socios agentes aduanales
+deben estar en el consejo de administración), y la fecha del 1-jul-2026
+confirma que el esquema ya opera en la práctica. Buena fuente de
+candidatos nuevas: agencias aduanales pequeñas con oficina en Peñón de
+los Baños, Venustiano Carranza (zona AICM) — hay varias más sin usar aún
+(Prida Bravo, Agencia Aduanal del Valle/AAVS, Agencia Aduanal Alfaro,
+Asesoría y Despacho Aduanal México S.C. —esta última sin contacto
+encontrado—, Sayma).
+
+Confirmé también, vía SAT/fuentes profesionales (IDC, AMCP), que desde la
+RMF 2026 (Anexo 2, ficha 7/CFF, DOF 28-dic-2025) el alta en el RFC de una
+SAS ya no es 100% en línea, requiere un trámite presencial — no lo usé
+como causa esta corrida porque aplica a la constitución de SAS nuevas,
+no a empresas ya existentes que necesiten "ponerse al día"; podría servir
+si en una futura corrida aparece una empresa en proceso de constituirse
+o convertirse a SAS.
+
 ## Detonantes verificados (reusar como base, revalidar fecha si pasa mucho tiempo)
 
 - Jornada 46h: reforma LFT, DOF 1-may-2026 (leído directo del DOF el
@@ -215,6 +277,10 @@ patrón de búsqueda por WebSearch.
   solidarios por contribuciones de comercio exterior. Línea de entrada:
   constitución (Isabel), aplica a cualquier agencia aduanal — buen
   detonante para PyMEs de comercio exterior/agencias aduanales en CDMX.
+  Complemento verificado el 23-sep-2026 directo en gob.mx/sat: operación
+  nacional de la figura "agencia aduanal" desde el 1-jul-2026 en las 50
+  aduanas (comunicado conjunto SAT/ANAM/SE) — confirma que el esquema del
+  art. 167-D ya opera en la práctica, no cambia la causa jurídica en sí.
 - Art. 181 LGSM: asamblea ordinaria anual dentro de los 4 meses
   siguientes al cierre de ejercicio (si cierra 31-dic, vence 30-abr) —
   prospectar desde noviembre, no antes.
