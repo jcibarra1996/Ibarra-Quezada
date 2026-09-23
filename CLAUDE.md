@@ -27,8 +27,8 @@ vigente).
   3. Consultoría y Cumplimiento Laboral (REPSE, NOM-035)
 - **Líneas secundarias, solo upsell posterior:** Gobierno Corporativo,
   Fusiones y Adquisiciones, Legal Ops/LegalTech.
-- **Cliente ideal:** PyMEs de 10-150 empleados en CDMX, foco
-  logística/transporte/almacenaje, decisor = dueño o director general.
+- **Cliente ideal:** PyMEs de 10-150 empleados en CDMX, cualquier sector,
+  decisor = dueño o director general.
 
 ### Reglas de tono para cualquier texto dirigido a un prospecto o cliente
 
