@@ -85,6 +85,73 @@ sesión (no son OCC/Computrabajo, pero sirven el mismo propósito
 metodológico y dieron vacantes reales con horario textual y fecha de
 publicación).
 
+## Radar 2026-09-23-v2 (mismo día, ICP ampliado + LinkedIn de solo lectura)
+
+Archivo: `despacho-web/radar-prospeccion/2026-09-23-v2.md` (no pisa el
+`2026-09-23.md` de la corrida anterior del mismo día). Cambio de criterio
+importante desde esta orden, vale para todas las corridas futuras:
+**el ICP ya NO está limitado a logística/transporte/almacenaje**
+(`CLAUDE.md` dice ahora "cualquier sector"), y **LinkedIn ahora está
+autorizado para lectura** (perfil de empresa, nombre/cargo del decisor,
+tamaño de plantilla) — nunca para conectar ni mensajear, eso lo sigue
+haciendo JC a mano.
+
+16 empresas NUEVAS, ninguna de logística/transporte/almacenaje (no
+repetir salvo causa nueva y distinta): DIMA Diseño y Manufactura, OZKEN
+(maquinados), De Aguiar Dental Studio, Bucio Casco y Asociados S.C.,
+Lafayette Repostería, Bespoke Advertising, Comercializadora Delibanez,
+Contadores Mismo Lenguaje, Dental Network (clínica CDMX), Distribuidora
+Moldemania, Método Escala Negocios, Ideas y Soluciones S.A. de C.V.,
+Diseño y Construcción OSCARQ, JAYOL S.A. de C.V., Grupo Sickse S.A. de
+C.V., Súper Soya.
+
+Decisor + LinkedIn confirmado con certeza en solo 2 de 16: Dr. Eduardo de
+Aguiar (De Aguiar Dental Studio, fundador) y Manuel Bucio Montañez (Bucio
+Casco y Asociados). En las otras 14 no encontré con certeza quién es el
+dueño/director general — PyMEs y negocios familiares chicos casi nunca
+tienen a su dueño indexado en LinkedIn de forma que un buscador lo
+encuentre. Para la próxima corrida: si hace falta subir esa tasa, probar
+fetch directo a la página de LinkedIn de cada empresa (`/company/...`) en
+vez de solo WebSearch — funcionó razonablemente bien para leer tamaño de
+plantilla, pero casi nunca lista al dueño ahí; el nombre del dueño se
+encuentra más por prensa/nota individual que por la ficha de la empresa.
+
+Candidatos investigados y DESCARTADOS: Hobi (startup, pero su sede real
+es Monterrey, no CDMX — el ICP es estrictamente CDMX); Super Mayoreo
+Naturista (sede real en Naucalpan, Estado de México, no CDMX, aunque
+tiene vacante publicada en CDMX); Grupo Mako Construcciones (dato de
+ZoomInfo ubica la sede en San Mateo Atenco, Edomex, aunque ejecuta obra
+en CDMX — no usar hasta confirmar sede real); Ingenierías y
+Construcciones ELDEPCI (sede real en Toluca, Edomex); PROBELL
+Profesionales de la Belleza (más de 100 sucursales en México, más de 30
+en CDMX — tamaño de cadena nacional, fuera de rango de PyME 10-150
+empleados); Waldo's y Kaiten Tokyo (cadenas/negocios sin datos
+suficientes para confirmar tamaño o sede única).
+
+### Hallazgo técnico nuevo: PSM sí es legible por documento individual
+
+`psm.economia.gob.mx/PSM/ServletMain?id_pub=<n>` SÍ devuelve el PDF
+completo y legible de una publicación societaria cuando se conoce el
+`id_pub` exacto (confirmado leyendo varias actas reales completas). El
+problema sigue siendo **descubrir** los `id_pub` de movimientos
+RECIENTES: los únicos indexados por buscador que encontré son de
+2015-2019 (viejos, ya no sirven como causa "de los últimos 30 días"). La
+página de búsqueda pública (`psm.economia.gob.mx/PSM/busqueda.jsf`) sigue
+siendo un formulario interactivo con sesión que WebFetch no puede operar.
+Si en una próxima corrida aparece una herramienta con soporte de
+formularios/JS (navegador real), retomar el cruce completo del PSM de
+los últimos 30 días — sería el upgrade más valioso posible para la línea
+de constitución, que esta corrida tuvo que apoyarse en la obligación
+genérica del art. 181 LGSM en vez de movimientos específicos detectados.
+
+Indeed: el buscador de empleo funcionó bien para encontrar vacantes reales
+con empresa, fecha y ubicación, pero los links de resultado
+(`to.indeed.com/...`) están bloqueados por la política de red al hacer
+WebFetch — no pude leer el texto completo de ninguna vacante (horario
+exacto, detalle de "lunes a sábado"). Usé el título/empresa/fecha del
+listado de búsqueda como señal, sin poder citar el horario textual exacto
+de cada vacante.
+
 ## Detonantes verificados (reusar como base, revalidar fecha si pasa mucho tiempo)
 
 - Jornada 46h: reforma LFT, DOF 1-may-2026 (leído directo del DOF el
