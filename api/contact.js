@@ -9,10 +9,15 @@
 //                       se usa el remitente de prueba de Resend (onboarding@resend.dev).
 
 const ALLOWED_AREAS = [
+  'Constitución y derecho corporativo',
   'Constitución & Derecho Corporativo',
+  'Contratos mercantiles y civiles',
   'Contratos Mercantiles & Civiles',
+  'Consultoría laboral',
   'Consultoría Laboral',
+  'Gobierno corporativo y cumplimiento',
   'Gobierno Corporativo & Cumplimiento',
+  'Fusiones y adquisiciones',
   'Fusiones & Adquisiciones',
   'Automatización Legal',
   'Otro',
