@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ibarraquezada.com/sitemap.xml
+Sitemap: https://www.ibarraquezada.com/sitemap.xml
