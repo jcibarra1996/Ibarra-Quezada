@@ -1,0 +1,6 @@
+# Archivos internos del repo que no deben publicarse en ibarraquezada.com
+CLAUDE.md
+README.md
+.claude
+.env.example
+despacho-web
