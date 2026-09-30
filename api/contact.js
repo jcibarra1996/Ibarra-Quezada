@@ -25,6 +25,24 @@ const ALLOWED_AREAS = [
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Versión vigente del Aviso de Privacidad (content/aviso-privacidad-ibarraquezada.md).
+// Debe coincidir con AVISO_VERSION en index.html. Un envío que no acepte
+// exactamente esta versión se rechaza.
+const AVISO_VERSION = '30 de septiembre de 2026';
+const TIME_ZONE = 'America/Mexico_City';
+
+function formatFechaHora(date) {
+  return date.toLocaleString('es-MX', {
+    timeZone: TIME_ZONE,
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+  });
+}
+
+function consentimientoAceptado(value) {
+  return value === true || value === 'acepto' || value === 'on';
+}
+
 // Límite básico de frecuencia por IP. Vive en memoria del propio proceso de la
 // función: es best-effort (se reinicia si la instancia se recicla, y no se
 // comparte entre instancias concurrentes), pero es la protección razonable
@@ -87,6 +105,14 @@ module.exports = async (req, res) => {
   const mensaje = clamp(body.mensaje, 5000);
   const pagina = clamp(body.pagina, 300);
 
+  // El consentimiento se valida aquí también: el navegador no es suficiente.
+  if (!consentimientoAceptado(body.consentimiento)) {
+    return res.status(400).json({ ok: false, error: 'validation', field: 'consentimiento' });
+  }
+  if (clamp(body.avisoVersion, 60) !== AVISO_VERSION) {
+    return res.status(400).json({ ok: false, error: 'validation', field: 'avisoVersion' });
+  }
+
   if (!nombre) return res.status(400).json({ ok: false, error: 'validation', field: 'nombre' });
   if (!email || !EMAIL_RE.test(email)) return res.status(400).json({ ok: false, error: 'validation', field: 'email' });
 
@@ -100,7 +126,14 @@ module.exports = async (req, res) => {
   }
 
   const from = process.env.RESEND_FROM || 'Ibarra Quezada Abogados <onboarding@resend.dev>';
-  const fecha = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
+  // La hora de aceptación oficial es la del servidor al recibir el envío con la
+  // casilla marcada; la hora que reporta el navegador se guarda solo como referencia.
+  const recibido = new Date();
+  const fecha = formatFechaHora(recibido);
+  const marcadaEnNavegador = new Date(clamp(body.consentimientoFechaHora, 40));
+  const fechaNavegador = isNaN(marcadaEnNavegador.getTime())
+    ? '(no disponible)'
+    : `${formatFechaHora(marcadaEnNavegador)} (${TIME_ZONE})`;
 
   const lines = [
     `Nombre: ${nombre}`,
@@ -113,6 +146,13 @@ module.exports = async (req, res) => {
     '',
     'Mensaje:',
     mensaje || '(sin mensaje)',
+    '',
+    '----------------------------------------',
+    'Consentimiento al Aviso de Privacidad',
+    'Casilla marcada: Sí',
+    `Fecha y hora de aceptación: ${fecha} (${TIME_ZONE})`,
+    `Versión del aviso aceptada: ${AVISO_VERSION}`,
+    `Casilla marcada según el navegador: ${fechaNavegador}`,
   ];
 
   try {
