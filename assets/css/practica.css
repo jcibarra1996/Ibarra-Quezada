@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   Ibarra Quezada Abogados — hoja de estilos compartida
+   Ibarra Quezada Abogados: hoja de estilos compartida
    para las páginas individuales de área de práctica.
    Reutiliza el sistema visual de index.html (paleta, tipografía,
    nav, botones, FAQ, footer) para que cada página se sienta como
@@ -32,7 +32,7 @@ body {
   overflow-x: hidden;
 }
 
-/* NAV — idéntico a la home */
+/* NAV: idéntico a la home */
 nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 1000;
@@ -76,7 +76,7 @@ nav {
 .nav-cta:hover { background: var(--dorado) !important; color: var(--blanco) !important; }
 .nav-cta::after { display: none !important; }
 
-/* HAMBURGER / MOBILE NAV — idéntico a la home */
+/* HAMBURGER / MOBILE NAV: idéntico a la home */
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:4px; background:none; border:none; }
 .hamburger span { width:24px; height:1.5px; background:var(--verde-oscuro); transition:all .3s; display:block; }
 .mobile-nav {
@@ -166,7 +166,7 @@ nav {
 }
 .hero-actions { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
 
-/* BOTONES — idénticos a la home */
+/* BOTONES: idénticos a la home */
 .btn-primary {
   background: var(--verde);
   color: var(--crema);
@@ -215,7 +215,7 @@ nav {
 }
 .btn-outline-light:hover { border-color: var(--dorado); color: var(--dorado); }
 
-/* SECTION BASE — idéntico a la home */
+/* SECTION BASE: idéntico a la home */
 section { position: relative; }
 .section-label {
   font-size: 9px; font-weight: 600;
@@ -246,7 +246,7 @@ section { position: relative; }
 }
 .trigger-list li::before { content: ''; width: 20px; height: 1px; background: var(--dorado); flex-shrink: 0; margin-top: 9px; }
 
-/* SERVICIOS DE LA PRÁCTICA — filas numeradas, igual a la home */
+/* SERVICIOS DE LA PRÁCTICA: filas numeradas, igual a la home */
 .section-servicios-practica { padding: 100px 60px; background: var(--crema); }
 .servicios-practica-list { display: flex; flex-direction: column; border-top: 1px solid var(--crema-oscura); margin-top: 48px; }
 .servicio-practica-row {
@@ -266,7 +266,7 @@ section { position: relative; }
   .servicio-practica-row { grid-template-columns: 1fr; gap: 8px; }
 }
 
-/* ENFOQUE IQ — bloque oscuro, igual a la metodología de la home */
+/* ENFOQUE IQ: bloque oscuro, igual a la metodología de la home */
 .section-enfoque {
   padding: 110px 60px;
   background: var(--verde-oscuro);
@@ -312,7 +312,7 @@ section { position: relative; }
   .enfoque-steps { grid-template-columns: 1fr; }
 }
 
-/* TIPO DE CLIENTE — grid tipo sectores de la home */
+/* TIPO DE CLIENTE: grid tipo sectores de la home */
 .section-cliente { padding: 100px 60px; background: var(--blanco); border-top: 1px solid var(--crema-oscura); }
 .cliente-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
@@ -333,7 +333,7 @@ section { position: relative; }
 @media (max-width: 900px) { .cliente-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .cliente-grid { grid-template-columns: 1fr; } }
 
-/* FAQ — idéntico a la home */
+/* FAQ: idéntico a la home */
 .section-faq { padding: 100px 60px; background: var(--crema); }
 .faq-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; }
 .faq-sidebar { position: sticky; top: 120px; }
@@ -383,7 +383,7 @@ section { position: relative; }
 }
 .cta-final-actions { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
 
-/* INSIGHTS RELACIONADOS — mismas tarjetas que la home */
+/* INSIGHTS RELACIONADOS: mismas tarjetas que la home */
 .section-insights-relacionados { padding: 100px 60px; background: var(--blanco); }
 .recursos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
 .recurso-card {
@@ -423,7 +423,7 @@ section { position: relative; }
 @media (max-width: 900px) { .recursos-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .recursos-grid { grid-template-columns: 1fr; } }
 
-/* OTRAS PRÁCTICAS — enlaces internos cruzados */
+/* OTRAS PRÁCTICAS: enlaces internos cruzados */
 .section-otras-practicas { padding: 80px 60px 100px; background: var(--crema); border-top: 1px solid var(--crema-oscura); }
 .otras-practicas-list { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
 .otra-practica-link {
@@ -434,7 +434,7 @@ section { position: relative; }
 }
 .otra-practica-link:hover { border-color: var(--dorado); color: var(--dorado); background: var(--blanco); }
 
-/* FOOTER — idéntico a la home */
+/* FOOTER: idéntico a la home */
 footer {
   background: var(--negro);
   padding: 60px;
@@ -499,7 +499,7 @@ footer {
   .cta-final-actions { flex-direction: column; align-items: stretch; }
 }
 
-/* SOLUCIONES — grid numerado, mismo patrón visual que cliente-grid */
+/* SOLUCIONES: grid numerado, mismo patrón visual que cliente-grid */
 .solucion-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
   background: var(--crema-oscura); margin-top: 48px;
@@ -519,7 +519,7 @@ footer {
 @media (max-width: 900px) { .solucion-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .solucion-grid { grid-template-columns: 1fr; } }
 
-/* SECCIÓN DE CONFIANZA — bloque centrado */
+/* SECCIÓN DE CONFIANZA: bloque centrado */
 .section-confianza {
   padding: 100px 60px; background: var(--crema);
   border-top: 1px solid var(--crema-oscura); text-align: center;
@@ -528,7 +528,7 @@ footer {
 .confianza-text { font-size: 14px; color: var(--gris); line-height: 1.9; font-weight: 300; margin-top: 24px; }
 @media (max-width: 1024px) { .section-confianza { padding: 72px 32px; } }
 
-/* TRES FORMAS DE EMPEZAR — banda oscura de tres columnas */
+/* TRES FORMAS DE EMPEZAR: banda oscura de tres columnas */
 .section-formas { padding: 100px 60px; background: var(--verde-oscuro); position: relative; overflow: hidden; }
 .section-formas::before {
   content: ''; position: absolute; inset: 0;

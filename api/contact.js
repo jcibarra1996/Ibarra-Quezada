@@ -1,5 +1,5 @@
 // Endpoint de envío del formulario de contacto de ibarraquezada.com.
-// Vercel serverless function (Node.js) — no requiere framework ni build step.
+// Vercel serverless function (Node.js): no requiere framework ni build step.
 //
 // Variables de entorno requeridas (ver .env.example):
 //   RESEND_API_KEY     Clave de API de Resend (https://resend.com).
@@ -126,7 +126,7 @@ module.exports = async (req, res) => {
         from,
         to: [recipient],
         reply_to: email,
-        subject: escapeForHeader(`Nueva consulta — ${area} — ${nombre}`),
+        subject: escapeForHeader(`Nueva consulta | ${area} | ${nombre}`),
         text: lines.join('\n'),
       }),
     });
