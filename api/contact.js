@@ -23,6 +23,9 @@ const ALLOWED_AREAS = [
   'Otro',
 ];
 
+// Versión vigente del Aviso de Privacidad. Debe coincidir con la que muestra index.html.
+const AVISO_VERSION = '30 de septiembre de 2026';
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Límite básico de frecuencia por IP. Vive en memoria del propio proceso de la
@@ -90,6 +93,12 @@ module.exports = async (req, res) => {
   if (!nombre) return res.status(400).json({ ok: false, error: 'validation', field: 'nombre' });
   if (!email || !EMAIL_RE.test(email)) return res.status(400).json({ ok: false, error: 'validation', field: 'email' });
 
+  // Consentimiento: obligatorio y validado aquí, no solo en el navegador.
+  const consentido = body.consentimiento === true || body.consentimiento === 'on' || body.consentimiento === 'true';
+  if (!consentido || clamp(body.avisoVersion, 80) !== AVISO_VERSION) {
+    return res.status(400).json({ ok: false, error: 'consent_required', field: 'consentimiento' });
+  }
+
   const area = ALLOWED_AREAS.includes(areaRaw) ? areaRaw : (areaRaw || 'No especificada');
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -102,6 +111,11 @@ module.exports = async (req, res) => {
   const from = process.env.RESEND_FROM || 'Ibarra Quezada Abogados <onboarding@resend.dev>';
   const fecha = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
 
+  // Evidencia del consentimiento: la fecha y hora las fija el servidor, no el navegador.
+  const ahora = new Date();
+  const consentFecha = ahora.toLocaleDateString('es-MX', { timeZone: 'America/Mexico_City', day: 'numeric', month: 'long', year: 'numeric' });
+  const consentHora = ahora.toLocaleTimeString('es-MX', { timeZone: 'America/Mexico_City', hour12: false });
+
   const lines = [
     `Nombre: ${nombre}`,
     `Empresa: ${empresa || '(no proporcionada)'}`,
@@ -113,6 +127,11 @@ module.exports = async (req, res) => {
     '',
     'Mensaje:',
     mensaje || '(sin mensaje)',
+    '',
+    'Consentimiento al Aviso de Privacidad:',
+    `Fecha de aceptación: ${consentFecha}`,
+    `Hora de aceptación: ${consentHora} (America/Mexico_City)`,
+    `Versión del aviso aceptada: ${AVISO_VERSION}`,
   ];
 
   try {
