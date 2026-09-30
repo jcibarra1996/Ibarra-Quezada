@@ -1,4 +1,4 @@
-// Ibarra Quezada Abogados — comportamiento compartido de las páginas de práctica
+// Ibarra Quezada Abogados: comportamiento compartido de las páginas de práctica
 // (mismo patrón que el script inline de index.html)
 
 function openMobileNav(){

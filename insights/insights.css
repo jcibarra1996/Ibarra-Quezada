@@ -1,4 +1,4 @@
-/* Ibarra Quezada Abogados — hoja de estilos compartida para artículos de Insights.
+/* Ibarra Quezada Abogados: hoja de estilos compartida para artículos de Insights.
    Reutiliza la paleta y tipografía del sitio principal (index.html). */
 
 :root {
@@ -112,7 +112,7 @@ a { color: inherit; }
   .iq-lede { font-size: 18px; padding-left: 18px; }
 }
 
-/* FOOTER — versión compacta, coherente con index.html */
+/* FOOTER: versión compacta, coherente con index.html */
 footer {
   background: var(--verde-oscuro);
   color: var(--crema);
