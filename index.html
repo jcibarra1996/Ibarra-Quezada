@@ -13,7 +13,6 @@
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://www.ibarraquezada.com/">
 <meta name="geo.region" content="MX-MEX">
-<meta name="geo.placename" content="Tlalnepantla de Baz">
 <meta name="language" content="es-MX">
 
 <!-- Open Graph -->
@@ -36,7 +35,7 @@
 
 <!-- Schema.org LegalService -->
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"@id":"https://www.ibarraquezada.com/#organizacion","name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://www.ibarraquezada.com","logo":"https://www.ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"contacto@ibarraquezada.com","founder":{"@type":"Person","name":"Juan Carlos Ibarra Quezada","jobTitle":"Socio Fundador"},"address":{"@type":"PostalAddress","streetAddress":"Avenida Córdoba 434, Valle Dorado","addressLocality":"Tlalnepantla de Baz","addressRegion":"MEX","addressCountry":"MX"},"areaServed":[{"@type":"Country","name":"México"},{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho corporativo","Contratos mercantiles","Consultoría laboral","Gobierno corporativo","Cumplimiento Normativo","Fusiones y adquisiciones","Automatización legal"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/IbarraQuezadaAbogados","https://www.linkedin.com/company/ibarra-quezada-abogados/"],"image":"https://www.ibarraquezada.com/og-image.jpg"}
+{"@context":"https://schema.org","@type":["LegalService","LocalBusiness"],"@id":"https://www.ibarraquezada.com/#organizacion","name":"Ibarra Quezada Abogados","alternateName":"Ibarra Quezada Corporativo & Laboral","description":"Firma especializada en derecho corporativo, contratos mercantiles y consultoría laboral. Constitución de empresas, gobierno corporativo, contratos comerciales y cumplimiento laboral para negocios de todos los tamaños.","url":"https://www.ibarraquezada.com","logo":"https://www.ibarraquezada.com/logo.png","telephone":"+52-56-1125-9959","email":"contacto@ibarraquezada.com","founder":{"@type":"Person","name":"Juan Carlos Ibarra Quezada","jobTitle":"Socio Fundador"},"areaServed":[{"@type":"Country","name":"México"},{"@type":"Country","name":"United States"},{"@type":"AdministrativeArea","name":"América Latina"}],"serviceType":["Derecho corporativo","Contratos mercantiles","Consultoría laboral","Gobierno corporativo","Cumplimiento Normativo","Fusiones y adquisiciones","Automatización legal"],"priceRange":"$$-$$$","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"sameAs":["https://www.instagram.com/IbarraQuezadaAbogados","https://www.linkedin.com/company/ibarra-quezada-abogados/"],"image":"https://www.ibarraquezada.com/og-image.jpg"}
 </script>
 
 <!-- Schema.org FAQ -->
@@ -877,12 +876,6 @@
   .info-val { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--crema); font-weight: 300; }
   .info-val a { color: var(--crema); text-decoration: none; transition: color 0.3s; }
   .info-val a:hover { color: var(--dorado-palo); }
-  .contacto-map {
-    margin: 52px auto 0; max-width: 720px;
-    border: 1px solid rgba(244,240,233,0.15);
-    filter: grayscale(1) invert(0.92) hue-rotate(180deg) brightness(0.9) contrast(0.9);
-  }
-  .contacto-map iframe { display: block; width: 100%; height: 280px; border: 0; }
 
   /* FOOTER */
   footer {
@@ -954,6 +947,8 @@
   .modal-body h4 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--verde-oscuro); margin: 32px 0 16px; font-weight: 400; }
   .modal-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .modal-list li { font-size: 12px; color: var(--gris); display: flex; gap: 12px; align-items: flex-start; line-height: 1.6; }
+  .modal-ol { margin: 0 0 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .modal-ol li { font-size: 12px; color: var(--gris); line-height: 1.6; padding-left: 4px; }
   .modal-list li::before { content: ''; width: 6px; height: 6px; margin-top: 7px; background: var(--dorado); flex-shrink: 0; }
   .modal-cta {
     margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--crema-oscura);
@@ -982,6 +977,11 @@
   .form-consent span { font-size: 12px; color: var(--gris); line-height: 1.6; font-weight: 300; }
   .form-consent a { color: var(--verde); text-decoration: underline; }
   .form-consent a:hover { color: var(--dorado); }
+  .form-aviso { font-size: 11px; color: var(--gris); line-height: 1.6; font-weight: 300; margin-bottom: 16px; }
+  .form-aviso a { color: var(--verde); text-decoration: underline; }
+  .form-aviso a:hover { color: var(--dorado); }
+  .form-consent-error { font-size: 12px; color: #9b2c2c; line-height: 1.6; margin: -16px 0 20px; min-height: 0; }
+  .form-consent input[aria-invalid="true"] { outline: 2px solid #9b2c2c; outline-offset: 2px; }
   .form-submit {
     width: 100%; background: var(--verde); color: var(--crema);
     padding: 18px; border: none; cursor: pointer;
@@ -1169,33 +1169,54 @@
     <div class="modal-body" id="modalBody"></div>
   </div>
 
-  <!-- TODO revisión jurídica: el texto de este Aviso de Privacidad no ha sido
-       validado contra el texto vigente de la LFPDPPP y su reglamento por un
-       especialista del despacho. No se modificó el contenido sustantivo en
-       esta pasada por no contar con una fuente aprobada en el proyecto;
-       queda pendiente de revisión antes de tratarlo como definitivo. -->
   <!-- Modal: Aviso de Privacidad -->
-  <div class="modal" id="modalPrivacidad" style="display:none">
+  <div class="modal" id="modalPrivacidad" style="display:none" role="dialog" aria-labelledby="avisoTitulo">
     <div class="modal-header">
-      <div class="modal-eyebrow">Protección de datos</div>
-      <div class="modal-title">Aviso de <em style="font-style:italic;color:var(--dorado-palo)">Privacidad</em></div>
-      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <div class="modal-title" id="avisoTitulo">Aviso de <em style="font-style:italic;color:var(--dorado-palo)">Privacidad</em></div>
+      <button class="modal-close" onclick="closeAllModals()" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-body">
-      <p><strong>Responsable.</strong> Ibarra Quezada Abogados, con domicilio en Avenida Córdoba 434, Valle Dorado, Tlalnepantla de Baz, Estado de México, es responsable del tratamiento de los datos personales que se proporcionan a través de este sitio, conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).</p>
-      <h4>Datos que recabamos</h4>
-      <p>A través de nuestro formulario de contacto recabamos: nombre, empresa (opcional), correo electrónico, teléfono (opcional) y la descripción de su situación o necesidad legal.</p>
-      <h4>Finalidades</h4>
+      <p>Última actualización: 30 de septiembre de 2026</p>
+      <h4>I. Identidad y domicilio del responsable</h4>
+      <p>Juan Carlos Ibarra Quezada, persona física que ejerce bajo el nombre comercial "Ibarra Quezada Abogados", con domicilio en Avenida Córdoba 434, Valle Dorado, Tlalnepantla de Baz, Estado de México, es responsable del tratamiento de los datos personales que usted proporcione a través de este sitio, conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.</p>
+      <h4>II. Datos personales que se tratan</h4>
       <ul class="modal-list">
-        <li>Responder a su solicitud de contacto o asesoría</li>
-        <li>Evaluar y, en su caso, dar seguimiento a un posible asunto legal</li>
-        <li>Comunicarnos con usted por correo electrónico o teléfono</li>
+        <li>Nombre completo.</li>
+        <li>Nombre de la empresa (opcional).</li>
+        <li>Correo electrónico.</li>
+        <li>Número telefónico (opcional).</li>
+        <li>Área de interés.</li>
+        <li>La descripción que usted comparta sobre su asunto.</li>
+        <li>Datos técnicos de conexión que registra el proveedor de hospedaje del sitio: dirección IP, tipo de navegador, y fecha y hora de acceso.</li>
       </ul>
-      <p>No utilizamos sus datos con fines de mercadotecnia ni los transferimos a terceros, salvo obligación legal.</p>
-      <h4>Derechos ARCO</h4>
-      <p>Usted puede acceder, rectificar o cancelar sus datos personales, u oponerse a su tratamiento, enviando su solicitud a <a href="mailto:contacto@ibarraquezada.com" style="color:var(--verde)">contacto@ibarraquezada.com</a>. Responderemos en un plazo razonable conforme a la ley aplicable.</p>
-      <h4>Cambios a este aviso</h4>
-      <p>Este aviso puede actualizarse. La versión vigente siempre estará disponible en esta página.</p>
+      <p>No se tratan datos personales sensibles.</p>
+      <h4>III. Finalidades del tratamiento</h4>
+      <p>Sus datos personales se tratarán para las siguientes finalidades:</p>
+      <ol class="modal-ol">
+        <li>Recibir y responder su solicitud de contacto.</li>
+        <li>Verificar que no exista un conflicto de interés.</li>
+        <li>Programar y llevar a cabo una reunión o llamada.</li>
+        <li>Evaluar su asunto y, en su caso, enviarle una propuesta de servicios.</li>
+        <li>Mantener comunicación con usted sobre su solicitud.</li>
+        <li>Mantener el sitio en funcionamiento y protegerlo contra usos indebidos.</li>
+      </ol>
+      <p>Todas las finalidades anteriores son necesarias para atender su solicitud. No se tratan sus datos para finalidades distintas que requieran un consentimiento adicional.</p>
+      <h4>IV. Opciones y medios para limitar el uso o divulgación de sus datos</h4>
+      <p>Puede solicitar que se limite el uso o la divulgación de sus datos personales enviando un correo a <a href="mailto:contacto@ibarraquezada.com" style="color:var(--verde)">contacto@ibarraquezada.com</a> con el asunto "Limitar uso de datos", en el que indique su nombre, los datos respecto de los cuales solicita la limitación y el uso que desea limitar.</p>
+      <h4>V. Mecanismos, medios y procedimientos para ejercer los derechos ARCO</h4>
+      <p>Usted puede acceder a sus datos personales, rectificarlos, cancelarlos u oponerse a su tratamiento (derechos ARCO) enviando su solicitud a <a href="mailto:contacto@ibarraquezada.com" style="color:var(--verde)">contacto@ibarraquezada.com</a> con el asunto "Derechos ARCO".</p>
+      <p>Su solicitud deberá contener:</p>
+      <ol class="modal-ol">
+        <li>Su nombre y domicilio, o cualquier otro medio para recibir notificaciones.</li>
+        <li>Los documentos que acrediten su identidad o, en su caso, la personalidad e identidad de su representante legal.</li>
+        <li>La descripción clara y precisa de los datos personales respecto de los que busca ejercer alguno de los derechos ARCO.</li>
+        <li>El derecho que desea ejercer.</li>
+        <li>Cualquier otro elemento o documento que facilite la localización de sus datos personales.</li>
+      </ol>
+      <p>La respuesta se le comunicará en un plazo máximo de veinte días contados desde la fecha en que se reciba su solicitud. Si resulta procedente, se hará efectiva dentro de los quince días siguientes a la fecha en que se le comunique la respuesta. Estos plazos podrán ampliarse una sola vez por un periodo igual cuando así lo justifiquen las circunstancias del caso.</p>
+      <p>El ejercicio de los derechos ARCO es gratuito. Solo podrán cobrarse los costos de reproducción, copias o envío.</p>
+      <h4>VI. Procedimiento y medio para comunicar cambios a este aviso</h4>
+      <p>Cualquier modificación a este aviso de privacidad se publicará en esta misma página, indicando la fecha de la última actualización al inicio del documento.</p>
     </div>
   </div>
 
@@ -1209,6 +1230,7 @@
     <div class="modal-body">
       <p>Cuéntenos brevemente su situación. En Ibarra Quezada revisamos cada mensaje a detalle antes de responder.</p>
       <form id="contactForm">
+        <input type="hidden" name="avisoVersion" value="30 de septiembre de 2026">
         <input type="text" name="sitioWeb" id="sitioWeb" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
         <input type="hidden" name="pagina" id="paginaField" value="">
         <div class="form-grid">
@@ -1233,10 +1255,12 @@
           </select>
         </div>
         <div class="form-group"><label class="form-label" id="mensajeLabel">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" id="mensajeField" placeholder="Describa brevemente su situación o necesidad legal..."></textarea><p id="mensajeHelp" style="font-size:11px;color:var(--gris-claro);font-weight:300;margin-top:8px;line-height:1.6">No incluya información confidencial ni documentos en este formulario.</p></div>
-        <label class="form-consent">
-          <input type="checkbox" name="consentimiento" id="consentimiento" required>
-          <span>He leído y acepto el <a href="#" onclick="event.stopPropagation();closeAllModals();openPrivacidad();return false;">Aviso de Privacidad</a>.</span>
+        <p class="form-aviso" id="avisoBreve">Juan Carlos Ibarra Quezada (Ibarra Quezada Abogados), con domicilio en Avenida Córdoba 434, Valle Dorado, Tlalnepantla de Baz, Estado de México, tratará su nombre, empresa, correo electrónico, teléfono, área de interés y la descripción de su asunto para responder su solicitud, verificar que no exista conflicto de interés, programar una reunión y, en su caso, enviarle una propuesta. Todas estas finalidades son necesarias para atender su solicitud. Puede limitar el uso o divulgación de sus datos escribiendo a contacto@ibarraquezada.com. Consulte el <a href="#aviso-privacidad" onclick="openPrivacidadDesdeFormulario();return false;">Aviso de Privacidad</a> completo.</p>
+        <label class="form-consent" for="consentimiento">
+          <input type="checkbox" name="consentimiento" id="consentimiento" aria-required="true" aria-describedby="consentError">
+          <span>He leído el <a href="#aviso-privacidad" onclick="event.stopPropagation();openPrivacidadDesdeFormulario();return false;">Aviso de Privacidad</a> y acepto el tratamiento de mis datos personales conforme a él.</span>
         </label>
+        <div class="form-consent-error" id="consentError" role="alert"></div>
         <div id="formStatus" role="status" aria-live="polite" style="font-size:12px;color:var(--gris);line-height:1.6;margin-bottom:16px;min-height:16px"></div>
         <button type="submit" class="form-submit" id="formSubmitBtn">Enviar mensaje →</button>
       </form>
@@ -1747,10 +1771,6 @@
         <div class="info-val"><a href="tel:+525611259959">56 1125 9959</a></div>
       </div>
       <div class="info-item">
-        <div class="info-label">Dirección</div>
-        <div class="info-val">Av. Córdoba 434, Valle Dorado<br>Tlalnepantla de Baz</div>
-      </div>
-      <div class="info-item">
         <div class="info-label">LinkedIn</div>
         <div class="info-val"><a href="https://www.linkedin.com/company/ibarra-quezada-abogados/" target="_blank" rel="noopener">Ibarra Quezada Abogados</a></div>
       </div>
@@ -1758,15 +1778,6 @@
         <div class="info-label">Instagram</div>
         <div class="info-val"><a href="https://www.instagram.com/IbarraQuezadaAbogados" target="_blank" rel="noopener">@IbarraQuezadaAbogados</a></div>
       </div>
-    </div>
-    <div class="contacto-map">
-      <iframe
-        src="https://maps.google.com/maps?q=Avenida%20C%C3%B3rdoba%20434%2C%20Valle%20Dorado%2C%20Tlalnepantla%20de%20Baz&t=&z=15&ie=UTF8&iwloc=&output=embed"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="Ubicación de Ibarra Quezada Abogados"
-        aria-label="Mapa con la ubicación de Ibarra Quezada Abogados">
-      </iframe>
     </div>
   </div>
 </section>
@@ -1862,7 +1873,17 @@ function showModal(id) {
   document.body.style.overflow = 'hidden';
 }
 function closeModal(e) { if (e.target === overlay) closeAllModals(); }
+let volverAlFormulario = false;
 function closeAllModals() {
+  const priv = document.getElementById('modalPrivacidad');
+  if (volverAlFormulario && priv && priv.style.display === 'block') {
+    volverAlFormulario = false;
+    showModal('modalContacto');
+    const cb = document.getElementById('consentimiento');
+    if (cb) cb.focus();
+    return;
+  }
+  volverAlFormulario = false;
   overlay.style.display = 'none';
   document.body.style.overflow = '';
 }
@@ -1885,7 +1906,14 @@ function openContacto(presetArea) {
   const statusEl = document.getElementById('formStatus');
   if (statusEl) statusEl.textContent = '';
 }
-function openPrivacidad() { showModal('modalPrivacidad'); }
+function openPrivacidad() { volverAlFormulario = false; showModal('modalPrivacidad'); }
+// Abre el aviso sin reiniciar el formulario: los campos solo se ocultan y al cerrar el aviso se regresa a ellos.
+function openPrivacidadDesdeFormulario() { showModal('modalPrivacidad'); volverAlFormulario = true; }
+
+// Enlace directo al aviso: ibarraquezada.com/#aviso-privacidad (lo usan los pies de página de las demás páginas)
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.location.hash === '#aviso-privacidad') openPrivacidad();
+});
 
 // Enlaces directos al formulario (QR del brochure, firmas de correo): ibarraquezada.com/#contacto
 document.addEventListener('DOMContentLoaded', function () {
@@ -1904,10 +1932,24 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('contactForm');
   if (!form) return;
   const statusEl = document.getElementById('formStatus');
+  const consentBox = document.getElementById('consentimiento');
+  const consentError = document.getElementById('consentError');
+  const CONSENT_MSG = 'Para enviar su solicitud es necesario aceptar el Aviso de Privacidad.';
+  function setConsentError(show) {
+    consentError.textContent = show ? CONSENT_MSG : '';
+    consentBox.setAttribute('aria-invalid', show ? 'true' : 'false');
+  }
+  consentBox.addEventListener('change', function () { if (consentBox.checked) setConsentError(false); });
   const ERROR_MSG = 'No fue posible enviar su mensaje. Escríbanos a contacto@ibarraquezada.com o llámenos al 56 1125 9959.';
 
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
+    if (!consentBox.checked) {
+      setConsentError(true);
+      consentBox.focus();
+      return;
+    }
+    setConsentError(false);
     const btn = document.getElementById('formSubmitBtn');
     const paginaField = document.getElementById('paginaField');
     if (paginaField) paginaField.value = window.location.href;
@@ -1940,6 +1982,7 @@ document.addEventListener('DOMContentLoaded', function() {
           btn.disabled = false;
           btn.style.opacity = '';
           if (statusEl) statusEl.textContent = '';
+          setConsentError(false);
           updateMensajeField();
         }, 4000);
       } else {
@@ -1947,7 +1990,8 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.textContent = 'Enviar mensaje →';
         btn.disabled = false;
         btn.style.opacity = '';
-        if (statusEl) statusEl.textContent = ERROR_MSG;
+        if (data.error === 'consent_required') { setConsentError(true); if (statusEl) statusEl.textContent = ''; }
+        else if (statusEl) statusEl.textContent = ERROR_MSG;
       }
     } catch (err) {
       btn.textContent = 'Enviar mensaje →';
