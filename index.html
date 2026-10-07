@@ -56,18 +56,18 @@
 <style>
   :root {
     /* Paleta Ibarra Quezada Abogados: carbón + ivory dominantes, copper como único acento */
-    --verde: #211f1b;        /* Carbón: color primario de texto/UI (ya no burgundy) */
-    --verde-oscuro: #15130f; /* Carbón profundo: fondos oscuros */
-    --dorado: #a85a2e;       /* Burnt Copper: acento de marca: botones, hovers, líneas, iconos, texto grande sobre fondo claro (≥18px) */
-    --dorado-texto: #914c25; /* Copper oscurecido: eyebrows/labels/números pequeños sobre fondo claro (mismo acento, contraste AA a tamaño de texto pequeño) */
-    --dorado-claro: #c17640; /* Copper medio: hover del acento */
-    --dorado-palo: #d5a077;  /* Copper claro: texto de acento (eyebrows, labels) sobre fondo oscuro */
-    --crema: #f6f1e6;        /* Ivory cálido */
-    --crema-oscura: #eae2d0; /* Ivory oscuro: líneas y retículas */
+    --verde: #201816;        /* Carbón: color primario de texto/UI (ya no burgundy) */
+    --verde-oscuro: #0D0D0D; /* Carbón profundo: fondos oscuros */
+    --dorado: #D8551D;       /* Burnt Copper: acento de marca: botones, hovers, líneas, iconos, texto grande sobre fondo claro (≥18px) */
+    --dorado-texto: #B8420F; /* Copper oscurecido: eyebrows/labels/números pequeños sobre fondo claro (mismo acento, contraste AA a tamaño de texto pequeño) */
+    --dorado-claro: #E8692F; /* Copper medio: hover del acento */
+    --dorado-palo: #D8551D;  /* Copper claro: texto de acento (eyebrows, labels) sobre fondo oscuro */
+    --crema: #F6EEEB;        /* Ivory cálido */
+    --crema-oscura: #E9E2D2; /* Ivory oscuro: líneas y retículas */
     --blanco: #ffffff;
-    --negro: #15130f;        /* Carbón profundo */
-    --gris: #67615a;         /* Gris mineral: texto de cuerpo sobre fondo claro */
-    --gris-claro: #6f6759;   /* Gris mineral secundario: labels/metadata/caption sobre fondo claro (oscurecido para pasar AA en texto pequeño; antes #948d81) */
+    --negro: #0D0D0D;        /* Carbón profundo */
+    --gris: #6E6864;         /* Gris mineral: texto de cuerpo sobre fondo claro */
+    --gris-claro: #6E6864;   /* Gris mineral secundario: labels/metadata/caption sobre fondo claro (oscurecido para pasar AA en texto pequeño; antes #948d81) */
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -119,7 +119,7 @@
     background: var(--verde);
     color: var(--crema) !important;
     padding: 10px 24px;
-    border-radius: 1px;
+    border-radius: 0;
     letter-spacing: 2px !important;
     transition: background 0.3s !important;
   }
@@ -147,7 +147,7 @@
     position: absolute; inset: 0;
     background:
       radial-gradient(ellipse at 70% 50%, rgba(21,19,15,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse at 20% 80%, rgba(168,90,46,0.08) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 80%, rgba(216,85,29,0.08) 0%, transparent 50%);
   }
   .hero-texture {
     position: absolute; inset: 0;
@@ -156,7 +156,7 @@
   }
   .hero-vline {
     position: absolute; top: 0; bottom: 0;
-    width: 1px; background: linear-gradient(to bottom, transparent, rgba(168,90,46,0.3), transparent);
+    width: 1px; background: linear-gradient(to bottom, transparent, rgba(216,85,29,0.3), transparent);
     left: 58%;
   }
   .hero-content {
@@ -295,7 +295,7 @@
   .hero-stat-label {
     font-size: 10px; font-weight: 400;
     letter-spacing: 2.5px; text-transform: uppercase;
-    color: rgba(244,240,233,0.8); margin-top: 8px;
+    color: rgba(246,238,235,0.8); margin-top: 8px;
   }
 
   /* SCROLL INDICATOR */
@@ -466,7 +466,7 @@
   .metodologia-steps { display: flex; flex-direction: column; gap: 0; }
   .step {
     display: flex; gap: 32px; padding: 40px 0;
-    border-bottom: 1px solid rgba(244,240,233,0.1);
+    border-bottom: 1px solid rgba(246,238,235,0.1);
     position: relative;
     cursor: pointer;
     transition: all 0.3s;
@@ -476,7 +476,7 @@
   .step-num {
     font-family: 'Playfair Display', serif;
     font-size: 48px; font-weight: 300;
-    color: rgba(168,90,46,0.3);
+    color: rgba(216,85,29,0.3);
     line-height: 1; min-width: 60px;
     transition: color 0.3s;
   }
@@ -488,12 +488,12 @@
   }
   .step-desc {
     font-size: 12px; font-weight: 300;
-    line-height: 1.9; color: rgba(244,240,233,0.78);
+    line-height: 1.9; color: rgba(246,238,235,0.78);
   }
   .metodologia-visual {
     position: sticky; top: 120px;
     background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(168,90,46,0.2);
+    border: 1px solid rgba(216,85,29,0.2);
     padding: 52px;
     display: flex; flex-direction: column; gap: 32px;
   }
@@ -507,16 +507,16 @@
     color: var(--dorado-palo);
   }
   .metodologia-intro { max-width: 640px; margin: 24px 0 0; display: flex; flex-direction: column; gap: 16px; }
-  .metodologia-intro p { font-size: 14px; font-weight: 300; line-height: 1.9; color: rgba(244,240,233,0.78); }
+  .metodologia-intro p { font-size: 14px; font-weight: 300; line-height: 1.9; color: rgba(246,238,235,0.78); }
   .metodologia-pillars { display: flex; flex-direction: column; margin-top: 8px; }
   .pillar {
     display: flex; align-items: flex-start; gap: 16px;
     padding: 20px 0;
-    border-top: 1px solid rgba(244,240,233,0.1);
+    border-top: 1px solid rgba(246,238,235,0.1);
   }
   .pillar:first-child { border-top: none; padding-top: 0; }
   .pillar-dot { width: 4px; height: 4px; margin-top: 8px; background: var(--dorado); flex-shrink: 0; }
-  .pillar-text { font-size: 13px; line-height: 1.7; color: rgba(244,240,233,0.85); font-weight: 300; }
+  .pillar-text { font-size: 13px; line-height: 1.7; color: rgba(246,238,235,0.85); font-weight: 300; }
 
   /* ÁREAS */
   #areas {
@@ -703,7 +703,7 @@
     margin: 16px 0 32px;
   }
   .socio-bio {
-    font-size: 14px; color: rgba(244,240,233,0.78);
+    font-size: 14px; color: rgba(246,238,235,0.78);
     line-height: 1.9; font-weight: 300;
     max-width: 620px;
   }
@@ -753,7 +753,7 @@
     transform: scaleX(0); transition: transform 0.3s;
     transform-origin: left;
   }
-  .recurso-card:hover { border-color: rgba(168,90,46,0.3); background: var(--crema); }
+  .recurso-card:hover { border-color: rgba(216,85,29,0.3); background: var(--crema); }
   .recurso-card:hover::after { transform: scaleX(1); }
   .recurso-tag {
     font-size: 9px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
@@ -839,7 +839,7 @@
   .contacto-eyebrow::before { background: var(--dorado-palo); }
   #contacto .section-title { color: var(--crema); }
   #contacto .section-title em { color: var(--dorado-palo); }
-  .contacto-desc { font-size: 14px; color: rgba(244,240,233,0.78); line-height: 1.9; margin: 32px 0 0; font-weight: 300; }
+  .contacto-desc { font-size: 14px; color: rgba(246,238,235,0.78); line-height: 1.9; margin: 32px 0 0; font-weight: 300; }
   .contacto-signature {
     font-family: 'Playfair Display', serif;
     font-style: italic; font-weight: 300;
@@ -857,7 +857,7 @@
   }
   .btn-gold:hover { background: var(--dorado-claro); }
   .btn-outline-light {
-    border: 1px solid rgba(244,240,233,0.3);
+    border: 1px solid rgba(246,238,235,0.3);
     color: var(--crema);
     padding: 18px 48px;
     font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
@@ -869,7 +869,7 @@
   .contacto-info {
     display: flex; justify-content: center; flex-wrap: wrap; gap: 40px 56px;
     margin-top: 72px; padding-top: 60px;
-    border-top: 1px solid rgba(244,240,233,0.1);
+    border-top: 1px solid rgba(246,238,235,0.1);
   }
   .info-item { text-align: center; min-width: 150px; }
   .info-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--dorado-palo); margin-bottom: 8px; }
@@ -936,7 +936,7 @@
   .modal-title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 300; color: var(--crema); line-height: 1.2; }
   .modal-close {
     position: absolute; top: 24px; right: 24px;
-    background: none; border: none; color: rgba(244,240,233,0.5);
+    background: none; border: none; color: rgba(246,238,235,0.5);
     font-size: 24px; cursor: pointer; width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
     transition: color 0.3s;
@@ -1055,7 +1055,7 @@
 .mobile-nav a:hover { color:var(--dorado-palo); }
 .mobile-nav-close {
   position:absolute; top:20px; right:20px; font-size:24px;
-  color:rgba(244,240,233,.6); cursor:pointer; background:none; border:none;
+  color:rgba(246,238,235,.6); cursor:pointer; background:none; border:none;
   width:40px; height:40px; display:flex; align-items:center; justify-content:center;
   transition:color .3s;
 }
@@ -1083,14 +1083,14 @@
 }
 .val-item {
   padding: 56px 48px;
-  border-right: 1px solid rgba(244,240,233,.07);
+  border-right: 1px solid rgba(246,238,235,.07);
   transition: background .4s;
   position: relative;
 }
 .val-item:last-child { border-right: none; }
 .val-item-mid {
-  border-left: 1px solid rgba(168,90,46,.25);
-  border-right: 1px solid rgba(168,90,46,.25);
+  border-left: 1px solid rgba(216,85,29,.25);
+  border-right: 1px solid rgba(216,85,29,.25);
 }
 .val-eyebrow {
   font-size: 9px; font-weight: 700;
@@ -1114,13 +1114,13 @@
 }
 .val-desc {
   font-size: 12px; font-weight: 300;
-  color: rgba(244,240,233,.82);
+  color: rgba(246,238,235,.82);
   line-height: 1.85;
 }
 @media (max-width:768px) {
   .strip-valor { grid-template-columns: 1fr; }
-  .val-item { padding: 36px 28px; border-right: none; border-bottom: 1px solid rgba(244,240,233,.07); }
-  .val-item-mid { border-left: none; border-right: none; border-top: 1px solid rgba(168,90,46,.2); border-bottom: 1px solid rgba(168,90,46,.2); }
+  .val-item { padding: 36px 28px; border-right: none; border-bottom: 1px solid rgba(246,238,235,.07); }
+  .val-item-mid { border-left: none; border-right: none; border-top: 1px solid rgba(216,85,29,.2); border-bottom: 1px solid rgba(216,85,29,.2); }
 }
 
 @media (max-width:768px) {
@@ -1136,6 +1136,45 @@
 /* Logo in mobile nav context: if we ever show it there, ensure visibility */
 
 
+
+  /* ALINEACIÓN AL SISTEMA DE MARCA (brochure IQ): superficie negra para la declaración de marca,
+     crema operativa para áreas, acento #D8551D, esquinas cuadradas, divisores en acento */
+  .hero { background: var(--negro); }
+  .hero-bg, .hero-texture, .hero-vline { display: none; }
+  .hero-visual { width: 100%; left: 0; }
+  .hero-visual-inner { justify-content: flex-end; align-items: flex-end; }
+  .hero-visual-inner::before {
+    background: linear-gradient(90deg, #0D0D0D 0%, rgba(13,13,13,0.88) 42%, rgba(13,13,13,0.25) 100%);
+    mix-blend-mode: normal; opacity: 1;
+  }
+  .hero-visual-text { opacity: 0.04; }
+  .hero h1 { color: var(--crema); font-weight: 400; }
+  .hero h1 em { font-style: normal; font-weight: 400; color: var(--dorado); }
+  .hero-subtitle {
+    font-family: 'Montserrat', sans-serif; font-style: normal; font-weight: 300;
+    font-size: clamp(15px, 1.6vw, 18px); line-height: 1.7; color: #A69C93; max-width: 520px;
+  }
+  .hero .btn-primary { background: var(--dorado); color: var(--blanco); }
+  .hero .btn-primary::before { background: var(--dorado-claro); }
+  .hero .btn-secondary { color: var(--crema); border-bottom-color: var(--dorado); }
+  .hero .btn-secondary:hover { color: var(--dorado); }
+  .scroll-text { color: #A69C93; }
+
+  #servicios { background: var(--crema); }
+  .servicios-list { border-top: none; gap: 16px; }
+  .servicio-row {
+    background: var(--crema-oscura);
+    border-bottom: none; border-left: 2px solid var(--dorado);
+    padding: 40px 40px 40px 32px;
+  }
+  .servicio-row::before { display: none; }
+  .servicio-row:hover { padding-left: 32px; background: #E1D9C6; }
+  .servicio-row-num { font-weight: 400; font-size: 48px; color: var(--dorado); }
+  .step-num { color: var(--dorado); }
+  .nav-logo-pos { display: none; }
+  nav.scrolled .nav-logo-neg { display: none; }
+  nav.scrolled .nav-logo-pos { display: block; }
+  .hero h1 { margin-bottom: 28px; }
 </style>
 </head>
 <body>
@@ -1277,7 +1316,7 @@
 <!-- NAV -->
 <nav id="mainNav">
   <div class="nav-logo">
-    <a href="/"><img src="assets/logo-principal.png" width="202" height="168" alt="Ibarra Quezada Abogados" class="nav-logo-img"></a>
+    <a href="/"><img src="assets/logo-negativo.png" width="202" height="168" alt="Ibarra Quezada Abogados" class="nav-logo-img nav-logo-neg"><img src="assets/logo-principal.png" width="202" height="168" alt="" aria-hidden="true" class="nav-logo-img nav-logo-pos"></a>
   </div>
   <ul class="nav-links">
     <li><a href="#servicios">Servicios</a></li>
