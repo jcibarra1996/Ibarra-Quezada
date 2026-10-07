@@ -591,7 +591,7 @@
     background: var(--blanco);
     border-top: 1px solid var(--crema-oscura);
   }
-  .sectores-header { text-align: center; margin-bottom: 56px; }
+  .sectores-header { text-align: left; margin-bottom: 56px; }
   .sectores-banda {
     height: 240px; margin-bottom: 80px;
     background-image: url('assets/img/sectores-banda.jpg');
@@ -1180,6 +1180,29 @@
   .btn-primary, .form-submit, .nav-cta { border-radius: 0; }
   .nav-links a::after { height: 1px; }
   ::selection { background: var(--dorado); color: var(--blanco); }
+
+  /* Nav sobre el hero: barra esmerilada marfil con texto oscuro. El hero es mitad claro / mitad oscuro,
+     así que ningún color de texto único cruzaba la división; una barra propia da contraste constante. */
+  @media (min-width: 1025px) {
+    nav:not(.scrolled) {
+      background: rgba(246, 241, 230, 0.94);
+      backdrop-filter: blur(10px);
+      padding: 18px 60px;
+      border-bottom: 1px solid rgba(33, 31, 27, 0.14);
+    }
+    nav:not(.scrolled) .nav-links a:not(.nav-cta) { color: var(--verde-oscuro); }
+    nav:not(.scrolled) .nav-links a:not(.nav-cta):hover { color: var(--dorado-texto); }
+    .hero-content { padding-top: 140px; }
+  }
+  /* Encabezados de sección como fila con filete (ritmo editorial, todo alineado a la izquierda) */
+  section .section-label:not(.contacto-eyebrow) {
+    width: 100%; margin-bottom: 40px; padding-top: 18px;
+    border-top: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+    justify-content: flex-start;
+  }
+  /* Hero: panel izquierdo en marfil plano, continuo con el resto de la página */
+  .hero { background: var(--crema); }
+  .hero-texture { display: none; }
 </style>
 </head>
 <body>
@@ -1628,7 +1651,7 @@
 <!-- SECTORES -->
 <section id="sectores">
   <div class="sectores-header fade-up">
-    <div class="section-label" style="justify-content:center">A quién servimos</div>
+    <div class="section-label">A quién servimos</div>
     <h2 class="section-title">Sectores que conocemos<br><em>desde adentro.</em></h2>
   </div>
 
