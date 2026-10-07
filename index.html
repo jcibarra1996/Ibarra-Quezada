@@ -49,6 +49,9 @@
 <link rel="icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@400;700&display=swap">
 <style>
   /* ═══════════════════════════════════════════════════════════════
      Sistema de marca Ibarra Quezada (fuente: BROCHURE IQ, 14 pp.)
@@ -57,9 +60,11 @@
        crema #F6EEEB para contenido operativo; negro #0D0D0D para
        declaración de marca (portada, metodología, la firma, cierre).
      - Esquinas cuadradas en todo (radius 0).
-     - Tipografía: Georgia (display) + sans de sistema (texto). El PDF
-       fuente no trae las fuentes reales: son sustitutos honestos
-       hasta confirmar los archivos con quien diseñó el brochure.
+     - Tipografía: EB Garamond (display) + Lato (texto), el par "Legal
+       Professional" de UI/UX Pro Max. El PDF del brochure no trae las
+       fuentes reales: es provisional hasta confirmar los archivos con
+       quien diseñó el brochure. Georgia y la sans de sistema quedan
+       como respaldo mientras carga la fuente (display=swap).
      ═══════════════════════════════════════════════════════════════ */
   :root {
     --surface-crema: #F6EEEB;
@@ -74,8 +79,8 @@
     --on-accent: #0D0D0D;         /* texto sobre relleno accent en botones (4.9:1) */
     --hairline-negro: rgba(246,238,235,0.12);
 
-    --font-display: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-display: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    --font-body: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
 
     --space-1: 8px; --space-2: 16px; --space-3: 24px; --space-4: 48px; --space-5: 96px;
     --gutter: clamp(20px, 5vw, 72px);
@@ -102,7 +107,17 @@
   img { max-width: 100%; }
   a { color: inherit; }
 
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  a, button, [role="tab"], .servicio-row { touch-action: manipulation; }
+  .skip-link {
+    position: absolute; left: 16px; top: -100px; z-index: 20000;
+    background: var(--accent); color: var(--on-accent); padding: 14px 20px;
+    font-size: 14px; font-weight: 700; text-decoration: none;
+  }
+  .skip-link:focus { top: 16px; }
+  h3.servicio-row-title, h3.step-title, h3.area-panel-title, h3.sector-name, h3.value-title, h3.recurso-title { font-weight: 400; }
+  .nav-links a[aria-current="true"] { color: var(--accent); }
+  .nav-links a[aria-current="true"]::after { transform: scaleX(1); }
 
   /* ── Superficies ─────────────────────────────────────────── */
   .is-negro { background: var(--surface-negro); color: var(--ink-negro); }
@@ -125,7 +140,7 @@
 
   .section-title {
     font-family: var(--font-display);
-    font-size: clamp(34px, 4.4vw, 56px);
+    font-size: clamp(38px, 4.8vw, 62px);
     font-weight: 400; line-height: 1.08; letter-spacing: -0.01em;
     color: var(--ink);
     text-wrap: balance;
@@ -253,7 +268,7 @@
   .hero-eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--accent); }
   .hero h1 {
     font-family: var(--font-display);
-    font-size: clamp(44px, 6vw, 88px);
+    font-size: clamp(48px, 6.6vw, 96px);
     font-weight: 400; line-height: 1.02; letter-spacing: -0.015em;
     color: var(--ink-negro);
     text-wrap: balance;
@@ -719,9 +734,26 @@
     .footer-bottom { flex-direction: column; align-items: flex-start; }
     .btn-primary, .btn-gold, .btn-outline-light { width: 100%; white-space: normal; text-align: center; }
   }
+
+  /* WebP con respaldo JPG donde el navegador soporta image-set con type() */
+  @supports (background-image: image-set(url("x.webp") type("image/webp"))) {
+    .hero-visual-inner { background-image: image-set(url('assets/img/hero-panel.webp') type("image/webp"), url('assets/img/hero-panel.jpg') type("image/jpeg")); }
+    .servicios-header-visual { background-image: image-set(url('assets/img/servicios-header.webp') type("image/webp"), url('assets/img/servicios-header.jpg') type("image/jpeg")); }
+    #metodologia::before { background-image: image-set(url('assets/img/metodologia-fondo.webp') type("image/webp"), url('assets/img/metodologia-fondo.jpg') type("image/jpeg")); }
+    [data-panel="0"] .area-visual { background-image: image-set(url('assets/img/areas-panel-0.webp') type("image/webp"), url('assets/img/areas-panel-0.jpg') type("image/jpeg")); }
+    [data-panel="1"] .area-visual { background-image: image-set(url('assets/img/areas-panel-1.webp') type("image/webp"), url('assets/img/areas-panel-1.jpg') type("image/jpeg")); }
+    [data-panel="2"] .area-visual { background-image: image-set(url('assets/img/areas-panel-2.webp') type("image/webp"), url('assets/img/areas-panel-2.jpg') type("image/jpeg")); }
+    [data-panel="3"] .area-visual { background-image: image-set(url('assets/img/areas-panel-3.webp') type("image/webp"), url('assets/img/areas-panel-3.jpg') type("image/jpeg")); }
+    .sectores-banda { background-image: image-set(url('assets/img/sectores-banda.webp') type("image/webp"), url('assets/img/sectores-banda.jpg') type("image/jpeg")); }
+    .nosotros-img-frame { background-image: image-set(url('assets/img/nosotros-fundador.webp') type("image/webp"), url('assets/img/nosotros-fundador.jpg') type("image/jpeg")); }
+    .socio-img-frame { background-image: image-set(url('assets/img/socio-fundador.webp') type("image/webp"), url('assets/img/socio-fundador.jpg') type("image/jpeg")); }
+    .faq-sidebar-img { background-image: image-set(url('assets/img/faq-columna.webp') type("image/webp"), url('assets/img/faq-columna.jpg') type("image/jpeg")); }
+    .contacto-photo { background-image: image-set(url('assets/img/contacto-fondo.webp') type("image/webp"), url('assets/img/contacto-fondo.jpg') type("image/jpeg")); }
+  }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
 
 <!-- MOBILE OVERLAY -->
 <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileNav()"></div>
@@ -743,7 +775,7 @@
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
 
   <!-- Modal: Servicio Detalle -->
-  <div class="modal" id="modalServicio" style="display:none">
+  <div class="modal" id="modalServicio" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
     <div class="modal-header">
       <div class="modal-eyebrow" id="modalEyebrow">Servicio</div>
       <div class="modal-title" id="modalTitle">Título</div>
@@ -753,7 +785,7 @@
   </div>
 
   <!-- Modal: Aviso de Privacidad -->
-  <div class="modal" id="modalPrivacidad" style="display:none" role="dialog" aria-labelledby="avisoTitulo">
+  <div class="modal" id="modalPrivacidad" style="display:none" role="dialog" aria-modal="true" aria-labelledby="avisoTitulo" tabindex="-1">
     <div class="modal-header">
       <div class="modal-title" id="avisoTitulo">Aviso de <em style="font-style:italic;color:var(--dorado-palo)">Privacidad</em></div>
       <button class="modal-close" onclick="closeAllModals()" aria-label="Cerrar">✕</button>
@@ -805,10 +837,10 @@
   </div>
 
   <!-- Modal: Contacto -->
-  <div class="modal" id="modalContacto" style="display:none">
+  <div class="modal" id="modalContacto" style="display:none" role="dialog" aria-modal="true" aria-labelledby="contactoTitulo" tabindex="-1">
     <div class="modal-header">
       <div class="modal-eyebrow">Escríbanos</div>
-      <div class="modal-title">Hablemos de su<br><em style="font-style:italic;color:var(--dorado-palo)">empresa</em></div>
+      <div class="modal-title" id="contactoTitulo">Hablemos de su<br><em style="font-style:italic;color:var(--dorado-palo)">empresa</em></div>
       <button class="modal-close" onclick="closeAllModals()" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-body">
@@ -818,15 +850,15 @@
         <input type="text" name="sitioWeb" id="sitioWeb" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
         <input type="hidden" name="pagina" id="paginaField" value="">
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Nombre completo *</label><input class="form-input" type="text" name="nombre" placeholder="Su nombre" required></div>
-          <div class="form-group"><label class="form-label">Empresa</label><input class="form-input" type="text" name="empresa" placeholder="Nombre de su empresa"></div>
+          <div class="form-group"><label class="form-label" for="f-nombre">Nombre completo *</label><input class="form-input" id="f-nombre" type="text" name="nombre" autocomplete="name" placeholder="Su nombre" required></div>
+          <div class="form-group"><label class="form-label" for="f-empresa">Empresa</label><input class="form-input" id="f-empresa" type="text" name="empresa" autocomplete="organization" placeholder="Nombre de su empresa"></div>
         </div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" name="email" placeholder="nombre@empresa.com" required></div>
-          <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" name="telefono" placeholder="55 0000 0000"></div>
+          <div class="form-group"><label class="form-label" for="f-email">Email *</label><input class="form-input" id="f-email" type="email" name="email" autocomplete="email" placeholder="nombre@empresa.com" required></div>
+          <div class="form-group"><label class="form-label" for="f-telefono">Teléfono</label><input class="form-input" id="f-telefono" type="tel" name="telefono" autocomplete="tel" placeholder="55 0000 0000"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Área de interés</label>
+          <label class="form-label" for="areaSelect">Área de interés</label>
           <select class="form-select" name="area" id="areaSelect" onchange="updateMensajeField()">
             <option value="">Seleccione...</option>
             <option>Constitución y derecho corporativo</option>
@@ -838,7 +870,7 @@
             <option>Otro</option>
           </select>
         </div>
-        <div class="form-group"><label class="form-label" id="mensajeLabel">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" id="mensajeField" placeholder="Describa brevemente su situación o necesidad legal..."></textarea><p id="mensajeHelp" style="font-size:13px;color:var(--ink-muted);margin-top:8px;line-height:1.6">No incluya información confidencial ni documentos en este formulario.</p></div>
+        <div class="form-group"><label class="form-label" id="mensajeLabel" for="mensajeField">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" id="mensajeField" aria-describedby="mensajeHelp" placeholder="Describa brevemente su situación o necesidad legal..."></textarea><p id="mensajeHelp" style="font-size:13px;color:var(--ink-muted);margin-top:8px;line-height:1.6">No incluya información confidencial ni documentos en este formulario.</p></div>
         <p class="form-aviso" id="avisoBreve">Juan Carlos Ibarra Quezada (Ibarra Quezada Abogados), con domicilio en Avenida Córdoba 434, Valle Dorado, Tlalnepantla de Baz, Estado de México, tratará su nombre, empresa, correo electrónico, teléfono, área de interés y la descripción de su asunto para responder su solicitud, verificar que no exista conflicto de interés, programar una reunión y, en su caso, enviarle una propuesta. Todas estas finalidades son necesarias para atender su solicitud. Puede limitar el uso o divulgación de sus datos escribiendo a contacto@ibarraquezada.com. Consulte el <a href="#aviso-privacidad" onclick="openPrivacidadDesdeFormulario();return false;">Aviso de Privacidad</a> completo.</p>
         <label class="form-consent" for="consentimiento">
           <input type="checkbox" name="consentimiento" id="consentimiento" aria-required="true" aria-describedby="consentError">
@@ -878,6 +910,7 @@
 </nav>
 
 <!-- HERO -->
+<main id="main" tabindex="-1">
 <section class="hero" id="inicio">
   <div class="hero-content">
     <div class="hero-eyebrow">Corporativo · Contratos · Laboral</div>
@@ -945,7 +978,7 @@
     <div class="servicio-row fade-up" onclick="openServicio('corporativo')">
       <div class="servicio-row-num">01</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Constitución y estructuración corporativa</div>
+        <h3 class="servicio-row-title">Constitución y estructuración corporativa</h3>
         <div class="servicio-row-body">
           <p class="servicio-row-desc">La forma en que se constituye una empresa determina cómo crece, cómo se financia y quién decide qué el día que las cosas se complican. Diseñamos esa arquitectura societaria (S.A. de C.V., S. de R.L., SAPI) y los convenios entre socios a partir de cómo va a operar el negocio.</p>
           <a href="/derecho-corporativo/" class="servicio-row-link" onclick="openServicio('corporativo');return false;">Conocer más →</a>
@@ -956,7 +989,7 @@
     <div class="servicio-row fade-up" onclick="openServicio('contratos')">
       <div class="servicio-row-num">02</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Contratos mercantiles y civiles</div>
+        <h3 class="servicio-row-title">Contratos mercantiles y civiles</h3>
         <div class="servicio-row-body">
           <p class="servicio-row-desc">Cada relación comercial, con un proveedor, un distribuidor, un cliente clave, funciona de cierta manera en la práctica. Convertimos esa forma de operar en acuerdos que se pueden hacer cumplir: servicios, distribución, arrendamiento, licencias, confidencialidad.</p>
           <a href="/contratos-mercantiles/" class="servicio-row-link" onclick="openServicio('contratos');return false;">Conocer más →</a>
@@ -967,7 +1000,7 @@
     <div class="servicio-row fade-up" onclick="openServicio('laboral')">
       <div class="servicio-row-num">03</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Consultoría y cumplimiento laboral</div>
+        <h3 class="servicio-row-title">Consultoría y cumplimiento laboral</h3>
         <div class="servicio-row-body">
           <p class="servicio-row-desc">Contratar, organizar y hacer crecer un equipo tiene reglas específicas en México: contratos de trabajo, reglamentos internos, NOM-035, REPSE. Construimos esa estructura laboral al mismo tiempo que la empresa construye su equipo.</p>
           <a href="/consultoria-laboral/" class="servicio-row-link" onclick="openServicio('laboral');return false;">Conocer más →</a>
@@ -978,7 +1011,7 @@
     <div class="servicio-row fade-up" onclick="openServicio('gobierno')">
       <div class="servicio-row-num">04</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Gobierno corporativo y cumplimiento regulatorio</div>
+        <h3 class="servicio-row-title">Gobierno corporativo y cumplimiento regulatorio</h3>
         <div class="servicio-row-body">
           <p class="servicio-row-desc">Un consejo, un comité, una política de datos: la forma en que una empresa se gobierna es, en sí misma, parte de su arquitectura. La diseñamos para que resista la pregunta de un inversionista o un regulador.</p>
           <a href="/gobierno-corporativo-cumplimiento/" class="servicio-row-link" onclick="openServicio('gobierno');return false;">Conocer más →</a>
@@ -989,7 +1022,7 @@
     <div class="servicio-row fade-up" onclick="openServicio('ma')">
       <div class="servicio-row-num">05</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Fusiones, adquisiciones y due diligence</div>
+        <h3 class="servicio-row-title">Fusiones, adquisiciones y due diligence</h3>
         <div class="servicio-row-body">
           <p class="servicio-row-desc">Comprar, vender o fusionar una empresa es una de las decisiones que más cambia su trayectoria. Estructuramos la operación (due diligence, pactos de accionistas, términos de cierre) para que sostenga lo que el negocio va a ser después.</p>
           <a href="/fusiones-adquisiciones/" class="servicio-row-link" onclick="openServicio('ma');return false;">Conocer más →</a>
@@ -1000,7 +1033,7 @@
     <div class="servicio-row fade-up" onclick="location.href='/automatizacion-legal/'">
       <div class="servicio-row-num">06</div>
       <div class="servicio-row-main">
-        <div class="servicio-row-title">Automatización legal</div>
+        <h3 class="servicio-row-title">Automatización legal</h3>
         <div class="servicio-row-body">
           <p class="servicio-row-desc">Las empresas que crecen dejan de poder operar por correo y carpetas compartidas. Diseñamos cómo se generan, aprueban y dan seguimiento sus contratos y documentos para que la estructura legal avance al ritmo del negocio.</p>
           <a href="/automatizacion-legal/" class="servicio-row-link">Conocer Automatización legal →</a>
@@ -1026,28 +1059,28 @@
       <div class="step">
         <div class="step-num">01</div>
         <div class="step-content">
-          <div class="step-title">Entender</div>
+          <h3 class="step-title">Entender</h3>
           <div class="step-desc">Antes de hablar de contratos, entendemos su negocio y lo que está en juego.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-content">
-          <div class="step-title">Anticipar</div>
+          <h3 class="step-title">Anticipar</h3>
           <div class="step-desc">Identificamos los riesgos antes de que se conviertan en problemas.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">03</div>
         <div class="step-content">
-          <div class="step-title">Estructurar</div>
+          <h3 class="step-title">Estructurar</h3>
           <div class="step-desc">Convertimos su decisión en contratos y estructuras que protegen lo que construyó.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">04</div>
         <div class="step-content">
-          <div class="step-title">Acompañar</div>
+          <h3 class="step-title">Acompañar</h3>
           <div class="step-desc">Ajustamos la estructura a cada nueva etapa del negocio.</div>
         </div>
       </div>
@@ -1073,16 +1106,16 @@
     <p>Cada empresa enfrenta retos legales distintos según su tamaño y su momento. Acompañamos a quien constituye su primera sociedad, al grupo corporativo con operaciones complejas y a la empresa que está a punto de cambiar de manos.</p>
   </div>
 
-  <div class="areas-tabs">
-    <button class="area-tab active" onclick="switchTab(0)"><span class="area-tab-num">01</span> Startups y emprendedores</button>
-    <button class="area-tab" onclick="switchTab(1)"><span class="area-tab-num">02</span> PyMEs y familiares</button>
-    <button class="area-tab" onclick="switchTab(2)"><span class="area-tab-num">03</span> Corporativos y grupos</button>
-    <button class="area-tab" onclick="switchTab(3)"><span class="area-tab-num">04</span> Empresas en transición</button>
+  <div class="areas-tabs" role="tablist" aria-label="Etapas de empresa">
+    <button class="area-tab active" role="tab" id="tab-0" aria-controls="panel-0" aria-selected="true" onclick="switchTab(0)"><span class="area-tab-num">01</span> Startups y emprendedores</button>
+    <button class="area-tab" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="false" tabindex="-1" onclick="switchTab(1)"><span class="area-tab-num">02</span> PyMEs y familiares</button>
+    <button class="area-tab" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1" onclick="switchTab(2)"><span class="area-tab-num">03</span> Corporativos y grupos</button>
+    <button class="area-tab" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1" onclick="switchTab(3)"><span class="area-tab-num">04</span> Empresas en transición</button>
   </div>
 
-  <div class="area-panel active" data-panel="0">
+  <div class="area-panel active" data-panel="0" id="panel-0" role="tabpanel" aria-labelledby="tab-0">
     <div>
-      <div class="area-panel-title">Startups y emprendedores</div>
+      <h3 class="area-panel-title">Startups y emprendedores</h3>
       <p class="area-panel-desc">Constituir bien su empresa desde el inicio evita conflictos societarios costosos más adelante. Acompañamos a fundadores en cada decisión legal de los primeros años del negocio, antes de que se conviertan en un problema en la due diligence de su próxima ronda.</p>
       <ul class="area-list">
         <li>Constitución ágil de sociedades y estructura inicial</li>
@@ -1099,9 +1132,9 @@
     </div>
   </div>
 
-  <div class="area-panel" data-panel="1">
+  <div class="area-panel" data-panel="1" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
     <div>
-      <div class="area-panel-title">PyMEs y empresas familiares</div>
+      <h3 class="area-panel-title">PyMEs y empresas familiares</h3>
       <p class="area-panel-desc">Las empresas familiares y las PyMEs cargan con retos propios: sucesión sin resolver, gobierno corporativo informal y contratos que crecieron sin orden. Ponemos estructura donde hoy hay buena voluntad, para que el negocio pueda escalar.</p>
       <ul class="area-list">
         <li>Formalización de acuerdos entre familiares y socios</li>
@@ -1118,9 +1151,9 @@
     </div>
   </div>
 
-  <div class="area-panel" data-panel="2">
+  <div class="area-panel" data-panel="2" id="panel-2" role="tabpanel" aria-labelledby="tab-2">
     <div>
-      <div class="area-panel-title">Corporativos y grupos empresariales</div>
+      <h3 class="area-panel-title">Corporativos y grupos empresariales</h3>
       <p class="area-panel-desc">A mayor tamaño, mayor exposición legal. Diseñamos gobierno corporativo robusto y gestionamos contratos complejos para grupos empresariales que ya no pueden permitirse zonas grises.</p>
       <ul class="area-list">
         <li>Gobierno corporativo: consejos, comités y políticas internas</li>
@@ -1136,9 +1169,9 @@
     </div>
   </div>
 
-  <div class="area-panel" data-panel="3">
+  <div class="area-panel" data-panel="3" id="panel-3" role="tabpanel" aria-labelledby="tab-3">
     <div>
-      <div class="area-panel-title">Empresas en transición</div>
+      <h3 class="area-panel-title">Empresas en transición</h3>
       <p class="area-panel-desc">Una venta, la entrada de un nuevo socio o una reorganización cambian las reglas de la empresa. Las ordenamos antes de que cambien el negocio.</p>
       <ul class="area-list">
         <li>Due diligence de compra o de venta</li>
@@ -1166,22 +1199,22 @@
   <div class="sectores-grid">
     <div class="sector-item fade-up">
       <div class="sector-num">01</div>
-      <div class="sector-name">Retail y consumo</div>
+      <h3 class="sector-name">Retail y consumo</h3>
       <div class="sector-desc">Contratos con proveedores, locales comerciales y personal en punto de venta, para operaciones que no admiten vacíos legales.</div>
     </div>
     <div class="sector-item fade-up">
       <div class="sector-num">02</div>
-      <div class="sector-name">Logística, transporte y comercio exterior</div>
+      <h3 class="sector-name">Logística, transporte y comercio exterior</h3>
       <div class="sector-desc">Contratos de transporte, flotillas y bodegas con cumplimiento aduanero, para empresas que no pueden detener la operación.</div>
     </div>
     <div class="sector-item fade-up">
       <div class="sector-num">03</div>
-      <div class="sector-name">Comercio electrónico</div>
+      <h3 class="sector-name">Comercio electrónico</h3>
       <div class="sector-desc">Términos, privacidad y relaciones con plataformas y operadores, para negocios que venden en línea y crecen en varios países.</div>
     </div>
     <div class="sector-item fade-up">
       <div class="sector-num">04</div>
-      <div class="sector-name">Tecnología y startups</div>
+      <h3 class="sector-name">Tecnología y startups</h3>
       <div class="sector-desc">Estructura societaria ágil y contratos que escalan con el negocio, sin frenar la velocidad que lo trajo hasta aquí.</div>
     </div>
   </div>
@@ -1200,19 +1233,19 @@
 
       <div class="nosotros-values">
         <div class="value-item">
-          <div class="value-title">El negocio antes que el papel</div>
+          <h3 class="value-title">El negocio antes que el papel</h3>
           <div class="value-desc">Primero entendemos cómo funciona la empresa. Después determinamos qué estructura necesita.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">La estructura antes que el documento</div>
+          <h3 class="value-title">La estructura antes que el documento</h3>
           <div class="value-desc">El contrato, el acta o la política son la forma que toma una estructura ya pensada, no el punto de partida.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">La operación antes que el modelo</div>
+          <h3 class="value-title">La operación antes que el modelo</h3>
           <div class="value-desc">Cada estructura se diseña a partir de cómo funciona esa empresa en particular.</div>
         </div>
         <div class="value-item">
-          <div class="value-title">Lo que sigue, antes que el cierre</div>
+          <h3 class="value-title">Lo que sigue, antes que el cierre</h3>
           <div class="value-desc">Una empresa sigue moviéndose después de cada decisión. La estructura tiene que poder moverse con ella.</div>
         </div>
       </div>
@@ -1262,7 +1295,7 @@
     <a class="recurso-card fade-up" href="/insights/sa-de-cv-vs-s-de-rl/">
       <div class="recurso-thumb" style="background-image:url('assets/img/recursos-card-1.jpg')" aria-hidden="true"></div>
       <div class="recurso-tag">Corporativo <span class="recurso-date">· Mayo 2026</span></div>
-      <div class="recurso-title">S.A. de C.V. vs. S. de R.L.: ¿qué figura conviene a su empresa?</div>
+      <h3 class="recurso-title">S.A. de C.V. vs. S. de R.L.: ¿qué figura conviene a su empresa?</h3>
       <div class="recurso-desc">Elegir mal la figura societaria hoy se paga en costos fiscales y de gobierno corporativo mañana. Comparamos las opciones más comunes.</div>
       <span class="recurso-link">Leer artículo →</span>
     </a>
@@ -1270,7 +1303,7 @@
     <a class="recurso-card fade-up" href="/insights/repse-que-es/">
       <div class="recurso-thumb" style="background-image:url('assets/img/recursos-card-2.jpg')" aria-hidden="true"></div>
       <div class="recurso-tag">Laboral <span class="recurso-date">· Agosto 2026</span></div>
-      <div class="recurso-title">REPSE: qué es y cómo cumplir al subcontratar servicios especializados</div>
+      <h3 class="recurso-title">REPSE: qué es y cómo cumplir al subcontratar servicios especializados</h3>
       <div class="recurso-desc">Si su empresa subcontrata servicios especializados y no está registrada en el REPSE, puede perder la deducibilidad del gasto sin saberlo. Esto es lo que debe revisar.</div>
       <span class="recurso-link">Leer artículo →</span>
     </a>
@@ -1278,7 +1311,7 @@
     <a class="recurso-card fade-up" href="/insights/clausulas-contrato-mercantil/">
       <div class="recurso-thumb" style="background-image:url('assets/img/recursos-card-3.jpg')" aria-hidden="true"></div>
       <div class="recurso-tag">Contratos <span class="recurso-date">· Septiembre 2026</span></div>
-      <div class="recurso-title">5 cláusulas que no pueden faltar en un contrato mercantil</div>
+      <h3 class="recurso-title">5 cláusulas que no pueden faltar en un contrato mercantil</h3>
       <div class="recurso-desc">La mayoría de los conflictos comerciales no nacen de la mala fe, sino de contratos ambiguos. Estas son las cláusulas que revisamos primero.</div>
       <span class="recurso-link">Leer artículo →</span>
     </a>
@@ -1356,6 +1389,8 @@
   </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">
@@ -1429,10 +1464,43 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 // TABS
-function switchTab(idx) {
-  document.querySelectorAll('.area-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+function switchTab(idx, focus) {
+  document.querySelectorAll('.area-tab').forEach((t, i) => {
+    const on = i === idx;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+    t.tabIndex = on ? 0 : -1;
+    if (on && focus) t.focus();
+  });
   document.querySelectorAll('.area-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
 }
+document.querySelector('.areas-tabs').addEventListener('keydown', e => {
+  const tabs = [...document.querySelectorAll('.area-tab')];
+  const cur = tabs.findIndex(t => t.classList.contains('active'));
+  let next = null;
+  if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+  if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+  if (e.key === 'Home') next = 0;
+  if (e.key === 'End') next = tabs.length - 1;
+  if (next !== null) { e.preventDefault(); switchTab(next, true); }
+});
+
+// NAV: resalta la sección visible (nav-state-active)
+(function () {
+  const links = [...document.querySelectorAll('.nav-links a[href^="#"]:not(.nav-cta)')];
+  const targets = links.map(a => [a, document.getElementById(a.getAttribute('href').slice(1))]).filter(x => x[1]);
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const mid = window.innerHeight * 0.4;
+    let current = null;
+    targets.forEach(([a, el]) => { if (el.getBoundingClientRect().top <= mid) current = a; });
+    links.forEach(a => a.toggleAttribute('aria-current', a === current));
+    if (current) current.setAttribute('aria-current', 'true');
+  }
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  update();
+})();
 
 // FAQ
 function toggleFaq(el) {
@@ -1443,12 +1511,28 @@ function toggleFaq(el) {
 
 // MODALS
 const overlay = document.getElementById('modalOverlay');
+let modalOpener = null;
 function showModal(id) {
+  if (overlay.style.display !== 'flex') modalOpener = document.activeElement;
   overlay.style.display = 'flex';
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
+  const m = document.getElementById(id);
+  m.style.display = 'block';
+  m.scrollTop = 0;
   document.body.style.overflow = 'hidden';
+  m.focus();
 }
+// Mantiene el Tab dentro del modal abierto
+overlay.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const m = [...overlay.querySelectorAll('.modal')].find(x => x.style.display === 'block');
+  if (!m) return;
+  const f = [...m.querySelectorAll('a[href], button:not([disabled]), input:not([type=hidden]):not([tabindex="-1"]), select, textarea')].filter(el => el.offsetParent !== null);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && (document.activeElement === first || document.activeElement === m)) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
 function closeModal(e) { if (e.target === overlay) closeAllModals(); }
 let volverAlFormulario = false;
 function closeAllModals() {
@@ -1463,6 +1547,8 @@ function closeAllModals() {
   volverAlFormulario = false;
   overlay.style.display = 'none';
   document.body.style.overflow = '';
+  if (modalOpener && document.contains(modalOpener)) modalOpener.focus();
+  modalOpener = null;
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
 
