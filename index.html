@@ -1203,6 +1203,150 @@
   /* Hero: panel izquierdo en marfil plano, continuo con el resto de la página */
   .hero { background: var(--crema); }
   .hero-texture { display: none; }
+
+  /* ═══ REDISEÑO "BIG LAW" OSCURO Y TIPOGRÁFICO ═══
+     Portada tipográfica, sin fotos de banco, composición distinta por sección.
+     Se conserva el retrato real del socio. Copy y paleta de marca intactos. */
+  :root { --carbon-2: #1c1915; --linea-osc: rgba(246,241,230,0.16); }
+
+  /* Nav: barra marfil en todos los anchos (el hero ahora es oscuro) */
+  nav:not(.scrolled) { background: rgba(246,241,230,0.96); backdrop-filter: blur(10px); padding: 18px 60px; border-bottom: 1px solid rgba(33,31,27,0.14); }
+  @media (max-width: 1024px) { nav:not(.scrolled), nav.scrolled { padding: 14px 24px; } }
+  .hamburger span { background: var(--verde-oscuro); }
+
+  /* HERO tipográfico a página completa */
+  .hero { background: var(--verde-oscuro); align-items: flex-end; }
+  .hero-bg {
+    background:
+      radial-gradient(ellipse 60% 70% at 85% 15%, rgba(168,90,46,0.26) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 0% 100%, rgba(168,90,46,0.12) 0%, transparent 60%);
+  }
+  .hero-vline, .hero-texture, .hero-visual-text, .scroll-indicator, .hero-mobile-band, .hero-visual-pattern { display: none !important; }
+  .hero::after {
+    content: ''; position: absolute; right: 4%; top: 50%; width: min(46vw, 640px); aspect-ratio: 1;
+    transform: translateY(-58%); background: url('assets/icon-mark-white.png') center / contain no-repeat;
+    opacity: 0.055; pointer-events: none;
+  }
+  .hero-content { max-width: 1200px; padding: 170px 60px 250px; }
+  .hero h1 { color: var(--crema); font-size: clamp(50px, 8.2vw, 128px); line-height: 0.98; letter-spacing: -0.03em; margin-bottom: 36px; }
+  .hero h1 em { color: var(--dorado-palo); }
+  .hero-subtitle { color: rgba(246,241,230,0.78); font-size: clamp(18px, 1.8vw, 24px); max-width: 620px; margin-bottom: 44px; }
+  .hero .btn-primary { background: var(--crema); color: var(--verde-oscuro); }
+  .hero .btn-primary:hover { color: var(--blanco); }
+  .hero .btn-secondary { color: var(--crema); border-color: rgba(246,241,230,0.55); }
+  .hero .btn-secondary:hover { color: var(--dorado-palo); border-color: var(--dorado-palo); }
+  .hero-visual { position: absolute; left: 0; right: 0; bottom: 0; top: auto; width: auto; overflow: visible; }
+  .hero-visual-inner { position: relative; inset: auto; background: none; display: block; }
+  .hero-visual-inner::before { display: none; }
+  .hero-stat-block { flex-direction: row; gap: 72px; padding: 26px 0 40px; margin: 0 60px; border-top: 1px solid var(--linea-osc); }
+  .hero-stat { border-left: none; padding-left: 0; display: flex; align-items: baseline; gap: 20px; }
+  .hero-stat-num { font-size: 44px; }
+  .hero-stat-label { margin-top: 0; max-width: 300px; font-size: 11px; letter-spacing: 0.14em; color: rgba(246,241,230,0.7); }
+  @media (max-width: 900px) {
+    .hero-content { padding: 130px 24px 280px; }
+    .hero-stat-block { flex-direction: column; gap: 18px; margin: 0 24px; padding-bottom: 32px; }
+    .hero-stat { flex-direction: column; gap: 6px; }
+    .hero-stat-num { font-size: 32px; }
+  }
+
+  /* SERVICIOS: índice tipográfico, sin foto lateral */
+  .servicios-header-visual { display: none; }
+  .servicios-header-text { max-width: 760px; }
+  #servicios .section-title { font-size: clamp(40px, 6vw, 84px); }
+  .servicio-row { padding: 56px 0; }
+  .servicio-row-num { font-size: 64px; font-style: italic; color: rgba(168,90,46,0.45); }
+  .servicio-row-title { font-size: clamp(26px, 2.6vw, 38px); line-height: 1.12; letter-spacing: -0.015em; }
+  .servicio-row-desc { font-size: 15px; line-height: 1.8; }
+
+  /* MÉTODO: cuatro columnas horizontales, fondo plano */
+  #metodologia { background: var(--carbon-2); }
+  #metodologia::before { display: none; }
+  .metodologia-grid { grid-template-columns: 1fr; gap: 72px; margin-top: 72px; }
+  .metodologia-steps { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--linea-osc); }
+  .step { flex-direction: column; gap: 22px; padding: 36px 32px 8px 0; border-bottom: none; }
+  .step:first-child { padding-top: 36px; }
+  .step:hover { padding-left: 0; }
+  .step-num { font-size: 72px; font-style: italic; color: var(--dorado); min-width: 0; }
+  .step-title { font-size: 30px; }
+  .step-desc { font-size: 14px; line-height: 1.7; }
+  .metodologia-visual {
+    position: static; display: grid; grid-template-columns: 1.2fr 1fr; column-gap: 72px; row-gap: 20px;
+    background: none; border: none; border-top: 1px solid var(--linea-osc); padding: 56px 0 0;
+  }
+  .metodologia-quote { font-size: clamp(28px, 3.2vw, 46px); line-height: 1.2; }
+  .metodologia-pillars { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; }
+  .metodologia-intro p, .pillar-text { font-size: 15px; }
+  @media (max-width: 1000px) { .metodologia-steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) {
+    .metodologia-steps { grid-template-columns: 1fr; }
+    .metodologia-visual { grid-template-columns: 1fr; }
+    .metodologia-pillars { grid-column: 1; grid-row: auto; }
+  }
+
+  /* SECTORES: oscuro, retícula con filetes, sin foto */
+  #sectores { background: var(--verde-oscuro); border-top: none; }
+  #sectores .section-label { color: var(--dorado-palo); }
+  #sectores .section-title { color: var(--crema); }
+  #sectores .section-title em { color: var(--dorado-palo); }
+  .sectores-banda { display: none; }
+  .sectores-grid { gap: 0; background: none; border-top: 1px solid var(--linea-osc); }
+  .sector-item { background: transparent; padding: 44px 32px 48px; border-left: 1px solid var(--linea-osc); }
+  .sector-item:first-child { border-left: none; padding-left: 0; }
+  .sector-item:hover { background: rgba(246,241,230,0.04); }
+  .sector-num { font-size: 40px; font-style: italic; color: var(--dorado); margin-bottom: 28px; letter-spacing: 0; }
+  .sector-name { color: var(--crema); font-size: 24px; }
+  .sector-desc { color: rgba(246,241,230,0.72); font-size: 14px; line-height: 1.7; }
+  @media (max-width: 900px) {
+    .sectores-grid { grid-template-columns: 1fr 1fr; }
+    .sector-item:nth-child(odd) { border-left: none; padding-left: 0; }
+  }
+  @media (max-width: 560px) { .sectores-grid { grid-template-columns: 1fr; } .sector-item { border-left: none; padding-left: 0; border-bottom: 1px solid var(--linea-osc); } }
+
+  /* LA FIRMA: sin foto; sello tipográfico con el monograma */
+  .nosotros-grid { grid-template-columns: 1.15fr 0.85fr; gap: 80px; align-items: stretch; }
+  .nosotros-img-frame { display: none; }
+  .nosotros-visual { display: flex; }
+  .nosotros-float-card {
+    position: static; width: 100%; min-height: 440px; padding: 48px; background: var(--verde-oscuro);
+    border-top: 3px solid var(--dorado); display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .nosotros-float-num { width: 150px; height: 150px; background-position: left top; opacity: 0.9; }
+  .nosotros-float-label { font-family: 'Newsreader', Georgia, serif; font-size: clamp(28px, 3vw, 40px); font-style: italic; font-weight: 300; letter-spacing: -0.01em; text-transform: none; line-height: 1.15; color: var(--crema); margin-top: 0; }
+  .nosotros-content p { font-size: 16px; }
+  .value-title { font-size: 21px; }
+  .value-desc { font-size: 14px; }
+  @media (max-width: 900px) { .nosotros-grid { grid-template-columns: 1fr; gap: 48px; } .nosotros-float-card { min-height: 280px; } }
+
+  /* INSIGHTS: tarjetas tipográficas, sin miniaturas */
+  .recurso-thumb { display: none; }
+  .recurso-title { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; }
+  .recurso-desc { font-size: 15px; }
+
+  /* FAQ y CONTACTO: sin fotos decorativas */
+  .faq-sidebar-img { display: none; }
+  .contacto-photo { display: none; }
+
+  /* Hero: que quepa en la primera pantalla */
+  .hero { min-height: 100svh; }
+  .hero-content { padding: 140px 60px 200px; }
+  .hero h1 { font-size: clamp(48px, 7.2vw, 112px); margin-bottom: 28px; }
+  .hero-subtitle { margin-bottom: 36px; }
+  @media (max-width: 900px) { .hero-content { padding: 110px 24px 250px; } }
+
+  /* ÁREAS: panel tipográfico en lugar de fotografías */
+  [data-panel] .area-visual { background: var(--verde-oscuro); background-image: none; min-height: 420px; overflow: hidden; display: flex; align-items: flex-end; }
+  [data-panel] .area-visual::after {
+    content: ''; position: absolute; right: -40px; top: -40px; width: 340px; aspect-ratio: 1;
+    background: url('assets/icon-mark-white.png') center / contain no-repeat; opacity: 0.07;
+  }
+  [data-panel] .area-visual-pattern { background-image: none; border-top: 3px solid var(--dorado); }
+  [data-panel] .area-visual-badge {
+    position: relative; inset: auto; right: auto; bottom: auto; background: none; padding: 0 40px 40px;
+    font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 300;
+    font-size: clamp(44px, 5vw, 72px); letter-spacing: -0.02em; text-transform: none; color: var(--crema); line-height: 1;
+  }
+  [data-panel] .area-visual { justify-content: flex-start; }
+  .sectores-grid { margin-bottom: 0; }
 </style>
 </head>
 <body>
