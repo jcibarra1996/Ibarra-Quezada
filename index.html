@@ -1136,6 +1136,24 @@
 /* Logo in mobile nav context: if we ever show it there, ensure visibility */
 
 
+
+  /* ACCESIBILIDAD E INTERACCIÓN (auditoría ui-ux-pro-max) */
+  :focus-visible { outline: 2px solid var(--dorado); outline-offset: 3px; }
+  .mobile-nav :focus-visible, .modal-header :focus-visible, nav:not(.scrolled) :focus-visible { outline-color: var(--dorado-palo); }
+  .form-input:focus-visible, .form-textarea:focus-visible, .form-select:focus-visible { outline: none; border-bottom-width: 2px; }
+  .hamburger { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  .modal-close, .mobile-nav-close { width: 44px; height: 44px; }
+  .area-tab { min-height: 44px; }
+  .faq-q { min-height: 44px; }
+  .form-label { font-size: 11px; }
+  @media (max-width: 640px) {
+    .form-input, .form-textarea, .form-select { font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .fade-up { opacity: 1 !important; transform: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -1145,7 +1163,7 @@
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Cerrar menú">✕</button>
   <a href="#servicios" onclick="closeMobileNav()">Servicios</a>
   <a href="#areas" onclick="closeMobileNav()">Áreas</a>
   <a href="#nosotros" onclick="closeMobileNav()">Firma</a>
@@ -1160,17 +1178,17 @@
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
 
   <!-- Modal: Servicio Detalle -->
-  <div class="modal" id="modalServicio" style="display:none">
+  <div class="modal" id="modalServicio" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-header">
       <div class="modal-eyebrow" id="modalEyebrow">Servicio</div>
       <div class="modal-title" id="modalTitle">Título</div>
-      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <button class="modal-close" onclick="closeAllModals()" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
   </div>
 
   <!-- Modal: Aviso de Privacidad -->
-  <div class="modal" id="modalPrivacidad" style="display:none" role="dialog" aria-labelledby="avisoTitulo">
+  <div class="modal" id="modalPrivacidad" style="display:none" role="dialog" aria-modal="true" aria-labelledby="avisoTitulo">
     <div class="modal-header">
       <div class="modal-title" id="avisoTitulo">Aviso de <em style="font-style:italic;color:var(--dorado-palo)">Privacidad</em></div>
       <button class="modal-close" onclick="closeAllModals()" aria-label="Cerrar">✕</button>
@@ -1222,11 +1240,11 @@
   </div>
 
   <!-- Modal: Contacto -->
-  <div class="modal" id="modalContacto" style="display:none">
+  <div class="modal" id="modalContacto" style="display:none" role="dialog" aria-modal="true" aria-label="Contacto">
     <div class="modal-header">
       <div class="modal-eyebrow">Escríbanos</div>
       <div class="modal-title">Hablemos de su<br><em style="font-style:italic;color:var(--dorado-palo)">empresa</em></div>
-      <button class="modal-close" onclick="closeAllModals()">✕</button>
+      <button class="modal-close" onclick="closeAllModals()" aria-label="Cerrar">✕</button>
     </div>
     <div class="modal-body">
       <p>Cuéntenos brevemente su situación. En Ibarra Quezada revisamos cada mensaje a detalle antes de responder.</p>
@@ -1235,15 +1253,15 @@
         <input type="text" name="sitioWeb" id="sitioWeb" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
         <input type="hidden" name="pagina" id="paginaField" value="">
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Nombre completo *</label><input class="form-input" type="text" name="nombre" placeholder="Su nombre" required></div>
-          <div class="form-group"><label class="form-label">Empresa</label><input class="form-input" type="text" name="empresa" placeholder="Nombre de su empresa"></div>
+          <div class="form-group"><label class="form-label" for="fNombre">Nombre completo *</label><input id="fNombre" class="form-input" type="text" name="nombre" placeholder="Su nombre" required></div>
+          <div class="form-group"><label class="form-label" for="fEmpresa">Empresa</label><input id="fEmpresa" class="form-input" type="text" name="empresa" placeholder="Nombre de su empresa"></div>
         </div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Email *</label><input class="form-input" type="email" name="email" placeholder="nombre@empresa.com" required></div>
-          <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" name="telefono" placeholder="55 0000 0000"></div>
+          <div class="form-group"><label class="form-label" for="fEmail">Email *</label><input id="fEmail" class="form-input" type="email" name="email" placeholder="nombre@empresa.com" required></div>
+          <div class="form-group"><label class="form-label" for="fTelefono">Teléfono</label><input id="fTelefono" class="form-input" type="tel" name="telefono" placeholder="55 0000 0000"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">Área de interés</label>
+          <label class="form-label" for="areaSelect">Área de interés</label>
           <select class="form-select" name="area" id="areaSelect" onchange="updateMensajeField()">
             <option value="">Seleccione...</option>
             <option>Constitución y derecho corporativo</option>
@@ -1255,7 +1273,7 @@
             <option>Otro</option>
           </select>
         </div>
-        <div class="form-group"><label class="form-label" id="mensajeLabel">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" id="mensajeField" placeholder="Describa brevemente su situación o necesidad legal..."></textarea><p id="mensajeHelp" style="font-size:11px;color:var(--gris-claro);font-weight:300;margin-top:8px;line-height:1.6">No incluya información confidencial ni documentos en este formulario.</p></div>
+        <div class="form-group"><label class="form-label" id="mensajeLabel" for="mensajeField">Cuéntenos sobre su caso</label><textarea class="form-textarea" name="mensaje" id="mensajeField" aria-describedby="mensajeHelp" placeholder="Describa brevemente su situación o necesidad legal..."></textarea><p id="mensajeHelp" style="font-size:11px;color:var(--gris-claro);font-weight:300;margin-top:8px;line-height:1.6">No incluya información confidencial ni documentos en este formulario.</p></div>
         <p class="form-aviso" id="avisoBreve">Juan Carlos Ibarra Quezada (Ibarra Quezada Abogados), con domicilio en Avenida Córdoba 434, Valle Dorado, Tlalnepantla de Baz, Estado de México, tratará su nombre, empresa, correo electrónico, teléfono, área de interés y la descripción de su asunto para responder su solicitud, verificar que no exista conflicto de interés, programar una reunión y, en su caso, enviarle una propuesta. Todas estas finalidades son necesarias para atender su solicitud. Puede limitar el uso o divulgación de sus datos escribiendo a contacto@ibarraquezada.com. Consulte el <a href="#aviso-privacidad" onclick="openPrivacidadDesdeFormulario();return false;">Aviso de Privacidad</a> completo.</p>
         <label class="form-consent" for="consentimiento">
           <input type="checkbox" name="consentimiento" id="consentimiento" aria-required="true" aria-describedby="consentError">
@@ -1288,7 +1306,7 @@
     <li><a href="#contacto" onclick="openContacto();return false;" class="nav-cta">Contacto</a></li>
   </ul>
 
-  <button class="hamburger" id="hamburger" onclick="openMobileNav()" aria-label="Abrir menú">
+  <button class="hamburger" id="hamburger" onclick="openMobileNav()" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span><span></span>
   </button>
 
@@ -1500,11 +1518,11 @@
     <p>Cada empresa enfrenta retos legales distintos según su tamaño y su momento. Acompañamos a quien constituye su primera sociedad, al grupo corporativo con operaciones complejas y a la empresa que está a punto de cambiar de manos.</p>
   </div>
 
-  <div class="areas-tabs">
-    <button class="area-tab active" onclick="switchTab(0)"><span class="area-tab-num">01</span> Startups y emprendedores</button>
-    <button class="area-tab" onclick="switchTab(1)"><span class="area-tab-num">02</span> PyMEs y familiares</button>
-    <button class="area-tab" onclick="switchTab(2)"><span class="area-tab-num">03</span> Corporativos y grupos</button>
-    <button class="area-tab" onclick="switchTab(3)"><span class="area-tab-num">04</span> Empresas en transición</button>
+  <div class="areas-tabs" role="tablist" aria-label="Áreas de práctica">
+    <button class="area-tab active" role="tab" aria-selected="true" onclick="switchTab(0)"><span class="area-tab-num">01</span> Startups y emprendedores</button>
+    <button class="area-tab" role="tab" aria-selected="false" onclick="switchTab(1)"><span class="area-tab-num">02</span> PyMEs y familiares</button>
+    <button class="area-tab" role="tab" aria-selected="false" onclick="switchTab(2)"><span class="area-tab-num">03</span> Corporativos y grupos</button>
+    <button class="area-tab" role="tab" aria-selected="false" onclick="switchTab(3)"><span class="area-tab-num">04</span> Empresas en transición</button>
   </div>
 
   <div class="area-panel active" data-panel="0">
@@ -1835,11 +1853,14 @@ function openMobileNav(){
   document.getElementById('mobileNav').classList.add('open');
   document.getElementById('mobileOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  const h=document.getElementById('hamburger'); if(h) h.setAttribute('aria-expanded','true');
+  const c=document.querySelector('.mobile-nav-close'); if(c) c.focus();
 }
 function closeMobileNav(){
   document.getElementById('mobileNav').classList.remove('open');
   document.getElementById('mobileOverlay').classList.remove('open');
   document.body.style.overflow='';
+  const h=document.getElementById('hamburger'); if(h){ h.setAttribute('aria-expanded','false'); }
 }
 
 // NAV SCROLL
@@ -1855,26 +1876,34 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 // TABS
 function switchTab(idx) {
-  document.querySelectorAll('.area-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.area-tab').forEach((t, i) => { t.classList.toggle('active', i === idx); t.setAttribute('aria-selected', i === idx ? 'true' : 'false'); });
   document.querySelectorAll('.area-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
 }
 
 // FAQ
 function toggleFaq(el) {
   const item = el.parentElement;
-  item.classList.toggle('open');
+  el.setAttribute('aria-expanded', item.classList.toggle('open') ? 'true' : 'false');
 }
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.setAttribute('role', 'button'); q.setAttribute('tabindex', '0'); q.setAttribute('aria-expanded', 'false');
+  q.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleFaq(q); } });
+});
 
 // MODALS
 const overlay = document.getElementById('modalOverlay');
 function showModal(id) {
+  if (overlay.style.display !== 'flex') focoPrevio = document.activeElement;
   overlay.style.display = 'flex';
   document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
+  const m = document.getElementById(id);
+  m.style.display = 'block';
   document.body.style.overflow = 'hidden';
+  const cl = m.querySelector('.modal-close'); if (cl) cl.focus();
 }
 function closeModal(e) { if (e.target === overlay) closeAllModals(); }
 let volverAlFormulario = false;
+let focoPrevio = null;
 function closeAllModals() {
   const priv = document.getElementById('modalPrivacidad');
   if (volverAlFormulario && priv && priv.style.display === 'block') {
@@ -1887,6 +1916,7 @@ function closeAllModals() {
   volverAlFormulario = false;
   overlay.style.display = 'none';
   document.body.style.overflow = '';
+  if (focoPrevio && focoPrevio.focus) { focoPrevio.focus(); focoPrevio = null; }
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
 
