@@ -190,7 +190,7 @@
     // Movimiento con inercia hacia el objetivo
     var raf = null;
     function animate() {
-      x += (gx - x) * (reduce ? 1 : 0.16); y += (gy - y) * (reduce ? 1 : 0.16);
+      x += (gx - x) * (reduce ? 1 : 0.26); y += (gy - y) * (reduce ? 1 : 0.26);
       apply();
       if (Math.abs(gx - x) > 0.4 || Math.abs(gy - y) > 0.4) raf = requestAnimationFrame(animate); else raf = null;
     }
@@ -203,7 +203,7 @@
       var f = flagsBase[tourIdx % flagsBase.length], d = doc.getBoundingClientRect(), r = f.getClientRects()[0];
       if (r) goTo(r.left - d.left - 14, r.top - d.top - (lh - r.height) / 2);
       tourIdx++;
-      tourTimer = setTimeout(tour, reduce ? 3800 : 2600);
+      tourTimer = setTimeout(tour, reduce ? 3000 : 1600);
     }
     function pointer(e) {
       var d = doc.getBoundingClientRect();
@@ -215,7 +215,7 @@
     doc.addEventListener('pointerdown', pointer);
     doc.addEventListener('mouseleave', function () { clearTimeout(idleTimer); idleTimer = setTimeout(function () { userActive = false; tour(); }, 900); });
 
-    function init() { measure(); x = gx = W * 0.08; y = gy = H * 0.1; apply(); setTimeout(tour, 1400); }
+    function init() { measure(); x = gx = W * 0.08; y = gy = H * 0.1; apply(); setTimeout(tour, 800); }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(init); else window.addEventListener('load', init);
     window.addEventListener('resize', function () { measure(); apply(); });
     // Pausar el recorrido cuando el hero no está a la vista
