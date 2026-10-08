@@ -1210,6 +1210,7 @@ nav.scrolled + .util-bar { transform: translateY(-100%); }
 .servicios-wrap .servicio-row-title { font-size: 26px; }
 .servicios-wrap .servicio-row-desc { font-size: 13.5px; color: #6E6864; }
 .servicios-wrap .servicio-row-link { color: var(--dorado-texto); }
+body { overflow-x: clip; }  /* hidden convertía body en contenedor de scroll y rompía el sticky */
 .servicios-figure { position: sticky; top: 120px; }
 .sf-frame { position: relative; aspect-ratio: 4 / 5; background: #0D0D0D; overflow: hidden; }
 .sf-frame img {
@@ -1540,7 +1541,7 @@ nav.scrolled + .util-bar { transform: translateY(-100%); }
 
   </div>
   <aside class="servicios-figure" aria-hidden="true">
-    <div class="sf-frame"><img src="assets/img/areas-panel-0.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Constitución y estructuración" class="on"><img src="assets/img/areas-panel-1.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Contratos mercantiles y civiles"><img src="assets/img/areas-panel-2.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Cumplimiento laboral"><img src="assets/img/areas-panel-3.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Gobierno corporativo"><img src="assets/img/servicios-header.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Fusiones y adquisiciones"><img src="assets/img/hero-panel.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Automatización legal">
+    <div class="sf-frame"><img src="assets/img/areas-panel-0.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Constitución y estructuración" class="on"><img src="assets/img/area-contratos.jpg" alt="" width="645" height="799" loading="lazy" data-label="Contratos mercantiles y civiles"><img src="assets/img/areas-panel-2.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Cumplimiento laboral"><img src="assets/img/area-gobierno.jpg" alt="" width="645" height="799" loading="lazy" data-label="Gobierno corporativo"><img src="assets/img/servicios-header.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Fusiones y adquisiciones"><img src="assets/img/hero-panel.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Automatización legal">
       <div class="sf-caption"><span class="sf-num">01</span><span class="sf-label">Constitución y estructuración</span></div>
     </div>
   </aside>
