@@ -1333,6 +1333,60 @@
   #metodologia .section-title em, #socio .section-title em, #contacto .section-title em, #sectores .section-title em { color: inherit; }
   .nav-cta, .nav-links a.nav-cta { letter-spacing: 0 !important; }
   .hero h1 { margin-bottom: 26px; }
+
+  /* ═══ IMÁGENES DE MARCA, USADAS A TODO LO ANCHO ═══
+     Las fotografías ya existentes (cobre y carbón) se integran como escenas cinematográficas
+     con degradados y filetes, en vez de cajas pegadas. */
+  /* Servicios: retrato vertical grande junto al encabezado */
+  @media (min-width: 1101px) {
+    .servicios-header { align-items: stretch; }
+    .servicios-header-visual { display: block; flex: 0 0 min(32vw, 420px); aspect-ratio: 4 / 5; position: relative; box-shadow: 14px 14px 0 -1px var(--crema-oscura); }
+    .servicios-header-text { align-self: flex-end; }
+  }
+  /* Método: fondo cinematográfico con velo para legibilidad */
+  #metodologia::before {
+    display: block; opacity: 1;
+    background-image: linear-gradient(180deg, rgba(28,25,21,0.94) 0%, rgba(28,25,21,0.62) 45%, rgba(28,25,21,0.94) 100%), url('assets/img/metodologia-fondo.jpg');
+    background-size: cover; background-position: center;
+  }
+  /* Sectores: el skyline como banda a sangre, difuminada arriba y abajo */
+  .sectores-banda {
+    display: block; height: clamp(220px, 30vw, 400px); margin: 8px -60px 0;
+    background-position: center 65%;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 72%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 72%, transparent 100%);
+  }
+  @media (max-width: 900px) { .sectores-banda { margin-left: -24px; margin-right: -24px; } }
+  /* Áreas: cada panel con su fotografía y el título como pie de imagen */
+  [data-panel="0"] .area-visual { background-image: url('assets/img/areas-panel-0.jpg'); }
+  [data-panel="1"] .area-visual { background-image: url('assets/img/areas-panel-1.jpg'); }
+  [data-panel="2"] .area-visual { background-image: url('assets/img/areas-panel-2.jpg'); }
+  [data-panel="3"] .area-visual { background-image: url('assets/img/areas-panel-3.jpg'); }
+  [data-panel] .area-visual { background-size: cover; background-position: center; min-height: 520px; align-items: flex-end; }
+  [data-panel] .area-visual::after { display: none; }
+  [data-panel] .area-visual-pattern { background-image: linear-gradient(to top, rgba(21,19,15,0.88) 0%, rgba(21,19,15,0.25) 45%, transparent 70%); border-top: 3px solid var(--dorado); }
+  [data-panel] .area-visual-badge { z-index: 1; }
+  /* La firma: fotografía con pie sobre degradado en lugar de tarjeta flotante */
+  .nosotros-img-frame { display: block; padding-bottom: 125%; background-position: center 15%; }
+  .nosotros-visual { display: block; position: relative; }
+  .nosotros-float-card {
+    position: absolute; left: 0; right: 0; bottom: 0; width: auto; min-height: 0; padding: 120px 40px 36px;
+    background: linear-gradient(to top, rgba(21,19,15,0.94) 0%, rgba(21,19,15,0.55) 55%, transparent 100%);
+    border-top: none; display: block;
+  }
+  .nosotros-float-num { width: 64px; height: 64px; margin-bottom: 14px; }
+  .nosotros-float-label { font-size: clamp(24px, 2.4vw, 34px); }
+  /* Insights: portada fotográfica en cada tarjeta, con zoom lento al pasar el cursor */
+  .recurso-card { padding: 0 0 36px; overflow: hidden; }
+  .recurso-card > :not(.recurso-thumb) { margin-left: 32px; margin-right: 32px; }
+  .recurso-thumb { display: block; height: 230px; margin: 0 0 28px; transition: transform 0.9s ease; }
+  .recurso-card:hover .recurso-thumb { transform: scale(1.05); }
+  .recurso-card { isolation: isolate; }
+  /* FAQ: columna fotográfica estrecha */
+  .faq-sidebar-img { display: block; height: 420px; margin-top: 44px; border-top: 3px solid var(--dorado); background-position: center; }
+  @media (max-width: 1024px) { .faq-sidebar-img { display: none; } }
+  /* Contacto: ciudad de noche como fondo */
+  .contacto-photo { display: block; opacity: 0.34; }
 </style>
 </head>
 <body>
