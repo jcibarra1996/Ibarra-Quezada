@@ -152,7 +152,7 @@
     var flagsBase = $$('.flag', base), flagsRev = $$('.flag', rev);
     var seen = {}, lw, lh, W, H, x = 0, y = 0, gx = 0, gy = 0, userActive = false, idleTimer, tourIdx = 0, tourTimer;
 
-    if (!finePointer) hint.textContent = 'Ejemplo ilustrativo · Toque el documento para revisar';
+    if (!finePointer) hint.textContent = 'Toque el documento para revisar';
 
     function measure() {
       W = doc.clientWidth; H = doc.clientHeight;
