@@ -148,7 +148,6 @@
     var rev = base.cloneNode(true);
     rev.id = ''; rev.className = 'doc-layer rev'; rev.setAttribute('aria-hidden', 'true');
     doc.insertBefore(rev, $('#lens'));
-    var win = $('#docWindow'), docOff = 0;
     var lens = $('#lens'), label = $('#lensLabel'), tally = $('#tally'), hint = $('#docHint');
     var flagsBase = $$('.flag', base), flagsRev = $$('.flag', rev);
     var seen = {}, lw, lh, W, H, x = 0, y = 0, gx = 0, gy = 0, userActive = false, idleTimer, tourIdx = 0, tourTimer;
@@ -165,11 +164,6 @@
       var l = Math.max(0, Math.min(W - lw, x)), t = Math.max(0, Math.min(H - lh, y));
       lens.style.setProperty('--lx', l + 'px'); lens.style.setProperty('--ly', t + 'px');
       rev.style.clipPath = 'inset(' + t + 'px ' + (W - l - lw) + 'px ' + (H - t - lh) + 'px ' + l + 'px)';
-      var winH = win.clientHeight;
-      if (winH && winH < H - 2) {
-        var off = Math.max(0, Math.min(H - winH, t + lh / 2 - winH * 0.42));
-        if (Math.abs(off - docOff) > 24) { docOff = off; doc.style.setProperty('--scrollDoc', -off + 'px'); }
-      } else if (docOff) { docOff = 0; doc.style.setProperty('--scrollDoc', '0px'); }
       // ¿Qué cláusula señalada está bajo la lente?
       var hit = -1, best = 0;
       flagsBase.forEach(function (f, i) {

@@ -682,13 +682,8 @@ footer.site-footer { padding: 88px 0 28px; border-top: 1px solid var(--line-negr
   .doc-stage { margin-top: 36px; }
   .doc-m-claim { display: block; font-family: var(--f-display); font-style: italic; font-size: 21px; line-height: 1.3; margin-bottom: 18px; max-width: 24ch; }
   .doc-m-claim .clause-tag { display: block; font-style: normal; margin-bottom: 8px; font-size: 11px; }
-  .doc-window {
-    height: min(380px, 52vh); overflow: hidden; perspective: none;
-    box-shadow: 0 40px 70px -30px rgba(0,0,0,.8);
-    margin: 0 calc(-1 * var(--gutter) + 8px);
-  }
-  .doc-window::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: linear-gradient(transparent, rgba(246,238,235,.95)); pointer-events: none; z-index: 4; }
-  .doc { transform: translateY(var(--scrollDoc, 0px)) !important; transition: transform .9s var(--ease); padding: 26px 22px 40px; cursor: default; }
+  .doc-window { perspective: none; margin: 0 calc(-1 * var(--gutter) + 8px); box-shadow: 0 40px 70px -30px rgba(0,0,0,.8); }
+  .doc { transform: none !important; padding: 26px 22px 30px; cursor: default; }
   .doc-layer { font-size: 10.5px; }
   .lens-label { font-size: 11px; }
   .doc-caption { margin-top: 16px; font-size: 10.5px; flex-direction: row; gap: 8px; }
