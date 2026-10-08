@@ -1136,6 +1136,103 @@
 /* Logo in mobile nav context: if we ever show it there, ensure visibility */
 
 
+
+/* ═══════════════════════════════════════
+   CAPA EDITORIAL (rediseño): tokens del sistema de marca IQ
+   Acento #D8551D, crema #F6EEEB, negro #0D0D0D, esquinas cuadradas
+═══════════════════════════════════════ */
+:root {
+  --dorado: #D8551D;
+  --dorado-claro: #E06A33;
+  --dorado-palo: #E8895A;
+  --dorado-texto: #A83F0F;   /* mismo acento oscurecido para texto chico sobre crema (AA) */
+  --crema: #F6EEEB;
+  --crema-oscura: #E6DAD3;
+  --verde-oscuro: #0D0D0D;
+  --negro: #0D0D0D;
+}
+body { background: var(--crema); }
+#servicios, #sectores { background: var(--crema); }
+*, *::before, *::after { border-radius: 0 !important; }
+.hamburger span { border-radius: 0 !important; }
+
+/* Barra superior (referencia: despachos de alto nivel) */
+.util-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1001; height: 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 60px; background: #0D0D0D; color: #A69C93;
+  font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 500;
+  border-bottom: 1px solid rgba(216,85,29,.45);
+  transition: transform .4s ease;
+}
+.util-bar a { color: #F6EEEB; text-decoration: none; margin-left: 28px; transition: color .3s; }
+.util-bar a:hover { color: var(--dorado-palo); }
+.util-bar b { color: var(--dorado); font-weight: 600; }
+nav:not(.scrolled) { top: 36px; }
+nav.scrolled + .util-bar { transform: translateY(-100%); }
+@media (max-width: 1024px) { .util-bar { display: none; } nav:not(.scrolled) { top: 0; } }
+
+/* Hero: más aire, filete vertical y sello de monograma */
+.hero { background: var(--crema); }
+.hero-content { padding-top: 140px; }
+.hero h1 { font-size: clamp(44px, 5.4vw, 74px); }
+.hero h1 { font-weight: 400; letter-spacing: -.01em; }
+.hero-eyebrow { color: var(--dorado-texto); }
+.hero::after {
+  content: ''; position: absolute; left: -90px; bottom: -120px; width: 520px; height: 520px;
+  background: url('assets/icon-mark.png') center/contain no-repeat; opacity: .06; pointer-events: none;
+}
+.hero-vline { background: var(--dorado); opacity: .55; }
+
+/* Franja de propuesta: numeración como identidad */
+.strip-valor { counter-reset: val; }
+.val-item { counter-increment: val; position: relative; }
+.val-item::before {
+  content: '0' counter(val);
+  position: absolute; top: 22px; right: 28px;
+  font-family: 'Playfair Display', serif; font-size: 64px; line-height: 1; font-weight: 400;
+  color: var(--dorado); opacity: .9;
+}
+
+@media (max-width: 1024px) {
+  .val-item::before { font-size: 40px; top: 20px; right: 22px; }
+  .val-statement { padding-right: 56px; }
+}
+
+/* Áreas de práctica: lista editorial + retrato alto que cambia con el cursor */
+.servicios-header-visual { display: none; }
+.servicios-wrap { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 64px; align-items: start; }
+.servicios-wrap .servicio-row { grid-template-columns: 84px 1fr; gap: 28px; padding: 40px 0; }
+.servicios-wrap .servicio-row-main { grid-template-columns: 1fr; gap: 14px; }
+.servicios-wrap .servicio-row-num { font-size: 56px; color: var(--dorado); opacity: .55; transition: opacity .4s; }
+.servicios-wrap .servicio-row.is-on .servicio-row-num,
+.servicios-wrap .servicio-row:hover .servicio-row-num { opacity: 1; }
+.servicios-wrap .servicio-row-title { font-size: 26px; }
+.servicios-wrap .servicio-row-desc { font-size: 13.5px; color: #6E6864; }
+.servicios-wrap .servicio-row-link { color: var(--dorado-texto); }
+.servicios-figure { position: sticky; top: 120px; }
+.sf-frame { position: relative; aspect-ratio: 4 / 5; background: #0D0D0D; overflow: hidden; }
+.sf-frame img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.06); transition: opacity .7s ease, transform 1.4s ease;
+}
+.sf-frame img.on { opacity: 1; transform: scale(1); }
+.sf-frame::after { content:''; position:absolute; inset:0; background: linear-gradient(180deg, transparent 55%, rgba(13,13,13,.85)); }
+.sf-caption {
+  position: absolute; left: 24px; right: 24px; bottom: 22px; z-index: 2; color: #F6EEEB;
+  display: flex; align-items: baseline; gap: 14px; border-top: 1px solid var(--dorado); padding-top: 14px;
+}
+.sf-num { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--dorado); line-height: 1; }
+.sf-label { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; }
+@media (max-width: 1100px) {
+  .servicios-wrap { grid-template-columns: 1fr; }
+  .servicios-figure { display: none; }
+}
+
+/* Citas / manifiestos: filete vertical naranja */
+.metodologia-quote, blockquote { border-left: 3px solid var(--dorado); }
+.btn-primary::before { background: var(--dorado); }
+.btn-primary:hover { color: #fff; }
 </style>
 </head>
 <body>
@@ -1293,6 +1390,10 @@
   </button>
 
 </nav>
+<div class="util-bar" role="complementary" aria-label="Datos de contacto">
+  <span><b>CDMX</b> &nbsp; Corporativo &middot; Contratos &middot; Laboral</span>
+  <span><a href="tel:+525611259959">56 1125 9959</a><a href="mailto:contacto@ibarraquezada.com">contacto@ibarraquezada.com</a><a href="https://www.linkedin.com/" rel="noopener" target="_blank" style="display:none">LinkedIn</a></span>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="inicio">
@@ -1302,6 +1403,7 @@
 
   <div class="hero-content">
     <div class="hero-mobile-band" aria-hidden="true"></div>
+    <div class="hero-eyebrow"><span>Derecho corporativo &middot; Ciudad de M&eacute;xico</span></div>
     <h1>Protegemos las decisiones<br>que cambian <em>el rumbo.</em></h1>
     <p class="hero-subtitle">Diseñamos la estructura jurídica detrás de las decisiones que hacen crecer, transforman o escalan una empresa.</p>
     <div class="hero-actions">
@@ -1367,6 +1469,7 @@
     <div class="servicios-header-visual" aria-hidden="true"></div>
   </div>
 
+<div class="servicios-wrap">
   <div class="servicios-list">
 
     <div class="servicio-row fade-up" onclick="openServicio('corporativo')">
@@ -1435,6 +1538,12 @@
       </div>
     </div>
 
+  </div>
+  <aside class="servicios-figure" aria-hidden="true">
+    <div class="sf-frame"><img src="assets/img/areas-panel-0.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Constitución y estructuración" class="on"><img src="assets/img/areas-panel-1.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Contratos mercantiles y civiles"><img src="assets/img/areas-panel-2.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Cumplimiento laboral"><img src="assets/img/areas-panel-3.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Gobierno corporativo"><img src="assets/img/servicios-header.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Fusiones y adquisiciones"><img src="assets/img/hero-panel.jpg" alt="" width="1122" height="1402" loading="lazy" data-label="Automatización legal">
+      <div class="sf-caption"><span class="sf-num">01</span><span class="sf-label">Constitución y estructuración</span></div>
+    </div>
+  </aside>
   </div>
 </section>
 
@@ -1846,6 +1955,21 @@ function closeMobileNav(){
 window.addEventListener('scroll', () => {
   document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
 });
+
+
+// ÁREAS: retrato editorial sincronizado con la fila activa
+(function(){
+  var rows=document.querySelectorAll('.servicios-wrap .servicio-row');
+  var imgs=document.querySelectorAll('.sf-frame img');
+  var num=document.querySelector('.sf-num'), lab=document.querySelector('.sf-label');
+  if(!rows.length||!imgs.length) return;
+  function show(i){
+    imgs.forEach(function(im,k){im.classList.toggle('on',k===i);});
+    rows.forEach(function(r,k){r.classList.toggle('is-on',k===i);});
+    num.textContent='0'+(i+1); lab.textContent=imgs[i].getAttribute('data-label');
+  }
+  rows.forEach(function(r,i){r.addEventListener('mouseenter',function(){show(i);});});
+})();
 
 // FADE UP
 const observer = new IntersectionObserver(entries => {
