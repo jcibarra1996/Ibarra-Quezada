@@ -486,8 +486,12 @@ section { position: relative; }
 .socio-areas div::before { content: ''; width: 6px; height: 6px; background: var(--accent); flex-shrink: 0; transform: translateY(-2px); }
 .firma { margin-top: 48px; display: flex; align-items: flex-end; gap: 22px; }
 .firma-line { flex: 1; max-width: 300px; }
-.firma-line svg { width: 100%; height: 40px; overflow: visible; }
-.firma-line path { stroke: var(--accent); stroke-width: 1.5; fill: none; stroke-dasharray: 600; stroke-dashoffset: 600; transition: stroke-dashoffset 2.4s var(--ease); }
+.firma-line svg { display: block; width: 100%; height: auto; overflow: visible; margin-bottom: -10px; }
+.firma-line path {
+  stroke: var(--accent); stroke-width: 1.7; fill: none; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: var(--len, 700); stroke-dashoffset: var(--len, 700);
+  transition: stroke-dashoffset 3.2s cubic-bezier(.45, .05, .35, 1) .3s;
+}
 .firma.in .firma-line path { stroke-dashoffset: 0; }
 .firma-line .rule { height: 1px; background: var(--ink-muted-negro); }
 .firma-name { font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted-negro); padding-bottom: 2px; }
@@ -789,6 +793,8 @@ footer.site-footer { padding: 88px 0 28px; border-top: 1px solid var(--line-negr
   .socio-photo { margin: 0 calc(-1 * var(--gutter)); aspect-ratio: 1 / 1.1; }
   .socio-copy p { font-size: 15.5px; }
   .socio-role { margin-bottom: 24px; font-size: 11.5px; }
+  .firma { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 40px; }
+  .firma-line { width: 100%; max-width: 280px; }
 
   /* ─── Anexos ─── */
   .anexos-head { margin-bottom: 32px; }

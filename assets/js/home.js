@@ -118,6 +118,10 @@
     });
   }
 
+  /* ─── Firma del socio: el trazo mide su propio largo para dibujarse completo ─── */
+  var fp = $('#firmaPath');
+  if (fp && fp.getTotalLength) fp.style.setProperty('--len', Math.ceil(fp.getTotalLength()) + 1);
+
   /* ─── Etapas: paneles que se expanden ─── */
   var etapas = $$('.etapa');
   function activar(el) {
