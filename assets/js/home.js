@@ -48,7 +48,7 @@
   /* ─── Nav: superficie, ocultar al bajar, progreso de lectura, indicador de cláusula ─── */
   var nav = $('#mainNav'), bar = $('#readProgress'), ci = $('#clauseIndicator'), ciText = $('#ciText');
   var sections = $$('main section[data-clause]');
-  var lastY = window.scrollY, ticking = false;
+  var lastY = window.scrollY, ticking = false, dock = $('#mDock');
 
   function surfaceAt(y) {
     for (var i = 0; i < sections.length; i++) {
@@ -64,6 +64,7 @@
     nav.classList.toggle('scrolled', y > 40);
     nav.classList.toggle('hide', y > 500 && y > lastY + 4 && !document.body.style.overflow);
     if (y < lastY - 4) nav.classList.remove('hide');
+    document.documentElement.classList.toggle('nav-hidden', nav.classList.contains('hide'));
     lastY = y;
 
     var under = surfaceAt(nav.offsetHeight / 2);
@@ -75,6 +76,13 @@
     var mid = surfaceAt(window.innerHeight * 0.55);
     if (mid && ciText.textContent !== mid.dataset.clause) ciText.textContent = mid.dataset.clause;
     ci.classList.toggle('show', y > window.innerHeight * 0.6 && footerTop > window.innerHeight * 0.7);
+
+    // Barra fija de contacto en móvil: aparece pasado el hero, se oculta en el cierre
+    if (dock) {
+      var heroBottom = $('#inicio').getBoundingClientRect().bottom;
+      var cierre = $('#contacto').getBoundingClientRect().top < window.innerHeight * 0.9;
+      dock.classList.toggle('show', heroBottom < 80 && !cierre && !document.body.style.overflow);
+    }
 
     parallax();
     metodo();
@@ -103,6 +111,7 @@
     if (idx === current) return;
     current = idx;
     steps.forEach(function (s, i) { s.classList.toggle('active', i === idx); });
+    $$('#mSteps span').forEach(function (s, i) { s.classList.toggle('active', i === idx); s.classList.toggle('done', i < idx); });
     slabs.forEach(function (s, i) {
       s.classList.toggle('active', i === idx);
       s.classList.toggle('done', i < idx);
@@ -129,33 +138,13 @@
     });
   });
 
-  /* ─── Servicios: imagen que sigue al cursor ─── */
-  var flo = $('#servFloat');
-  if (flo && finePointer && !reduce) {
-    var imgs = $$('img', flo), fx = 0, fy = 0, tx = 0, ty = 0, running = false;
-    function loop() {
-      fx += (tx - fx) * 0.14; fy += (ty - fy) * 0.14;
-      flo.style.transform = 'translate3d(' + fx + 'px,' + fy + 'px,0) translate(-50%,-50%) scale(' + (flo.classList.contains('show') ? 1 : .85) + ')';
-      if (running) requestAnimationFrame(loop);
-    }
-    $$('.serv-row').forEach(function (row) {
-      row.addEventListener('mouseenter', function (e) {
-        imgs.forEach(function (im, i) { im.classList.toggle('on', i === +row.dataset.img); });
-        tx = fx = e.clientX + 180; ty = fy = e.clientY;
-        flo.classList.add('show');
-        if (!running) { running = true; loop(); }
-      });
-      row.addEventListener('mousemove', function (e) { tx = e.clientX + 180; ty = e.clientY; });
-      row.addEventListener('mouseleave', function () { flo.classList.remove('show'); setTimeout(function () { if (!flo.classList.contains('show')) running = false; }, 500); });
-    });
-  }
-
   /* ═══ Lente de revisión sobre el contrato ═══ */
   var doc = $('#doc'), base = $('#docBase');
   if (doc && base) {
     var rev = base.cloneNode(true);
     rev.id = ''; rev.className = 'doc-layer rev'; rev.setAttribute('aria-hidden', 'true');
     doc.insertBefore(rev, $('#lens'));
+    var win = $('#docWindow'), docOff = 0;
     var lens = $('#lens'), label = $('#lensLabel'), tally = $('#tally'), hint = $('#docHint');
     var flagsBase = $$('.flag', base), flagsRev = $$('.flag', rev);
     var seen = {}, lw, lh, W, H, x = 0, y = 0, gx = 0, gy = 0, userActive = false, idleTimer, tourIdx = 0, tourTimer;
@@ -172,6 +161,11 @@
       var l = Math.max(0, Math.min(W - lw, x)), t = Math.max(0, Math.min(H - lh, y));
       lens.style.setProperty('--lx', l + 'px'); lens.style.setProperty('--ly', t + 'px');
       rev.style.clipPath = 'inset(' + t + 'px ' + (W - l - lw) + 'px ' + (H - t - lh) + 'px ' + l + 'px)';
+      var winH = win.clientHeight;
+      if (winH && winH < H - 2) {
+        var off = Math.max(0, Math.min(H - winH, t + lh / 2 - winH * 0.42));
+        if (Math.abs(off - docOff) > 24) { docOff = off; doc.style.setProperty('--scrollDoc', -off + 'px'); }
+      } else if (docOff) { docOff = 0; doc.style.setProperty('--scrollDoc', '0px'); }
       // ¿Qué cláusula señalada está bajo la lente?
       var hit = -1, best = 0;
       flagsBase.forEach(function (f, i) {
@@ -231,6 +225,24 @@
       if (en[0].isIntersecting) { if (!userActive) tour(); } else clearTimeout(tourTimer);
     }).observe(doc);
   }
+
+  /* ─── Carruseles deslizables (móvil) ─── */
+  $$('[data-carousel]').forEach(function (track) {
+    var items = track.children.length;
+    var meta = document.createElement('div');
+    meta.className = 'carousel-meta'; meta.setAttribute('aria-hidden', 'true');
+    meta.innerHTML = '<span class="ct">01 / ' + ('0' + items).slice(-2) + '</span><span class="bar"><i style="width:' + (100 / items) + '%"></i></span><span>Deslice</span>';
+    track.parentNode.insertBefore(meta, track.nextSibling);
+    var ct = $('.ct', meta), bi = $('i', meta);
+    function upd() {
+      var max = track.scrollWidth - track.clientWidth;
+      var p = max > 0 ? track.scrollLeft / max : 0;
+      var n = Math.min(items, Math.round(p * (items - 1)) + 1);
+      ct.textContent = ('0' + n).slice(-2) + ' / ' + ('0' + items).slice(-2);
+      bi.style.transform = 'translateX(' + (p * (items - 1) * 100) + '%)';
+    }
+    track.addEventListener('scroll', function () { requestAnimationFrame(upd); }, { passive: true });
+  });
 
   onScroll();
 })();

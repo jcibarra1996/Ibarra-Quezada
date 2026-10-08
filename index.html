@@ -71,6 +71,10 @@
   <a href="#recursos" onclick="closeMobileNav()"><small>VII</small>Insights</a>
   <a href="#faq" onclick="closeMobileNav()"><small>VIII</small>FAQ</a>
   <a href="#contacto" class="mobile-cta" onclick="closeMobileNav();openContacto();return false;">Preparemos su siguiente decisión →</a>
+  <div class="mobile-nav-foot">
+    <a href="mailto:contacto@ibarraquezada.com">contacto@ibarraquezada.com</a>
+    <a href="tel:+525611259959">56 1125 9959</a>
+  </div>
 </div>
 
 <!-- MODALS -->
@@ -209,6 +213,11 @@
   <button class="hamburger" id="hamburger" onclick="openMobileNav()" aria-label="Abrir menú"><span></span><span></span></button>
 </nav>
 
+<div class="m-dock" id="mDock">
+  <a href="#contacto" class="m-dock-cta" onclick="openContacto();return false;">Preparemos su siguiente decisión <span aria-hidden="true">→</span></a>
+  <a href="tel:+525611259959" class="m-dock-tel" aria-label="Llamar al 56 1125 9959"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter"/></svg></a>
+</div>
+
 <div class="clause-indicator" id="clauseIndicator" aria-hidden="true"><span class="ci-bar"></span><span class="ci-text" id="ciText">Proemio</span></div>
 
 <main id="contenido">
@@ -231,6 +240,8 @@
     </div>
 
     <div class="doc-stage reveal" style="--d:.3s">
+      <p class="doc-m-claim" aria-hidden="true"><span class="clause-tag">Proemio</span> Leemos la letra chica antes de que usted la firme.</p>
+      <div class="doc-window" id="docWindow">
       <div class="doc" id="doc" aria-label="Ejemplo ilustrativo de un contrato con cláusulas señaladas en revisión">
         <div class="doc-layer base" id="docBase">
           <div class="doc-head">Contrato de prestación de servicios</div>
@@ -249,6 +260,7 @@
           <div class="doc-sign"><div><span>LA EMPRESA</span></div><div><span>EL PROVEEDOR</span></div></div>
         </div>
         <div class="lens" id="lens" aria-hidden="true"><i></i><i></i><i></i><i></i><div class="lens-label" id="lensLabel"></div></div>
+      </div>
       </div>
       <div class="doc-caption">
         <span id="docHint">Ejemplo ilustrativo · Pase el cursor para revisar</span>
@@ -339,21 +351,21 @@
     <div class="serv-group">
       <div class="serv-group-label reveal"><b>Donde empieza el trabajo</b><span>Seis áreas, una sola estrategia</span></div>
 
-      <a class="serv-row reveal" href="/derecho-corporativo/" data-img="0" onclick="openServicio('corporativo');return false;">
+      <a class="serv-row reveal" href="/derecho-corporativo/" onclick="openServicio('corporativo');return false;">
         <div class="serv-num">01</div>
         <div><div class="serv-title">Constitución y estructuración corporativa</div><p class="serv-q">¿Quién decide el día que los socios no estén de acuerdo?</p></div>
         <div class="serv-desc-col"><p class="serv-desc">La forma en que se constituye una empresa determina cómo crece, cómo se financia y quién decide qué el día que las cosas se complican. Diseñamos esa arquitectura societaria (S.A. de C.V., S. de R.L., SAPI) y los convenios entre socios a partir de cómo va a operar el negocio.</p><span class="serv-more link-arrow">Conocer más →</span></div>
         <div class="serv-go" aria-hidden="true">↗</div>
       </a>
 
-      <a class="serv-row reveal" href="/contratos-mercantiles/" data-img="1" onclick="openServicio('contratos');return false;">
+      <a class="serv-row reveal" href="/contratos-mercantiles/" onclick="openServicio('contratos');return false;">
         <div class="serv-num">02</div>
         <div><div class="serv-title">Contratos mercantiles y civiles</div><p class="serv-q">¿Qué pasa el día que la otra parte deja de cumplir?</p></div>
         <div class="serv-desc-col"><p class="serv-desc">Cada relación comercial, con un proveedor, un distribuidor, un cliente clave, funciona de cierta manera en la práctica. Convertimos esa forma de operar en acuerdos que se pueden hacer cumplir: servicios, distribución, arrendamiento, licencias, confidencialidad.</p><span class="serv-more link-arrow">Conocer más →</span></div>
         <div class="serv-go" aria-hidden="true">↗</div>
       </a>
 
-      <a class="serv-row reveal" href="/consultoria-laboral/" data-img="2" onclick="openServicio('laboral');return false;">
+      <a class="serv-row reveal" href="/consultoria-laboral/" onclick="openServicio('laboral');return false;">
         <div class="serv-num">03</div>
         <div><div class="serv-title">Consultoría y cumplimiento laboral</div><p class="serv-q">¿Cómo se ordena un equipo mientras crece?</p></div>
         <div class="serv-desc-col"><p class="serv-desc">Contratar, organizar y hacer crecer un equipo tiene reglas específicas en México: contratos de trabajo, reglamentos internos, NOM-035, REPSE. Construimos esa estructura laboral al mismo tiempo que la empresa construye su equipo.</p><span class="serv-more link-arrow">Conocer más →</span></div>
@@ -363,27 +375,29 @@
 
     <div class="serv-group">
       <div class="serv-group-label reveal"><b>Cuando la empresa crece</b><span>Mismo criterio, siguiente etapa</span></div>
+      <div class="serv-track" data-carousel>
 
-      <a class="serv-row compact reveal" href="/gobierno-corporativo-cumplimiento/" data-img="3" onclick="openServicio('gobierno');return false;">
+      <a class="serv-row compact reveal" href="/gobierno-corporativo-cumplimiento/" onclick="openServicio('gobierno');return false;">
         <div class="serv-num">04</div>
         <div><div class="serv-title">Gobierno corporativo y cumplimiento regulatorio</div><p class="serv-q">¿Quién aprueba qué, y dónde consta?</p></div>
         <div class="serv-desc-col"><p class="serv-desc">Un consejo, un comité, una política de datos: la forma en que una empresa se gobierna es, en sí misma, parte de su arquitectura. La diseñamos para que resista la pregunta de un inversionista o un regulador.</p></div>
         <div class="serv-go" aria-hidden="true">↗</div>
       </a>
 
-      <a class="serv-row compact reveal" href="/fusiones-adquisiciones/" data-img="4" onclick="openServicio('ma');return false;">
+      <a class="serv-row compact reveal" href="/fusiones-adquisiciones/" onclick="openServicio('ma');return false;">
         <div class="serv-num">05</div>
         <div><div class="serv-title">Fusiones, adquisiciones y due diligence</div><p class="serv-q">¿Qué dicen los contratos que no dice el pitch deck?</p></div>
         <div class="serv-desc-col"><p class="serv-desc">Comprar, vender o fusionar una empresa es una de las decisiones que más cambia su trayectoria. Estructuramos la operación (due diligence, pactos de accionistas, términos de cierre) para que sostenga lo que el negocio va a ser después.</p></div>
         <div class="serv-go" aria-hidden="true">↗</div>
       </a>
 
-      <a class="serv-row compact reveal" href="/automatizacion-legal/" data-img="5">
+      <a class="serv-row compact reveal" href="/automatizacion-legal/">
         <div class="serv-num">06</div>
         <div><div class="serv-title">Automatización legal</div><p class="serv-q">¿Dónde vive hoy la última versión de cada contrato?</p></div>
         <div class="serv-desc-col"><p class="serv-desc">Las empresas que crecen dejan de poder operar por correo y carpetas compartidas. Diseñamos cómo se generan, aprueban y dan seguimiento sus contratos y documentos para que la estructura legal avance al ritmo del negocio.</p></div>
         <div class="serv-go" aria-hidden="true">↗</div>
       </a>
+      </div>
     </div>
 
     <div class="alcance reveal">
@@ -392,14 +406,6 @@
     </div>
   </div>
 
-  <div class="serv-float" id="servFloat" aria-hidden="true">
-    <img src="assets/img/areas-panel-2.jpg" alt="" loading="lazy">
-    <img src="assets/img/recursos-card-3.jpg" alt="" loading="lazy">
-    <img src="assets/img/areas-panel-3.jpg" alt="" loading="lazy">
-    <img src="assets/img/servicios-header.jpg" alt="" loading="lazy">
-    <img src="assets/img/areas-panel-1.jpg" alt="" loading="lazy">
-    <img src="assets/img/recursos-card-2.jpg" alt="" loading="lazy">
-  </div>
 </section>
 
 <!-- ═══ III. MÉTODO IQ ═══ -->
@@ -412,6 +418,9 @@
       <p class="lead reveal">Cada asunto empieza por entender la decisión, la operación y el nivel de riesgo de su empresa. Combinamos criterio jurídico y análisis técnico para revisar información, contrastar versiones y llegar más rápido a lo que realmente importa. El criterio final es siempre de un abogado que entiende la operación completa detrás del documento.</p>
     </div>
 
+    <div class="m-steps" id="mSteps" aria-hidden="true">
+      <span data-m="0"><b>01</b>Entender</span><span data-m="1"><b>02</b>Anticipar</span><span data-m="2"><b>03</b>Estructurar</span><span data-m="3"><b>04</b>Acompañar</span>
+    </div>
     <div class="metodo-grid">
       <div class="metodo-sticky" aria-hidden="true">
         <div class="stack" id="stack">
@@ -531,7 +540,7 @@
     <img src="assets/img/sectores-banda.jpg" alt="" loading="lazy" data-parallax="0.18">
   </div>
   <div class="wrap">
-    <div class="sectores-grid">
+    <div class="sectores-grid" data-carousel>
       <div class="sector reveal"><div class="sector-n">01</div><div class="sector-name">Retail y consumo</div><p class="sector-desc">Contratos con proveedores, locales comerciales y personal en punto de venta, para operaciones que no admiten vacíos legales.</p></div>
       <div class="sector reveal" style="--d:.08s"><div class="sector-n">02</div><div class="sector-name">Logística, transporte y comercio exterior</div><p class="sector-desc">Contratos de transporte, flotillas y bodegas con cumplimiento aduanero, para empresas que no pueden detener la operación.</p></div>
       <div class="sector reveal" style="--d:.16s"><div class="sector-n">03</div><div class="sector-name">Comercio electrónico</div><p class="sector-desc">Términos, privacidad y relaciones con plataformas y operadores, para negocios que venden en línea y crecen en varios países.</p></div>
@@ -580,7 +589,7 @@
         <h2 class="h-section split">Insights legales para <em>su empresa.</em></h2>
       </div>
     </div>
-    <div class="anexos-grid">
+    <div class="anexos-grid" data-carousel>
       <a class="anexo reveal" href="/insights/sa-de-cv-vs-s-de-rl/">
         <div class="anexo-thumb"><img src="assets/img/recursos-card-1.jpg" width="900" height="507" alt="" loading="lazy"><span class="tag">Anexo A</span></div>
         <div class="anexo-meta">Corporativo · Mayo 2026</div>
