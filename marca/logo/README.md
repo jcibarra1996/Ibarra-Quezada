@@ -37,3 +37,12 @@ curl -L -o fonts/inter-latin-500-normal.woff2 https://cdn.jsdelivr.net/npm/@font
 python3 build.py   # SVG en assets/brand/
 node png.js        # PNG en assets/brand/png/ (requiere playwright)
 ```
+
+## Opciones ronda 3
+
+`opciones_ronda3.py` genera las cuatro direcciones de la ronda 3 (Lupa, Monograma y
+nombre apilado, Q con cola naranja, Lupa vertical en serif): funciones `logo_A..D`
+e `icon_A..C`, que devuelven SVG. Además de las fuentes de arriba, requiere
+`fonts/jost-latin-500-normal.woff2`
+(https://cdn.jsdelivr.net/npm/@fontsource/jost@5.1.0/files/jost-latin-500-normal.woff2).
+Pendiente de que JC elija una; la elegida se exporta a `assets/brand/`.

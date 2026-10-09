@@ -4,3 +4,4 @@
 node_modules/
 .vercel
 marca/logo/fonts/
+__pycache__/
