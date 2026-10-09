@@ -113,6 +113,24 @@ npm run dev
 `ADMIN_PASSWORD=... npm run admin:create -- correo` fija la contraseña en vez
 de generarla, y sirve también para cambiarla (cierra las sesiones abiertas).
 
+### Sin terminal: todo desde GitHub Actions
+
+Los dos workflows de `.github/workflows/` corren en GitHub, con estos datos
+del repositorio (Settings, Secrets and variables, Actions):
+
+| Tipo | Nombre | Valor |
+| --- | --- | --- |
+| Secreto | `COMPLIANCE_DATABASE_URL` | Cadena de conexión de Neon |
+| Secreto | `COMPLIANCE_ADMIN_PASSWORD` | Contraseña del administrador (12+ caracteres) |
+| Variable | `COMPLIANCE_SYNC_ENABLED` | `true` |
+
+1. **Compliance AML - listas oficiales** (Run workflow): crea el esquema y
+   carga las listas. Después corre solo cada día.
+2. **Compliance AML - administrador** (Run workflow, con tu correo): crea tu
+   usuario con la contraseña del secreto.
+
+GitHub solo muestra y agenda workflows que están en la rama principal.
+
 ### Sincronización diaria
 
 `.github/workflows/compliance-listas.yml` corre migraciones y

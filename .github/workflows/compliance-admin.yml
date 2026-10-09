@@ -1,0 +1,44 @@
+# Crea un administrador del orquestador de Compliance AML, o le cambia la
+# contraseña. Se ejecuta a mano desde Actions.
+#
+# La contraseña sale del secreto COMPLIANCE_ADMIN_PASSWORD (mínimo 12
+# caracteres): nunca se escribe en el log. Si el secreto no existe, falla en
+# lugar de generar una contraseña que quedaría impresa.
+name: Compliance AML - administrador
+
+on:
+  workflow_dispatch:
+    inputs:
+      email:
+        description: Correo del administrador
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: compliance-orchestrator
+    env:
+      DATABASE_URL: ${{ secrets.COMPLIANCE_DATABASE_URL }}
+      ADMIN_PASSWORD: ${{ secrets.COMPLIANCE_ADMIN_PASSWORD }}
+      ADMIN_EMAIL: ${{ inputs.email }}
+    steps:
+      - name: Verificar secretos
+        run: |
+          if [ -z "$DATABASE_URL" ]; then echo "Falta el secreto COMPLIANCE_DATABASE_URL"; exit 1; fi
+          if [ -z "$ADMIN_PASSWORD" ]; then echo "Falta el secreto COMPLIANCE_ADMIN_PASSWORD"; exit 1; fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: compliance-orchestrator/package-lock.json
+      - run: npm ci
+      - run: npm run db:migrate
+      - run: npm run admin:create -- "$ADMIN_EMAIL"
