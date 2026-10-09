@@ -1,0 +1,40 @@
+# Sincroniza las listas oficiales (OFAC SDN, ONU, SAT 69-B) del orquestador de
+# Compliance AML y re-chequea las entidades si alguna lista cambió.
+#
+# Se activa al crear la variable de repositorio COMPLIANCE_SYNC_ENABLED = true
+# y el secreto COMPLIANCE_DATABASE_URL (cadena de conexión de Neon).
+name: Compliance AML - listas oficiales
+
+on:
+  schedule:
+    # Diario 11:17 UTC (5:17 en Ciudad de México).
+    - cron: '17 11 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compliance-listas
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: ${{ vars.COMPLIANCE_SYNC_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: compliance-orchestrator
+    env:
+      DATABASE_URL: ${{ secrets.COMPLIANCE_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: compliance-orchestrator/package-lock.json
+      - run: npm ci
+      - run: npm run db:migrate
+      - run: npm run listas:sync

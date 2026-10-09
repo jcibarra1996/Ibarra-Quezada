@@ -2,32 +2,25 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { DocumentStatusLabel, EntityStatusLabel, RiskLabel } from '@/components/labels';
+import { dismissalKey, ScreeningCard } from '@/components/screening-report';
+import { withAdmin } from '@/lib/db/server';
 import { isUuid } from '@/lib/env';
-import { actionLabel, daysUntil, formatDate, formatDateTime, formatPlainDate } from '@/lib/format';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import type { AmlProviderMatch, AmlScreening, Json } from '@/types/compliance';
+import { actionLabel, daysUntil, formatDate, formatDateTime, formatPlainDate, PARTY_TYPE_LABEL } from '@/lib/format';
+import type { AmlScreening, AuditLog, ComplianceDocument, LegalEntity, MatchDismissal, RelatedParty } from '@/types/compliance';
 import { AmlCheckButton } from './aml-check-button';
+import { DecisionForm } from './decision-form';
+import { AddPartyForm, RemovePartyForm } from './party-forms';
 
 type Params = { params: Promise<{ id: string }> };
+
+const LOG_LIMIT = 100;
+const SCREENING_LIMIT = 10;
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
   if (!isUuid(id)) return { title: 'Entidad | Compliance AML' };
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.from('legal_entities').select('name').eq('id', id).maybeSingle();
-  return { title: `${data?.name ?? 'Entidad'} | Compliance AML` };
-}
-
-function asObject(v: Json): Record<string, Json | undefined> {
-  return typeof v === 'object' && v !== null && !Array.isArray(v) ? v : {};
-}
-
-function screeningDetails(s: AmlScreening) {
-  const raw = asObject(s.raw_json_response);
-  const matches = Array.isArray(raw.matches) ? (raw.matches as unknown as AmlProviderMatch[]) : [];
-  const alerts = Array.isArray(raw.alerts) ? raw.alerts.map((a) => asObject(a as Json)) : [];
-  const reference = typeof raw.reference_id === 'string' ? raw.reference_id : null;
-  return { matches, alerts, reference };
+  const name = await withAdmin(async (db) => (await db.query<{ name: string }>('select name from public.legal_entities where id = $1', [id])).rows[0]?.name);
+  return { title: `${name ?? 'Entidad'} | Compliance AML` };
 }
 
 // Texto, no etiqueta: el estado del documento ya lleva la etiqueta y el
@@ -40,39 +33,61 @@ function ExpirationNote({ date }: { date: string }) {
   return null;
 }
 
+function SectionHead({ n, eyebrow, title, id }: { n: string; eyebrow: string; title: string; id: string }) {
+  return (
+    <div className="section-head">
+      <span className="index-number" aria-hidden="true">
+        {n}
+      </span>
+      <div>
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="h2" id={id}>
+          {title}
+        </h2>
+      </div>
+    </div>
+  );
+}
+
 export default async function EntidadPage({ params }: Params) {
   const { id } = await params;
   if (!isUuid(id)) notFound();
 
-  const supabase = await createSupabaseServerClient();
+  const data = await withAdmin(async (db) => {
+    const entity = (await db.query<LegalEntity>('select * from public.legal_entities where id = $1', [id])).rows[0];
+    if (!entity) return null;
+    const [parties, screenings, documents, logs, dismissals] = await Promise.all([
+      db.query<RelatedParty>('select * from public.related_parties where entity_id = $1 order by created_at', [id]),
+      db.query<AmlScreening>(
+        'select * from public.aml_screenings where entity_id = $1 order by last_checked_at desc limit $2',
+        [id, SCREENING_LIMIT],
+      ),
+      db.query<ComplianceDocument>(
+        'select * from public.compliance_documents where entity_id = $1 order by expiration_date asc nulls last',
+        [id],
+      ),
+      db.query<AuditLog>('select * from public.audit_logs where entity_id = $1 order by "timestamp" desc limit $2', [id, LOG_LIMIT]),
+      db.query<MatchDismissal>(
+        'select subject_key, source_code, match_key, reason, actor, created_at from public.match_dismissals where entity_id = $1',
+        [id],
+      ),
+    ]);
+    return {
+      entity,
+      parties: parties.rows,
+      screenings: screenings.rows,
+      documents: documents.rows,
+      logs: logs.rows,
+      dismissals: new Map(dismissals.rows.map((d) => [dismissalKey(d.subject_key, d.source_code, d.match_key), d])),
+    };
+  });
 
-  const [entityRes, screeningsRes, documentsRes, logsRes] = await Promise.all([
-    supabase.from('legal_entities').select('*').eq('id', id).maybeSingle(),
-    supabase.from('aml_screenings').select('*').eq('entity_id', id).order('last_checked_at', { ascending: false }),
-    supabase
-      .from('compliance_documents')
-      .select('*')
-      .eq('entity_id', id)
-      .order('expiration_date', { ascending: true, nullsFirst: false }),
-    supabase.from('audit_logs').select('*').eq('entity_id', id).order('timestamp', { ascending: false }).limit(100),
-  ]);
-
-  const firstError = entityRes.error ?? screeningsRes.error ?? documentsRes.error ?? logsRes.error;
-  if (firstError) {
-    return (
-      <div className="notice notice-alert" role="alert">
-        <p>No pudimos leer el expediente: {firstError.message}</p>
-      </div>
-    );
-  }
-
-  const entity = entityRes.data;
-  if (!entity) notFound();
-
-  const screenings = screeningsRes.data ?? [];
-  const documents = documentsRes.data ?? [];
-  const logs = logsRes.data ?? [];
+  if (!data) notFound();
+  const { entity, parties, screenings, documents, logs, dismissals } = data;
   const current = screenings[0] ?? null;
+
+  // Personas agregadas después del último chequeo: todavía sin revisar.
+  const unscreened = parties.filter((p) => !current || p.created_at > current.last_checked_at);
 
   return (
     <>
@@ -94,95 +109,56 @@ export default async function EntidadPage({ params }: Params) {
 
       <div className="grid-2">
         <div>
-          {/* 01 Screening AML */}
           <section className="section" style={{ marginTop: 0 }} aria-labelledby="sec-screening">
-            <div className="section-head">
-              <span className="index-number" aria-hidden="true">
-                01
-              </span>
-              <div>
-                <p className="eyebrow">Screening AML</p>
-                <h2 className="h2" id="sec-screening">
-                  Resultados del proveedor
-                </h2>
+            <SectionHead n="01" eyebrow="Screening AML" title="Revisión contra listas oficiales" id="sec-screening" />
+            {unscreened.length > 0 && current && (
+              <div className="notice notice-alert" style={{ marginTop: 0, marginBottom: 'var(--space-2)' }}>
+                <p>
+                  {unscreened.map((p) => p.full_name).join(', ')} {unscreened.length === 1 ? 'se agregó' : 'se agregaron'} después
+                  del último chequeo. Ejecuta uno nuevo para incluir{unscreened.length === 1 ? 'la' : 'las'}.
+                </p>
               </div>
-            </div>
-
+            )}
             {screenings.length === 0 ? (
-              <p className="empty">Sin chequeos registrados. Ejecuta el chequeo inicial desde el panel lateral.</p>
+              <p className="empty">Sin chequeos registrados. Agrega a las personas relacionadas y ejecuta el chequeo.</p>
             ) : (
               <div>
-                {screenings.map((s) => {
-                  const { matches, alerts, reference } = screeningDetails(s);
-                  return (
-                    <article key={s.id} className="screening">
-                      <div className="screening-head">
-                        <RiskLabel risk={s.risk_level} />
-                        <strong>{s.provider}</strong>
-                        <span className="small">{formatDateTime(s.last_checked_at)}</span>
-                      </div>
-                      {reference && (
-                        <p className="small" style={{ margin: '6px 0 0' }}>
-                          Referencia <span className="mono">{reference}</span>
-                        </p>
-                      )}
-
-                      {matches.length > 0 && (
-                        <ul className="bullets">
-                          {matches.map((m, i) => (
-                            <li key={i}>
-                              Coincidencia en <strong>{m.list}</strong> con {m.matched_name}{' '}
-                              <span className="small">(score {m.score})</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                      {matches.length === 0 && alerts.length === 0 && (
-                        <p className="body" style={{ marginTop: 6 }}>
-                          Sin coincidencias reportadas.
-                        </p>
-                      )}
-
-                      {alerts.length > 0 && (
-                        <ul className="bullets">
-                          {alerts.map((a, i) => (
-                            <li key={i}>
-                              Alerta en <strong>{String(a.list ?? 'lista no especificada')}</strong>:{' '}
-                              {String(a.description ?? '')}
-                              {a.subject_name ? ` (${String(a.subject_name)})` : ''}{' '}
-                              {typeof a.received_at === 'string' && (
-                                <span className="small">{formatDateTime(a.received_at)}</span>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      <details>
-                        <summary>Respuesta completa</summary>
-                        <pre>{JSON.stringify(s.raw_json_response, null, 2)}</pre>
-                      </details>
-                    </article>
-                  );
-                })}
+                {screenings.map((s, i) => (
+                  <ScreeningCard key={s.id} screening={s} current={i === 0} dismissals={dismissals} />
+                ))}
               </div>
             )}
           </section>
 
-          {/* 02 Documentos */}
-          <section className="section" aria-labelledby="sec-docs">
-            <div className="section-head">
-              <span className="index-number" aria-hidden="true">
-                02
-              </span>
-              <div>
-                <p className="eyebrow">Documentos</p>
-                <h2 className="h2" id="sec-docs">
-                  Expediente documental
-                </h2>
-              </div>
-            </div>
+          <section className="section" aria-labelledby="sec-parties">
+            <SectionHead n="02" eyebrow="Personas relacionadas" title="Quiénes están detrás" id="sec-parties" />
+            <p className="body" style={{ marginBottom: 'var(--space-2)' }}>
+              Representante legal, accionistas y beneficiario controlador. Cada una se revisa contra las mismas listas que la
+              empresa.
+            </p>
+            {parties.length === 0 ? (
+              <p className="empty">Sin personas registradas. Sin ellas, el chequeo solo cubre la razón social.</p>
+            ) : (
+              <ul className="parties">
+                {parties.map((p) => (
+                  <li key={p.id}>
+                    <div>
+                      <p className="eyebrow eyebrow-muted">{PARTY_TYPE_LABEL[p.party_type]}</p>
+                      <p className="subject-name">
+                        {p.full_name}
+                        {p.tax_id && <span className="small mono"> · {p.tax_id}</span>}
+                      </p>
+                    </div>
+                    <RemovePartyForm entityId={entity.id} partyId={p.id} name={p.full_name} />
+                  </li>
+                ))}
+              </ul>
+            )}
+            <AddPartyForm entityId={entity.id} />
+          </section>
 
+          <section className="section" aria-labelledby="sec-docs">
+            <SectionHead n="03" eyebrow="Documentos" title="Expediente documental" id="sec-docs" />
             {documents.length === 0 ? (
               <p className="empty">Sin documentos registrados.</p>
             ) : (
@@ -223,29 +199,20 @@ export default async function EntidadPage({ params }: Params) {
             )}
           </section>
 
-          {/* 03 Bitácora */}
           <section className="section" aria-labelledby="sec-log">
-            <div className="section-head">
-              <span className="index-number" aria-hidden="true">
-                03
-              </span>
-              <div>
-                <p className="eyebrow">Bitácora</p>
-                <h2 className="h2" id="sec-log">
-                  Registro inmutable
-                </h2>
-              </div>
-            </div>
-
+            <SectionHead n="04" eyebrow="Bitácora" title="Registro inmutable" id="sec-log" />
             {logs.length === 0 ? (
               <p className="empty">Sin eventos registrados.</p>
             ) : (
               <ol className="log">
                 {logs.map((l) => (
                   <li key={l.id}>
-                    <time className="small" dateTime={l.timestamp}>
-                      {formatDateTime(l.timestamp)}
-                    </time>
+                    <div>
+                      <time className="small" dateTime={new Date(l.timestamp).toISOString()}>
+                        {formatDateTime(l.timestamp)}
+                      </time>
+                      <div className="small">{l.actor}</div>
+                    </div>
                     <div>
                       <p className="log-action">{actionLabel(l.action_type)}</p>
                       <p className="body">{l.description}</p>
@@ -254,23 +221,23 @@ export default async function EntidadPage({ params }: Params) {
                 ))}
               </ol>
             )}
-            {logs.length === 100 && <p className="small">Se muestran los 100 eventos más recientes.</p>}
+            {logs.length === LOG_LIMIT && <p className="small">Se muestran los {LOG_LIMIT} eventos más recientes.</p>}
           </section>
         </div>
 
-        <aside className="card aside-first-mobile">
-          <p className="eyebrow">Chequeo inicial</p>
-          <h2 className="h2">Consulta al proveedor AML</h2>
-          <p className="body" style={{ marginTop: 'var(--space-2)' }}>
-            Envía razón social y RFC al proveedor. Un resultado de riesgo alto suspende la entidad de forma automática y
-            queda asentado en la bitácora.
-          </p>
-          {entity.status === 'suspended' && (
-            <div className="notice notice-alert">
-              <p>La entidad ya está suspendida. Un chequeo nuevo no la reactiva.</p>
-            </div>
-          )}
-          <AmlCheckButton entityId={entity.id} />
+        <aside className="stack-lg aside-first-mobile">
+          <div className="card">
+            <p className="eyebrow">Chequeo AML</p>
+            <h2 className="h2">Revisar contra listas</h2>
+            <p className="body" style={{ marginTop: 'var(--space-2)' }}>
+              Revisa la razón social, el RFC y a cada persona relacionada contra OFAC SDN, la lista consolidada de la ONU y el
+              listado 69-B del SAT. Un riesgo alto suspende la entidad de forma automática.
+            </p>
+            <AmlCheckButton entityId={entity.id} />
+          </div>
+          <div className="card">
+            <DecisionForm entityId={entity.id} status={entity.status} lastRisk={current?.risk_level ?? null} />
+          </div>
         </aside>
       </div>
     </>

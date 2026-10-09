@@ -1,123 +1,166 @@
 # compliance-orchestrator
 
 Orquestador de Compliance y AML para onboarding de crédito y validación de
-proveedores. Next.js (App Router) + TypeScript + `@supabase/ssr`. Backend más
-un panel interno para administradores con el sistema de marca de la firma.
+proveedores. Revisa a cada empresa y a las personas detrás de ella
+(representante legal, accionistas, beneficiario controlador) contra listas
+oficiales públicas, suspende en automático ante riesgo alto y deja todo en una
+bitácora que no se puede editar.
 
-Vive en su propio directorio para no convertir el sitio estático de la raíz
-(que Vercel sirve tal cual) en un proyecto Next.js.
+Next.js (App Router) + TypeScript + Postgres en Neon (`pg`). Vive en su propio
+directorio para no convertir el sitio estático de la raíz en un proyecto
+Next.js; `.vercelignore` lo excluye del deploy de ibarraquezada.com.
+
+## Contra qué revisa
+
+| Lista | Fuente | Qué se compara |
+| --- | --- | --- |
+| OFAC SDN | Tesoro de EE. UU. (`sdn.csv` + `alt.csv`) | Nombre y alias; RFC cuando OFAC lo anota en sus observaciones |
+| ONU | Lista consolidada del Consejo de Seguridad (`consolidated.xml`) | Nombre y alias |
+| SAT 69-B | Listado completo del artículo 69-B del CFF | RFC y nombre, con la situación del contribuyente |
+
+**No incluida:** la Lista de Personas Bloqueadas de la UIF. No se encontró una
+descarga oficial pública verificable; las fuentes secundarias se contradicen
+sobre si es pública o de acceso restringido a sujetos obligados.
+
+**Limitación conocida:** el servidor del SAT corta la conexión por https y solo
+responde por http, así que esa descarga va sin cifrar.
+
+### Criterios de riesgo
+
+Son decisiones de diseño del motor, no umbrales normativos. Viven en
+`db/migrations/0002_watchlists.sql` (`screen_subject`).
+
+| Coincidencia | Riesgo |
+| --- | --- |
+| RFC idéntico en OFAC u ONU | Alto |
+| RFC idéntico en 69-B, situación Definitivo o Presunto | Alto |
+| RFC idéntico en 69-B, Desvirtuado o Sentencia Favorable | Bajo, se muestra como informativo |
+| Nombre en OFAC/ONU con similitud de 85% o más | Alto (medio si la entrada trae otro RFC: probable homónimo) |
+| Nombre en OFAC/ONU con similitud de 65% a 85% | Medio, requiere revisión |
+| Persona: todas las palabras del nombre listado (3 o más) presentes, en cualquier orden | Similitud plena |
+| Nombre en 69-B (Definitivo/Presunto) con similitud de 90% o más, sin RFC que lo confirme | Medio, nunca alto |
+
+El SAT publica 81 RFC más de una vez con situaciones distintas (por ejemplo
+Definitivo y Sentencia Favorable). El motor toma la más grave y el panel avisa
+que hay que revisar los oficios de cada publicación.
+
+Si alguna lista no está cargada, el chequeo **falla** en lugar de devolver un
+riesgo bajo falso.
+
+## Flujo
+
+1. Alta de la entidad (razón social, RFC, país).
+2. Registro de personas relacionadas.
+3. **Chequeo AML**: empresa y personas contra las tres listas, en una sola
+   transacción. Riesgo alto suspende la entidad.
+4. Revisión humana:
+   - una coincidencia por nombre que resulta homónimo se **descarta como falso
+     positivo** con motivo; el descarte se recuerda y el re-chequeo periódico ya
+     no vuelve a suspender por ella. Una coincidencia por RFC idéntico no se
+     puede descartar.
+   - **decisión** con motivo obligatorio: aprobar, rechazar, reactivar o
+     reabrir, según el estado.
+5. **Monitoreo continuo**: cada día se descargan las listas; si alguna cambió,
+   se re-chequean todas las entidades no rechazadas.
+
+Todo queda en `audit_logs` con quién lo hizo.
 
 ## Estructura
 
 | Ruta | Qué hace |
 | --- | --- |
-| `supabase/migrations/20261009000000_compliance_aml_core.sql` | Tablas, enums, RLS, bitácora inmutable y RPC transaccionales |
-| `types/compliance.ts` | Interfaces 1:1 con el esquema, `ActionResult<T>` y el tipo `Database` |
-| `lib/supabase/server.ts` | Cliente con sesión del usuario (respeta RLS) |
-| `lib/supabase/admin.ts` | Cliente `service_role` para el webhook (ignora RLS) |
-| `lib/aml/provider.ts` | Llamada REST al proveedor AML y su mock |
-| `app/actions/compliance-engine.ts` | Server Action `executeInitialAMLCheck(entityId)` |
-| `app/api/webhooks/aml-alerts/route.ts` | `POST` de alertas de monitoreo continuo |
-| `app/actions/entities.ts` | Server Action `createLegalEntity` (alta + bitácora, atómico) |
-| `proxy.ts` | Refresca la sesión de Supabase y manda a `/login` a quien no tenga sesión |
-| `app/login/` | Acceso con correo y contraseña (Supabase Auth) |
-| `app/(panel)/entidades/` | Lista con filtros por estado, alta de entidad y expediente |
-| `app/globals.css` | Tokens del sistema de marca (BROCHURE IQ) |
+| `db/migrations/0001_base.sql` | Tablas, usuarios y sesiones, RLS forzado, bitácora inmutable |
+| `db/migrations/0002_watchlists.sql` | Listas, normalización de nombres, motor de coincidencias |
+| `db/migrations/0003_workflows.sql` | Alta, personas, chequeo, descartes, decisiones, alertas externas |
+| `lib/db/pool.ts` | Conexión y transacciones con rol declarado |
+| `lib/auth/` | Contraseñas (scrypt) y sesiones en base de datos |
+| `lib/watchlists/parsers.ts` | Lectura de los archivos de cada lista |
+| `app/actions/` | Server Actions: chequeo, alta, personas, descartes, decisiones |
+| `app/api/webhooks/aml-alerts/route.ts` | Alertas de un proveedor externo de monitoreo (opcional) |
+| `app/(panel)/entidades/` | Lista y expediente |
+| `scripts/` | Migraciones, sincronización de listas, alta de administradores, pruebas |
+| `../.github/workflows/compliance-listas.yml` | Sincronización diaria |
 
-## Panel
+## Seguridad
 
-- **`/login`** en superficie negra (declaración de marca), con el monograma.
-- **`/entidades`**: lista con estado, último riesgo y último chequeo; filtros
-  por estado; formulario de alta.
-- **`/entidades/[id]`**: expediente con 01 Screening AML (coincidencias,
-  alertas y respuesta completa), 02 Documentos (vencidos y por vencer en 30
-  días) y 03 Bitácora; botón para `executeInitialAMLCheck`.
-- Un usuario con sesión pero sin rol admin ve un aviso, no datos.
+- **Acceso en dos capas.** La app valida la sesión y abre cada transacción
+  declarando un rol (`auth`, `admin` o `system`). En la base, RLS está
+  **forzado** en todas las tablas: sin rol declarado no se ve nada, `admin` no
+  puede leer usuarios ni sesiones, y solo `system` escribe las listas.
+- **Bitácora inmutable.** `audit_logs` solo acepta lectura e inserción; un
+  trigger por sentencia rechaza cualquier UPDATE, DELETE o TRUNCATE.
+- **Contraseñas** con scrypt; **sesiones** de 12 horas guardadas como hash
+  SHA-256 del token (nunca el token); cookie `httpOnly`, `secure` en
+  producción, `sameSite=lax`. Bloqueo de 15 minutos tras 5 intentos fallidos.
+  Mismo mensaje y mismo costo de cómputo para correo inexistente o contraseña
+  incorrecta.
+- El rol de conexión **no debe ser superusuario**: un superusuario ignora RLS.
+  En Neon, `neondb_owner` no lo es.
 
-Marca: superficie crema en todo el panel, acento `#D8551D` solo en números de
-sección, divisores, eyebrows y estados que piden acción; esquinas cuadradas.
-Las tipografías (Georgia y sans de sistema) son aproximaciones: las fuentes
-reales del brochure no están confirmadas. `public/monograma.png` trae fondo
-`#0D0D0D` incrustado (no es transparente), por eso solo aparece sobre negro.
+## Puesta en marcha
 
-## Decisiones
+Requiere Node 22.18 o superior (corre TypeScript directo en los scripts).
 
-- **Atomicidad.** PostgREST abre una transacción por request, así que
-  screening + cambio de estado + bitácora viven en una sola función SQL
-  (`record_aml_screening`, `apply_aml_alert`). O se escriben los tres o
-  ninguno: no puede quedar un screening `high` sin suspensión ni sin bitácora.
-- **Acceso.** RLS en las cuatro tablas; solo pasa un JWT con
-  `app_metadata.role = 'admin'` (ese campo solo se escribe con service_role).
-  Las funciones son `SECURITY INVOKER`, así que RLS sigue aplicando.
-- **Bitácora inmutable.** `audit_logs` no tiene políticas de UPDATE/DELETE,
-  se revocan esos privilegios y un trigger rechaza UPDATE, DELETE y TRUNCATE
-  incluso para `service_role`.
-- **Integridad.** FKs con `on delete restrict`: no se puede borrar una
-  entidad con historial AML. RFC normalizado y con validación de formato
-  cuando `country = 'MX'` (solo forma, no existencia ante el SAT).
-- **Fallas.** Todo devuelve `{ success, data, error }`. Si el proveedor AML
-  falla, se registra `aml.initial_check_failed` en la bitácora y la entidad
-  no cambia de estado. El webhook responde 500 genérico para que el
-  proveedor reintente; el detalle queda en el log del servidor.
+```bash
+cp .env.example .env.local        # DATABASE_URL de Neon
+npm install
+npm run db:migrate                # crea el esquema
+npm run listas:sync               # descarga y carga las tres listas (~10 s)
+npm run admin:create -- tu@correo.com   # imprime una contraseña generada
+npm run dev
+```
 
-## Mock del proveedor
+`ADMIN_PASSWORD=... npm run admin:create -- correo` fija la contraseña en vez
+de generarla, y sirve también para cambiarla (cierra las sesiones abiertas).
 
-Sin `AML_PROVIDER_URL`, la llamada REST se resuelve con `mockAmlFetch`
-(datos ficticios, no consulta listas reales). Según el nombre de la entidad:
+### Sincronización diaria
 
-| Nombre contiene | Resultado |
-| --- | --- |
-| `SANCION` u `OFAC` | `high` (suspende la entidad) |
-| `PEP` | `medium` |
-| `TIMEOUT` | HTTP 503 (falla del proveedor) |
-| otro | `low` |
+`.github/workflows/compliance-listas.yml` corre migraciones y
+`listas:sync` cada día. Para activarlo en GitHub:
 
-## Webhook
+1. Secreto de repositorio `COMPLIANCE_DATABASE_URL` con la cadena de Neon.
+2. Variable de repositorio `COMPLIANCE_SYNC_ENABLED` = `true`.
+
+Protecciones: si una descarga trae menos del 50% de los registros de la
+versión anterior (o menos del mínimo esperado), no se reemplaza la lista y el
+job falla.
+
+### Pruebas
+
+```bash
+DATABASE_URL=... npm run db:migrate
+DATABASE_URL=... npm run listas:sync -- --sin-rechequeo
+DATABASE_URL=... npm run test:db
+```
+
+32 pruebas contra la base real con las listas cargadas: normalización, casos
+reales de cada lista, nombres comunes sin falsos positivos, RLS, bitácora
+inmutable, chequeo completo, descartes y decisiones. Cada prueba se revierte.
+
+## Webhook de proveedor externo (opcional)
+
+Si más adelante se contrata un proveedor de monitoreo, sus alertas entran por:
 
 ```
 POST /api/webhooks/aml-alerts
 Authorization: Bearer <AML_WEBHOOK_SECRET>
-Content-Type: application/json
 
-{
-  "entity_id": "<uuid>",
-  "provider": "ComplyAdvantage",
-  "alert": {
-    "list": "OFAC SDN",
-    "description": "Representante legal listado",
-    "subject_name": "Nombre de la persona",
-    "external_id": "id-del-proveedor",
-    "detected_at": "2026-10-09T12:00:00Z"
-  }
-}
+{ "entity_id": "<uuid>", "provider": "Nombre", "alert": { "list": "OFAC SDN", "description": "..." } }
 ```
 
-Respuestas: 200, 400 (payload), 401 (token), 404 (entidad), 413 (>64 KB),
-500 (persistencia, reintentable). Actualiza el screening más reciente de ese
-proveedor (o crea uno), lo marca `high`, acumula la alerta en
-`raw_json_response.alerts`, suspende la entidad y escribe
-`aml.monitoring_alert` en la bitácora.
+Respuestas: 200, 400, 401, 404, 413, 500 (reintentable). Marca riesgo alto,
+suspende y deja bitácora.
 
-## Puesta en marcha
+## Marca
 
-```bash
-cp .env.example .env.local   # llenar valores
-npm install
-supabase db push             # o aplicar la migración desde el dashboard
-npm run typecheck && npm run build
-```
-
-Para dar acceso de administrador a un usuario, desde SQL con service_role:
-
-```sql
-update auth.users
-   set raw_app_meta_data = raw_app_meta_data || '{"role":"admin"}'
- where email = '<correo>';
-```
+Superficie crema en el panel, negra en el acceso; acento `#D8551D` solo donde
+hay acción o identidad de sección; esquinas cuadradas. Las tipografías
+(Georgia y sans de sistema) son aproximaciones: las del brochure no están
+confirmadas. `public/monograma.png` trae fondo `#0D0D0D` incrustado, por eso
+solo aparece sobre negro.
 
 ## Pendiente
 
-- Idempotencia del webhook por `external_id` (hoy un reintento del
-  proveedor agrega la alerta dos veces al arreglo y a la bitácora).
-- Firma HMAC del cuerpo si el proveedor real la ofrece, en lugar de token fijo.
-- Middleware de refresco de sesión de `@supabase/ssr` cuando exista UI.
+- Carga de documentos (requiere almacenamiento de archivos).
+- Idempotencia del webhook por `external_id`.
+- Lista de Personas Bloqueadas de la UIF, si se confirma un canal oficial.

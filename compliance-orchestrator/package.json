@@ -2,24 +2,34 @@
   "name": "compliance-orchestrator",
   "version": "0.1.0",
   "private": true,
-  "description": "Backend del orquestador de Compliance y AML: onboarding de crédito y validación de proveedores.",
+  "type": "module",
+  "description": "Orquestador de Compliance y AML: onboarding de crédito y validación de proveedores contra listas oficiales.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "node scripts/migrate.ts",
+    "listas:sync": "node scripts/sync-listas.ts",
+    "admin:create": "node scripts/create-admin.ts",
+    "test:db": "node --test scripts/db.test.ts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.12.7",
-    "@supabase/supabase-js": "^2.117.3",
+    "csv-parse": "^7.0.3",
+    "fast-xml-parser": "^5.11.2",
     "next": "^16.4.0",
+    "pg": "^8.23.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.3.0",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.18"
   }
 }

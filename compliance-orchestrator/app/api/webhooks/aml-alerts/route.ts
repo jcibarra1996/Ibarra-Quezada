@@ -1,10 +1,11 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { amlProviderName } from '@/lib/aml/provider';
 import { errorMessage, isUuid } from '@/lib/env';
-import { createSupabaseAdminClient } from '@/lib/supabase/admin';
-import type { ActionResult, AmlAlert, AmlAlertWebhookPayload, Json, ScreeningOutcome } from '@/types/compliance';
+import { PG, pgCode, withTx } from '@/lib/db/pool';
+import type { ActionResult, AmlAlert, AmlAlertWebhookPayload, ScreeningOutcome } from '@/types/compliance';
+
+const DEFAULT_PROVIDER = 'Proveedor externo';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -101,22 +102,21 @@ export async function POST(request: NextRequest) {
 
   // 3, 4 y 5. Screening + suspensión + bitácora, atómico
   try {
-    const supabase = createSupabaseAdminClient();
-    const { data, error } = await supabase.rpc('apply_aml_alert', {
-      p_entity_id: payload.entity_id,
-      p_provider: payload.provider ?? amlProviderName(),
-      p_alert: payload.alert as unknown as Json,
-    });
+    const provider = payload.provider ?? DEFAULT_PROVIDER;
+    const outcome = await withTx({ role: 'system', actor: `webhook ${provider}` }, async (db) =>
+      (
+        await db.query<{ r: ScreeningOutcome }>('select public.apply_aml_alert($1, $2, $3::jsonb) as r', [
+          payload.entity_id,
+          provider,
+          JSON.stringify(payload.alert),
+        ])
+      ).rows[0]?.r,
+    );
+    if (!outcome) throw new Error('apply_aml_alert no devolvió resultado');
 
-    if (error) {
-      // no_data_found desde la función: la entidad no existe.
-      if (error.code === 'P0002') return fail(404, `Entidad ${payload.entity_id} no existe`);
-      throw error;
-    }
-    if (!data) throw new Error('apply_aml_alert no devolvió resultado');
-
-    return reply(200, { success: true, data: data as unknown as ScreeningOutcome, error: null });
+    return reply(200, { success: true, data: outcome, error: null });
   } catch (err) {
+    if (pgCode(err) === PG.noDataFound) return fail(404, `Entidad ${payload.entity_id} no existe`);
     // 500 para que el proveedor reintente: la transacción se revirtió completa.
     // El detalle va al log, no al tercero que llama.
     console.error('[aml-alerts] persistencia', payload.entity_id, errorMessage(err), err);

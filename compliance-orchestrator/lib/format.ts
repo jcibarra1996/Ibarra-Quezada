@@ -1,4 +1,4 @@
-import type { DocumentStatus, EntityStatus, RiskLevel } from '@/types/compliance';
+import type { DocumentStatus, EntityStatus, PartyType, RiskLevel, WatchlistCode } from '@/types/compliance';
 
 export const ENTITY_STATUS_LABEL: Record<EntityStatus, string> = {
   pending: 'Pendiente',
@@ -27,10 +27,26 @@ export const DOCUMENT_STATUS_LABEL: Record<DocumentStatus, string> = {
   rejected: 'Rechazado',
 };
 
+export const PARTY_TYPE_LABEL: Record<PartyType, string> = {
+  legal_representative: 'Representante legal',
+  shareholder: 'Accionista',
+  beneficial_owner: 'Beneficiario controlador',
+};
+
+export const SOURCE_SHORT: Record<WatchlistCode, string> = {
+  OFAC_SDN: 'OFAC SDN',
+  UN_CONSOLIDATED: 'ONU',
+  SAT_69B: 'SAT 69-B',
+};
+
 const ACTION_LABEL: Record<string, string> = {
   'entity.created': 'Alta de entidad',
-  'aml.initial_check': 'Chequeo AML inicial',
-  'aml.initial_check_failed': 'Chequeo AML no completado',
+  'entity.decision': 'Decisión',
+  'party.added': 'Persona relacionada registrada',
+  'party.removed': 'Persona relacionada retirada',
+  'aml.initial_check': 'Chequeo AML',
+  'aml.periodic_check': 'Re-chequeo periódico',
+  'aml.match_dismissed': 'Falso positivo descartado',
   'aml.monitoring_alert': 'Alerta de monitoreo',
 };
 
@@ -48,14 +64,18 @@ const dateTimeFmt = new Intl.DateTimeFormat('es-MX', {
 
 const dateFmt = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeZone: TZ });
 
-export function formatDateTime(iso: string | null | undefined): string {
-  if (!iso) return 'Sin registro';
-  return dateTimeFmt.format(new Date(iso));
+export function formatDateTime(value: Date | string | null | undefined): string {
+  if (!value) return 'Sin registro';
+  return dateTimeFmt.format(new Date(value));
 }
 
-export function formatDate(iso: string | null | undefined): string {
-  if (!iso) return 'Sin registro';
-  return dateFmt.format(new Date(iso));
+export function formatDate(value: Date | string | null | undefined): string {
+  if (!value) return 'Sin registro';
+  return dateFmt.format(new Date(value));
+}
+
+export function formatScore(score: number): string {
+  return `${Math.round(score * 100)}%`;
 }
 
 /** Para columnas DATE (YYYY-MM-DD): se interpretan como fecha local, sin hora. */

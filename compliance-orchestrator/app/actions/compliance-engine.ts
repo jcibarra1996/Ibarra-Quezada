@@ -1,101 +1,49 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { amlProviderName, screenEntity } from '@/lib/aml/provider';
+import { unstable_rethrow } from 'next/navigation';
 import { errorMessage, isUuid } from '@/lib/env';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import type { ActionResult, Json, LegalEntity, ScreeningOutcome } from '@/types/compliance';
+import { PG, pgCode } from '@/lib/db/pool';
+import { withAdmin } from '@/lib/db/server';
+import type { ActionResult, ScreeningOutcome } from '@/types/compliance';
 
 /**
- * Chequeo AML inicial de una entidad.
+ * Chequeo AML de una entidad y de sus personas relacionadas contra las
+ * listas oficiales cargadas (OFAC SDN, ONU, SAT 69-B).
  *
- * 1. Lee la entidad (RLS: requiere sesión de administrador).
- * 2. Consulta al proveedor AML por REST con nombre y RFC.
- * 3-5. En una sola transacción (RPC record_aml_screening): inserta el
- *      screening, suspende la entidad si el riesgo es high y escribe la
- *      bitácora. Si cualquiera falla, no se escribe nada.
- *
- * Si el proveedor falla, se intenta dejar constancia en audit_logs y se
- * devuelve el error. Nunca devuelve success sin bitácora escrita.
+ * Todo ocurre en la función run_aml_screening, en una sola transacción:
+ * screening, suspensión automática si el riesgo es alto, y bitácora. Si las
+ * listas no están cargadas, falla en lugar de devolver un "riesgo bajo" falso.
  */
 export async function executeInitialAMLCheck(entityId: string): Promise<ActionResult<ScreeningOutcome>> {
   if (!isUuid(entityId)) {
     return { success: false, data: null, error: 'entityId debe ser un UUID válido' };
   }
 
-  const provider = amlProviderName();
-  let supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
-  let entity: LegalEntity;
-
-  // 1. Entidad
   try {
-    supabase = await createSupabaseServerClient();
-
-    const { data, error } = await supabase
-      .from('legal_entities')
-      .select('*')
-      .eq('id', entityId)
-      .maybeSingle();
-
-    if (error) throw error;
-    if (!data) {
-      return { success: false, data: null, error: `Entidad ${entityId} no existe o no es accesible` };
-    }
-    entity = data;
-  } catch (err) {
-    console.error('[executeInitialAMLCheck] lectura de entidad', entityId, err);
-    return { success: false, data: null, error: `No se pudo leer la entidad: ${errorMessage(err)}` };
-  }
-
-  // 2. Proveedor AML
-  let response;
-  try {
-    response = await screenEntity({ name: entity.name, tax_id: entity.tax_id, country: entity.country });
-  } catch (err) {
-    const reason = errorMessage(err);
-    console.error('[executeInitialAMLCheck] proveedor AML', entityId, err);
-
-    let auditNote = '';
-    try {
-      const { error } = await supabase.rpc('log_audit_event', {
-        p_entity_id: entityId,
-        p_action_type: 'aml.initial_check_failed',
-        p_description: `Chequeo AML inicial con ${provider} no completado: ${reason}. Estado de la entidad sin cambios (${entity.status}).`,
-      });
-      if (error) throw error;
-    } catch (auditErr) {
-      console.error('[executeInitialAMLCheck] audit_logs', entityId, auditErr);
-      auditNote = ` Además falló el registro en audit_logs: ${errorMessage(auditErr)}`;
-    }
-
-    revalidatePath(`/entidades/${entityId}`);
-    return { success: false, data: null, error: `No se completó el chequeo, el proveedor AML falló (${reason}). La entidad no cambió de estado.${auditNote}` };
-  }
-
-  // 3, 4 y 5. Screening + suspensión + bitácora, atómico
-  try {
-    const { data, error } = await supabase.rpc('record_aml_screening', {
-      p_entity_id: entityId,
-      p_provider: provider,
-      p_risk_level: response.risk_level,
-      p_raw_json_response: response as unknown as Json,
+    const outcome = await withAdmin(async (db) => {
+      const res = await db.query<{ r: ScreeningOutcome }>("select public.run_aml_screening($1, 'aml.initial_check') as r", [
+        entityId,
+      ]);
+      return res.rows[0]?.r;
     });
-
-    if (error) throw error;
-    if (!data) throw new Error('record_aml_screening no devolvió resultado');
+    if (!outcome) throw new Error('run_aml_screening no devolvió resultado');
 
     revalidatePath('/entidades');
     revalidatePath(`/entidades/${entityId}`);
-    return { success: true, data: data as unknown as ScreeningOutcome, error: null };
+    return { success: true, data: outcome, error: null };
   } catch (err) {
-    // La transacción se revirtió: no quedó screening, ni cambio de estado,
-    // ni bitácora. Se reporta con el reference_id del proveedor para poder
-    // reconciliar.
-    console.error('[executeInitialAMLCheck] persistencia', entityId, response.reference_id, err);
-    return {
-      success: false,
-      data: null,
-      error: `Resultado AML (${response.risk_level}, ref ${response.reference_id}) no se pudo guardar: ${errorMessage(err)}`,
-    };
+    // redirect() de requireAdmin se propaga tal cual.
+    unstable_rethrow(err);
+    const code = pgCode(err);
+    if (code === PG.noDataFound) {
+      return { success: false, data: null, error: `Entidad ${entityId} no existe.` };
+    }
+    if (code === PG.prerequisiteState) {
+      // Mensaje de la función: qué listas faltan.
+      return { success: false, data: null, error: errorMessage(err) };
+    }
+    console.error('[executeInitialAMLCheck]', entityId, err);
+    return { success: false, data: null, error: `No se pudo completar el chequeo: ${errorMessage(err)}` };
   }
 }

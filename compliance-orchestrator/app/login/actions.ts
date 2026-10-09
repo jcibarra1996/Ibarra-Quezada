@@ -1,7 +1,7 @@
 'use server';
 
-import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { redirect, unstable_rethrow } from 'next/navigation';
+import { login, logout } from '@/lib/auth/session';
 
 // email se devuelve para rellenar el campo: React limpia el formulario tras cada envío.
 export type LoginState = { error: string | null; email: string };
@@ -15,13 +15,18 @@ export async function signIn(_prev: LoginState, formData: FormData): Promise<Log
   }
 
   try {
-    const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      // Mensaje único para no revelar si el correo existe.
-      return { error: 'Correo o contraseña incorrectos.', email };
+    const result = await login(email, password);
+    if (!result.ok) {
+      return {
+        error:
+          result.reason === 'locked'
+            ? 'La cuenta quedó bloqueada 15 minutos por intentos fallidos.'
+            : 'Correo o contraseña incorrectos.',
+        email,
+      };
     }
   } catch (err) {
+    unstable_rethrow(err);
     console.error('[signIn]', err);
     return { error: 'No pudimos validar el acceso. Intenta de nuevo en unos minutos.', email };
   }
@@ -31,8 +36,7 @@ export async function signIn(_prev: LoginState, formData: FormData): Promise<Log
 
 export async function signOut(): Promise<void> {
   try {
-    const supabase = await createSupabaseServerClient();
-    await supabase.auth.signOut();
+    await logout();
   } catch (err) {
     console.error('[signOut]', err);
   }

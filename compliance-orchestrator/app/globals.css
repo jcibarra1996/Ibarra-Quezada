@@ -575,6 +575,180 @@ pre {
   white-space: nowrap;
 }
 
+/* ------------------------------------------------------- listas y motor */
+
+.stack-lg > * + * {
+  margin-top: var(--space-3);
+}
+
+.sources {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+}
+
+.sources li {
+  padding: var(--space-1) 0;
+  border-top: 1px solid rgba(32, 24, 22, 0.15);
+}
+
+.sources-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-1);
+}
+
+.screening-past {
+  opacity: 0.75;
+}
+
+.subjects {
+  margin-top: var(--space-2);
+}
+
+.subject {
+  padding: var(--space-2) 0;
+  border-top: 1px solid rgba(32, 24, 22, 0.15);
+}
+
+.subject-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.subject-head .eyebrow {
+  margin-bottom: 2px;
+}
+
+.subject-name {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.matches {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0 0 0 var(--space-2);
+  border-left: 2px solid var(--accent);
+}
+
+.matches li + li {
+  margin-top: var(--space-2);
+}
+
+.match-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.match-name {
+  margin: 6px 0 2px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.matches .small {
+  margin: 0;
+}
+
+.match-dismissed .match-name {
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-muted);
+  color: var(--ink-muted);
+}
+
+.dismiss {
+  margin-top: var(--space-1);
+  max-width: none;
+}
+
+/* ------------------------------------------------- personas relacionadas */
+
+.parties {
+  list-style: none;
+  margin: 0 0 var(--space-3);
+  padding: 0;
+}
+
+.parties li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid rgba(32, 24, 22, 0.15);
+}
+
+.parties .eyebrow {
+  margin-bottom: 2px;
+}
+
+.inline-details {
+  margin-top: 0;
+  flex-shrink: 0;
+  max-width: 280px;
+}
+
+.inline-details[open] {
+  width: 100%;
+}
+
+.inline-details form {
+  margin-top: var(--space-1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.form-grid .field + .field {
+  margin-top: 0;
+}
+
+select.input {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+    linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 84px;
+}
+
+.radio-group {
+  border: 0;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.radio input {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
 /* ------------------------------------------------------------ bitácora */
 
 .log {
@@ -690,6 +864,18 @@ pre {
   .log li {
     grid-template-columns: minmax(0, 1fr);
     gap: 4px;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .parties li {
+    flex-direction: column;
+  }
+
+  .inline-details {
+    max-width: none;
   }
 
   /* En el expediente, la acción principal va antes que el historial. */

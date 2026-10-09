@@ -1,11 +1,3 @@
-export function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Falta la variable de entorno ${name}`);
-  }
-  return value;
-}
-
 export function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
   if (typeof err === 'object' && err !== null && 'message' in err && typeof err.message === 'string') {

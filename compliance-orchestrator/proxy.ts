@@ -1,55 +1,23 @@
-import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+const SESSION_COOKIE = 'iq_session';
+
 /**
- * Refresca la sesión de Supabase en cada request del panel y manda a
- * /login a quien no tenga sesión. El webhook queda fuera del matcher:
- * se autentica con su propio token.
+ * Filtro rápido: sin cookie de sesión, a /login. La validación real de la
+ * sesión contra la base ocurre en el layout del panel y en cada Server
+ * Action (requireAdmin). El webhook queda fuera: usa su propio token.
  */
-export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
-
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) {
-    return new NextResponse('Supabase no configurado', { status: 500 });
-  }
-
-  const supabase = createServerClient(url, key, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        for (const { name, value } of cookiesToSet) request.cookies.set(name, value);
-        response = NextResponse.next({ request });
-        for (const { name, value, options } of cookiesToSet) response.cookies.set(name, value, options);
-      },
-    },
-  });
-
-  // getUser valida el token contra Supabase Auth; no confiar solo en la cookie.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+export function proxy(request: NextRequest) {
+  const hasSession = Boolean(request.cookies.get(SESSION_COOKIE)?.value);
   const isLogin = request.nextUrl.pathname.startsWith('/login');
 
-  if (!user && !isLogin) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = '/login';
-    loginUrl.search = '';
-    return NextResponse.redirect(loginUrl);
+  if (!hasSession && !isLogin) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/login';
+    url.search = '';
+    return NextResponse.redirect(url);
   }
-
-  if (user && isLogin) {
-    const panelUrl = request.nextUrl.clone();
-    panelUrl.pathname = '/entidades';
-    panelUrl.search = '';
-    return NextResponse.redirect(panelUrl);
-  }
-
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {
