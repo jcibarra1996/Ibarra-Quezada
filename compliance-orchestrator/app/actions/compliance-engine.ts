@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { amlProviderName, screenEntity } from '@/lib/aml/provider';
 import { errorMessage, isUuid } from '@/lib/env';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -67,7 +68,8 @@ export async function executeInitialAMLCheck(entityId: string): Promise<ActionRe
       auditNote = ` Además falló el registro en audit_logs: ${errorMessage(auditErr)}`;
     }
 
-    return { success: false, data: null, error: `Proveedor AML no disponible: ${reason}.${auditNote}` };
+    revalidatePath(`/entidades/${entityId}`);
+    return { success: false, data: null, error: `No se completó el chequeo, el proveedor AML falló (${reason}). La entidad no cambió de estado.${auditNote}` };
   }
 
   // 3, 4 y 5. Screening + suspensión + bitácora, atómico
@@ -82,6 +84,8 @@ export async function executeInitialAMLCheck(entityId: string): Promise<ActionRe
     if (error) throw error;
     if (!data) throw new Error('record_aml_screening no devolvió resultado');
 
+    revalidatePath('/entidades');
+    revalidatePath(`/entidades/${entityId}`);
     return { success: true, data: data as unknown as ScreeningOutcome, error: null };
   } catch (err) {
     // La transacción se revirtió: no quedó screening, ni cambio de estado,

@@ -82,6 +82,7 @@ export type AuditLogInsert = Pick<AuditLog, 'entity_id' | 'action_type' | 'descr
 // ---------------------------------------------------------------------------
 
 export type AuditActionType =
+  | 'entity.created'
   | 'aml.initial_check'
   | 'aml.initial_check_failed'
   | 'aml.monitoring_alert';
@@ -181,6 +182,10 @@ export type Database = {
       apply_aml_alert: {
         Args: { p_entity_id: string; p_provider: string; p_alert: Json };
         Returns: Json;
+      };
+      create_legal_entity: {
+        Args: { p_name: string; p_tax_id: string; p_country?: string };
+        Returns: Plain<LegalEntity>;
       };
       log_audit_event: {
         Args: { p_entity_id: string; p_action_type: string; p_description: string };

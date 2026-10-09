@@ -1,8 +1,8 @@
 # compliance-orchestrator
 
-Backend del orquestador de Compliance y AML para onboarding de crédito y
-validación de proveedores. Next.js (App Router) + TypeScript + `@supabase/ssr`.
-Sin UI.
+Orquestador de Compliance y AML para onboarding de crédito y validación de
+proveedores. Next.js (App Router) + TypeScript + `@supabase/ssr`. Backend más
+un panel interno para administradores con el sistema de marca de la firma.
 
 Vive en su propio directorio para no convertir el sitio estático de la raíz
 (que Vercel sirve tal cual) en un proyecto Next.js.
@@ -18,6 +18,27 @@ Vive en su propio directorio para no convertir el sitio estático de la raíz
 | `lib/aml/provider.ts` | Llamada REST al proveedor AML y su mock |
 | `app/actions/compliance-engine.ts` | Server Action `executeInitialAMLCheck(entityId)` |
 | `app/api/webhooks/aml-alerts/route.ts` | `POST` de alertas de monitoreo continuo |
+| `app/actions/entities.ts` | Server Action `createLegalEntity` (alta + bitácora, atómico) |
+| `proxy.ts` | Refresca la sesión de Supabase y manda a `/login` a quien no tenga sesión |
+| `app/login/` | Acceso con correo y contraseña (Supabase Auth) |
+| `app/(panel)/entidades/` | Lista con filtros por estado, alta de entidad y expediente |
+| `app/globals.css` | Tokens del sistema de marca (BROCHURE IQ) |
+
+## Panel
+
+- **`/login`** en superficie negra (declaración de marca), con el monograma.
+- **`/entidades`**: lista con estado, último riesgo y último chequeo; filtros
+  por estado; formulario de alta.
+- **`/entidades/[id]`**: expediente con 01 Screening AML (coincidencias,
+  alertas y respuesta completa), 02 Documentos (vencidos y por vencer en 30
+  días) y 03 Bitácora; botón para `executeInitialAMLCheck`.
+- Un usuario con sesión pero sin rol admin ve un aviso, no datos.
+
+Marca: superficie crema en todo el panel, acento `#D8551D` solo en números de
+sección, divisores, eyebrows y estados que piden acción; esquinas cuadradas.
+Las tipografías (Georgia y sans de sistema) son aproximaciones: las fuentes
+reales del brochure no están confirmadas. `public/monograma.png` trae fondo
+`#0D0D0D` incrustado (no es transparente), por eso solo aparece sobre negro.
 
 ## Decisiones
 
