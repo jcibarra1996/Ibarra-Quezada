@@ -1,6 +1,8 @@
 # IQ Contratos
 
-Plataforma de revisión de contratos con inteligencia artificial para direcciones legales.
+Plataforma de gestión del ciclo de vida de contratos (CLM) con revisión por inteligencia artificial,
+hecha para direcciones legales en México: solicitud, plantilla, revisión, negociación, aprobación,
+firma y vigencia.
 **La IA hace la primera lectura. Su equipo decide.** La herramienta nunca aprueba ni firma
 nada sola: propone, y un abogado del equipo valida cada punto.
 
@@ -20,7 +22,11 @@ organización) y la API de Anthropic llamada solo desde el servidor.
 | Vencimientos | Lista y calendario de plazos de aviso, fines de vigencia y periodos renovados, con área responsable y avisos programados. El correo está preparado y desactivado. |
 | Repositorio | Búsqueda por contraparte o título, tipo, estado, riesgo y fecha. Versiones, comentarios de Legal y de Negocio, historial completo. |
 | Reportes | Contratos en revisión, tiempo promedio de revisión, hallazgos por riesgo y por tema, próximos vencimientos. Todo calculado con los registros de la app. |
-| Roles | Abogado (revisa y valida), Director jurídico (todo, más playbook y reportes), Negocio (sube, comenta y ve el estado; no valida). |
+| Expedientes corporativos | Por cada parte (la empresa y sus contrapartes): acta constitutiva, poderes, constancia de situación fiscal, identificación y comprobante de domicilio. Acepta PDF (también escaneado), Word o fotografía. La IA extrae escritura, notaría, folio mercantil, representante, poder y facultades, RFC y domicilio, cada dato con su documento y cita; Legal lo corrige y lo valida. |
+| Verificación de declaraciones | Al analizar un contrato, la IA compara las declaraciones de cada parte contra su expediente. Si un dato no coincide o es de relleno ("escritura número 00000"), propone corregirlo; si falta y el expediente lo tiene, propone agregarlo. Son hallazgos normales: con cita exacta, control de cambios y decisión de Legal. |
+| Plantillas | Prestación de servicios, suministro, compraventa, arrendamiento y convenio de confidencialidad, alineadas con el playbook. Se llenan solas con los expedientes (proemio, declaraciones, firmas) y los datos del negocio (importes y plazos con letra). Lo que falte queda marcado como pendiente. La dirección jurídica edita las plantillas y cada cambio sube la versión. |
+| Solicitudes | Quien solicita (área de negocio) elige plantilla y contraparte, carga los documentos corporativos y genera el borrador, que entra como "Recibido" a revisión de Legal. También puede subir el contrato de la contraparte. |
+| Roles | Abogado (revisa y valida), Director jurídico (todo, más playbook, plantillas y reportes), Negocio (solicita, sube documentos, comenta y ve el estado; no valida). En una organización de demostración se cambia de perfil con un clic en la barra lateral. |
 
 ## Correr en local
 
@@ -32,7 +38,7 @@ npm install
 npx supabase start            # Postgres, Auth y Storage locales
 npx supabase db reset         # aplica supabase/migrations
 cp .env.example .env.local    # complete los valores (ver abajo)
-npm run seed                  # empresa ficticia, 3 usuarios, playbook y 5 contratos
+npm run seed                  # empresa ficticia, 3 usuarios, playbook, plantillas, expedientes y 5 contratos
 npm run dev                   # http://localhost:3000
 ```
 
@@ -107,19 +113,23 @@ Las pruebas de integración modifican datos de la semilla; corra `npm run seed` 
 
 ```
 app/                      rutas (App Router)
-  (app)/                  inicio, contratos, vencimientos, playbook, firmas, reportes
+  (app)/                  inicio, contratos, expedientes, plantillas, vencimientos, playbook, firmas, reportes
   api/contratos/          subida, análisis y contrapropuesta
   api/documentos/         descarga del original con enlace firmado y bitácora
   api/contrapropuestas/   descarga de contrapropuestas con enlace firmado y bitácora
+  api/expedientes/        carga de documentos corporativos y extracción con IA
+  api/plantillas/         generación de contratos desde plantilla
   api/alertas/cron/       tarea diaria de avisos (desactivada)
 lib/
   parsing/                extracción PDF (pdfjs vía unpdf) y Word (mammoth); parser de cláusulas
   ai/                     esquema zod, prompt, llamada a la API, verificación de citas
-  docx/                   contrapropuesta con control de cambios (librería docx)
+  corporativo/            campos del expediente, extracción de documentos, vínculo con contratos
+  plantillas/             plantillas base, llenado y cantidades con letra
+  docx/                   contrapropuesta con control de cambios y Word desde texto
   fechas/                 fechas derivadas, alertas y avisos
   reportes/               indicadores del tablero
 supabase/migrations/      esquema, RLS, triggers de reglas y bucket privado
-supabase/seed/            semilla y contratos ficticios
+supabase/seed/            semilla, contratos y expedientes ficticios
 tests/                    pruebas unitarias e integración
 ```
 
@@ -135,6 +145,18 @@ sistema con caché. La respuesta se valida de nuevo con zod en el servidor; las 
 texto tolerando solo diferencias tipográficas; las fechas se extraen tal como las dice el contrato y
 el servidor calcula periodos y plazos. Cada análisis guarda modelo y versión del prompt.
 
+**Expedientes y plantillas.** Los documentos corporativos se mandan al modelo como PDF, imagen o
+texto con salida estructurada; el servidor valida fechas y RFC, y un documento solo reemplaza un dato
+si es su fuente primaria (el poder para el representante, el acta para la constitución); si no, solo
+reporta la diferencia. No se guarda el texto de esos documentos, solo los datos y la cita breve de
+cada uno. Si alguien fuera de Legal cambia un dato, un trigger regresa el expediente a "por validar".
+Las plantillas se llenan con una función pura (`lib/plantillas/llenar.ts`), así que la vista previa
+y el Word generado son idénticos y lo que falta nunca se inventa.
+
+**Cambio de perfil (solo demo).** Si la organización tiene `es_demo = true`, el servidor genera un
+enlace de un solo uso para el perfil elegido y lo canjea en la misma solicitud; nunca sale al
+navegador. En una organización real `es_demo` debe ser `false` y la opción no aparece.
+
 **Confidencialidad.** Bucket privado sin políticas para usuarios: los archivos solo salen por
 enlaces firmados de 5 minutos emitidos por el servidor; cada vista y descarga queda en
 `document_access_log` (consultable por el director jurídico). Los logs técnicos (`lib/log.ts`) solo
@@ -142,6 +164,10 @@ registran identificadores y conteos, nunca texto del contrato.
 
 ## Limitaciones conocidas de la demo
 
+- Los expedientes y documentos corporativos de la semilla son ficticios (las notarías 901 a 903 no
+  existen). Las plantillas son un punto de partida que la dirección jurídica debe revisar.
+- La extracción de documentos corporativos depende de la calidad del escaneo; cada dato debe
+  validarse contra el original antes de usarse.
 - PDF escaneado sin texto: se rechaza con un mensaje claro. No hay OCR.
 - Word no tiene páginas fijas: el visor arma páginas de lectura de tamaño similar.
 - La contrapropuesta es un .docx nuevo con estructura limpia; no conserva estilos, membretes ni
@@ -189,7 +215,8 @@ anonimizados antes de usarlo con clientes.
 ## Guion de demo (5 minutos) para un director jurídico
 
 Preparación: `npm run seed -- --analizar` (deja analizado el contrato de suministro), ingrese como
-**Carlos Rivas (Abogado)** y tenga a mano un contrato real del prospecto en PDF o Word.
+**Carlos Rivas (Abogado)** y tenga a mano un contrato real del prospecto en PDF o Word. Para cambiar
+de perfil durante la demo, haga clic en el nombre en "Ver la demo como" de la barra lateral.
 
 1. **Minuto 0 a 0:30. La promesa.** En Inicio: "La IA hace la primera lectura. Su equipo decide."
    Señale el aviso al pie: la herramienta propone, el abogado decide.
@@ -205,8 +232,19 @@ Preparación: `npm run seed -- --analizar` (deja analizado el contrato de sumini
 5. **3:45 a 4:15. Lo que no se olvida.** En *Vencimientos*, la fecha límite para el aviso de no
    renovación con el área de Compras responsable y sus avisos programados. Abra el calendario.
 6. **4:15 a 5:00. Su contrato.** *Subir contrato* con el documento del prospecto y deje que la IA
-   haga la primera lectura frente a él. Cierre con *Plantillas y playbook* (ingresando como Laura
+   haga la primera lectura frente a él. Cierre con *Playbook* (cambiando a Laura
    Méndez si hay tiempo): el criterio es el de su dirección legal, no el de la herramienta.
+
+Recorrido opcional del ciclo completo (3 minutos más):
+
+7. **La solicitud.** Cambie a **Sofía Herrera (Negocio)**: *Solicitar contrato*, plantilla de
+   prestación de servicios, contraparte *LOGÍSTICA DEMO*, descripción y monto. La vista previa ya
+   trae proemio, declaraciones con escritura, poder, RFC y domicilio, y el monto con letra.
+   *Generar contrato*: entra a Legal como "Recibido".
+8. **Los documentos.** En *Expedientes corporativos*, abra *PROVEEDOR XYZ*: cada dato muestra de qué
+   documento sale y su cita. Regrese al contrato de suministro como Carlos y use *Volver a
+   analizar*: la IA propone corregir la "escritura pública número 00000" y la notaría con los datos
+   del acta constitutiva.
 
 Si pregunta por confidencialidad: almacenamiento privado, enlaces firmados de 5 minutos, bitácora
 de quién vio o descargó cada documento y ningún texto del contrato en logs.

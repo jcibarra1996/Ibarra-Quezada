@@ -11,7 +11,7 @@ export const HallazgoSchema = z.object({
   cita_textual: z.string().describe("Copia exacta, carácter por carácter y continua, del fragmento del contrato que origina el hallazgo. Sin puntos suspensivos ni paráfrasis."),
   tema: z.string().describe("Tema del playbook al que corresponde, o un tema breve si no está en el playbook."),
   posicion_playbook_id: z.string().nullable().describe("Identificador de la posición del playbook aplicada, o null."),
-  tipo: z.enum(["desviacion_playbook", "ajena_al_objeto"]),
+  tipo: z.enum(["desviacion_playbook", "ajena_al_objeto", "dato_corporativo"]),
   nivel_riesgo: z.enum(RIESGOS),
   explicacion: z.string().describe("Explicación en lenguaje claro para el abogado, de dos a cuatro oraciones."),
   redaccion_propuesta: z.string().describe("Texto que sustituye exactamente a cita_textual. Cadena vacía si la propuesta es eliminar el fragmento."),

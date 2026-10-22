@@ -1,6 +1,9 @@
+import { after } from "next/server";
 import { exigirUsuario } from "@/lib/auth/sesion";
+import { clienteSesion } from "@/lib/supabase/server";
 import { cargarRevision } from "@/lib/revision/cargar";
-import { registrarAcceso } from "@/lib/contratos/bitacora";
+import { encabezadosAcceso, registrarAcceso } from "@/lib/contratos/bitacora";
+import { PanelPartes, type ExpedienteParte } from "@/components/revision/panel-partes";
 import { EncabezadoContrato } from "@/components/revision/encabezado-contrato";
 import { Pestanas, PESTANAS, type Pestana } from "@/components/revision/pestanas";
 import { EspacioRevision } from "@/components/revision/espacio-revision";
@@ -28,8 +31,13 @@ export default async function PaginaRevision({
   const { contrato, version } = datos;
 
   if (version && pestana === "documento") {
-    await registrarAcceso({ orgId: usuario.org_id, actorId: usuario.id, accion: "ver", versionId: version.id });
+    // La bitácora se escribe después de enviar la página, sin retrasarla.
+    const encabezados = await encabezadosAcceso();
+    after(() => registrarAcceso({ orgId: usuario.org_id, actorId: usuario.id, accion: "ver", versionId: version.id, encabezados }));
   }
+  const partes = pestana === "partes" ? await cargarPartes(contrato.propia_id, contrato.contraparte_id) : null;
+  const puedeVincular =
+    contrato.estado !== "firmado" && (permisos.validar(usuario.rol) || contrato.creado_por === usuario.id || contrato.solicitado_por === usuario.id);
 
   return (
     <div className="flex h-full flex-col">
@@ -45,7 +53,7 @@ export default async function PaginaRevision({
           />
         }
       />
-      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length, comentarios: datos.comentarios.length }} />
+      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ partes: [contrato.propia_id, contrato.contraparte_id].filter(Boolean).length, versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length, comentarios: datos.comentarios.length }} />
 
       {pestana === "documento" && (
         version ? (
@@ -70,6 +78,19 @@ export default async function PaginaRevision({
           <ListaHallazgos contratoId={contrato.id} hallazgos={datos.hallazgos} perfiles={datos.perfiles} />
         </div>
       )}
+      {pestana === "partes" && partes && (
+        <div className="px-8 py-6">
+          <PanelPartes
+            contratoId={contrato.id}
+            contraparteNombre={contrato.contraparte}
+            propia={partes.propia}
+            contraparte={partes.contraparte}
+            opciones={partes.opciones}
+            editable={puedeVincular}
+            hallazgosCorporativos={datos.hallazgos.filter((x) => x.tipo === "dato_corporativo").length}
+          />
+        </div>
+      )}
       {pestana === "versiones" && (
         <div className="space-y-4 px-8 py-6">
           {permisos.validar(usuario.rol) && contrato.estado !== "firmado" && <NuevaVersion contratoId={contrato.id} />}
@@ -88,4 +109,21 @@ export default async function PaginaRevision({
       )}
     </div>
   );
+}
+
+async function cargarPartes(propiaId: string | null, contraparteId: string | null) {
+  const supabase = await clienteSesion();
+  const ids = [propiaId, contraparteId].filter(Boolean) as string[];
+  const [{ data: opciones }, { data: filas }] = await Promise.all([
+    supabase.from("companies").select("id, denominacion, es_propia").order("denominacion"),
+    ids.length
+      ? supabase.from("companies").select("id, denominacion, rfc, tipo_persona, estado, datos, corporate_documents(tipo)").in("id", ids)
+      : Promise.resolve({ data: [] as never[] }),
+  ]);
+  const aParte = (id: string | null): ExpedienteParte | null => {
+    const f = filas?.find((x) => x.id === id);
+    if (!f) return null;
+    return { ...f, documentos: (f.corporate_documents ?? []).map((d: { tipo: string }) => d.tipo) };
+  };
+  return { opciones: opciones ?? [], propia: aParte(propiaId), contraparte: aParte(contraparteId) };
 }

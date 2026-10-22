@@ -7,15 +7,16 @@ export default async function LayoutApp({ children }: { children: React.ReactNod
   const usuario = await exigirUsuario();
   const supabase = await clienteSesion();
   const limite = new Date(Date.now() + 90 * 864e5).toISOString().slice(0, 10);
-  const [{ data: equipo }, { count: vencimientos }, { data: areas }] = await Promise.all([
+  const [{ data: equipo }, { count: vencimientos }, { data: areas }, { data: org }] = await Promise.all([
     supabase.from("profiles").select("id, nombre, puesto, rol").order("rol"),
     supabase.from("alerts").select("id", { count: "exact", head: true }).eq("estado", "activa").lte("fecha_limite", limite),
     supabase.from("areas").select("id, nombre").order("nombre"),
+    supabase.from("organizations").select("es_demo").maybeSingle(),
   ]);
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <MenuLateral usuario={usuario} equipo={equipo ?? []} vencimientos={vencimientos ?? 0} areas={areas ?? []} />
+      <MenuLateral usuario={usuario} equipo={equipo ?? []} vencimientos={vencimientos ?? 0} areas={areas ?? []} demo={org?.es_demo === true} />
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="min-h-0 flex-1 overflow-auto">{children}</div>
         <AvisoApoyo />

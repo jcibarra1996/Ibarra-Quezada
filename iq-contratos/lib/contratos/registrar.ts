@@ -3,6 +3,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { clienteSistema } from "@/lib/supabase/admin";
 import { leerContrato, MIME_PDF } from "@/lib/parsing/extraer";
 import { contraparteDelProemio, tituloDelProemio } from "./datos-generales";
+import { identificarPartes } from "@/lib/corporativo/vincular";
 import type { Usuario } from "@/lib/tipos";
 
 export const BUCKET = "contratos";
@@ -15,8 +16,14 @@ interface Entrada {
   areaId?: string | null;
   // Para cargar una nueva versión de un contrato existente.
   contratoId?: string;
-  origen?: "subida" | "contrapropuesta";
+  origen?: "subida" | "contrapropuesta" | "plantilla";
   recibidoEn?: string;
+  // Expedientes de las partes; si no se indican, se buscan por denominación en el proemio.
+  contraparteId?: string | null;
+  propiaId?: string | null;
+  plantillaId?: string | null;
+  solicitud?: Record<string, unknown>;
+  tipoContrato?: string | null;
 }
 
 // Lee el archivo, guarda el original en almacenamiento privado y registra el contrato,
@@ -43,14 +50,25 @@ export async function registrarContrato(e: Entrada) {
   let contratoId = e.contratoId;
   let numero = 1;
   if (!contratoId) {
+    const contraparte = e.contraparte?.trim() || contraparteDelProemio(proemio, organizacion?.nombre ?? "") || "";
+    const { data: expedientes } = await db.from("companies").select("id, denominacion, es_propia").eq("org_id", org);
+    const lista = expedientes ?? [];
+    const valido = (id: string | null | undefined) => (id && lista.some((x) => x.id === id) ? id : null);
+    const auto = identificarPartes({ proemio, contraparte, expedientes: lista });
     const { data: nuevo, error } = await db
       .from("contracts")
       .insert({
         org_id: org,
         titulo: tituloDelProemio(proemio, e.nombreArchivo),
-        contraparte: e.contraparte?.trim() || contraparteDelProemio(proemio, organizacion?.nombre ?? "") || "",
+        contraparte,
         area_responsable_id: areaId,
         creado_por: e.usuario.id,
+        solicitado_por: e.usuario.id,
+        contraparte_id: valido(e.contraparteId) ?? auto.contraparteId,
+        propia_id: valido(e.propiaId) ?? auto.propiaId,
+        plantilla_id: e.plantillaId ?? null,
+        datos_solicitud: e.solicitud ?? {},
+        ...(e.tipoContrato ? { tipo_contrato: e.tipoContrato } : {}),
         ...(e.recibidoEn ? { recibido_en: e.recibidoEn } : {}),
       })
       .select("id")
@@ -114,7 +132,7 @@ export async function registrarContrato(e: Entrada) {
     org_id: org,
     contract_id: contratoId,
     actor_id: e.usuario.id,
-    accion: numero === 1 ? "contrato_subido" : "version_agregada",
+    accion: numero > 1 ? "version_agregada" : e.origen === "plantilla" ? "contrato_generado" : "contrato_subido",
     detalle: {
       version: numero,
       archivo: e.nombreArchivo.slice(0, 200),

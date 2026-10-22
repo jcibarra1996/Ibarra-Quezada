@@ -3,6 +3,7 @@ import { useState } from "react";
 import { VisorContrato, type SeccionVista } from "./visor";
 import { PanelAnalisis, type AnalisisVista } from "./panel-analisis";
 import { EstadoAnalisis } from "./estado-analisis";
+import { BotonReanalizar } from "./boton-reanalizar";
 import { fechaHora } from "@/lib/formato";
 import type { Hallazgo } from "@/lib/revision/cargar";
 
@@ -43,7 +44,12 @@ export function EspacioRevision({
       <aside className="flex w-[430px] shrink-0 flex-col border-l border-linea bg-white" aria-label="Análisis IA">
         <div className="flex items-baseline justify-between border-b border-linea px-5 py-3">
           <h2 className="text-[15px] font-semibold">Análisis IA</h2>
-          {completado && <span className="text-[11.5px] text-secundario">{fechaHora(analisis!.creado_en)}</span>}
+          {completado && (
+            <span className="flex items-baseline gap-3">
+              <span className="text-[11.5px] text-secundario">{fechaHora(analisis!.creado_en)}</span>
+              {puedeValidar && !cerrado && <BotonReanalizar contratoId={contratoId} />}
+            </span>
+          )}
         </div>
         {completado ? (
           <PanelAnalisis analisis={analisis!} hallazgos={hallazgos} activa={activa} alSeleccionar={setActiva} puedeValidar={puedeValidar} perfiles={perfiles} />

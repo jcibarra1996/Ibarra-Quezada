@@ -13,12 +13,18 @@ function describir(e: Evento): string {
   switch (e.accion) {
     case "contrato_subido":
       return `Subió el contrato: ${plural(d.clausulas, "cláusula", "cláusulas")}, ${plural(d.declaraciones, "declaración", "declaraciones")}, ${plural(d.paginas ?? 1, "página", "páginas")}.`;
+    case "contrato_generado":
+      return `Generó el contrato desde la plantilla: ${plural(d.clausulas, "cláusula", "cláusulas")}, ${plural(d.declaraciones, "declaración", "declaraciones")}.`;
+    case "expediente_vinculado":
+      return d.expediente
+        ? `Vinculó el expediente corporativo de ${d.parte === "propia" ? "la empresa" : "la contraparte"}.`
+        : `Desvinculó el expediente corporativo de ${d.parte === "propia" ? "la empresa" : "la contraparte"}.`;
     case "version_agregada":
       return `Agregó la versión ${d.version}.`;
     case "estado_cambiado":
       return `Cambió el estado de ${ESTADOS[d.de as EstadoContrato] ?? d.de} a ${ESTADOS[d.a as EstadoContrato] ?? d.a}.`;
     case "analisis_completado":
-      return `Análisis de IA completado: ${plural(d.hallazgos, "hallazgo", "hallazgos")}${d.descartados ? `; ${plural(d.descartados, "omitido", "omitidos")} por no encontrar la cita exacta` : ""}.`;
+      return `Análisis de IA completado: ${plural(d.hallazgos, "hallazgo", "hallazgos")}${d.corporativos ? `, ${plural(d.corporativos, "sobre datos corporativos", "sobre datos corporativos")}` : ""}${d.descartados ? `; ${plural(d.descartados, "omitido", "omitidos")} por no encontrar la cita exacta` : ""}.`;
     case "analisis_fallido":
       return "El análisis de IA no se pudo completar.";
     case "comentario":

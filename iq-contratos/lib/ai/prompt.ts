@@ -1,7 +1,7 @@
 // Instrucciones del análisis. Cambiar VERSION_PROMPT cada vez que cambie el texto,
 // para saber con qué instrucciones se generó cada análisis guardado.
 
-export const VERSION_PROMPT = "2026-10-22.1";
+export const VERSION_PROMPT = "2026-10-23.1";
 
 export const INSTRUCCIONES_SISTEMA = `Usted es un abogado corporativo mexicano con amplia experiencia en revisión de contratos mercantiles y civiles. Hace la primera lectura de un contrato para la dirección legal de una empresa. Su trabajo es una propuesta: un abogado del equipo valida cada punto antes de que tenga efecto. Nada de lo que usted entregue se aplica sin esa validación.
 
@@ -23,7 +23,13 @@ Tareas:
    - explicacion: lenguaje claro, de dos a cuatro oraciones, que diga qué riesgo concreto tiene la empresa y qué cambia la propuesta.
 4. omisiones: temas del playbook del tipo de contrato que el contrato no regula en absoluto y que conviene agregar. Proponga la cláusula completa con base en la cláusula modelo. No repita aquí lo que ya reportó como hallazgo.
 5. fechas_clave: extraiga solo lo que el contrato establece: inicio y fin de vigencia, renovación automática (con periodo en meses si lo dice), plazos de aviso (con días y si son naturales o hábiles), vencimientos y fechas o reglas de pago. Escriba fecha en formato AAAA-MM-DD únicamente si el contrato la fija expresamente; no calcule fechas. Incluya la cita textual de donde sale cada una.
-6. resumen_negocio: dos o tres líneas para el área de negocio, sin tecnicismos, que digan qué es el contrato y cuáles son los puntos que el equipo legal está revisando.
+6. Datos corporativos. Si se le entregan expedientes corporativos, compare las declaraciones de cada parte contra su expediente: denominación, RFC, escritura constitutiva (número, fecha, notario, notaría y lugar), folio mercantil, representante y el instrumento donde constan sus facultades, y domicilio.
+   - Si el contrato trae un dato distinto del expediente, o un dato genérico o de relleno (por ejemplo "número 00000"), reporte un hallazgo de tipo "dato_corporativo": cita_textual es el fragmento de la declaración con el dato y redaccion_propuesta es ese mismo fragmento corregido con el dato del expediente.
+   - Si la declaración omite un dato que el expediente sí tiene (por ejemplo, no menciona la escritura del poder, el folio mercantil o el RFC), reporte un hallazgo "dato_corporativo" que cite la declaración de esa parte más relacionada y proponga la misma declaración completada con el dato.
+   - Use únicamente datos del expediente. Nunca complete un dato que el expediente no tenga. En la explicación diga de qué documento del expediente sale el dato y, si el expediente está pendiente de validación, adviértalo.
+   - Riesgo alto: denominación o representante distintos, o facultades que según el expediente no alcanzan para celebrar el contrato. Riesgo medio: escritura, fecha, notaría, folio o RFC distintos, faltantes o de relleno. Riesgo bajo: diferencias de forma en el domicilio.
+   - Si no se entregan expedientes, no reporte hallazgos de este tipo.
+7. resumen_negocio: dos o tres líneas para el área de negocio, sin tecnicismos, que digan qué es el contrato y cuáles son los puntos que el equipo legal está revisando.
 
 Rigor:
 - Nunca invente leyes, artículos, normas ni criterios judiciales. No cite artículos. Si para explicar un hallazgo es indispensable mencionar una ley, nómbrela de forma general en referencias_normativas; el abogado la verificará.
@@ -67,9 +73,35 @@ export function textoContrato(secciones: { etiqueta: string; texto: string }[]):
   return secciones.map((s) => `[${s.etiqueta}]\n${s.texto}`).join("\n\n");
 }
 
-export function mensajeUsuario(p: { organizacion: string; fechaHoy: string; contrato: string }): string {
+export interface ExpedientePrompt {
+  papel: "empresa" | "contraparte";
+  denominacion: string;
+  rfc: string | null;
+  validado: boolean;
+  datos: { etiqueta: string; valor: string; fuente: string | null }[];
+  faltantes: string[];
+}
+
+export function textoExpedientes(expedientes: ExpedientePrompt[]): string {
+  if (expedientes.length === 0) return "No hay expedientes corporativos vinculados a este contrato.";
+  return expedientes
+    .map(
+      (e) =>
+        `<expediente parte="${e.papel === "empresa" ? "la empresa cliente" : "la contraparte"}" estado="${e.validado ? "validado por Legal" : "pendiente de validación por Legal"}">\n` +
+        `Denominación: ${e.denominacion}\nRFC: ${e.rfc ?? "no consta en el expediente"}\n` +
+        e.datos.map((d) => `${d.etiqueta}: ${d.valor}${d.fuente ? ` (fuente: ${d.fuente})` : ""}`).join("\n") +
+        (e.faltantes.length ? `\nDatos que el expediente no tiene: ${e.faltantes.join("; ")}` : "") +
+        "\n</expediente>",
+    )
+    .join("\n\n");
+}
+
+export function mensajeUsuario(p: { organizacion: string; fechaHoy: string; contrato: string; expedientes?: string }): string {
   return `Empresa cliente (la organización que usa esta herramienta): ${p.organizacion}
 Fecha de hoy: ${p.fechaHoy}
+
+Expedientes corporativos de las partes:
+${p.expedientes ?? "No hay expedientes corporativos vinculados a este contrato."}
 
 Contrato a revisar. Cada sección viene precedida de su etiqueta entre corchetes; las etiquetas no forman parte del texto del contrato y no deben aparecer en las citas.
 

@@ -6,7 +6,7 @@ import type { EstadoHallazgo, Riesgo } from "@/lib/tipos";
 export interface Hallazgo {
   id: string;
   numero: number;
-  tipo: "desviacion_playbook" | "ajena_al_objeto" | "omision";
+  tipo: "desviacion_playbook" | "ajena_al_objeto" | "dato_corporativo" | "omision";
   clausula: string;
   tema: string;
   riesgo: Riesgo;
@@ -24,65 +24,47 @@ export interface Hallazgo {
 }
 
 // Todo lo que necesita la vista de revisión, leído con la sesión del usuario (RLS).
+// Las consultas van en dos tandas en paralelo para no encadenar viajes a la base.
 export async function cargarRevision(contratoId: string) {
   const supabase = await clienteSesion();
-  const { data: contrato } = await supabase
-    .from("contracts")
-    .select("*, areas:area_responsable_id(id, nombre)")
-    .eq("id", contratoId)
-    .maybeSingle();
+  const [{ data: contrato }, { data: versiones }, { data: historial }, { data: perfiles }, { data: comentarios }, { data: contrapropuestas }] =
+    await Promise.all([
+      supabase.from("contracts").select("*, areas:area_responsable_id(id, nombre)").eq("id", contratoId).maybeSingle(),
+      supabase
+        .from("contract_versions")
+        .select("id, numero, origen, nombre_archivo, mime, tamano_bytes, paginas, paginas_virtuales, creado_por, creado_en")
+        .eq("contract_id", contratoId)
+        .order("numero", { ascending: false }),
+      supabase.from("audit_events").select("id, accion, detalle, actor_id, creado_en").eq("contract_id", contratoId).order("creado_en", { ascending: false }).limit(200),
+      supabase.from("profiles").select("id, nombre, rol"),
+      supabase.from("comments").select("id, autor_id, audiencia, cuerpo, creado_en, finding_id").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
+      supabase.from("counterproposals").select("id, generado_por, creado_en, hallazgos_incluidos").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
+    ]);
   if (!contrato) notFound();
-
-  const [{ data: versiones }, { data: secciones }, { data: historial }, { data: perfiles }] = await Promise.all([
-    supabase
-      .from("contract_versions")
-      .select("id, numero, origen, nombre_archivo, mime, tamano_bytes, paginas, paginas_virtuales, creado_por, creado_en")
-      .eq("contract_id", contratoId)
-      .order("numero", { ascending: false }),
-    contrato.version_actual_id
-      ? supabase
-          .from("contract_sections")
-          .select("id, tipo, etiqueta, titulo, texto, inicio, fin, pagina")
-          .eq("version_id", contrato.version_actual_id)
-          .order("orden")
-      : Promise.resolve({ data: [] }),
-    supabase.from("audit_events").select("id, accion, detalle, actor_id, creado_en").eq("contract_id", contratoId).order("creado_en", { ascending: false }).limit(200),
-    supabase.from("profiles").select("id, nombre, rol"),
-  ]);
-  const { data: comentarios } = await supabase
-    .from("comments")
-    .select("id, autor_id, audiencia, cuerpo, creado_en, finding_id")
-    .eq("contract_id", contratoId)
-    .order("creado_en", { ascending: false });
-  const { data: contrapropuestas } = await supabase
-    .from("counterproposals")
-    .select("id, generado_por, creado_en, hallazgos_incluidos")
-    .eq("contract_id", contratoId)
-    .order("creado_en", { ascending: false });
 
   const version = versiones?.find((v) => v.id === contrato.version_actual_id) ?? null;
 
-  // Último análisis de la versión vigente, con sus hallazgos.
-  const { data: analisis } = version
-    ? await supabase
-        .from("analyses")
-        .select("id, estado, modelo, resumen_negocio, tipo_detectado, objeto_detectado, hallazgos_descartados_sin_cita, error, creado_en, duracion_ms")
-        .eq("version_id", version.id)
-        .order("creado_en", { ascending: false })
-        .limit(1)
-        .maybeSingle()
-    : { data: null };
-  const { data: hallazgos } = analisis
-    ? await supabase
-        .from("findings")
-        .select("id, numero, tipo, clausula, tema, riesgo, cita, cita_inicio, cita_fin, section_id, explicacion, redaccion_propuesta, referencias_normativas, estado, texto_final, decidido_por, decidido_en")
-        .eq("analysis_id", analisis.id)
-        .order("numero")
-    : { data: [] };
+  // Secciones y último análisis de la versión vigente, con sus hallazgos.
+  const [{ data: secciones }, { data: analisisConHallazgos }] = version
+    ? await Promise.all([
+        supabase.from("contract_sections").select("id, tipo, etiqueta, titulo, texto, inicio, fin, pagina").eq("version_id", version.id).order("orden"),
+        supabase
+          .from("analyses")
+          .select(
+            "id, estado, modelo, resumen_negocio, tipo_detectado, objeto_detectado, hallazgos_descartados_sin_cita, error, creado_en, duracion_ms, findings(id, numero, tipo, clausula, tema, riesgo, cita, cita_inicio, cita_fin, section_id, explicacion, redaccion_propuesta, referencias_normativas, estado, texto_final, decidido_por, decidido_en)",
+          )
+          .eq("version_id", version.id)
+          .order("creado_en", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+    : [{ data: [] }, { data: null }];
+  const { findings, ...analisis } = (analisisConHallazgos ?? { findings: [] }) as { findings: Hallazgo[] } & Record<string, unknown>;
+  const hallazgos = [...(findings ?? [])].sort((a, b) => a.numero - b.numero);
 
   return {
-    analisis: analisis ?? null,
-    hallazgos: (hallazgos ?? []) as Hallazgo[],
+    analisis: analisisConHallazgos ? (analisis as unknown as AnalisisCargado) : null,
+    hallazgos,
     contrato,
     version,
     versiones: versiones ?? [],
@@ -92,4 +74,17 @@ export async function cargarRevision(contratoId: string) {
     historial: historial ?? [],
     perfiles: Object.fromEntries((perfiles ?? []).map((p) => [p.id, p])) as Record<string, { id: string; nombre: string; rol: string }>,
   };
+}
+
+export interface AnalisisCargado {
+  id: string;
+  estado: string;
+  modelo: string;
+  resumen_negocio: string | null;
+  tipo_detectado: string | null;
+  objeto_detectado: string | null;
+  hallazgos_descartados_sin_cita: number;
+  error: string | null;
+  creado_en: string;
+  duracion_ms: number | null;
 }
