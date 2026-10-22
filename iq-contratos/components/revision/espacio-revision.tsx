@@ -18,7 +18,10 @@ export function EspacioRevision({
   perfiles,
   inicial,
   cerrado,
+  panel,
 }: {
+  // Sustituye el análisis (área de negocio): sin marcas en el documento ni hallazgos.
+  panel?: React.ReactNode;
   contratoId: string;
   secciones: SeccionVista[];
   paginas: number;
@@ -32,7 +35,7 @@ export function EspacioRevision({
 }) {
   const [activa, setActiva] = useState<string | null>(inicial);
   const completado = analisis?.estado === "completado";
-  const notas = completado
+  const notas = completado && !panel
     ? hallazgos
         .filter((h) => h.cita_inicio !== null && h.cita_fin !== null)
         .map((h) => ({ id: h.id, numero: h.numero, riesgo: h.riesgo, inicio: h.cita_inicio!, fin: h.cita_fin!, sectionId: h.section_id, tema: h.tema, estado: h.estado }))
@@ -41,6 +44,11 @@ export function EspacioRevision({
   return (
     <div className="flex min-h-0 flex-1">
       <VisorContrato secciones={secciones} paginas={paginas} paginasVirtuales={paginasVirtuales} notas={notas} activa={activa} alSeleccionar={setActiva} />
+      {panel ? (
+        <aside className="w-[380px] shrink-0 overflow-auto border-l border-linea bg-white" aria-label="Estado de la solicitud">
+          {panel}
+        </aside>
+      ) : (
       <aside className="flex w-[430px] shrink-0 flex-col border-l border-linea bg-white" aria-label="Análisis IA">
         <div className="flex items-baseline justify-between border-b border-linea px-5 py-3">
           <h2 className="text-[15px] font-semibold">Análisis IA</h2>
@@ -69,6 +77,7 @@ export function EspacioRevision({
           </div>
         )}
       </aside>
+      )}
     </div>
   );
 }

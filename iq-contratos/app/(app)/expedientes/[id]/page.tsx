@@ -16,6 +16,7 @@ interface DatosExtraidos {
   campos?: { clave: ClaveCampo; valor: string }[];
   observaciones?: string[];
   diferencias?: { clave: ClaveCampo; anterior: string; nuevo: string; reemplazado: boolean }[];
+  lectura?: { paginas: number[] | null; total: number | null } | null;
 }
 
 export default async function PaginaExpediente({ params }: { params: Promise<{ id: string }> }) {
@@ -105,10 +106,16 @@ export default async function PaginaExpediente({ params }: { params: Promise<{ i
                 </div>
                 {d.estado === "en_proceso" && <p className="mt-2 text-[12.5px] text-secundario">La IA está leyendo el documento...</p>}
                 {d.estado === "error" && <p className="mt-2 rounded bg-burgundy-suave px-2 py-1.5 text-[12.5px] text-burgundy">{d.error}</p>}
-                {d.estado === "completado" && (
+                {d.estado === "completado" && !puedeValidar && (
+                  <p className="mt-2 text-[12.5px] text-secundario">Documento recibido. Legal revisa los datos que se extrajeron.</p>
+                )}
+                {d.estado === "completado" && puedeValidar && (
                   <>
                     {d.resumen && <p className="mt-2 text-[12.5px] leading-relaxed">{d.resumen}</p>}
-                    <p className="mt-1.5 text-[12px] text-secundario">{x.campos?.length ?? 0} datos extraídos.</p>
+                    <p className="mt-1.5 text-[12px] text-secundario">
+                      {x.campos?.length ?? 0} datos extraídos
+                      {x.lectura?.paginas && x.lectura.total ? `; se leyeron las páginas ${x.lectura.paginas.join(", ")} de ${x.lectura.total}, donde suelen estar los datos` : ""}.
+                    </p>
                     {(x.diferencias ?? []).length > 0 && (
                       <ul className="mt-2 space-y-1">
                         {x.diferencias!.map((df) => (

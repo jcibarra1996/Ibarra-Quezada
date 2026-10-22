@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Boton } from "@/components/ui/boton";
 import { TIPOS_DOCUMENTO, type TipoDocumento } from "@/lib/corporativo/campos";
+import { subirTemporal } from "@/lib/subir-archivo";
 
 // Carga un documento corporativo y espera a que la IA lo lea.
 export function SubirDocumento({ expedienteId, alTerminar }: { expedienteId: string; alTerminar?: () => void }) {
@@ -17,10 +18,18 @@ export function SubirDocumento({ expedienteId, alTerminar }: { expedienteId: str
     if (!archivo) return;
     setEnviando(true);
     setMensaje(null);
-    const datos = new FormData();
-    datos.set("archivo", archivo);
-    datos.set("tipo", tipo);
-    const r = await fetch(`/api/expedientes/${expedienteId}/documentos`, { method: "POST", body: datos });
+    let ruta: string;
+    try {
+      ruta = await subirTemporal(archivo);
+    } catch (e) {
+      setEnviando(false);
+      return setMensaje({ tipo: "error", texto: e instanceof Error ? e.message : "No fue posible subir el archivo." });
+    }
+    const r = await fetch(`/api/expedientes/${expedienteId}/documentos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ruta, nombre: archivo.name, tipo }),
+    });
     const cuerpo = await r.json().catch(() => ({}));
     setEnviando(false);
     if (!r.ok) return setMensaje({ tipo: "error", texto: cuerpo.error ?? "No fue posible cargar el documento." });

@@ -10,10 +10,20 @@ export const PESTANAS = [
 ] as const;
 export type Pestana = (typeof PESTANAS)[number]["clave"];
 
-export function Pestanas({ base, activa, conteos }: { base: string; activa: Pestana; conteos: Partial<Record<Pestana, number>> }) {
+export function Pestanas({
+  base,
+  activa,
+  conteos,
+  ocultar = [],
+}: {
+  base: string;
+  activa: Pestana;
+  conteos: Partial<Record<Pestana, number>>;
+  ocultar?: Pestana[];
+}) {
   return (
     <nav className="flex gap-1 border-b border-linea bg-white px-8" aria-label="Secciones del contrato">
-      {PESTANAS.map((p) => (
+      {PESTANAS.filter((p) => !ocultar.includes(p.clave)).map((p) => (
         <Link
           key={p.clave}
           href={p.clave === "documento" ? base : `${base}?pestana=${p.clave}`}

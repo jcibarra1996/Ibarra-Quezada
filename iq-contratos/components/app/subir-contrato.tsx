@@ -2,10 +2,21 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Boton } from "@/components/ui/boton";
+import { subirTemporal } from "@/lib/subir-archivo";
 
 type Fase = "inactivo" | "subiendo" | "error";
 
-export function SubirContrato({ areas, ancho = true }: { areas: { id: string; nombre: string }[]; ancho?: boolean }) {
+export function SubirContrato({
+  areas,
+  ancho = true,
+  texto = "Subir contrato",
+  variante = "primario",
+}: {
+  areas: { id: string; nombre: string }[];
+  ancho?: boolean;
+  texto?: string;
+  variante?: "primario" | "secundario";
+}) {
   const [abierto, setAbierto] = useState(false);
   const [archivo, setArchivo] = useState<File | null>(null);
   const [fase, setFase] = useState<Fase>("inactivo");
@@ -25,11 +36,22 @@ export function SubirContrato({ areas, ancho = true }: { areas: { id: string; no
   async function enviar(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!archivo) return;
-    const datos = new FormData(e.currentTarget);
-    datos.set("archivo", archivo);
+    const formulario = new FormData(e.currentTarget);
     setFase("subiendo");
     setError("");
-    const r = await fetch("/api/contratos", { method: "POST", body: datos });
+    let ruta: string;
+    try {
+      ruta = await subirTemporal(archivo);
+    } catch (err) {
+      setFase("error");
+      setError(err instanceof Error ? err.message : "No fue posible subir el archivo.");
+      return;
+    }
+    const r = await fetch("/api/contratos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ruta, nombre: archivo.name, contraparte: formulario.get("contraparte"), area_id: formulario.get("area_id") }),
+    });
     const cuerpo = await r.json().catch(() => ({}));
     if (!r.ok) {
       setFase("error");
@@ -45,11 +67,11 @@ export function SubirContrato({ areas, ancho = true }: { areas: { id: string; no
 
   return (
     <>
-      <Boton variante="primario" className={ancho ? "w-full h-9" : ""} onClick={() => setAbierto(true)}>
+      <Boton variante={variante} className={ancho ? "w-full h-9" : ""} onClick={() => setAbierto(true)}>
         <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" aria-hidden>
           <path d="M10 13.5V4M6 7.5 10 3.5l4 4M4 16.5h12" />
         </svg>
-        Subir contrato
+        {texto}
       </Boton>
 
       {abierto && (
