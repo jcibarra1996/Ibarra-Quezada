@@ -10,7 +10,7 @@ import { paginasSinTexto, seleccionarPaginas, seRecorta, tieneTexto } from "./pa
 import { ExtraccionSchema, ErrorExtraccion, procesarExtraccion, type ExtraccionLista } from "./esquema";
 import { CAMPOS, TIPOS_DOCUMENTO, type TipoDocumento } from "./campos";
 
-export const VERSION_PROMPT_EXTRACCION = "2026-10-23.2";
+export const VERSION_PROMPT_EXTRACCION = "2026-10-23.3";
 
 const INSTRUCCIONES = `Usted es un abogado corporativo mexicano. Lee un documento corporativo (acta constitutiva, reforma de estatutos, poder notarial, constancia de situación fiscal, identificación oficial o comprobante de domicilio) para integrar el expediente de una de las partes de un contrato. Un abogado del equipo valida cada dato antes de usarlo.
 
@@ -22,6 +22,7 @@ Dónde buscar cada dato. Vaya directo a estas secciones; no lea ni resuma lo dem
   * Primera hoja o proemio: número de escritura o instrumento (a veces con volumen o libro), fecha, nombre del notario, número de notaría y entidad.
   * Estatutos, normalmente en los primeros artículos o cláusulas: denominación, nacionalidad (cláusula de admisión o exclusión de extranjeros), domicilio y objeto social.
   * Cláusulas transitorias, resoluciones o "nombramientos", casi siempre al final: administrador único o consejo de administración, y el otorgamiento de poderes con el nombre de cada apoderado y sus facultades.
+    Si el poder del representante se otorga ahí, dentro de la propia acta, los datos del poder (poder_escritura, poder_fecha, poder_notario, poder_notaria, poder_lugar) son los de esa misma escritura constitutiva: regístrelos así y anótelo en observaciones.
   * Últimas hojas: notas, certificaciones y la boleta o constancia de inscripción en el Registro Público de Comercio con el folio mercantil electrónico. A veces también el RFC.
 - Poder notarial:
   * Proemio: número de escritura, fecha, notario, notaría y entidad del poder.
