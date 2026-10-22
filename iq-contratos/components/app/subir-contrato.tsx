@@ -1,0 +1,138 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import { Boton } from "@/components/ui/boton";
+
+type Fase = "inactivo" | "subiendo" | "error";
+
+export function SubirContrato({ areas, ancho = true }: { areas: { id: string; nombre: string }[]; ancho?: boolean }) {
+  const [abierto, setAbierto] = useState(false);
+  const [archivo, setArchivo] = useState<File | null>(null);
+  const [fase, setFase] = useState<Fase>("inactivo");
+  const [error, setError] = useState("");
+  const [arrastrando, setArrastrando] = useState(false);
+  const input = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const cerrar = () => {
+    if (fase === "subiendo") return;
+    setAbierto(false);
+    setArchivo(null);
+    setFase("inactivo");
+    setError("");
+  };
+
+  async function enviar(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!archivo) return;
+    const datos = new FormData(e.currentTarget);
+    datos.set("archivo", archivo);
+    setFase("subiendo");
+    setError("");
+    const r = await fetch("/api/contratos", { method: "POST", body: datos });
+    const cuerpo = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      setFase("error");
+      setError(cuerpo.error ?? "No fue posible procesar el archivo.");
+      return;
+    }
+    router.push(`/contratos/${cuerpo.id}`);
+    router.refresh();
+    setAbierto(false);
+    setArchivo(null);
+    setFase("inactivo");
+  }
+
+  return (
+    <>
+      <Boton variante="primario" className={ancho ? "w-full h-9" : ""} onClick={() => setAbierto(true)}>
+        <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" aria-hidden>
+          <path d="M10 13.5V4M6 7.5 10 3.5l4 4M4 16.5h12" />
+        </svg>
+        Subir contrato
+      </Boton>
+
+      {abierto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-tinta/30 px-4" onClick={cerrar}>
+          <form
+            onSubmit={enviar}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-[520px] rounded-lg border border-linea bg-white p-6 shadow-xl"
+            role="dialog"
+            aria-modal
+            aria-labelledby="titulo-subir"
+          >
+            <h2 id="titulo-subir" className="text-[17px] font-semibold tracking-tight">Subir contrato</h2>
+            <p className="mt-1 text-[13px] text-secundario">PDF con texto seleccionable o Word (.docx), hasta 20 MB. El archivo se guarda en almacenamiento privado.</p>
+
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                setArrastrando(true);
+              }}
+              onDragLeave={() => setArrastrando(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setArrastrando(false);
+                const f = e.dataTransfer.files[0];
+                if (f) setArchivo(f);
+              }}
+              onClick={() => input.current?.click()}
+              className={`mt-5 flex cursor-pointer flex-col items-center justify-center rounded-md border border-dashed px-4 py-8 text-center transition-colors ${
+                arrastrando ? "border-terracota bg-terracota-suave" : "border-linea-fuerte bg-lienzo hover:border-secundario"
+              }`}
+            >
+              {archivo ? (
+                <>
+                  <span className="text-[14px] font-medium">{archivo.name}</span>
+                  <span className="mt-1 text-[12px] text-secundario">{(archivo.size / 1024 / 1024).toFixed(2)} MB · haga clic para cambiarlo</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-[14px] font-medium">Arrastre el archivo aquí</span>
+                  <span className="mt-1 text-[12px] text-secundario">o haga clic para seleccionarlo</span>
+                </>
+              )}
+              <input
+                ref={input}
+                type="file"
+                accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                className="hidden"
+                onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
+              />
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="mb-1 block text-[12px] font-medium text-secundario">Contraparte (opcional)</span>
+                <input name="contraparte" placeholder="Se detecta del proemio" className="h-9 w-full rounded-md border border-linea-fuerte px-2.5 text-[13px] outline-none focus:border-terracota" />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-[12px] font-medium text-secundario">Área responsable</span>
+                <select name="area_id" className="h-9 w-full rounded-md border border-linea-fuerte bg-white px-2 text-[13px] outline-none focus:border-terracota">
+                  <option value="">Sin asignar</option>
+                  {areas.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.nombre}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            {error && <p className="mt-4 rounded-md bg-burgundy-suave px-3 py-2 text-[13px] text-burgundy">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-2">
+              <Boton type="button" variante="fantasma" onClick={cerrar} disabled={fase === "subiendo"}>
+                Cancelar
+              </Boton>
+              <Boton type="submit" variante="primario" disabled={!archivo || fase === "subiendo"}>
+                {fase === "subiendo" ? "Leyendo el contrato..." : "Subir y leer"}
+              </Boton>
+            </div>
+          </form>
+        </div>
+      )}
+    </>
+  );
+}

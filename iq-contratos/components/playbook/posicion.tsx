@@ -1,0 +1,153 @@
+"use client";
+import { useState, useTransition } from "react";
+import { Boton } from "@/components/ui/boton";
+import { eliminarPosicion, guardarPosicion, type CamposPosicion } from "@/app/(app)/playbook/acciones";
+
+const CAMPOS: { clave: keyof CamposPosicion; etiqueta: string; filas: number; serif?: boolean }[] = [
+  { clave: "preferida", etiqueta: "Posición preferida", filas: 3 },
+  { clave: "respaldo", etiqueta: "Posición aceptable de respaldo", filas: 3 },
+  { clave: "nunca_se_acepta", etiqueta: "Nunca se acepta", filas: 3 },
+  { clave: "clausula_modelo", etiqueta: "Cláusula modelo aprobada", filas: 6, serif: true },
+];
+
+export function Posicion({
+  playbookId,
+  posicion,
+  editable,
+  nueva = false,
+  alTerminar,
+}: {
+  playbookId: string;
+  posicion: CamposPosicion & { id?: string };
+  editable: boolean;
+  nueva?: boolean;
+  alTerminar?: () => void;
+}) {
+  const [editando, setEditando] = useState(nueva);
+  const [valores, setValores] = useState<CamposPosicion>(posicion);
+  const [error, setError] = useState("");
+  const [pendiente, iniciar] = useTransition();
+
+  const guardar = () =>
+    iniciar(async () => {
+      const r = await guardarPosicion(playbookId, posicion.id ?? null, valores);
+      if (!r.ok) return setError(r.error);
+      setError("");
+      setEditando(false);
+      alTerminar?.();
+    });
+
+  if (!editando) {
+    return (
+      <article className="rounded-lg border border-linea bg-white p-5">
+        <header className="mb-3 flex items-center justify-between">
+          <h3 className="text-[15px] font-semibold">{posicion.tema}</h3>
+          {editable && (
+            <Boton variante="fantasma" onClick={() => setEditando(true)}>
+              Editar
+            </Boton>
+          )}
+        </header>
+        <dl className="grid grid-cols-3 gap-4 text-[13px]">
+          <div>
+            <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-bajo">Preferida</dt>
+            <dd className="leading-relaxed">{posicion.preferida || "Sin definir"}</dd>
+          </div>
+          <div>
+            <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-medio">Respaldo aceptable</dt>
+            <dd className="leading-relaxed">{posicion.respaldo || "Sin definir"}</dd>
+          </div>
+          <div>
+            <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-burgundy">Nunca se acepta</dt>
+            <dd className="leading-relaxed">{posicion.nunca_se_acepta || "Sin definir"}</dd>
+          </div>
+        </dl>
+        {posicion.clausula_modelo && (
+          <div className="mt-4 rounded-md border border-linea bg-lienzo p-3">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-secundario">Cláusula modelo aprobada</p>
+            <p className="font-serif text-[14px] leading-relaxed">{posicion.clausula_modelo}</p>
+          </div>
+        )}
+      </article>
+    );
+  }
+
+  return (
+    <article className="rounded-lg border border-terracota bg-white p-5">
+      <label className="mb-3 block">
+        <span className="mb-1 block text-[12px] font-medium text-secundario">Tema</span>
+        <input
+          value={valores.tema}
+          onChange={(e) => setValores({ ...valores, tema: e.target.value })}
+          placeholder="Por ejemplo: Intereses moratorios"
+          className="h-9 w-full rounded-md border border-linea-fuerte px-2.5 text-[14px] font-medium outline-none focus:border-terracota"
+        />
+      </label>
+      <div className="grid grid-cols-2 gap-3">
+        {CAMPOS.map((c) => (
+          <label key={c.clave} className={`block ${c.clave === "clausula_modelo" ? "col-span-2" : ""}`}>
+            <span className="mb-1 block text-[12px] font-medium text-secundario">{c.etiqueta}</span>
+            <textarea
+              value={valores[c.clave]}
+              onChange={(e) => setValores({ ...valores, [c.clave]: e.target.value })}
+              rows={c.filas}
+              className={`w-full rounded-md border border-linea-fuerte p-2.5 text-[13px] leading-relaxed outline-none focus:border-terracota ${c.serif ? "font-serif text-[14px]" : ""}`}
+            />
+          </label>
+        ))}
+      </div>
+      {error && <p className="mt-2 text-[13px] text-burgundy">{error}</p>}
+      <footer className="mt-4 flex items-center gap-2">
+        <Boton variante="primario" onClick={guardar} disabled={pendiente}>
+          Guardar
+        </Boton>
+        <Boton
+          variante="fantasma"
+          disabled={pendiente}
+          onClick={() => {
+            setValores(posicion);
+            setEditando(false);
+            alTerminar?.();
+          }}
+        >
+          Cancelar
+        </Boton>
+        {posicion.id && (
+          <Boton
+            variante="peligro"
+            className="ml-auto"
+            disabled={pendiente}
+            onClick={() => {
+              if (!confirm(`¿Eliminar la posición "${posicion.tema}" del playbook?`)) return;
+              iniciar(async () => {
+                const r = await eliminarPosicion(posicion.id!);
+                if (!r.ok) setError(r.error);
+              });
+            }}
+          >
+            Eliminar
+          </Boton>
+        )}
+      </footer>
+    </article>
+  );
+}
+
+export function AgregarPosicion({ playbookId }: { playbookId: string }) {
+  const [abierta, setAbierta] = useState(false);
+  if (!abierta)
+    return (
+      <Boton onClick={() => setAbierta(true)} className="w-full border-dashed">
+        Agregar posición
+      </Boton>
+    );
+  return (
+    <Posicion
+      playbookId={playbookId}
+      posicion={{ tema: "", preferida: "", respaldo: "", nunca_se_acepta: "", clausula_modelo: "" }}
+      editable
+      nueva
+      alTerminar={() => setAbierta(false)}
+    />
+  );
+}

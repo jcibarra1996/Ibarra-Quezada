@@ -4,3 +4,6 @@ README.md
 .claude
 .env.example
 despacho-web
+
+# App IQ Contratos: se despliega como proyecto aparte en Vercel (Root Directory = iq-contratos)
+iq-contratos
