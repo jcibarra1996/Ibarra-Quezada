@@ -79,8 +79,8 @@ export function MenuLateral({
         </ul>
       </div>
       <div className="flex items-center justify-between border-t border-linea px-5 py-3 text-[12px] text-secundario">
-        <span className="truncate">
-          {usuario.nombre} · {ROLES[usuario.rol]}
+        <span className="truncate" title={`${usuario.nombre}, ${ROLES[usuario.rol]}`}>
+          {ROLES[usuario.rol]}
         </span>
         <form action={cerrarSesion}>
           <button className="hover:text-tinta">Salir</button>

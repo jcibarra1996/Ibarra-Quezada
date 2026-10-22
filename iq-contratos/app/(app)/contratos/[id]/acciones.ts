@@ -39,3 +39,20 @@ export async function cambiarEstado(contratoId: string, estado: EstadoContrato):
   revalidatePath("/contratos");
   return { ok: true };
 }
+
+export async function marcarFirmado(contratoId: string, fechaFirma: string): Promise<Resultado> {
+  const usuario = await exigirUsuario();
+  if (!permisos.cambiarEstado(usuario.rol)) return { ok: false, error: "Su rol no permite registrar firmas." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaFirma)) return { ok: false, error: "Indique la fecha de firma." };
+  const supabase = await clienteSesion();
+  const { data, error } = await supabase
+    .from("contracts")
+    .update({ estado: "firmado", firmado_en: `${fechaFirma}T12:00:00-06:00` })
+    .eq("id", contratoId)
+    .select("id")
+    .maybeSingle();
+  if (error || !data) return { ok: false, error: mensajeDe(error, "No se pudo registrar la firma.") };
+  revalidatePath("/firmas");
+  revalidatePath(`/contratos/${contratoId}`);
+  return { ok: true };
+}

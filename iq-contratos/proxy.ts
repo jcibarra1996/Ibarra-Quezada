@@ -20,7 +20,8 @@ export async function proxy(request: NextRequest) {
     },
   );
   const { data } = await supabase.auth.getUser();
-  const publica = request.nextUrl.pathname.startsWith("/login");
+  // La tarea programada de avisos se autentica con su propio secreto (CRON_SECRET).
+  const publica = request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname === "/api/alertas/cron";
   if (!data.user && !publica) {
     if (request.nextUrl.pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Sesión no válida." }, { status: 401 });
