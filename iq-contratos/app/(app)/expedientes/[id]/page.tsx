@@ -63,6 +63,7 @@ export default async function PaginaExpediente({ params }: { params: Promise<{ i
             </p>
           )}
           <FormularioExpediente
+            key={e.actualizado_en}
             id={e.id}
             tipo={tipo}
             denominacion={e.denominacion}

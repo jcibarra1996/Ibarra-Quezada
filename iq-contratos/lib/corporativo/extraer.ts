@@ -155,11 +155,21 @@ async function prepararPdf(datos: Buffer, tipo: TipoDocumento): Promise<{ bloque
         type: "document",
         source: { type: "base64", media_type: "application/pdf", data: bytes.toString("base64") },
         title: `Páginas ${paginas.join(", ")} de ${total} del original`,
-        context: `Las páginas de este PDF corresponden, en orden, a las páginas ${paginas.join(", ")} del documento original de ${total} páginas. Reporte el número de página original.`,
+        context: correspondencia(paginas, total),
       },
       lectura: { paginas, total },
     };
   } catch {
     return { bloque: completo(), lectura: { paginas: null, total: null } };
   }
+}
+
+// "La página 5 de este PDF es la página 23 del original", para que el modelo no confunda
+// la numeración del recorte con la del documento.
+export function correspondencia(paginas: number[], total: number): string {
+  return (
+    `Este PDF es un recorte de ${paginas.length} páginas de un documento de ${total}. Todas las páginas del recorte se recibieron completas. ` +
+    paginas.map((n, i) => `La página ${i + 1} de este PDF es la página ${n} del original.`).join(" ") +
+    " Reporte siempre el número de página del original."
+  );
 }

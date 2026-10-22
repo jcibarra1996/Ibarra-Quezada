@@ -55,6 +55,9 @@ export interface Campo {
   personas: TipoPersona[];
   // Documentos que son fuente primaria del dato: si uno de ellos lo trae, prevalece.
   fuentes: TipoDocumento[];
+  // Si se indica, el dato solo se toma de estos documentos. El domicilio de un acta es la
+  // ciudad del domicilio social, no una dirección para notificaciones.
+  soloDe?: TipoDocumento[];
   ayuda?: string;
 }
 
@@ -95,7 +98,7 @@ export const CAMPOS: Campo[] = [
     ayuda: "Tal como las describe el instrumento (por ejemplo, actos de administración, pleitos y cobranzas, títulos de crédito).",
   },
   { clave: "identificacion", etiqueta: "Identificación oficial", grupo: "Representación", tipo: "texto", personas: AMBAS, fuentes: ["identificacion"], ayuda: "Tipo de identificación y su número o folio." },
-  { clave: "domicilio_fiscal", etiqueta: "Domicilio fiscal", grupo: "Datos fiscales y domicilio", tipo: "texto", personas: AMBAS, fuentes: ["constancia_fiscal"] },
+  { clave: "domicilio_fiscal", etiqueta: "Domicilio fiscal", grupo: "Datos fiscales y domicilio", tipo: "texto", personas: AMBAS, fuentes: ["constancia_fiscal"], soloDe: ["constancia_fiscal"] },
   {
     clave: "domicilio",
     etiqueta: "Domicilio para efectos del contrato",
@@ -103,6 +106,7 @@ export const CAMPOS: Campo[] = [
     tipo: "texto",
     personas: AMBAS,
     fuentes: ["comprobante_domicilio", "constancia_fiscal"],
+    soloDe: ["comprobante_domicilio", "constancia_fiscal"],
   },
   { clave: "correo_notificaciones", etiqueta: "Correo para notificaciones", grupo: "Datos fiscales y domicilio", tipo: "texto", personas: AMBAS, fuentes: [] },
 ];
@@ -191,6 +195,7 @@ export function integrarDatos(p: {
     const campo = CAMPO[e.clave];
     const valor = e.valor.trim();
     if (!campo || !valor) continue;
+    if (campo.soloDe && !campo.soloDe.includes(p.documento.tipo)) continue;
     const anterior = datos[e.clave]?.trim() ?? "";
     const fuente: Fuente = { documento_id: p.documento.id, tipo: p.documento.tipo, cita: e.cita?.trim() || null, pagina: e.pagina };
     if (!anterior) {

@@ -31,10 +31,20 @@ describe("lectura dirigida de instrumentos notariales", () => {
   });
 
   it("en un PDF escaneado toma las primeras y las últimas páginas", () => {
-    expect(paginasSinTexto(40)).toEqual([1, 2, 3, 4, 37, 38, 39, 40]);
+    expect(paginasSinTexto(40)).toEqual([1, 2, 3, 4, 5, 6, 35, 36, 37, 38, 39, 40]);
     expect(paginasSinTexto(5)).toEqual([1, 2, 3, 4, 5]);
+    expect(paginasSinTexto(28, 8)).toEqual([1, 2, 3, 4, 25, 26, 27, 28]);
     expect(tieneTexto(["", " ", "x"])).toBe(false);
     expect(tieneTexto(acta)).toBe(true);
+  });
+});
+
+describe("recorte de un PDF escaneado", () => {
+  it("le dice al modelo qué página del original es cada página del recorte", async () => {
+    const { correspondencia } = await import("@/lib/corporativo/extraer");
+    const t = correspondencia([1, 2, 25, 26], 28);
+    expect(t).toContain("La página 3 de este PDF es la página 25 del original.");
+    expect(t).toContain("se recibieron completas");
   });
 });
 

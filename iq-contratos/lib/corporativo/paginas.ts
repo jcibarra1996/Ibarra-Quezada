@@ -76,7 +76,7 @@ export function seleccionarPaginas(textos: string[], tipo: TipoDocumento, maximo
 }
 
 // Para un PDF escaneado no hay texto que puntuar: primeras y últimas páginas.
-export function paginasSinTexto(total: number, maximo = 8): number[] {
+export function paginasSinTexto(total: number, maximo = 12): number[] {
   if (total <= maximo) return Array.from({ length: total }, (_, i) => i + 1);
   const mitad = Math.floor(maximo / 2);
   return [...Array.from({ length: mitad }, (_, i) => i + 1), ...Array.from({ length: maximo - mitad }, (_, i) => total - (maximo - mitad) + i + 1)];
