@@ -92,7 +92,9 @@ Las pruebas de integración modifican datos de la semilla; corra `npm run seed` 
    No lo corra en un proyecto con datos reales: borra y recrea la empresa de demostración.
 3. **Proyecto en Vercel.** Importe el repositorio como un proyecto nuevo, separado del sitio
    ibarraquezada.com, con **Root Directory = `iq-contratos`** (Vercel detecta Next.js).
-   El `.vercelignore` de la raíz del repositorio excluye `iq-contratos/` del sitio web.
+   El `vercel.json` de la raíz (el del sitio) redirige `/iq-contratos/...` a la página de inicio
+   para que el sitio no publique el código de la app. No use `.vercelignore` para eso: Vercel
+   aplica el de la raíz del repositorio a todos sus proyectos y borraría la app antes de construirla.
 4. **Variables.** Cargue las de la tabla anterior en Settings > Environment Variables. En
    producción use `MODO_DEMO=false`.
 5. **Duración de funciones.** El análisis declara `maxDuration = 300` segundos. Verifique que su
