@@ -3,7 +3,10 @@ import { cargarRevision } from "@/lib/revision/cargar";
 import { registrarAcceso } from "@/lib/contratos/bitacora";
 import { EncabezadoContrato } from "@/components/revision/encabezado-contrato";
 import { Pestanas, PESTANAS, type Pestana } from "@/components/revision/pestanas";
-import { VisorContrato } from "@/components/revision/visor";
+import { EspacioRevision } from "@/components/revision/espacio-revision";
+import { ListaHallazgos } from "@/components/revision/lista-hallazgos";
+import { SelectorEstado } from "@/components/revision/selector-estado";
+import { permisos } from "@/lib/tipos";
 import { ListaVersiones } from "@/components/revision/versiones";
 import { Historial } from "@/components/revision/historial";
 import { Boton } from "@/components/ui/boton";
@@ -13,11 +16,11 @@ export default async function PaginaRevision({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ pestana?: string }>;
+  searchParams: Promise<{ pestana?: string; h?: string }>;
 }) {
   const usuario = await exigirUsuario();
   const { id } = await params;
-  const { pestana: p } = await searchParams;
+  const { pestana: p, h } = await searchParams;
   const pestana: Pestana = PESTANAS.some((x) => x.clave === p) ? (p as Pestana) : "documento";
   const datos = await cargarRevision(id);
   const { contrato, version } = datos;
@@ -30,25 +33,35 @@ export default async function PaginaRevision({
     <div className="flex h-full flex-col">
       <EncabezadoContrato
         contrato={contrato}
+        estado={<SelectorEstado contratoId={contrato.id} estado={contrato.estado} editable={permisos.cambiarEstado(usuario.rol)} />}
         acciones={
           <Boton variante="primario" disabled title="Disponible al validar hallazgos">
             Enviar contrapropuesta
           </Boton>
         }
       />
-      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length }} />
+      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length, hallazgos: datos.hallazgos.length }} />
 
       {pestana === "documento" && (
-        <div className="flex min-h-0 flex-1">
-          {version ? (
-            <VisorContrato secciones={datos.secciones} paginas={version.paginas} paginasVirtuales={version.paginas_virtuales} />
-          ) : (
-            <p className="p-8 text-secundario">Este contrato no tiene documento cargado.</p>
-          )}
-          <aside className="w-[400px] shrink-0 border-l border-linea bg-white p-5">
-            <h2 className="text-[15px] font-semibold">Análisis IA</h2>
-            <p className="mt-2 text-[13px] text-secundario">El análisis contra el playbook se habilita en la siguiente etapa.</p>
-          </aside>
+        version ? (
+          <EspacioRevision
+            contratoId={contrato.id}
+            secciones={datos.secciones}
+            paginas={version.paginas}
+            paginasVirtuales={version.paginas_virtuales}
+            analisis={datos.analisis}
+            hallazgos={datos.hallazgos}
+            puedeValidar={permisos.validar(usuario.rol)}
+            perfiles={datos.perfiles}
+            inicial={h ?? null}
+          />
+        ) : (
+          <p className="p-8 text-secundario">Este contrato no tiene documento cargado.</p>
+        )
+      )}
+      {pestana === "hallazgos" && (
+        <div className="px-8 py-6">
+          <ListaHallazgos contratoId={contrato.id} hallazgos={datos.hallazgos} perfiles={datos.perfiles} />
         </div>
       )}
       {pestana === "versiones" && (
@@ -61,7 +74,7 @@ export default async function PaginaRevision({
           <Historial eventos={datos.historial} perfiles={datos.perfiles} />
         </div>
       )}
-      {(pestana === "hallazgos" || pestana === "comentarios") && (
+      {pestana === "comentarios" && (
         <p className="px-8 py-6 text-[13.5px] text-secundario">Esta sección se habilita en la siguiente etapa.</p>
       )}
     </div>

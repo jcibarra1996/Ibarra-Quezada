@@ -6,9 +6,11 @@ import { BotonCompartir } from "./boton-compartir";
 export function EncabezadoContrato({
   contrato,
   acciones,
+  estado,
 }: {
   contrato: { id: string; titulo: string; contraparte: string; estado: string; recibido_en: string; tipo_contrato: string | null; areas: unknown };
   acciones?: React.ReactNode;
+  estado?: React.ReactNode;
 }) {
   const area = (contrato.areas as { nombre: string } | null)?.nombre;
   return (
@@ -34,9 +36,7 @@ export function EncabezadoContrato({
             </div>
             <div className="flex items-center gap-1.5">
               <dt className="sr-only">Estado</dt>
-              <dd>
-                <EtiquetaEstado estado={contrato.estado as EstadoContrato} />
-              </dd>
+              <dd>{estado ?? <EtiquetaEstado estado={contrato.estado as EstadoContrato} />}</dd>
             </div>
           </dl>
         </div>

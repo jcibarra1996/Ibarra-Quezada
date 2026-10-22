@@ -18,13 +18,13 @@ function describir(e: Evento): string {
     case "estado_cambiado":
       return `Cambió el estado de ${ESTADOS[d.de as EstadoContrato] ?? d.de} a ${ESTADOS[d.a as EstadoContrato] ?? d.a}.`;
     case "analisis_completado":
-      return `Análisis de IA completado: ${d.hallazgos ?? 0} hallazgo(s)${d.descartados ? `, ${d.descartados} omitido(s) por no encontrar la cita exacta` : ""}.`;
+      return `Análisis de IA completado: ${plural(d.hallazgos, "hallazgo", "hallazgos")}${d.descartados ? `; ${plural(d.descartados, "omitido", "omitidos")} por no encontrar la cita exacta` : ""}.`;
     case "analisis_fallido":
       return "El análisis de IA no se pudo completar.";
     case "comentario":
       return d.audiencia === "negocio" ? "Agregó un comentario para el área de negocio." : "Agregó un comentario del equipo legal.";
     case "contrapropuesta_generada":
-      return `Generó la contrapropuesta en Word con ${d.cambios ?? 0} cambio(s) en control de cambios.`;
+      return `Generó la contrapropuesta en Word con ${plural(d.cambios, "cambio", "cambios")} en control de cambios.`;
     case "datos_actualizados":
       return "Actualizó los datos generales del contrato.";
     default:

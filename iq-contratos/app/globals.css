@@ -69,3 +69,12 @@ mark.resaltado[data-activo="true"] {
   outline: 2px solid var(--color-terracota);
   outline-offset: 2px;
 }
+
+@keyframes avance {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+del + ins {
+  margin-left: 3px;
+}
