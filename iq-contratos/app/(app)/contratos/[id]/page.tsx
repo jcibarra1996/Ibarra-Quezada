@@ -53,7 +53,7 @@ export default async function PaginaRevision({
         acciones={
           legal ? (
             <>
-              {(contrato.estado === "aprobado" || datos.firmas.length > 0) && (
+              {(contrato.estado !== "firmado" || datos.firmas.length > 0) && (
                 <FirmaElectronica
                   contratoId={contrato.id}
                   estado={contrato.estado as EstadoContrato}
