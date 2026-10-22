@@ -57,6 +57,13 @@ describe("integración de datos extraídos", () => {
     expect(csf.diferencias[0]).toMatchObject({ anterior: "222", nuevo: "333", reemplazado: false });
   });
 
+  it("el domicilio solo se toma de la constancia fiscal o de un comprobante, nunca del acta", () => {
+    const r = integrarDatos({ datos: {}, fuentes: {}, documento: doc("acta_constitutiva"), extraidos: [{ clave: "domicilio", valor: "Ciudad de México", cita: null, pagina: 1 }] });
+    expect(r.datos.domicilio).toBeUndefined();
+    const c = integrarDatos({ datos: {}, fuentes: {}, documento: doc("constancia_fiscal"), extraidos: [{ clave: "domicilio", valor: "Calle Uno 1, CDMX", cita: null, pagina: 1 }] });
+    expect(c.datos.domicilio).toBe("Calle Uno 1, CDMX");
+  });
+
   it("no cuenta como cambio una diferencia de forma", () => {
     const r = integrarDatos({ datos: { domicilio: "Calle Uno 1, CDMX" }, fuentes: {}, documento: doc("constancia_fiscal"), extraidos: [{ clave: "domicilio", valor: "calle uno 1 cdmx", cita: null, pagina: null }] });
     expect(r.cambios).toEqual([]);
