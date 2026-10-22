@@ -133,6 +133,27 @@ describe("procesamiento del análisis", () => {
     expect(aviso?.dias_aviso).toBe(90);
   });
 
+  it("ubica en las declaraciones un hallazgo de dato corporativo contra el expediente", () => {
+    const salida = analisisSuministro(POS) as { hallazgos: Record<string, unknown>[] };
+    salida.hallazgos.push({
+      clausula: "DECLARACIÓN I",
+      cita_textual: "según consta en la escritura pública número 00000, otorgada ante la fe del Notario Público número 000 de la Ciudad de México",
+      tema: "Datos de constitución de EL PROVEEDOR",
+      posicion_playbook_id: null,
+      tipo: "dato_corporativo",
+      nivel_riesgo: "medio",
+      explicacion: "El acta constitutiva del expediente indica la escritura 12,345 ante la Notaría 902 de Monterrey.",
+      redaccion_propuesta: "según consta en la escritura pública número 12,345, de fecha 21 de septiembre de 2018, otorgada ante la fe de Óscar Ficticio Lara, titular de la Notaría Pública número 902 de Monterrey, Nuevo León",
+      referencias_normativas: [],
+    });
+    const r2 = procesarAnalisis({ salida, texto: doc.texto, secciones, posicionesValidas, hoy: "2026-10-22" });
+    const h = r2.hallazgos.find((x) => x.tipo === "dato_corporativo")!;
+    expect(h.clausula).toBe("DECLARACIÓN I");
+    expect(doc.texto.slice(h.cita_inicio!, h.cita_fin!)).toContain("00000");
+    // Va antes que las cláusulas: el orden sigue al documento.
+    expect(h.numero).toBe(1);
+  });
+
   it("quita rayas largas del texto para personas", () => {
     expect(sinRayas("Riesgo alto — revisar")).toBe("Riesgo alto, revisar");
   });

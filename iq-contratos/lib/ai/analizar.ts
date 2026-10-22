@@ -5,7 +5,17 @@ import { clienteSistema } from "@/lib/supabase/admin";
 import { env } from "@/lib/env";
 import { registrar, registrarError } from "@/lib/log";
 import { AnalisisSchema } from "./esquema";
-import { INSTRUCCIONES_SISTEMA, VERSION_PROMPT, mensajeUsuario, textoContrato, textoPlaybooks, type PlaybookPrompt } from "./prompt";
+import {
+  INSTRUCCIONES_SISTEMA,
+  VERSION_PROMPT,
+  mensajeUsuario,
+  textoContrato,
+  textoExpedientes,
+  textoPlaybooks,
+  type ExpedientePrompt,
+  type PlaybookPrompt,
+} from "./prompt";
+import { expedienteParaPrompt } from "@/lib/corporativo/para-prompt";
 import { procesarAnalisis, ErrorSalidaModelo } from "./procesar";
 import { generarAlertas } from "@/lib/fechas/alertas";
 
@@ -19,7 +29,7 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
   const db = clienteSistema();
   const { data: contrato } = await db
     .from("contracts")
-    .select("id, org_id, version_actual_id, contraparte, estado, area_responsable_id, organizations(nombre)")
+    .select("id, org_id, version_actual_id, contraparte, estado, area_responsable_id, contraparte_id, propia_id, organizations(nombre)")
     .eq("id", p.contratoId)
     .eq("org_id", p.orgId)
     .single();
@@ -29,13 +39,17 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
     throw new ErrorAnalisis("El contrato ya está aprobado o firmado. Para analizarlo de nuevo, regréselo primero a En negociación.");
   }
 
-  const [{ data: version }, { data: secciones }, { data: playbooks }] = await Promise.all([
+  const idsExpedientes = [contrato.propia_id, contrato.contraparte_id].filter(Boolean) as string[];
+  const [{ data: version }, { data: secciones }, { data: playbooks }, { data: expedientes }] = await Promise.all([
     db.from("contract_versions").select("id, texto_extraido").eq("id", contrato.version_actual_id).single(),
     db.from("contract_sections").select("id, etiqueta, texto, inicio, fin").eq("version_id", contrato.version_actual_id).order("orden"),
     db
       .from("playbooks")
       .select("id, tipo_contrato, nombre, playbook_positions(id, tema, preferida, respaldo, nunca_se_acepta, clausula_modelo, orden)")
       .eq("org_id", p.orgId),
+    idsExpedientes.length
+      ? db.from("companies").select("id, denominacion, rfc, tipo_persona, estado, datos, fuentes").eq("org_id", p.orgId).in("id", idsExpedientes)
+      : Promise.resolve({ data: [] }),
   ]);
   if (!version || !secciones) throw new ErrorAnalisis("No se encontró el texto del contrato.");
 
@@ -46,6 +60,11 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
   }));
   const posicionesValidas = new Set(playbooksPrompt.flatMap((pb) => pb.posiciones.map((x) => x.id)));
   const modelo = env.modelo();
+  const bloquesExpediente: ExpedientePrompt[] = [];
+  const propia = expedientes?.find((e) => e.id === contrato.propia_id);
+  const contraparte = expedientes?.find((e) => e.id === contrato.contraparte_id);
+  if (propia) bloquesExpediente.push(expedienteParaPrompt(propia, "empresa"));
+  if (contraparte) bloquesExpediente.push(expedienteParaPrompt(contraparte, "contraparte"));
 
   const { data: analisis, error: errAnalisis } = await db
     .from("analyses")
@@ -73,7 +92,12 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
       messages: [
         {
           role: "user",
-          content: mensajeUsuario({ organizacion, fechaHoy: hoyEnMexico(), contrato: textoContrato(secciones) }),
+          content: mensajeUsuario({
+            organizacion,
+            fechaHoy: hoyEnMexico(),
+            contrato: textoContrato(secciones),
+            expedientes: textoExpedientes(bloquesExpediente),
+          }),
         },
       ],
     });
@@ -139,7 +163,14 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
       contract_id: contrato.id,
       actor_id: null,
       accion: "analisis_completado",
-      detalle: { hallazgos: r.hallazgos.length, descartados: r.descartados_sin_cita, modelo, version_prompt: VERSION_PROMPT },
+      detalle: {
+        hallazgos: r.hallazgos.length,
+        descartados: r.descartados_sin_cita,
+        corporativos: r.hallazgos.filter((h) => h.tipo === "dato_corporativo").length,
+        expedientes: bloquesExpediente.length,
+        modelo,
+        version_prompt: VERSION_PROMPT,
+      },
     });
     registrar("analisis_completado", {
       contrato: contrato.id,

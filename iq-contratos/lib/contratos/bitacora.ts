@@ -10,6 +10,9 @@ export async function registrarAcceso(p: {
   accion: "ver" | "descargar";
   versionId?: string;
   contrapropuestaId?: string;
+  documentoCorporativoId?: string;
+  // Para registrar después de responder (after), los encabezados se leen antes.
+  encabezados?: { ip: string | null; userAgent: string | null };
 }) {
   const db = clienteSistema();
   if (p.accion === "ver" && p.versionId) {
@@ -23,14 +26,20 @@ export async function registrarAcceso(p: {
       .gte("creado_en", desde);
     if (count) return;
   }
-  const h = await headers();
+  const e = p.encabezados ?? (await encabezadosAcceso());
   await db.from("document_access_log").insert({
     org_id: p.orgId,
     actor_id: p.actorId,
     accion: p.accion,
     version_id: p.versionId ?? null,
     counterproposal_id: p.contrapropuestaId ?? null,
-    ip: h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
-    user_agent: h.get("user-agent")?.slice(0, 300) ?? null,
+    corporate_document_id: p.documentoCorporativoId ?? null,
+    ip: e.ip,
+    user_agent: e.userAgent,
   });
+}
+
+export async function encabezadosAcceso() {
+  const h = await headers();
+  return { ip: h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null, userAgent: h.get("user-agent")?.slice(0, 300) ?? null };
 }

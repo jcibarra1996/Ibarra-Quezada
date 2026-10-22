@@ -3,6 +3,7 @@ import Link from "next/link";
 export const PESTANAS = [
   { clave: "documento", texto: "Documento" },
   { clave: "hallazgos", texto: "Hallazgos" },
+  { clave: "partes", texto: "Partes y expedientes" },
   { clave: "versiones", texto: "Versiones" },
   { clave: "comentarios", texto: "Comentarios" },
   { clave: "historial", texto: "Historial" },

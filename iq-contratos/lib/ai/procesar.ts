@@ -16,7 +16,7 @@ export interface SeccionRef {
 
 export interface HallazgoListo {
   numero: number;
-  tipo: "desviacion_playbook" | "ajena_al_objeto" | "omision";
+  tipo: "desviacion_playbook" | "ajena_al_objeto" | "dato_corporativo" | "omision";
   clausula: string;
   tema: string;
   posicion_id: string | null;

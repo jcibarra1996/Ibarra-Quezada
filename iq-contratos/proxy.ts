@@ -19,10 +19,11 @@ export async function proxy(request: NextRequest) {
       },
     },
   );
-  const { data } = await supabase.auth.getUser();
+  // Renueva el token si venció y verifica su firma.
+  const { data } = await supabase.auth.getClaims();
   // La tarea programada de avisos se autentica con su propio secreto (CRON_SECRET).
   const publica = request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname === "/api/alertas/cron";
-  if (!data.user && !publica) {
+  if (!data?.claims?.sub && !publica) {
     if (request.nextUrl.pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Sesión no válida." }, { status: 401 });
     }

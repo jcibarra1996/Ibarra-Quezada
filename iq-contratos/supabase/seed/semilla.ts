@@ -1,5 +1,6 @@
 // Datos semilla de la demostración: una empresa ficticia, 3 usuarios, áreas,
-// el playbook de ejemplo y 5 contratos ficticios en formato mexicano.
+// el playbook de ejemplo, plantillas, expedientes corporativos y 5 contratos ficticios
+// en formato mexicano.
 //
 // Uso:  npm run seed
 // Los contratos se convierten a .docx y pasan por el mismo proceso que una subida real
@@ -10,11 +11,12 @@ import { config } from "dotenv";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
-import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
 import { PLAYBOOKS_EJEMPLO } from "./playbook";
 import { CONTRASENA_DEMO, ORG_DEMO, USUARIOS_DEMO } from "../../lib/demo";
 import { registrarContrato, BUCKET } from "../../lib/contratos/registrar";
 import { analizarContrato } from "../../lib/ai/analizar";
+import { textoADocx } from "../../lib/docx/desde-texto";
+import { sembrarClm } from "./clm";
 import type { Usuario } from "../../lib/tipos";
 
 config({ path: path.join(import.meta.dirname, "../../.env.local") });
@@ -43,29 +45,23 @@ const ESCENARIO: Record<string, { estado: string; recibido: string; area: string
 // suministro, para que la demo arranque con ese análisis listo.
 const ANALIZAR = process.argv.includes("--analizar");
 
-function aDocx(texto: string): Promise<Buffer> {
-  const bloques = texto.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
-  const parrafos = bloques.map((b) => {
-    const encabezado = /^(DECLARACIONES|CLÁUSULAS|ANTECEDENTES)$/.test(b);
-    const lineas = b.split("\n");
-    return new Paragraph({
-      alignment: encabezado ? AlignmentType.CENTER : AlignmentType.JUSTIFIED,
-      spacing: { after: 200 },
-      children: lineas.map((l, i) => new TextRun({ text: l, bold: encabezado, break: i > 0 ? 1 : undefined, font: "Times New Roman", size: 24 })),
-    });
-  });
-  return Packer.toBuffer(new Document({ sections: [{ children: parrafos }] }));
+// Lista todos los archivos bajo una carpeta del almacenamiento, en cualquier nivel.
+async function archivosBajo(prefijo: string): Promise<string[]> {
+  const { data } = await db.storage.from(BUCKET).list(prefijo, { limit: 1000 });
+  const rutas: string[] = [];
+  for (const f of data ?? []) {
+    const ruta = `${prefijo}/${f.name}`;
+    if (f.id) rutas.push(ruta);
+    else rutas.push(...(await archivosBajo(ruta)));
+  }
+  return rutas;
 }
 
 async function limpiar() {
   const { data: orgs } = await db.from("organizations").select("id").eq("nombre", ORG_DEMO);
   for (const o of orgs ?? []) {
-    const { data: archivos } = await db.storage.from(BUCKET).list(o.id, { limit: 1000 });
-    for (const carpeta of archivos ?? []) {
-      const { data: dentro } = await db.storage.from(BUCKET).list(`${o.id}/${carpeta.name}`, { limit: 1000 });
-      const rutas = (dentro ?? []).map((f) => `${o.id}/${carpeta.name}/${f.name}`);
-      if (rutas.length) await db.storage.from(BUCKET).remove(rutas);
-    }
+    const rutas = await archivosBajo(o.id);
+    for (let i = 0; i < rutas.length; i += 100) await db.storage.from(BUCKET).remove(rutas.slice(i, i + 100));
     await db.from("organizations").delete().eq("id", o.id);
   }
   const { data: usuarios } = await db.auth.admin.listUsers({ perPage: 1000 });
@@ -106,11 +102,16 @@ async function main() {
     await db.from("playbook_positions").insert(pb.posiciones.map((p, i) => ({ ...p, org_id: org.id, playbook_id: playbook!.id, orden: i })));
   }
 
+  // Expedientes y plantillas antes que los contratos, para que cada contrato quede
+  // vinculado con el expediente de sus partes al registrarse.
+  console.log("Ciclo de vida: plantillas y expedientes corporativos...");
+  await sembrarClm(db, { orgId: org.id, directoraId: directora.id, comprasId: compras.id });
+
   const dir = path.join(import.meta.dirname, "contratos");
   for (const archivo of readdirSync(dir).filter((f) => f.endsWith(".txt")).sort()) {
     const escenario = ESCENARIO[archivo];
     const texto = readFileSync(path.join(dir, archivo), "utf8");
-    const docx = await aDocx(texto);
+    const docx = await textoADocx(texto);
     const { contratoId } = await registrarContrato({
       usuario: compras,
       nombreArchivo: archivo.replace(/\.txt$/, ".docx"),

@@ -7,7 +7,7 @@ import { clienteSesion } from "@/lib/supabase/server";
 import { fechaHora } from "@/lib/formato";
 import { permisos, TIPOS_CONTRATO, type TipoContrato } from "@/lib/tipos";
 
-export const metadata = { title: "Plantillas y playbook" };
+export const metadata = { title: "Playbook" };
 
 export default async function Playbook({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const usuario = await exigirUsuario();
@@ -29,7 +29,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
   return (
     <div>
       <EncabezadoPagina
-        titulo="Plantillas y playbook"
+        titulo="Playbook"
         descripcion="Posiciones estándar de la dirección legal por tipo de contrato. La IA compara cada cláusula contra estas posiciones y propone redacción con base en la cláusula modelo."
         acciones={editable ? <CrearPlaybook disponibles={disponibles} /> : undefined}
       />

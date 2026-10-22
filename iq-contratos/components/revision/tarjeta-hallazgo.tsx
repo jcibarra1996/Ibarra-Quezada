@@ -11,6 +11,7 @@ import { decidirHallazgo } from "@/app/(app)/contratos/[id]/acciones";
 const TIPO: Record<Hallazgo["tipo"], string> = {
   desviacion_playbook: "Desviación del playbook",
   ajena_al_objeto: "No corresponde al objeto del contrato",
+  dato_corporativo: "Dato corporativo contra expediente",
   omision: "Falta en el contrato",
 };
 
