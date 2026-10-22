@@ -4,5 +4,17 @@
       "source": "/IQLAW/(.*)",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/iq-contratos/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/iq-contratos",
+      "destination": "/",
+      "permanent": false
+    }
   ]
 }
