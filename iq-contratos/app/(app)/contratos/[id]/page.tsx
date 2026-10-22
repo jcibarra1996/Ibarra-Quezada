@@ -9,7 +9,7 @@ import { SelectorEstado } from "@/components/revision/selector-estado";
 import { permisos } from "@/lib/tipos";
 import { ListaVersiones } from "@/components/revision/versiones";
 import { Historial } from "@/components/revision/historial";
-import { Boton } from "@/components/ui/boton";
+import { BotonContrapropuesta } from "@/components/revision/boton-contrapropuesta";
 
 export default async function PaginaRevision({
   params,
@@ -35,12 +35,15 @@ export default async function PaginaRevision({
         contrato={contrato}
         estado={<SelectorEstado contratoId={contrato.id} estado={contrato.estado} editable={permisos.cambiarEstado(usuario.rol)} />}
         acciones={
-          <Boton variante="primario" disabled title="Disponible al validar hallazgos">
-            Enviar contrapropuesta
-          </Boton>
+          <BotonContrapropuesta
+            contratoId={contrato.id}
+            cambios={datos.hallazgos.filter((x) => x.estado === "aceptado" || x.estado === "editado").length}
+            altosPendientes={datos.hallazgos.filter((x) => x.riesgo === "alto" && x.estado === "pendiente").length}
+            habilitado={permisos.validar(usuario.rol)}
+          />
         }
       />
-      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length, hallazgos: datos.hallazgos.length }} />
+      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length }} />
 
       {pestana === "documento" && (
         version ? (
@@ -66,7 +69,7 @@ export default async function PaginaRevision({
       )}
       {pestana === "versiones" && (
         <div className="px-8 py-6">
-          <ListaVersiones versiones={datos.versiones} actual={contrato.version_actual_id} perfiles={datos.perfiles} />
+          <ListaVersiones versiones={datos.versiones} actual={contrato.version_actual_id} perfiles={datos.perfiles} contrapropuestas={datos.contrapropuestas} />
         </div>
       )}
       {pestana === "historial" && (

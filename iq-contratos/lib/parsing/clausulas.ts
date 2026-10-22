@@ -87,6 +87,17 @@ export function ordinalANumero(etiqueta: string): number | null {
   return total || null;
 }
 
+const UNIDADES_ACENTO = ["PRIMERA", "SEGUNDA", "TERCERA", "CUARTA", "QUINTA", "SEXTA", "SÉPTIMA", "OCTAVA", "NOVENA"];
+const DECENAS_ACENTO = ["", "DÉCIMA", "VIGÉSIMA", "TRIGÉSIMA", "CUADRAGÉSIMA"];
+
+// 16 -> "DÉCIMA SEXTA". Se usa para numerar cláusulas nuevas en la contrapropuesta.
+export function numeroAOrdinal(n: number): string {
+  if (!Number.isInteger(n) || n < 1 || n > 49) return `CLÁUSULA ${n}`;
+  const d = Math.floor(n / 10);
+  const u = n % 10;
+  return [DECENAS_ACENTO[d], u ? UNIDADES_ACENTO[u - 1] : ""].filter(Boolean).join(" ");
+}
+
 // ---------------------------------------------------------------------------
 // Encabezados de bloque
 // ---------------------------------------------------------------------------
