@@ -6,7 +6,7 @@ import { encabezadosAcceso, registrarAcceso } from "@/lib/contratos/bitacora";
 import { PanelPartes, type ExpedienteParte } from "@/components/revision/panel-partes";
 import { PanelSolicitud } from "@/components/revision/panel-solicitud";
 import { FirmaElectronica } from "@/components/firmas/firma-electronica";
-import { mifielConfigurado } from "@/lib/firmas/mifiel";
+import { credencialesMifiel } from "@/lib/firmas/mifiel";
 import type { EstadoContrato } from "@/lib/tipos";
 import { EncabezadoContrato } from "@/components/revision/encabezado-contrato";
 import { Pestanas, PESTANAS, type Pestana } from "@/components/revision/pestanas";
@@ -58,7 +58,7 @@ export default async function PaginaRevision({
                   contratoId={contrato.id}
                   estado={contrato.estado as EstadoContrato}
                   solicitudes={datos.firmas}
-                  configurado={mifielConfigurado()}
+                  configurado={(await credencialesMifiel(usuario.org_id)) !== null}
                   versionEsPdf={version?.mime === "application/pdf"}
                   sugeridos={await firmantesSugeridos(contrato.propia_id, contrato.contraparte_id)}
                 />

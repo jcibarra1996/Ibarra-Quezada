@@ -74,10 +74,10 @@ contrato de servicios. El playbook precargado es un ejemplo y debe revisarlo la 
 | `MODO_DEMO` | servidor | `true` muestra los usuarios demo en el ingreso. Nunca en un ambiente con datos reales |
 | `ALERTAS_CORREO_ACTIVAS` | servidor | `false` en la demo: las alertas solo se muestran en la app |
 | `CRON_SECRET` | servidor | Secreto de la tarea diaria de avisos (`/api/alertas/cron`) |
-| `MIFIEL_APP_ID` | solo servidor | APP_ID de Mifiel (app-sandbox.mifiel.com o app.mifiel.com, en Ajustes, Access tokens) |
+| `MIFIEL_APP_ID` | solo servidor | Opcional. Normalmente la dirección jurídica conecta Mifiel desde *Firmas* y las credenciales se guardan cifradas en Supabase Vault por organización; estas variables solo sirven para una instalación de una sola empresa. APP_ID de Mifiel |
 | `MIFIEL_APP_SECRET` | solo servidor | APP_SECRET de Mifiel. Nunca llega al navegador |
 | `MIFIEL_ENTORNO` | servidor | `sandbox` (por defecto, sin validez legal) o `produccion` |
-| `MIFIEL_WEBHOOK_CLAVE` | solo servidor | Clave de 16 caracteres o más que protege la URL de avisos de Mifiel (`/api/firmas/mifiel`). Con ella, la dirección jurídica conecta los avisos desde *Firmas* |
+| `MIFIEL_WEBHOOK_CLAVE` | solo servidor | Opcional, junto con las anteriores: clave de 16 caracteres o más que protege la URL de avisos. Al conectar desde *Firmas*, la clave se genera sola |
 
 ## Pruebas
 

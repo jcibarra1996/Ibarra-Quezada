@@ -157,3 +157,23 @@ describe("lo que ve el área de negocio", () => {
     await db.storage.from("contratos").remove([ruta]);
   });
 });
+
+describe("credenciales de Mifiel en Vault", () => {
+  it("el servidor las guarda y las lee; nadie las obtiene con su sesión", async () => {
+    const { error } = await db.rpc("guardar_integracion", { p_org: orgId, p_proveedor: "mifiel", p_entorno: "sandbox", p_app_id: "appdeprueba123456", p_secreto: "secreto-de-prueba-1234567890", p_usuario: null });
+    expect(error).toBeNull();
+    const { data } = await db.rpc("credenciales_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    expect(data[0]).toMatchObject({ entorno: "sandbox", app_id: "appdeprueba123456", secreto: "secreto-de-prueba-1234567890" });
+    expect(data[0].webhook_clave.length).toBeGreaterThanOrEqual(32);
+    const intento = await directora.rpc("credenciales_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    expect(intento.error).not.toBeNull();
+    const { data: visible } = await directora.from("integraciones").select("*").single();
+    expect(visible.app_id).toBe("appdeprueba123456");
+    expect(JSON.stringify(visible)).not.toContain("secreto-de-prueba");
+    const { data: paraAbogado } = await abogado.from("integraciones").select("app_id");
+    expect(paraAbogado).toEqual([]);
+    await db.rpc("borrar_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    const { data: borrado } = await db.rpc("credenciales_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    expect(borrado).toEqual([]);
+  });
+});

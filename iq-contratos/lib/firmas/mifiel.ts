@@ -1,4 +1,5 @@
 import "server-only";
+import { clienteSistema } from "@/lib/supabase/admin";
 
 // Cliente mínimo de la API v1 de Mifiel (firma electrónica avanzada con e.firma y
 // constancia de conservación NOM-151), según su especificación pública
@@ -23,34 +24,60 @@ export class ErrorMifiel extends Error {
   }
 }
 
-export function mifielConfigurado(): boolean {
-  return Boolean(process.env.MIFIEL_APP_ID && process.env.MIFIEL_APP_SECRET);
+export interface CredencialesMifiel {
+  entorno: EntornoMifiel;
+  appId: string;
+  secreto: string;
+  // Protege la URL de avisos; null si no hay.
+  webhookClave: string | null;
 }
 
-export function entornoMifiel(): EntornoMifiel {
-  return process.env.MIFIEL_ENTORNO === "produccion" ? "produccion" : "sandbox";
+// Las credenciales de cada organización viven cifradas en Supabase Vault (ver la migración
+// de integraciones) y las administra la dirección jurídica desde Firmas. Las variables de
+// entorno MIFIEL_* quedan como alternativa para una instalación de una sola organización.
+export async function credencialesMifiel(orgId: string): Promise<CredencialesMifiel | null> {
+  const { data } = await clienteSistema().rpc("credenciales_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+  const fila = (data as { entorno: string; app_id: string; secreto: string; webhook_clave: string }[] | null)?.[0];
+  if (fila) return { entorno: fila.entorno === "produccion" ? "produccion" : "sandbox", appId: fila.app_id, secreto: fila.secreto, webhookClave: fila.webhook_clave };
+  if (process.env.MIFIEL_APP_ID && process.env.MIFIEL_APP_SECRET) {
+    return {
+      entorno: process.env.MIFIEL_ENTORNO === "produccion" ? "produccion" : "sandbox",
+      appId: process.env.MIFIEL_APP_ID,
+      secreto: process.env.MIFIEL_APP_SECRET,
+      webhookClave: process.env.MIFIEL_WEBHOOK_CLAVE ?? null,
+    };
+  }
+  return null;
 }
 
-export function urlBase(entorno: EntornoMifiel = entornoMifiel()): string {
+export async function exigirCredenciales(orgId: string): Promise<CredencialesMifiel> {
+  const c = await credencialesMifiel(orgId);
+  if (!c) throw new ErrorMifiel("Mifiel no está conectado. La dirección jurídica lo conecta desde Firmas.");
+  return c;
+}
+
+export function urlBase(entorno: EntornoMifiel): string {
   return entorno === "produccion" ? "https://app.mifiel.com/api/v1" : "https://app-sandbox.mifiel.com/api/v1";
 }
 
-function autorizacion(): string {
-  const id = process.env.MIFIEL_APP_ID;
-  const secreto = process.env.MIFIEL_APP_SECRET;
-  if (!id || !secreto) throw new ErrorMifiel("Mifiel no está configurado. Agregue MIFIEL_APP_ID y MIFIEL_APP_SECRET en las variables de entorno.");
-  return `Basic ${Buffer.from(`${id}:${secreto}`).toString("base64")}`;
-}
-
-async function llamar(ruta: string, init: RequestInit = {}): Promise<Response> {
+async function llamar(cred: CredencialesMifiel, ruta: string, init: RequestInit = {}): Promise<Response> {
   let r: Response;
   try {
-    r = await fetch(`${urlBase()}${ruta}`, { ...init, headers: { Authorization: autorizacion(), Accept: "application/json", ...(init.headers ?? {}) } });
+    r = await fetch(`${urlBase(cred.entorno)}${ruta}`, {
+      ...init,
+      headers: { Authorization: `Basic ${Buffer.from(`${cred.appId}:${cred.secreto}`).toString("base64")}`, Accept: "application/json", ...(init.headers ?? {}) },
+    });
   } catch {
     throw new ErrorMifiel("No fue posible comunicarse con Mifiel. Intente de nuevo.");
   }
-  if (r.status === 401) throw new ErrorMifiel("Mifiel rechazó las credenciales. Revise MIFIEL_APP_ID, MIFIEL_APP_SECRET y el entorno.", 401);
+  if (r.status === 401) throw new ErrorMifiel("Mifiel rechazó las credenciales. Revise el APP_ID, el APP_SECRET y el ambiente (pruebas o producción).", 401);
   return r;
+}
+
+// Comprueba las credenciales contra la API antes de guardarlas.
+export async function probarCredenciales(cred: Omit<CredencialesMifiel, "webhookClave">): Promise<void> {
+  const r = await llamar({ ...cred, webhookClave: null }, "/webhooks");
+  if (!r.ok) throw await errorDe(r, "Mifiel no aceptó las credenciales.");
 }
 
 async function errorDe(r: Response, porDefecto: string): Promise<ErrorMifiel> {
@@ -85,8 +112,8 @@ export function formularioDocumento(p: { pdf: Buffer; nombreArchivo: string; fir
   return f;
 }
 
-export async function crearDocumento(p: Parameters<typeof formularioDocumento>[0]): Promise<DocumentoMifiel> {
-  const r = await llamar("/documents", { method: "POST", body: formularioDocumento(p) });
+export async function crearDocumento(cred: CredencialesMifiel, p: Parameters<typeof formularioDocumento>[0]): Promise<DocumentoMifiel> {
+  const r = await llamar(cred, "/documents", { method: "POST", body: formularioDocumento(p) });
   if (!r.ok) throw await errorDe(r, "Mifiel no aceptó el documento.");
   const d = (await r.json()) as { id: string; signers?: { name?: string; email?: string; tax_id?: string; widget_id?: string; signed?: boolean }[] };
   return {
@@ -102,8 +129,8 @@ export interface EstadoMifiel {
   rechazado: boolean;
 }
 
-export async function consultarEstado(id: string): Promise<EstadoMifiel> {
-  const r = await llamar(`/documents/${encodeURIComponent(id)}/state`);
+export async function consultarEstado(cred: CredencialesMifiel, id: string): Promise<EstadoMifiel> {
+  const r = await llamar(cred, `/documents/${encodeURIComponent(id)}/state`);
   if (!r.ok) throw await errorDe(r, "No fue posible consultar el documento en Mifiel.");
   const d = (await r.json()) as { state?: string; signing_groups?: { state?: string; stakeholders?: { email?: string; state?: string }[] }[] };
   const participantes = (d.signing_groups ?? []).flatMap((g) => g.stakeholders ?? []);
@@ -115,8 +142,8 @@ export async function consultarEstado(id: string): Promise<EstadoMifiel> {
 }
 
 // Regresa el PDF firmado, o null si Mifiel aún no lo tiene listo (423).
-export async function descargarFirmado(id: string, formato: "pdf" | "xml"): Promise<Buffer | null> {
-  const r = await llamar(`/documents/${encodeURIComponent(id)}/${formato === "pdf" ? "file_signed" : "xml"}`, {
+export async function descargarFirmado(cred: CredencialesMifiel, id: string, formato: "pdf" | "xml"): Promise<Buffer | null> {
+  const r = await llamar(cred, `/documents/${encodeURIComponent(id)}/${formato === "pdf" ? "file_signed" : "xml"}`, {
     headers: { Accept: formato === "pdf" ? "application/pdf" : "application/xml" },
   });
   if (r.status === 423 || r.status === 404) return null;
@@ -124,7 +151,14 @@ export async function descargarFirmado(id: string, formato: "pdf" | "xml"): Prom
   return Buffer.from(await r.arrayBuffer());
 }
 
-export async function registrarWebhook(url: string, tipo: "document_closed" | "signer_completed" | "signer_rejected") {
-  const r = await llamar("/webhooks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url, callback_type: tipo }) });
+export async function webhooksRegistrados(cred: CredencialesMifiel): Promise<{ url: string; callback_type: string }[]> {
+  const r = await llamar(cred, "/webhooks");
+  if (!r.ok) return [];
+  const d = (await r.json().catch(() => [])) as unknown;
+  return Array.isArray(d) ? (d as { url: string; callback_type: string }[]) : [];
+}
+
+export async function registrarWebhook(cred: CredencialesMifiel, url: string, tipo: "document_closed" | "signer_completed" | "signer_rejected") {
+  const r = await llamar(cred, "/webhooks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url, callback_type: tipo }) });
   if (!r.ok) throw await errorDe(r, "Mifiel no aceptó el aviso.");
 }
