@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
 import { clienteSistema } from "@/lib/supabase/admin";
-import { CAMPOS, rfcValido, type DatosExpediente, type TipoPersona } from "@/lib/corporativo/campos";
+import { aplicarCambios, CAMPO, CAMPOS, rfcValido, type DatosExpediente, type TipoPersona } from "@/lib/corporativo/campos";
 import { permisos } from "@/lib/tipos";
 
 type Resultado = { ok: true; id?: string } | { ok: false; error: string };
@@ -30,27 +30,35 @@ export async function crearExpediente(p: { denominacion: string; tipo_persona: T
 
 export async function guardarExpediente(
   id: string,
-  p: { denominacion: string; rfc: string; datos: DatosExpediente },
+  // enPantalla: los datos que el formulario cargó; solo se guarda lo que la persona cambió.
+  p: { denominacion: string; rfc: string; datos: DatosExpediente; enPantalla: DatosExpediente },
 ): Promise<Resultado> {
   await exigirUsuario();
   const supabase = await clienteSesion();
-  const { data: actual } = await supabase.from("companies").select("tipo_persona, datos").eq("id", id).maybeSingle();
+  const { data: actual } = await supabase.from("companies").select("tipo_persona, datos, fuentes").eq("id", id).maybeSingle();
   if (!actual) return { ok: false, error: "Expediente no encontrado." };
   const denominacion = limpiar(p.denominacion, 300);
   if (denominacion.length < 2) return { ok: false, error: "La denominación es obligatoria." };
   const rfc = limpiar(p.rfc, 13).toUpperCase().replace(/[\s-]/g, "") || null;
   if (rfc && !rfcValido(rfc, actual.tipo_persona as TipoPersona)) return { ok: false, error: "El RFC no tiene el formato esperado." };
-  const datos: DatosExpediente = {};
+  const editado: DatosExpediente = {};
   for (const c of CAMPOS) {
     const v = limpiar(p.datos[c.clave], c.tipo === "largo" ? 3000 : 600);
     if (!v) continue;
     if (c.tipo === "fecha" && !/^\d{4}-\d{2}-\d{2}$/.test(v)) return { ok: false, error: `${c.etiqueta}: use una fecha completa.` };
-    datos[c.clave] = v;
+    editado[c.clave] = v;
   }
+  const r = aplicarCambios({ actual: (actual.datos ?? {}) as DatosExpediente, enPantalla: p.enPantalla ?? {}, editado });
+  if (r.conflictos.length) {
+    return {
+      ok: false,
+      error: `Mientras editaba, se actualizó ${r.conflictos.map((k) => CAMPO[k].etiqueta.toLowerCase()).join(", ")} con un documento. Recargue la página para ver el dato nuevo y vuelva a hacer su cambio.`,
+    };
+  }
+  const datos = r.datos;
   // Las fuentes de un dato corregido a mano dejan de aplicar.
-  const { data: fila } = await supabase.from("companies").select("fuentes").eq("id", id).single();
-  const fuentes = { ...((fila?.fuentes ?? {}) as Record<string, unknown>) };
-  for (const c of CAMPOS) if ((actual.datos as DatosExpediente)[c.clave] !== datos[c.clave]) delete fuentes[c.clave];
+  const fuentes = { ...((actual.fuentes ?? {}) as Record<string, unknown>) };
+  for (const k of r.cambiados) delete fuentes[k];
   const { error } = await supabase.from("companies").update({ denominacion, rfc, datos, fuentes }).eq("id", id);
   if (error) return { ok: false, error: "No se pudo guardar el expediente." };
   revalidatePath(`/expedientes/${id}`);

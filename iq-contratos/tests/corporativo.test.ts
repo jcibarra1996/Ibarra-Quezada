@@ -129,3 +129,24 @@ describe("expediente para el modelo", () => {
     expect(e.faltantes).not.toContain("Escritura constitutiva (número)");
   });
 });
+
+describe("guardar el expediente desde el formulario", () => {
+  it("un formulario abierto antes de la lectura de la IA no borra los datos integrados", async () => {
+    const { aplicarCambios } = await import("@/lib/corporativo/campos");
+    const actual = { constitucion_escritura: "50,843", representante_nombre: "Persona Ejemplo" };
+    const r = aplicarCambios({ actual, enPantalla: {}, editado: { correo_notificaciones: "avisos@ejemplo.example" } });
+    expect(r.datos).toEqual({ ...actual, correo_notificaciones: "avisos@ejemplo.example" });
+    expect(r.cambiados).toEqual(["correo_notificaciones"]);
+    // Guardar sin cambios tampoco borra nada.
+    expect(aplicarCambios({ actual, enPantalla: {}, editado: {} }).datos).toEqual(actual);
+  });
+
+  it("aplica correcciones y borrados hechos a mano, y detecta conflictos", async () => {
+    const { aplicarCambios } = await import("@/lib/corporativo/campos");
+    const enPantalla = { constitucion_escritura: "50,843", poder_notaria: "12" };
+    const r = aplicarCambios({ actual: enPantalla, enPantalla, editado: { constitucion_escritura: "50,844" } });
+    expect(r.datos).toEqual({ constitucion_escritura: "50,844" });
+    const c = aplicarCambios({ actual: { constitucion_escritura: "60,000" }, enPantalla, editado: { ...enPantalla, constitucion_escritura: "50,844" } });
+    expect(c.conflictos).toEqual(["constitucion_escritura"]);
+  });
+});
