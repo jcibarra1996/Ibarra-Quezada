@@ -123,7 +123,25 @@ export function FirmaElectronica({
     );
   }
 
-  if (estado !== "aprobado") return null;
+  if (estado === "firmado") return null;
+  if (estado !== "aprobado") {
+    // Visible desde el inicio de la revisión, para que Legal sepa que la firma será electrónica.
+    return (
+      <span className="relative">
+        <Boton onClick={() => setAbierto(!abierto)}>Firmar con Mifiel</Boton>
+        {abierto && (
+          <div className="absolute right-0 top-10 z-40 w-[340px] rounded-lg border border-linea bg-white p-4 text-[12.5px] shadow-xl">
+            <p className="text-[13px] font-semibold">Firma electrónica con Mifiel</p>
+            <p className="mt-1.5 leading-relaxed text-secundario">
+              Se habilita cuando Legal aprueba el contrato: cambie el estado a <span className="font-medium text-tinta">Aprobado</span> (sin hallazgos de riesgo alto pendientes) y
+              aquí mismo podrá enviarlo a firma con la e.firma de cada firmante.
+            </p>
+            {!configurado && <p className="mt-2 rounded bg-medio-suave px-2 py-1.5 text-medio">Mifiel aún no está conectado; vea las instrucciones en Firmas.</p>}
+          </div>
+        )}
+      </span>
+    );
+  }
   const control = "h-8 w-full rounded-md border border-linea-fuerte bg-white px-2 text-[12.5px] outline-none focus:border-terracota";
   return (
     <>

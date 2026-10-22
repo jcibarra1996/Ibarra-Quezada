@@ -43,7 +43,20 @@ export default async function Firmas() {
               <td className="px-4 py-3 text-secundario">{fecha(c.aprobado_en)}</td>
               <td className="px-4 py-3">{estadoFirma(c.signature_requests)}</td>
               <td className="px-4 py-3 text-right">
-                {pendiente ? puede ? <RegistrarFirma contratoId={c.id} hoy={hoy} /> : <span className="text-secundario">Pendiente</span> : <span className="text-secundario">{fecha(c.firmado_en)}</span>}
+                {pendiente ? (
+                  puede ? (
+                    <span className="inline-flex items-center gap-3">
+                      <Link href={`/contratos/${c.id}`} className="text-[13px] font-medium text-terracota hover:underline">
+                        Firmar con Mifiel
+                      </Link>
+                      <RegistrarFirma contratoId={c.id} hoy={hoy} />
+                    </span>
+                  ) : (
+                    <span className="text-secundario">Pendiente</span>
+                  )
+                ) : (
+                  <span className="text-secundario">{fecha(c.firmado_en)}</span>
+                )}
               </td>
             </tr>
           ))}
@@ -60,18 +73,51 @@ export default async function Firmas() {
       <EncabezadoPagina
         titulo="Firmas"
         descripcion="Contratos aprobados por Legal pendientes de firma y contratos ya firmados. Firma electrónica con Mifiel (e.firma y constancia NOM-151) desde cada contrato, o registro manual de una firma autógrafa."
-        acciones={
-          mifielConfigurado() ? (
-            <span className="flex items-center gap-3 text-[12.5px] text-secundario">
-              Mifiel conectado{entornoMifiel() === "sandbox" ? " (ambiente de pruebas)" : ""}
-              {permisos.editarPlaybook(usuario.rol) && <ConectarAvisos />}
-            </span>
-          ) : (
-            <span className="text-[12.5px] text-secundario">Mifiel sin conectar</span>
-          )
-        }
       />
       <div className="space-y-6 px-8 py-6">
+        <section className="rounded-xl border border-linea bg-white p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-[16px] font-semibold">Firma electrónica con Mifiel</h2>
+              <p className="mt-1 max-w-3xl text-[13px] leading-relaxed text-secundario">
+                Legal envía el PDF final de un contrato aprobado; cada firmante recibe un correo de Mifiel y firma con su e.firma del SAT. Al concluir, el portal guarda el
+                PDF firmado y el XML con la constancia de conservación (NOM-151) y marca el contrato como firmado. El botón <span className="font-medium text-tinta">Firmar con Mifiel</span>{" "}
+                está en el encabezado de cada contrato.
+              </p>
+            </div>
+            {mifielConfigurado() ? (
+              <span className="shrink-0 rounded-full bg-bajo-suave px-3 py-1 text-[12px] font-medium text-bajo">
+                Conectado{entornoMifiel() === "sandbox" ? " · ambiente de pruebas" : " · producción"}
+              </span>
+            ) : (
+              <span className="shrink-0 rounded-full bg-medio-suave px-3 py-1 text-[12px] font-medium text-medio">Sin conectar</span>
+            )}
+          </div>
+          {mifielConfigurado() ? (
+            permisos.editarPlaybook(usuario.rol) && (
+              <p className="mt-3 text-[12.5px] text-secundario">
+                Para que el portal se entere en cuanto se firme: <ConectarAvisos />
+              </p>
+            )
+          ) : (
+            <ol className="mt-4 grid grid-cols-2 gap-x-8 gap-y-2 text-[13px]">
+              <li>
+                <span className="font-medium">1.</span> Cree una cuenta de pruebas en app-sandbox.mifiel.com (o en mifiel.com para producción).
+              </li>
+              <li>
+                <span className="font-medium">2.</span> En Mifiel, Ajustes, Access tokens, genere su APP_ID y APP_SECRET.
+              </li>
+              <li>
+                <span className="font-medium">3.</span> En Vercel, proyecto iq-contratos, Settings, Environment Variables, agregue <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_APP_ID</code>,{" "}
+                <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_APP_SECRET</code>, <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_ENTORNO</code> (sandbox o produccion) y{" "}
+                <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_WEBHOOK_CLAVE</code> (una clave propia de 16 caracteres o más).
+              </li>
+              <li>
+                <span className="font-medium">4.</span> Vuelva a desplegar el proyecto y, como dirección jurídica, regrese aquí para conectar los avisos automáticos.
+              </li>
+            </ol>
+          )}
+        </section>
         <section>
           <h2 className="mb-2 text-[14px] font-semibold">Pendientes de firma</h2>
           <Tabla filas={pendientes} pendiente />
