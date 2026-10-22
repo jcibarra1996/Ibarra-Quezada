@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+
+  --color-terracota: #d8551d;
+  --color-terracota-oscuro: #b8461a;
+  --color-terracota-suave: #fbeee7;
+  --color-burgundy: #8f2926;
+  --color-burgundy-suave: #f6e6e5;
+  --color-tinta: #201816;
+  --color-secundario: #6e6864;
+  --color-crema: #f6eeeb;
+
+  /* Grises cálidos para el área de trabajo */
+  --color-lienzo: #faf8f7;
+  --color-linea: #e9e3e0;
+  --color-linea-fuerte: #d9d1cd;
+  --color-gris-50: #f4f1ef;
+  --color-gris-100: #ece7e4;
+
+  --color-medio: #a3640f;
+  --color-medio-suave: #fbf1e1;
+  --color-bajo: #4b6b5c;
+  --color-bajo-suave: #e9f0ec;
+}
+
+html,
+body {
+  background: var(--color-lienzo);
+  color: var(--color-tinta);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-terracota-suave);
+}
+
+/* Texto del contrato */
+.texto-contrato {
+  font-family: var(--font-serif);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--color-tinta);
+}
+
+mark.resaltado {
+  background: transparent;
+  color: inherit;
+  border-bottom: 2px solid var(--color-terracota);
+  background-image: linear-gradient(var(--color-terracota-suave), var(--color-terracota-suave));
+  padding: 1px 0;
+}
+mark.resaltado[data-riesgo="alto"] {
+  border-bottom-color: var(--color-burgundy);
+  background-image: linear-gradient(var(--color-burgundy-suave), var(--color-burgundy-suave));
+}
+mark.resaltado[data-riesgo="bajo"] {
+  border-bottom-color: var(--color-bajo);
+  background-image: linear-gradient(var(--color-bajo-suave), var(--color-bajo-suave));
+}
+mark.resaltado[data-activo="true"] {
+  outline: 2px solid var(--color-terracota);
+  outline-offset: 2px;
+}

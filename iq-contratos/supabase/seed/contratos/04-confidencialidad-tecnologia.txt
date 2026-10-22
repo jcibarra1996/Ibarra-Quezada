@@ -1,0 +1,35 @@
+CONVENIO DE CONFIDENCIALIDAD QUE CELEBRAN, POR UNA PARTE, DESARROLLOS TECNOLÓGICOS DEMO, S.A.P.I. DE C.V., EN LO SUCESIVO "LA DESARROLLADORA", Y POR LA OTRA, EMPRESA CLIENTE, S.A. DE C.V., EN LO SUCESIVO "LA EMPRESA", A QUIENES CONJUNTAMENTE SE LES DENOMINARÁ "LAS PARTES", AL TENOR DE LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
+
+DECLARACIONES
+
+I. Declaran LAS PARTES, por conducto de sus representantes legales, que:
+
+a) Son sociedades mercantiles constituidas conforme a las leyes mexicanas y sus representantes cuentan con facultades suficientes para obligarlas en los términos de este convenio.
+
+b) Se encuentran en pláticas para evaluar la posible implementación de un sistema de gestión de inventarios desarrollado por LA DESARROLLADORA (en lo sucesivo, "EL PROYECTO"), para lo cual intercambiarán información confidencial.
+
+CLÁUSULAS
+
+PRIMERA.- OBJETO. El presente convenio tiene por objeto establecer las obligaciones de LAS PARTES respecto de la información confidencial que una de ellas (la "Parte Divulgadora") entregue a la otra (la "Parte Receptora") con motivo de EL PROYECTO.
+
+SEGUNDA.- INFORMACIÓN CONFIDENCIAL. Se considera información confidencial toda la información técnica, comercial, financiera, operativa y de cualquier otra naturaleza que la Parte Divulgadora entregue a la Parte Receptora, por cualquier medio, identificada o no como confidencial.
+
+TERCERA.- EXCLUSIONES. No se considerará información confidencial aquella que sea del dominio público sin culpa de la Parte Receptora, que la Parte Receptora conociera previamente por medios lícitos, o que deba revelarse por mandato de autoridad competente, en cuyo caso la Parte Receptora notificará previamente a la Parte Divulgadora en la medida en que la ley lo permita.
+
+CUARTA.- OBLIGACIONES. La Parte Receptora se obliga a utilizar la información confidencial exclusivamente para evaluar EL PROYECTO, a no divulgarla a terceros y a limitar su acceso a los empleados y asesores que necesiten conocerla, quienes deberán estar sujetos a obligaciones de confidencialidad equivalentes.
+
+QUINTA.- VIGENCIA. El presente convenio tendrá una vigencia de dos años contados a partir del 15 de mayo de 2026. Las obligaciones de confidencialidad subsistirán durante cinco años posteriores a la terminación del convenio.
+
+SEXTA.- DEVOLUCIÓN DE INFORMACIÓN. A la terminación del convenio o a solicitud de la Parte Divulgadora, la Parte Receptora devolverá o destruirá la información confidencial dentro de los quince días naturales siguientes.
+
+SÉPTIMA.- PROPIEDAD INTELECTUAL. Nada de lo dispuesto en este convenio implica la transmisión o licencia de derechos de propiedad intelectual de una parte a la otra.
+
+OCTAVA.- JURISDICCIÓN. Para la interpretación y cumplimiento del presente convenio, LAS PARTES se someten a la jurisdicción de los tribunales competentes de la Ciudad de México, renunciando a cualquier otro fuero.
+
+Leído que fue el presente convenio, LAS PARTES lo firman en la Ciudad de México, el 15 de mayo de 2026.
+
+LA DESARROLLADORA
+DESARROLLOS TECNOLÓGICOS DEMO, S.A.P.I. DE C.V.
+
+LA EMPRESA
+EMPRESA CLIENTE, S.A. DE C.V.
