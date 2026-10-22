@@ -1,14 +1,14 @@
 import { fechaHora } from "@/lib/formato";
 import { ESTADOS, ESTADOS_HALLAZGO, type EstadoContrato, type EstadoHallazgo } from "@/lib/tipos";
 
-type Evento = { id: number; accion: string; detalle: Record<string, unknown>; actor_id: string | null; creado_en: string };
+export type Evento = { id: number; accion: string; detalle: Record<string, unknown>; actor_id: string | null; creado_en: string };
 
 function plural(n: unknown, uno: string, varios: string): string {
   const v = Number(n ?? 0);
   return `${v} ${v === 1 ? uno : varios}`;
 }
 
-function describir(e: Evento): string {
+export function describir(e: Evento): string {
   const d = e.detalle ?? {};
   switch (e.accion) {
     case "contrato_subido":
@@ -31,6 +31,12 @@ function describir(e: Evento): string {
       return d.audiencia === "negocio" ? "Agregó un comentario para el área de negocio." : "Agregó un comentario del equipo legal.";
     case "contrapropuesta_generada":
       return `Generó la contrapropuesta en Word con ${plural(d.cambios, "cambio", "cambios")} en control de cambios.`;
+    case "firma_enviada":
+      return `Envió el contrato a firma electrónica con Mifiel (${plural(d.firmantes, "firmante", "firmantes")}).`;
+    case "firma_completada":
+      return "Mifiel confirmó todas las firmas; se guardaron el PDF firmado y la constancia NOM-151.";
+    case "firma_rechazada":
+      return "Un firmante rechazó la firma en Mifiel.";
     case "datos_actualizados":
       return "Actualizó los datos generales del contrato.";
     default:

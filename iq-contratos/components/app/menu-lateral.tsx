@@ -38,10 +38,25 @@ export function MenuLateral({
         <Logo />
       </div>
       <div className="space-y-1.5 px-4 pb-4">
-        <SubirContrato areas={areas} />
-        <Link href="/plantillas" className="flex h-8 w-full items-center justify-center rounded-md border border-linea-fuerte text-[13px] font-medium hover:bg-gris-50">
-          Crear desde plantilla
-        </Link>
+        {usuario.rol === "negocio" ? (
+          // Quien pide un contrato no "sube" ni "crea": lo solicita, y Legal lo revisa.
+          <Link
+            href="/solicitar"
+            className="flex h-9 w-full items-center justify-center gap-1.5 rounded-md bg-terracota text-[13px] font-medium text-white hover:bg-terracota-oscuro"
+          >
+            <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" aria-hidden>
+              <path d="M10 4.5v11M4.5 10h11" />
+            </svg>
+            Solicitar nuevo contrato
+          </Link>
+        ) : (
+          <>
+            <SubirContrato areas={areas} />
+            <Link href="/plantillas" className="flex h-8 w-full items-center justify-center rounded-md border border-linea-fuerte text-[13px] font-medium hover:bg-gris-50">
+              Crear desde plantilla
+            </Link>
+          </>
+        )}
       </div>
       <nav className="flex-1 space-y-0.5 px-3" aria-label="Principal">
         {ENTRADAS.filter((e) => e.href !== "/reportes" || usuario.rol === "director_juridico").map((e) => {

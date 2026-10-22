@@ -27,7 +27,7 @@ export interface Hallazgo {
 // Las consultas van en dos tandas en paralelo para no encadenar viajes a la base.
 export async function cargarRevision(contratoId: string) {
   const supabase = await clienteSesion();
-  const [{ data: contrato }, { data: versiones }, { data: historial }, { data: perfiles }, { data: comentarios }, { data: contrapropuestas }] =
+  const [{ data: contrato }, { data: versiones }, { data: historial }, { data: perfiles }, { data: comentarios }, { data: contrapropuestas }, { data: firmas }] =
     await Promise.all([
       supabase.from("contracts").select("*, areas:area_responsable_id(id, nombre)").eq("id", contratoId).maybeSingle(),
       supabase
@@ -39,6 +39,11 @@ export async function cargarRevision(contratoId: string) {
       supabase.from("profiles").select("id, nombre, rol"),
       supabase.from("comments").select("id, autor_id, audiencia, cuerpo, creado_en, finding_id").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
       supabase.from("counterproposals").select("id, generado_por, creado_en, hallazgos_incluidos").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
+      supabase
+        .from("signature_requests")
+        .select("id, estado, entorno, firmantes, firmado_pdf_path, firmado_xml_path, error, enviado_por, creado_en, actualizado_en")
+        .eq("contract_id", contratoId)
+        .order("creado_en", { ascending: false }),
     ]);
   if (!contrato) notFound();
 
@@ -69,6 +74,7 @@ export async function cargarRevision(contratoId: string) {
     version,
     versiones: versiones ?? [],
     contrapropuestas: contrapropuestas ?? [],
+    firmas: (firmas ?? []) as SolicitudFirma[],
     comentarios: comentarios ?? [],
     secciones: secciones ?? [],
     historial: historial ?? [],
@@ -87,4 +93,17 @@ export interface AnalisisCargado {
   error: string | null;
   creado_en: string;
   duracion_ms: number | null;
+}
+
+export interface SolicitudFirma {
+  id: string;
+  estado: "enviado" | "firmado" | "rechazado" | "cancelado" | "error";
+  entorno: string;
+  firmantes: { nombre: string; correo: string; rfc: string | null; firmado: boolean; widget_id: string | null }[];
+  firmado_pdf_path: string | null;
+  firmado_xml_path: string | null;
+  error: string | null;
+  enviado_por: string | null;
+  creado_en: string;
+  actualizado_en: string;
 }

@@ -11,6 +11,7 @@ export async function registrarAcceso(p: {
   versionId?: string;
   contrapropuestaId?: string;
   documentoCorporativoId?: string;
+  firmaId?: string;
   // Para registrar después de responder (after), los encabezados se leen antes.
   encabezados?: { ip: string | null; userAgent: string | null };
 }) {
@@ -34,6 +35,7 @@ export async function registrarAcceso(p: {
     version_id: p.versionId ?? null,
     counterproposal_id: p.contrapropuestaId ?? null,
     corporate_document_id: p.documentoCorporativoId ?? null,
+    signature_request_id: p.firmaId ?? null,
     ip: e.ip,
     user_agent: e.userAgent,
   });

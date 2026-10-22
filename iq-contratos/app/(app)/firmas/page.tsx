@@ -5,6 +5,8 @@ import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
 import { fecha } from "@/lib/formato";
 import { permisos } from "@/lib/tipos";
+import { entornoMifiel, mifielConfigurado } from "@/lib/firmas/mifiel";
+import { ConectarAvisos } from "@/components/firmas/conectar-avisos";
 
 export const metadata = { title: "Firmas" };
 
@@ -13,7 +15,7 @@ export default async function Firmas() {
   const supabase = await clienteSesion();
   const { data } = await supabase
     .from("contracts")
-    .select("id, titulo, contraparte, estado, aprobado_en, firmado_en")
+    .select("id, titulo, contraparte, estado, aprobado_en, firmado_en, signature_requests(id, estado, firmantes, creado_en)")
     .in("estado", ["aprobado", "firmado"])
     .order("aprobado_en", { ascending: false });
   const pendientes = (data ?? []).filter((c) => c.estado === "aprobado");
@@ -29,6 +31,7 @@ export default async function Firmas() {
             <th className="px-4 py-2.5 font-medium">Contrato</th>
             <th className="px-4 py-2.5 font-medium">Contraparte</th>
             <th className="px-4 py-2.5 font-medium">Aprobado</th>
+            <th className="px-4 py-2.5 font-medium">Firma electrónica</th>
             <th className="px-4 py-2.5 font-medium">{pendiente ? "" : "Firmado"}</th>
           </tr>
         </thead>
@@ -38,13 +41,14 @@ export default async function Firmas() {
               <td className="px-4 py-3"><Link href={`/contratos/${c.id}`} className="font-medium hover:text-terracota">{c.titulo}</Link></td>
               <td className="px-4 py-3 text-secundario">{c.contraparte}</td>
               <td className="px-4 py-3 text-secundario">{fecha(c.aprobado_en)}</td>
+              <td className="px-4 py-3">{estadoFirma(c.signature_requests)}</td>
               <td className="px-4 py-3 text-right">
                 {pendiente ? puede ? <RegistrarFirma contratoId={c.id} hoy={hoy} /> : <span className="text-secundario">Pendiente</span> : <span className="text-secundario">{fecha(c.firmado_en)}</span>}
               </td>
             </tr>
           ))}
           {filas.length === 0 && (
-            <tr><td colSpan={4} className="px-4 py-8 text-center text-secundario">{pendiente ? "No hay contratos aprobados pendientes de firma." : "Aún no hay contratos firmados."}</td></tr>
+            <tr><td colSpan={5} className="px-4 py-8 text-center text-secundario">{pendiente ? "No hay contratos aprobados pendientes de firma." : "Aún no hay contratos firmados."}</td></tr>
           )}
         </tbody>
       </table>
@@ -53,7 +57,20 @@ export default async function Firmas() {
 
   return (
     <div>
-      <EncabezadoPagina titulo="Firmas" descripcion="Contratos aprobados por Legal pendientes de firma y contratos ya firmados. La firma se registra manualmente; esta versión no integra firma electrónica." />
+      <EncabezadoPagina
+        titulo="Firmas"
+        descripcion="Contratos aprobados por Legal pendientes de firma y contratos ya firmados. Firma electrónica con Mifiel (e.firma y constancia NOM-151) desde cada contrato, o registro manual de una firma autógrafa."
+        acciones={
+          mifielConfigurado() ? (
+            <span className="flex items-center gap-3 text-[12.5px] text-secundario">
+              Mifiel conectado{entornoMifiel() === "sandbox" ? " (ambiente de pruebas)" : ""}
+              {permisos.editarPlaybook(usuario.rol) && <ConectarAvisos />}
+            </span>
+          ) : (
+            <span className="text-[12.5px] text-secundario">Mifiel sin conectar</span>
+          )
+        }
+      />
       <div className="space-y-6 px-8 py-6">
         <section>
           <h2 className="mb-2 text-[14px] font-semibold">Pendientes de firma</h2>
@@ -66,4 +83,12 @@ export default async function Firmas() {
       </div>
     </div>
   );
+}
+
+function estadoFirma(lista: { estado: string; firmantes: { firmado: boolean }[]; creado_en: string }[] | null) {
+  const s = [...(lista ?? [])].sort((a, b) => b.creado_en.localeCompare(a.creado_en))[0];
+  if (!s) return <span className="text-secundario">Sin enviar</span>;
+  if (s.estado === "firmado") return <span className="text-bajo">Firmado con Mifiel</span>;
+  if (s.estado === "enviado") return <span className="text-medio">En Mifiel: {s.firmantes.filter((f) => f.firmado).length} de {s.firmantes.length} firmaron</span>;
+  return <span className="text-burgundy">{s.estado === "rechazado" ? "Rechazado por un firmante" : "Error al enviar"}</span>;
 }

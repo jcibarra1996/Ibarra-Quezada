@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { analizarEnSegundoPlano } from "@/lib/ai/segundo-plano";
 import { usuarioActual } from "@/lib/auth/sesion";
 import { ErrorPlantilla, generarDesdePlantilla } from "@/lib/plantillas/generar";
 import { ErrorDocumento } from "@/lib/parsing/extraer";
 import { registrar, registrarError } from "@/lib/log";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 // Cualquier integrante puede solicitar un contrato desde plantilla; Legal lo revisa después.
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -29,6 +30,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       areaId: texto(cuerpo.area_id) || null,
     });
     registrar("contrato_generado", { org: usuario.org_id, contrato: r.contratoId, pendientes: r.faltantes.length });
+    after(() => analizarEnSegundoPlano({ contratoId: r.contratoId, orgId: usuario.org_id, usuarioId: usuario.id }));
     return NextResponse.json({ id: r.contratoId, faltantes: r.faltantes });
   } catch (e) {
     if (e instanceof ErrorPlantilla || e instanceof ErrorDocumento) return NextResponse.json({ error: e.message }, { status: 422 });

@@ -110,3 +110,50 @@ describe("cambio de perfil de la demo", () => {
     expect(data!.es_demo).toBe(true);
   });
 });
+
+describe("lo que ve el área de negocio", () => {
+  it("no ve análisis, hallazgos ni su historial; Legal sí", async () => {
+    const { data: c } = await db.from("contracts").select("id, org_id, version_actual_id").eq("titulo", "Contrato de suministro").single();
+    const { data: a } = await db
+      .from("analyses")
+      .insert({ org_id: c!.org_id, version_id: c!.version_actual_id, estado: "completado", modelo: "prueba", version_prompt: "prueba", resumen_negocio: "x" })
+      .select("id")
+      .single();
+    await db.from("findings").insert({ org_id: c!.org_id, analysis_id: a!.id, contract_id: c!.id, numero: 1, tipo: "omision", clausula: "Nueva", tema: "Prueba", riesgo: "alto", explicacion: "x", redaccion_propuesta: "y" });
+    await db.from("audit_events").insert({ org_id: c!.org_id, contract_id: c!.id, accion: "analisis_completado", detalle: {} });
+    const [n1, n2, n3] = await Promise.all([
+      negocio.from("analyses").select("id").eq("id", a!.id),
+      negocio.from("findings").select("id").eq("analysis_id", a!.id),
+      negocio.from("audit_events").select("id").eq("contract_id", c!.id).eq("accion", "analisis_completado"),
+    ]);
+    expect([n1.data, n2.data, n3.data]).toEqual([[], [], []]);
+    const [l1, l2] = await Promise.all([abogado.from("analyses").select("id").eq("id", a!.id), abogado.from("findings").select("id").eq("analysis_id", a!.id)]);
+    expect(l1.data).toHaveLength(1);
+    expect(l2.data).toHaveLength(1);
+    await db.from("analyses").delete().eq("id", a!.id);
+  });
+
+  it("los comentarios internos de Legal no los ve Negocio; los dirigidos a Negocio sí", async () => {
+    const { data: c } = await db.from("contracts").select("id, org_id").eq("titulo", "Contrato de suministro").single();
+    const { data: u } = await abogado.auth.getUser();
+    await db.from("comments").insert([
+      { org_id: c!.org_id, contract_id: c!.id, autor_id: u.user!.id, audiencia: "equipo", cuerpo: "interno de prueba" },
+      { org_id: c!.org_id, contract_id: c!.id, autor_id: u.user!.id, audiencia: "negocio", cuerpo: "para negocio de prueba" },
+    ]);
+    const { data } = await negocio.from("comments").select("cuerpo").eq("contract_id", c!.id).like("cuerpo", "%de prueba");
+    expect(data!.map((x) => x.cuerpo)).toEqual(["para negocio de prueba"]);
+    await db.from("comments").delete().like("cuerpo", "%de prueba");
+  });
+
+  it("sube archivos directo al almacenamiento con un enlace firmado de un solo uso", async () => {
+    const { data: u } = await negocio.auth.getUser();
+    const ruta = `${orgId}/temporal/${u.user!.id}/prueba.pdf`;
+    const { data: firmado } = await db.storage.from("contratos").createSignedUploadUrl(ruta);
+    const { error } = await negocio.storage.from("contratos").uploadToSignedUrl(ruta, firmado!.token, new Blob(["%PDF-1.4 prueba"], { type: "application/pdf" }));
+    expect(error).toBeNull();
+    // Sin enlace firmado, nadie escribe en el almacenamiento con su sesión.
+    const directo = await negocio.storage.from("contratos").upload(`${orgId}/temporal/${u.user!.id}/otro.pdf`, new Blob(["%PDF-1.4"], { type: "application/pdf" }));
+    expect(directo.error).not.toBeNull();
+    await db.storage.from("contratos").remove([ruta]);
+  });
+});

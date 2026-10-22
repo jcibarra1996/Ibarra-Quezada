@@ -102,14 +102,15 @@ export function PanelPartes(p: {
   contraparte: ExpedienteParte | null;
   opciones: { id: string; denominacion: string; es_propia: boolean }[];
   editable: boolean;
-  hallazgosCorporativos: number;
+  // null: quien consulta no ve el análisis de la IA (área de negocio).
+  hallazgosCorporativos: number | null;
 }) {
   return (
     <div className="space-y-4">
       <p className="max-w-3xl text-[13px] leading-relaxed text-secundario">
         Al analizar el contrato, la IA compara las declaraciones de cada parte con su expediente corporativo y propone corregir o agregar los datos que no coincidan
         (denominación, escritura constitutiva, representante y poder, RFC, domicilio). Las propuestas aparecen como hallazgos y Legal decide cada una.
-        {p.hallazgosCorporativos > 0 && ` El análisis vigente tiene ${p.hallazgosCorporativos} ${p.hallazgosCorporativos === 1 ? "hallazgo" : "hallazgos"} sobre datos corporativos.`}
+        {p.hallazgosCorporativos !== null && p.hallazgosCorporativos > 0 && ` El análisis vigente tiene ${p.hallazgosCorporativos} ${p.hallazgosCorporativos === 1 ? "hallazgo" : "hallazgos"} sobre datos corporativos.`}
       </p>
       <div className="grid grid-cols-2 gap-4">
         <Tarjeta

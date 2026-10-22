@@ -26,7 +26,8 @@ organización) y la API de Anthropic llamada solo desde el servidor.
 | Verificación de declaraciones | Al analizar un contrato, la IA compara las declaraciones de cada parte contra su expediente. Si un dato no coincide o es de relleno ("escritura número 00000"), propone corregirlo; si falta y el expediente lo tiene, propone agregarlo. Son hallazgos normales: con cita exacta, control de cambios y decisión de Legal. |
 | Plantillas | Prestación de servicios, suministro, compraventa, arrendamiento y convenio de confidencialidad, alineadas con el playbook. Se llenan solas con los expedientes (proemio, declaraciones, firmas) y los datos del negocio (importes y plazos con letra). Lo que falte queda marcado como pendiente. La dirección jurídica edita las plantillas y cada cambio sube la versión. |
 | Solicitudes | Quien solicita (área de negocio) elige plantilla y contraparte, carga los documentos corporativos y genera el borrador, que entra como "Recibido" a revisión de Legal. También puede subir el contrato de la contraparte. |
-| Roles | Abogado (revisa y valida), Director jurídico (todo, más playbook, plantillas y reportes), Negocio (solicita, sube documentos, comenta y ve el estado; no valida). En una organización de demostración se cambia de perfil con un clic en la barra lateral. |
+| Firma electrónica | Integración con Mifiel: Legal envía el PDF final de un contrato aprobado, Mifiel invita a cada firmante a firmar con su e.firma, y al concluir el portal guarda el PDF firmado y el XML con la constancia de conservación NOM-151 y marca el contrato como firmado. También se puede registrar una firma autógrafa a mano. |
+| Roles | Abogado (revisa y valida), Director jurídico (todo, más playbook, plantillas y reportes), Negocio (solicita contratos, sube documentos, comenta y ve en qué va su solicitud; no ve el análisis de la IA, los riesgos ni los comentarios internos de Legal, y la base de datos lo impide aunque se intente por la API). En una organización de demostración se cambia de perfil con un clic en la barra lateral. |
 
 ## Correr en local
 
@@ -73,6 +74,10 @@ contrato de servicios. El playbook precargado es un ejemplo y debe revisarlo la 
 | `MODO_DEMO` | servidor | `true` muestra los usuarios demo en el ingreso. Nunca en un ambiente con datos reales |
 | `ALERTAS_CORREO_ACTIVAS` | servidor | `false` en la demo: las alertas solo se muestran en la app |
 | `CRON_SECRET` | servidor | Secreto de la tarea diaria de avisos (`/api/alertas/cron`) |
+| `MIFIEL_APP_ID` | solo servidor | APP_ID de Mifiel (app-sandbox.mifiel.com o app.mifiel.com, en Ajustes, Access tokens) |
+| `MIFIEL_APP_SECRET` | solo servidor | APP_SECRET de Mifiel. Nunca llega al navegador |
+| `MIFIEL_ENTORNO` | servidor | `sandbox` (por defecto, sin validez legal) o `produccion` |
+| `MIFIEL_WEBHOOK_CLAVE` | solo servidor | Clave de 16 caracteres o más que protege la URL de avisos de Mifiel (`/api/firmas/mifiel`). Con ella, la dirección jurídica conecta los avisos desde *Firmas* |
 
 ## Pruebas
 

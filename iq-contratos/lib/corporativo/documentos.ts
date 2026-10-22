@@ -64,7 +64,7 @@ export async function registrarDocumentoCorporativo(p: {
   });
 
   try {
-    const { extraccion, modelo } =
+    const { extraccion, modelo, lectura } =
       p.extraccionConocida ?? (await leerDocumentoCorporativo({ datos: p.datos, mime, tipoDeclarado: p.tipo, denominacion: expediente.denominacion }));
 
     // Se relee el expediente justo antes de integrar, por si otro documento terminó primero.
@@ -95,7 +95,7 @@ export async function registrarDocumentoCorporativo(p: {
         estado: "completado",
         modelo,
         resumen: extraccion.resumen,
-        datos_extraidos: { campos: extraccion.campos, observaciones, diferencias: r.diferencias, rfc: extraccion.rfc },
+        datos_extraidos: { campos: extraccion.campos, observaciones, diferencias: r.diferencias, rfc: extraccion.rfc, lectura: lectura ?? null },
       })
       .eq("id", id);
     if (r.cambios.length || rfcNuevo) {

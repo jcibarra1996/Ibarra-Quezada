@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Boton } from "@/components/ui/boton";
+import { subirTemporal } from "@/lib/subir-archivo";
 
 // Carga la respuesta de la contraparte como nueva versión. El análisis corre de nuevo sobre ella.
 export function NuevaVersion({ contratoId }: { contratoId: string }) {
@@ -13,10 +14,18 @@ export function NuevaVersion({ contratoId }: { contratoId: string }) {
   async function subir(archivo: File) {
     setSubiendo(true);
     setError("");
-    const datos = new FormData();
-    datos.set("archivo", archivo);
-    datos.set("contrato_id", contratoId);
-    const r = await fetch("/api/contratos", { method: "POST", body: datos });
+    let ruta: string;
+    try {
+      ruta = await subirTemporal(archivo);
+    } catch (e) {
+      setSubiendo(false);
+      return setError(e instanceof Error ? e.message : "No fue posible subir el archivo.");
+    }
+    const r = await fetch("/api/contratos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ruta, nombre: archivo.name, contrato_id: contratoId }),
+    });
     const cuerpo = await r.json().catch(() => ({}));
     setSubiendo(false);
     if (!r.ok) return setError(cuerpo.error ?? "No fue posible cargar la versión.");

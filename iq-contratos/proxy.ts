@@ -21,8 +21,10 @@ export async function proxy(request: NextRequest) {
   );
   // Renueva el token si venció y verifica su firma.
   const { data } = await supabase.auth.getClaims();
-  // La tarea programada de avisos se autentica con su propio secreto (CRON_SECRET).
-  const publica = request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname === "/api/alertas/cron";
+  // La tarea programada de avisos (CRON_SECRET) y el aviso de Mifiel (MIFIEL_WEBHOOK_CLAVE)
+  // se autentican con su propia clave.
+  const ruta = request.nextUrl.pathname;
+  const publica = ruta.startsWith("/login") || ruta === "/api/alertas/cron" || ruta === "/api/firmas/mifiel";
   if (!data?.claims?.sub && !publica) {
     if (request.nextUrl.pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Sesión no válida." }, { status: 401 });

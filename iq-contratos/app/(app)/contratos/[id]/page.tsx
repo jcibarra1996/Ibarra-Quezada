@@ -4,6 +4,10 @@ import { clienteSesion } from "@/lib/supabase/server";
 import { cargarRevision } from "@/lib/revision/cargar";
 import { encabezadosAcceso, registrarAcceso } from "@/lib/contratos/bitacora";
 import { PanelPartes, type ExpedienteParte } from "@/components/revision/panel-partes";
+import { PanelSolicitud } from "@/components/revision/panel-solicitud";
+import { FirmaElectronica } from "@/components/firmas/firma-electronica";
+import { mifielConfigurado } from "@/lib/firmas/mifiel";
+import type { EstadoContrato } from "@/lib/tipos";
 import { EncabezadoContrato } from "@/components/revision/encabezado-contrato";
 import { Pestanas, PESTANAS, type Pestana } from "@/components/revision/pestanas";
 import { EspacioRevision } from "@/components/revision/espacio-revision";
@@ -26,7 +30,9 @@ export default async function PaginaRevision({
   const usuario = await exigirUsuario();
   const { id } = await params;
   const { pestana: p, h } = await searchParams;
-  const pestana: Pestana = PESTANAS.some((x) => x.clave === p) ? (p as Pestana) : "documento";
+  // El análisis de la IA es trabajo interno de Legal: Negocio no ve la pestaña de hallazgos.
+  const legal = permisos.validar(usuario.rol);
+  const pestana: Pestana = PESTANAS.some((x) => x.clave === p) && (legal || p !== "hallazgos") ? (p as Pestana) : "documento";
   const datos = await cargarRevision(id);
   const { contrato, version } = datos;
 
@@ -45,15 +51,29 @@ export default async function PaginaRevision({
         contrato={contrato}
         estado={<SelectorEstado contratoId={contrato.id} estado={contrato.estado} editable={permisos.cambiarEstado(usuario.rol)} />}
         acciones={
-          <BotonContrapropuesta
-            contratoId={contrato.id}
-            cambios={datos.hallazgos.filter((x) => x.estado === "aceptado" || x.estado === "editado").length}
-            altosPendientes={datos.hallazgos.filter((x) => x.riesgo === "alto" && x.estado === "pendiente").length}
-            habilitado={permisos.validar(usuario.rol)}
-          />
+          legal ? (
+            <>
+              {(contrato.estado === "aprobado" || datos.firmas.length > 0) && (
+                <FirmaElectronica
+                  contratoId={contrato.id}
+                  estado={contrato.estado as EstadoContrato}
+                  solicitudes={datos.firmas}
+                  configurado={mifielConfigurado()}
+                  versionEsPdf={version?.mime === "application/pdf"}
+                  sugeridos={await firmantesSugeridos(contrato.propia_id, contrato.contraparte_id)}
+                />
+              )}
+              <BotonContrapropuesta
+                contratoId={contrato.id}
+                cambios={datos.hallazgos.filter((x) => x.estado === "aceptado" || x.estado === "editado").length}
+                altosPendientes={datos.hallazgos.filter((x) => x.riesgo === "alto" && x.estado === "pendiente").length}
+                habilitado
+              />
+            </>
+          ) : undefined
         }
       />
-      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ partes: [contrato.propia_id, contrato.contraparte_id].filter(Boolean).length, versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length, comentarios: datos.comentarios.length }} />
+      <Pestanas base={`/contratos/${id}`} activa={pestana} ocultar={legal ? [] : ["hallazgos"]} conteos={{ partes: [contrato.propia_id, contrato.contraparte_id].filter(Boolean).length, versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length, comentarios: datos.comentarios.length }} />
 
       {pestana === "documento" && (
         version ? (
@@ -68,6 +88,17 @@ export default async function PaginaRevision({
             perfiles={datos.perfiles}
             inicial={h ?? null}
             cerrado={contrato.estado === "aprobado" || contrato.estado === "firmado"}
+            panel={
+              legal ? undefined : (
+                <PanelSolicitud
+                  contratoId={contrato.id}
+                  estado={contrato.estado as EstadoContrato}
+                  recibido={contrato.recibido_en}
+                  firmaEnCurso={datos.firmas.some((f) => f.estado === "enviado")}
+                  comentariosLegal={datos.comentarios.filter((c) => c.audiencia === "negocio" && c.autor_id !== usuario.id).length}
+                />
+              )
+            }
           />
         ) : (
           <p className="p-8 text-secundario">Este contrato no tiene documento cargado.</p>
@@ -87,7 +118,7 @@ export default async function PaginaRevision({
             contraparte={partes.contraparte}
             opciones={partes.opciones}
             editable={puedeVincular}
-            hallazgosCorporativos={datos.hallazgos.filter((x) => x.tipo === "dato_corporativo").length}
+            hallazgosCorporativos={legal ? datos.hallazgos.filter((x) => x.tipo === "dato_corporativo").length : null}
           />
         </div>
       )}
@@ -126,4 +157,21 @@ async function cargarPartes(propiaId: string | null, contraparteId: string | nul
     return { ...f, documentos: (f.corporate_documents ?? []).map((d: { tipo: string }) => d.tipo) };
   };
   return { opciones: opciones ?? [], propia: aParte(propiaId), contraparte: aParte(contraparteId) };
+}
+
+// Representantes de cada parte según su expediente, para proponerlos como firmantes.
+async function firmantesSugeridos(propiaId: string | null, contraparteId: string | null) {
+  const ids = [propiaId, contraparteId].filter(Boolean) as string[];
+  if (!ids.length) return [];
+  const supabase = await clienteSesion();
+  const { data } = await supabase.from("companies").select("id, denominacion, tipo_persona, datos").in("id", ids);
+  return (data ?? []).map((e) => {
+    const d = (e.datos ?? {}) as { representante_nombre?: string; correo_notificaciones?: string };
+    return {
+      nombre: e.tipo_persona === "fisica" ? e.denominacion : (d.representante_nombre ?? ""),
+      correo: d.correo_notificaciones ?? "",
+      rfc: "",
+      parte: e.denominacion,
+    };
+  });
 }

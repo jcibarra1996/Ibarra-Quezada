@@ -4,14 +4,16 @@ import { EtiquetaEstado, EtiquetaRiesgo } from "@/components/ui/etiquetas";
 import { clienteSesion } from "@/lib/supabase/server";
 import { exigirUsuario } from "@/lib/auth/sesion";
 import { fecha } from "@/lib/formato";
-import { ESTADOS, RIESGOS, TIPOS_CONTRATO, type EstadoContrato, type Riesgo, type TipoContrato } from "@/lib/tipos";
+import { permisos, ESTADOS, RIESGOS, TIPOS_CONTRATO, type EstadoContrato, type Riesgo, type TipoContrato } from "@/lib/tipos";
 
 export const metadata = { title: "Contratos" };
 
 type Filtros = { q?: string; tipo?: string; estado?: string; riesgo?: string; desde?: string; hasta?: string };
 
 export default async function PaginaContratos({ searchParams }: { searchParams: Promise<Filtros> }) {
-  await exigirUsuario();
+  const usuario = await exigirUsuario();
+  // El riesgo lo determina el análisis de la IA, que solo ve Legal.
+  const legal = permisos.validar(usuario.rol);
   const f = await searchParams;
   const supabase = await clienteSesion();
 
@@ -25,7 +27,7 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
   }
   if (f.tipo && f.tipo in TIPOS_CONTRATO) consulta = consulta.eq("tipo_contrato", f.tipo);
   if (f.estado && f.estado in ESTADOS) consulta = consulta.eq("estado", f.estado);
-  if (f.riesgo && f.riesgo in RIESGOS) consulta = consulta.eq("riesgo_max", f.riesgo);
+  if (legal && f.riesgo && f.riesgo in RIESGOS) consulta = consulta.eq("riesgo_max", f.riesgo);
   if (f.desde && /^\d{4}-\d{2}-\d{2}$/.test(f.desde)) consulta = consulta.gte("recibido_en", f.desde);
   if (f.hasta && /^\d{4}-\d{2}-\d{2}$/.test(f.hasta)) consulta = consulta.lte("recibido_en", `${f.hasta}T23:59:59`);
   const { data: contratos } = await consulta;
@@ -49,12 +51,14 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
               <option key={k} value={k}>{v}</option>
             ))}
           </select>
+          {legal && (
           <select name="riesgo" defaultValue={f.riesgo ?? ""} className={campo} aria-label="Riesgo">
             <option value="">Cualquier riesgo</option>
             {Object.entries(RIESGOS).map(([k, v]) => (
               <option key={k} value={k}>Riesgo {v.toLowerCase()}</option>
             ))}
           </select>
+          )}
           <label className="flex items-center gap-1.5 text-[12px] text-secundario">
             Recibido del
             <input type="date" name="desde" defaultValue={f.desde} className={campo} />
@@ -74,7 +78,7 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
                 <th className="px-4 py-2.5 font-medium">Contrato</th>
                 <th className="px-4 py-2.5 font-medium">Contraparte</th>
                 <th className="px-4 py-2.5 font-medium">Tipo</th>
-                <th className="px-4 py-2.5 font-medium">Riesgo</th>
+                {legal && <th className="px-4 py-2.5 font-medium">Riesgo</th>}
                 <th className="px-4 py-2.5 font-medium">Estado</th>
                 <th className="px-4 py-2.5 font-medium">Área</th>
                 <th className="px-4 py-2.5 font-medium">Recibido</th>
@@ -88,7 +92,7 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
                   </td>
                   <td className="px-4 py-3 text-secundario">{c.contraparte || "Sin identificar"}</td>
                   <td className="px-4 py-3 text-secundario">{c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : "Por analizar"}</td>
-                  <td className="px-4 py-3">{c.riesgo_max ? <EtiquetaRiesgo riesgo={c.riesgo_max as Riesgo} /> : <span className="text-secundario">-</span>}</td>
+                  {legal && <td className="px-4 py-3">{c.riesgo_max ? <EtiquetaRiesgo riesgo={c.riesgo_max as Riesgo} /> : <span className="text-secundario">-</span>}</td>}
                   <td className="px-4 py-3"><EtiquetaEstado estado={c.estado as EstadoContrato} /></td>
                   <td className="px-4 py-3 text-secundario">{(c.areas as unknown as { nombre: string } | null)?.nombre ?? "Sin asignar"}</td>
                   <td className="px-4 py-3 text-secundario">{fecha(c.recibido_en)}</td>
