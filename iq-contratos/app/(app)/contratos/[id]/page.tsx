@@ -9,6 +9,8 @@ import { SelectorEstado } from "@/components/revision/selector-estado";
 import { permisos } from "@/lib/tipos";
 import { ListaVersiones } from "@/components/revision/versiones";
 import { Historial } from "@/components/revision/historial";
+import { Comentarios } from "@/components/revision/comentarios";
+import { NuevaVersion } from "@/components/revision/nueva-version";
 import { BotonContrapropuesta } from "@/components/revision/boton-contrapropuesta";
 
 export default async function PaginaRevision({
@@ -43,7 +45,7 @@ export default async function PaginaRevision({
           />
         }
       />
-      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length }} />
+      <Pestanas base={`/contratos/${id}`} activa={pestana} conteos={{ versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length, comentarios: datos.comentarios.length }} />
 
       {pestana === "documento" && (
         version ? (
@@ -57,6 +59,7 @@ export default async function PaginaRevision({
             puedeValidar={permisos.validar(usuario.rol)}
             perfiles={datos.perfiles}
             inicial={h ?? null}
+            cerrado={contrato.estado === "aprobado" || contrato.estado === "firmado"}
           />
         ) : (
           <p className="p-8 text-secundario">Este contrato no tiene documento cargado.</p>
@@ -68,7 +71,8 @@ export default async function PaginaRevision({
         </div>
       )}
       {pestana === "versiones" && (
-        <div className="px-8 py-6">
+        <div className="space-y-4 px-8 py-6">
+          {permisos.validar(usuario.rol) && contrato.estado !== "firmado" && <NuevaVersion contratoId={contrato.id} />}
           <ListaVersiones versiones={datos.versiones} actual={contrato.version_actual_id} perfiles={datos.perfiles} contrapropuestas={datos.contrapropuestas} />
         </div>
       )}
@@ -78,7 +82,9 @@ export default async function PaginaRevision({
         </div>
       )}
       {pestana === "comentarios" && (
-        <p className="px-8 py-6 text-[13.5px] text-secundario">Esta sección se habilita en la siguiente etapa.</p>
+        <div className="px-8 py-6">
+          <Comentarios contratoId={contrato.id} comentarios={datos.comentarios} perfiles={datos.perfiles} hallazgos={datos.hallazgos} />
+        </div>
       )}
     </div>
   );

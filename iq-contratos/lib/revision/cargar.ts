@@ -49,6 +49,11 @@ export async function cargarRevision(contratoId: string) {
     supabase.from("audit_events").select("id, accion, detalle, actor_id, creado_en").eq("contract_id", contratoId).order("creado_en", { ascending: false }).limit(200),
     supabase.from("profiles").select("id, nombre, rol"),
   ]);
+  const { data: comentarios } = await supabase
+    .from("comments")
+    .select("id, autor_id, audiencia, cuerpo, creado_en, finding_id")
+    .eq("contract_id", contratoId)
+    .order("creado_en", { ascending: false });
   const { data: contrapropuestas } = await supabase
     .from("counterproposals")
     .select("id, generado_por, creado_en, hallazgos_incluidos")
@@ -82,6 +87,7 @@ export async function cargarRevision(contratoId: string) {
     version,
     versiones: versiones ?? [],
     contrapropuestas: contrapropuestas ?? [],
+    comentarios: comentarios ?? [],
     secciones: secciones ?? [],
     historial: historial ?? [],
     perfiles: Object.fromEntries((perfiles ?? []).map((p) => [p.id, p])) as Record<string, { id: string; nombre: string; rol: string }>,

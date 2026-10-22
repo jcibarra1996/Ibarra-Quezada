@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { usuarioActual } from "@/lib/auth/sesion";
+import { clienteSesion } from "@/lib/supabase/server";
+import { permisos } from "@/lib/tipos";
 import { registrarContrato } from "@/lib/contratos/registrar";
 import { ErrorDocumento, TAMANO_MAXIMO } from "@/lib/parsing/extraer";
 import { registrar, registrarError } from "@/lib/log";
@@ -20,14 +22,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "El archivo supera el límite de 20 MB." }, { status: 413 });
   }
 
+  // Nueva versión de un contrato existente: solo Legal, y RLS confirma que el contrato es de su organización.
+  const existente = String(datos.get("contrato_id") ?? "") || null;
+  let estadoPrevio: string | null = null;
+  if (existente) {
+    if (!permisos.validar(usuario.rol)) return NextResponse.json({ error: "Solo Legal carga nuevas versiones." }, { status: 403 });
+    const supabase = await clienteSesion();
+    const { data: c } = await supabase.from("contracts").select("estado").eq("id", existente).maybeSingle();
+    if (!c) return NextResponse.json({ error: "Contrato no encontrado." }, { status: 404 });
+    if (c.estado === "firmado") return NextResponse.json({ error: "El contrato ya está firmado." }, { status: 409 });
+    estadoPrevio = c.estado;
+  }
+
   try {
     const { contratoId, versionId } = await registrarContrato({
+      contratoId: existente ?? undefined,
       usuario,
       nombreArchivo: archivo.name,
       datos: Buffer.from(await archivo.arrayBuffer()),
       contraparte: String(datos.get("contraparte") ?? ""),
       areaId: String(datos.get("area_id") ?? "") || null,
     });
+    // Una versión nueva deja sin efecto la aprobación anterior: el contrato vuelve a negociación.
+    if (estadoPrevio === "aprobado") {
+      const supabase = await clienteSesion();
+      await supabase.from("contracts").update({ estado: "en_negociacion" }).eq("id", contratoId);
+    }
     registrar("contrato_subido", { org: usuario.org_id, contrato: contratoId, version: versionId, bytes: archivo.size });
     return NextResponse.json({ id: contratoId });
   } catch (e) {

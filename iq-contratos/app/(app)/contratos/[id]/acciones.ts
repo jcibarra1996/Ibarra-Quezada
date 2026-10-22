@@ -56,3 +56,22 @@ export async function marcarFirmado(contratoId: string, fechaFirma: string): Pro
   revalidatePath(`/contratos/${contratoId}`);
   return { ok: true };
 }
+
+export async function comentar(contratoId: string, cuerpo: string, hallazgoId: string | null): Promise<Resultado> {
+  const usuario = await exigirUsuario();
+  const texto = cuerpo.trim();
+  if (!texto) return { ok: false, error: "Escriba el comentario." };
+  if (texto.length > 4000) return { ok: false, error: "El comentario es demasiado largo." };
+  const supabase = await clienteSesion();
+  const { error } = await supabase.from("comments").insert({
+    org_id: usuario.org_id,
+    contract_id: contratoId,
+    finding_id: hallazgoId,
+    autor_id: usuario.id,
+    audiencia: usuario.rol === "negocio" ? "negocio" : "equipo",
+    cuerpo: texto,
+  });
+  if (error) return { ok: false, error: "No se pudo guardar el comentario." };
+  revalidatePath(`/contratos/${contratoId}`);
+  return { ok: true };
+}

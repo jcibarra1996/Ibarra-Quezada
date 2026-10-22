@@ -16,6 +16,7 @@ export function EspacioRevision({
   puedeValidar,
   perfiles,
   inicial,
+  cerrado,
 }: {
   contratoId: string;
   secciones: SeccionVista[];
@@ -26,6 +27,7 @@ export function EspacioRevision({
   puedeValidar: boolean;
   perfiles: Record<string, { nombre: string }>;
   inicial: string | null;
+  cerrado: boolean;
 }) {
   const [activa, setActiva] = useState<string | null>(inicial);
   const completado = analisis?.estado === "completado";
@@ -45,6 +47,10 @@ export function EspacioRevision({
         </div>
         {completado ? (
           <PanelAnalisis analisis={analisis!} hallazgos={hallazgos} activa={activa} alSeleccionar={setActiva} puedeValidar={puedeValidar} perfiles={perfiles} />
+        ) : cerrado && !analisis ? (
+          <p className="m-5 rounded-lg border border-linea bg-lienzo p-4 text-[13px] text-secundario">
+            Este contrato se aprobó sin análisis de IA. Para analizarlo, regréselo primero a En negociación.
+          </p>
         ) : (
           <div className="p-5">
             <EstadoAnalisis

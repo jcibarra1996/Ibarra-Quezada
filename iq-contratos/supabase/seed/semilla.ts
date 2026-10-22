@@ -14,6 +14,7 @@ import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
 import { PLAYBOOKS_EJEMPLO } from "./playbook";
 import { CONTRASENA_DEMO, ORG_DEMO, USUARIOS_DEMO } from "../../lib/demo";
 import { registrarContrato, BUCKET } from "../../lib/contratos/registrar";
+import { analizarContrato } from "../../lib/ai/analizar";
 import type { Usuario } from "../../lib/tipos";
 
 config({ path: path.join(import.meta.dirname, "../../.env.local") });
@@ -28,14 +29,19 @@ const db = createClient(url, secreta, { auth: { persistSession: false } });
 
 const AREAS = ["Jurídico", "Compras", "Finanzas", "Operaciones", "Administración"];
 
-// Estado y fechas de cada contrato en el escenario de la demo.
-const ESCENARIO: Record<string, { estado: string; recibido: string; area: string }> = {
+// Escenario de la demo. Las fechas de aprobación y firma alimentan el tiempo promedio de
+// revisión del tablero; no se registran decisiones sobre hallazgos que nadie tomó.
+const ESCENARIO: Record<string, { estado: string; recibido: string; area: string; aprobado?: string; firmado?: string }> = {
   "01-suministro-proveedor-xyz.txt": { estado: "en_revision", recibido: "2026-10-19T16:20:00-06:00", area: "Compras" },
   "02-servicios-mantenimiento.txt": { estado: "recibido", recibido: "2026-10-21T10:05:00-06:00", area: "Operaciones" },
-  "03-arrendamiento-oficinas.txt": { estado: "en_negociacion", recibido: "2026-09-28T12:40:00-06:00", area: "Administración" },
-  "04-confidencialidad-tecnologia.txt": { estado: "en_revision", recibido: "2026-10-14T09:15:00-06:00", area: "Operaciones" },
-  "05-servicios-logistica.txt": { estado: "en_revision", recibido: "2026-10-08T11:30:00-06:00", area: "Operaciones" },
+  "03-arrendamiento-oficinas.txt": { estado: "aprobado", recibido: "2026-09-28T12:40:00-06:00", area: "Administración", aprobado: "2026-10-09T13:00:00-06:00" },
+  "04-confidencialidad-tecnologia.txt": { estado: "firmado", recibido: "2026-05-04T09:15:00-06:00", area: "Operaciones", aprobado: "2026-05-08T17:30:00-06:00", firmado: "2026-05-15T12:00:00-06:00" },
+  "05-servicios-logistica.txt": { estado: "firmado", recibido: "2025-11-25T11:30:00-06:00", area: "Operaciones", aprobado: "2025-12-03T18:10:00-06:00", firmado: "2025-12-12T12:00:00-06:00" },
 };
+
+// Con --analizar se corre el análisis real (requiere ANTHROPIC_API_KEY) del contrato de
+// suministro, para que la demo arranque con ese análisis listo.
+const ANALIZAR = process.argv.includes("--analizar");
 
 function aDocx(texto: string): Promise<Buffer> {
   const bloques = texto.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
@@ -112,8 +118,21 @@ async function main() {
       areaId: areaId(escenario.area),
       recibidoEn: escenario.recibido,
     });
-    if (escenario.estado !== "recibido") await db.from("contracts").update({ estado: escenario.estado }).eq("id", contratoId);
+    // Recorrer los estados en orden respeta las reglas de la base (firmado exige aprobado).
+    const ruta = ["en_revision", "aprobado", "firmado"];
+    for (const paso of ruta.slice(0, ruta.indexOf(escenario.estado) + 1)) {
+      const { error } = await db.from("contracts").update({ estado: paso }).eq("id", contratoId);
+      if (error) throw error;
+    }
+    if (escenario.aprobado || escenario.firmado) {
+      await db.from("contracts").update({ aprobado_en: escenario.aprobado ?? null, firmado_en: escenario.firmado ?? null }).eq("id", contratoId);
+    }
     console.log(`  ${archivo} -> ${contratoId}`);
+    if (ANALIZAR && archivo.startsWith("01-")) {
+      console.log("    Analizando con la API de Anthropic (1 a 3 minutos)...");
+      await analizarContrato({ contratoId, orgId: org.id, usuarioId: null });
+      console.log("    Análisis listo.");
+    }
   }
 
   console.log("\nListo. Usuarios de demostración (contraseña: " + CONTRASENA_DEMO + "):");

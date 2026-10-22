@@ -37,7 +37,7 @@ export function MenuLateral({
         <SubirContrato areas={areas} />
       </div>
       <nav className="flex-1 space-y-0.5 px-3" aria-label="Principal">
-        {ENTRADAS.map((e) => {
+        {ENTRADAS.filter((e) => e.href !== "/reportes" || usuario.rol === "director_juridico").map((e) => {
           const activa = ruta === e.href || ruta.startsWith(`${e.href}/`);
           return (
             <Link

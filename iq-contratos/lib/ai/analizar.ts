@@ -24,6 +24,10 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
     .eq("org_id", p.orgId)
     .single();
   if (!contrato?.version_actual_id) throw new ErrorAnalisis("El contrato no tiene documento cargado.");
+  // Un análisis nuevo crea hallazgos pendientes: no se permite sobre un contrato ya aprobado o firmado.
+  if (contrato.estado === "aprobado" || contrato.estado === "firmado") {
+    throw new ErrorAnalisis("El contrato ya está aprobado o firmado. Para analizarlo de nuevo, regréselo primero a En negociación.");
+  }
 
   const [{ data: version }, { data: secciones }, { data: playbooks }] = await Promise.all([
     db.from("contract_versions").select("id, texto_extraido").eq("id", contrato.version_actual_id).single(),
