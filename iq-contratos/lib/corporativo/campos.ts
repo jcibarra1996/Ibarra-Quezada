@@ -223,3 +223,31 @@ export function comparable(s: string): string {
     .toUpperCase()
     .replace(/[^A-Z0-9@]/g, "");
 }
+
+// Aplica solo lo que la persona cambió en el formulario respecto de lo que tenía en
+// pantalla. Así, guardar un formulario abierto antes de que la IA terminara de leer un
+// documento nunca borra los datos que se integraron mientras tanto. Si un mismo dato cambió
+// en ambos lados, se reporta como conflicto y no se guarda nada.
+export function aplicarCambios(p: {
+  actual: DatosExpediente;
+  enPantalla: DatosExpediente;
+  editado: DatosExpediente;
+}): { datos: DatosExpediente; cambiados: ClaveCampo[]; conflictos: ClaveCampo[] } {
+  const datos: DatosExpediente = { ...p.actual };
+  const cambiados: ClaveCampo[] = [];
+  const conflictos: ClaveCampo[] = [];
+  for (const c of CAMPOS) {
+    const antes = p.enPantalla[c.clave]?.trim() ?? "";
+    const ahora = p.editado[c.clave]?.trim() ?? "";
+    if (antes === ahora) continue;
+    const guardado = p.actual[c.clave]?.trim() ?? "";
+    if (guardado !== antes && guardado !== ahora) {
+      conflictos.push(c.clave);
+      continue;
+    }
+    if (ahora) datos[c.clave] = ahora;
+    else delete datos[c.clave];
+    cambiados.push(c.clave);
+  }
+  return { datos, cambiados, conflictos };
+}

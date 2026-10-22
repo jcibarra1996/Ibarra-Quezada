@@ -36,7 +36,7 @@ export function FormularioExpediente({
   const guardar = () =>
     iniciar(async () => {
       setMensaje(null);
-      const r = await guardarExpediente(id, { denominacion, rfc, datos });
+      const r = await guardarExpediente(id, { denominacion, rfc, datos, enPantalla: datosIniciales });
       setMensaje(r.ok ? { ok: true, texto: "Cambios guardados." } : { ok: false, texto: r.error });
     });
 
