@@ -1,6 +1,6 @@
 // Datos semilla de la demostración: una empresa ficticia, 3 usuarios, áreas,
-// el playbook de ejemplo, plantillas, expedientes corporativos y 5 contratos ficticios
-// en formato mexicano.
+// el playbook de ejemplo, plantillas, expedientes corporativos y 7 contratos ficticios
+// en formato mexicano, con su ficha (monto, vigencia, renovación, aviso, jurisdicción).
 //
 // Uso:  npm run seed
 // Los contratos se convierten a .docx y pasan por el mismo proceso que una subida real
@@ -17,6 +17,7 @@ import { registrarContrato, BUCKET } from "../../lib/contratos/registrar";
 import { analizarContrato } from "../../lib/ai/analizar";
 import { textoADocx } from "../../lib/docx/desde-texto";
 import { sembrarClm } from "./clm";
+import { FICHAS, fichaDemo } from "./fichas";
 import type { Usuario } from "../../lib/tipos";
 
 config({ path: path.join(import.meta.dirname, "../../.env.local") });
@@ -39,6 +40,8 @@ const ESCENARIO: Record<string, { estado: string; recibido: string; area: string
   "03-arrendamiento-oficinas.txt": { estado: "aprobado", recibido: "2026-09-28T12:40:00-06:00", area: "Administración", aprobado: "2026-10-09T13:00:00-06:00" },
   "04-confidencialidad-tecnologia.txt": { estado: "firmado", recibido: "2026-05-04T09:15:00-06:00", area: "Operaciones", aprobado: "2026-05-08T17:30:00-06:00", firmado: "2026-05-15T12:00:00-06:00" },
   "05-servicios-logistica.txt": { estado: "firmado", recibido: "2025-11-25T11:30:00-06:00", area: "Operaciones", aprobado: "2025-12-03T18:10:00-06:00", firmado: "2025-12-12T12:00:00-06:00" },
+  "06-servicios-limpieza.txt": { estado: "firmado", recibido: "2025-02-10T10:00:00-06:00", area: "Administración", aprobado: "2025-02-20T17:00:00-06:00", firmado: "2025-02-25T12:00:00-06:00" },
+  "07-licencia-software.txt": { estado: "firmado", recibido: "2024-05-10T09:30:00-06:00", area: "Operaciones", aprobado: "2024-05-20T16:00:00-06:00", firmado: "2024-05-28T12:00:00-06:00" },
 };
 
 // Con --analizar se corre el análisis real (requiere ANTHROPIC_API_KEY) del contrato de
@@ -91,6 +94,7 @@ async function main() {
     usuarios.push({ id: data.user.id, org_id: org.id, nombre: u.nombre, puesto: u.puesto, rol: u.clave, correo: u.correo });
   }
   const directora = usuarios[0];
+  const abogado = usuarios[1];
   const compras = usuarios[2];
 
   for (const pb of PLAYBOOKS_EJEMPLO) {
@@ -127,6 +131,24 @@ async function main() {
     }
     if (escenario.aprobado || escenario.firmado) {
       await db.from("contracts").update({ aprobado_en: escenario.aprobado ?? null, firmado_en: escenario.firmado ?? null }).eq("id", contratoId);
+    }
+    const ficha = FICHAS[archivo];
+    if (ficha) {
+      const { valores, fuentes } = fichaDemo(ficha, texto);
+      const quien = (q: "directora" | "abogado" | null) => (q === "directora" ? directora.id : q === "abogado" ? abogado.id : null);
+      const { error } = await db
+        .from("contracts")
+        .update({
+          ...valores,
+          // En una carga real el tipo lo identifica el análisis de la IA.
+          tipo_contrato: ficha.tipo,
+          ficha_fuentes: fuentes,
+          responsable_id: quien(ficha.responsable),
+          ficha_confirmada_por: quien(ficha.confirmada),
+          ficha_confirmada_en: ficha.confirmada ? (escenario.firmado ?? escenario.recibido) : null,
+        })
+        .eq("id", contratoId);
+      if (error) throw error;
     }
     console.log(`  ${archivo} -> ${contratoId}`);
     if (ANALIZAR && archivo.startsWith("01-")) {

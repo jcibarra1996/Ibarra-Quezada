@@ -50,3 +50,17 @@ export function fechaLargaHoy(): string {
 export function fechaCorta(valor: string | Date): string {
   return new Date(valor).toLocaleDateString("es-MX", { day: "numeric", month: "short", timeZone: zona }).replace(".", "");
 }
+
+// "$180,000.00 MXN"
+export function dinero(monto: number | string | null | undefined, moneda: string | null = "MXN"): string {
+  if (monto == null || monto === "") return "";
+  const n = Number(monto);
+  return `${n.toLocaleString("es-MX", { style: "currency", currency: moneda ?? "MXN", currencyDisplay: "narrowSymbol", minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${moneda ?? "MXN"}`;
+}
+
+// "$2.2 M MXN", para totales de cartera.
+export function dineroCorto(monto: number, moneda = "MXN"): string {
+  const abs = Math.abs(monto);
+  const corto = abs >= 1e6 ? `${(monto / 1e6).toLocaleString("es-MX", { maximumFractionDigits: 1 })} M` : abs >= 1e3 ? `${(monto / 1e3).toLocaleString("es-MX", { maximumFractionDigits: 0 })} mil` : monto.toLocaleString("es-MX");
+  return `$${corto} ${moneda}`;
+}

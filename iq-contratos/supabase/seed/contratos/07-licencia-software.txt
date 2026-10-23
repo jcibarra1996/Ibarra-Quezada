@@ -1,0 +1,39 @@
+CONTRATO DE LICENCIA DE USO DE SOFTWARE QUE CELEBRAN, POR UNA PARTE, SOFTWARE EJEMPLO, S.A. DE C.V., EN LO SUCESIVO "EL LICENCIANTE", Y POR LA OTRA, EMPRESA CLIENTE, S.A. DE C.V., EN LO SUCESIVO "LA LICENCIATARIA", AL TENOR DE LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
+
+DECLARACIONES
+
+I. Declara EL LICENCIANTE, por conducto de su representante legal, que:
+
+a) Es una sociedad mercantil constituida conforme a las leyes mexicanas, según consta en la escritura pública número 00007, otorgada ante la fe del Notario Público número 000 de la Ciudad de México.
+
+b) Es titular de los derechos sobre el sistema de administración de inventarios descrito en el Anexo A (en lo sucesivo, "EL SISTEMA").
+
+II. Declara LA LICENCIATARIA, por conducto de su representante legal, que:
+
+a) Es una sociedad mercantil constituida conforme a las leyes mexicanas.
+
+b) Desea usar EL SISTEMA para la administración de los inventarios de sus almacenes.
+
+CLÁUSULAS
+
+PRIMERA.- OBJETO. EL LICENCIANTE otorga a LA LICENCIATARIA una licencia de uso no exclusiva e intransferible de EL SISTEMA, para hasta cincuenta usuarios, en los términos del presente contrato.
+
+SEGUNDA.- CONTRAPRESTACIÓN. LA LICENCIATARIA pagará a EL LICENCIANTE una cuota anual de $360,000.00 (trescientos sesenta mil pesos 00/100 M.N.), más el Impuesto al Valor Agregado, al inicio de cada periodo de vigencia.
+
+TERCERA.- VIGENCIA Y RENOVACIÓN. El presente contrato tendrá una vigencia del 1 de junio de 2024 al 31 de mayo de 2025. Al término de dicho plazo se renovará automáticamente por periodos sucesivos de doce meses, salvo que alguna de las partes notifique a la otra por escrito su voluntad de no renovarlo con al menos sesenta días naturales de anticipación al vencimiento del periodo en curso.
+
+CUARTA.- SOPORTE Y ACTUALIZACIONES. EL LICENCIANTE prestará soporte técnico en días hábiles y entregará sin costo adicional las actualizaciones de EL SISTEMA que libere durante la vigencia.
+
+QUINTA.- PROPIEDAD INTELECTUAL. La licencia no transmite a LA LICENCIATARIA la titularidad de EL SISTEMA. La información que LA LICENCIATARIA capture en EL SISTEMA es de su propiedad y le será entregada a su solicitud al término del contrato.
+
+SEXTA.- CONFIDENCIALIDAD. Las partes mantendrán en reserva la información de la otra parte durante la vigencia del contrato y tres años posteriores a su terminación.
+
+SÉPTIMA.- JURISDICCIÓN. Para la interpretación y cumplimiento del presente contrato, las partes se someten a las leyes federales de los Estados Unidos Mexicanos y a la jurisdicción de los tribunales competentes de la Ciudad de México, renunciando a cualquier otro fuero.
+
+Leído que fue el presente contrato, las partes lo firman en la Ciudad de México, el 28 de mayo de 2024.
+
+EL LICENCIANTE
+SOFTWARE EJEMPLO, S.A. DE C.V.
+
+LA LICENCIATARIA
+EMPRESA CLIENTE, S.A. DE C.V.

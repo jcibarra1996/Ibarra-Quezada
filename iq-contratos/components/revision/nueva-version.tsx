@@ -29,7 +29,7 @@ export function NuevaVersion({ contratoId }: { contratoId: string }) {
     const cuerpo = await r.json().catch(() => ({}));
     setSubiendo(false);
     if (!r.ok) return setError(cuerpo.error ?? "No fue posible cargar la versión.");
-    router.push(`/contratos/${contratoId}`);
+    router.push(`/contratos/${contratoId}?pestana=documento`);
     router.refresh();
   }
 

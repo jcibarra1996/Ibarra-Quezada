@@ -1,4 +1,4 @@
-import { fechaHora } from "@/lib/formato";
+import { fecha, fechaHora } from "@/lib/formato";
 import { ESTADOS, ESTADOS_HALLAZGO, type EstadoContrato, type EstadoHallazgo } from "@/lib/tipos";
 
 export type Evento = { id: number; accion: string; detalle: Record<string, unknown>; actor_id: string | null; creado_en: string };
@@ -35,6 +35,16 @@ export function describir(e: Evento): string {
       return `Envió el contrato a firma electrónica con Mifiel (${plural(d.firmantes, "firmante", "firmantes")}).`;
     case "firma_completada":
       return "Mifiel confirmó todas las firmas; se guardaron el PDF firmado y la constancia NOM-151.";
+    case "ficha_extraida":
+      return `La IA llenó la ficha del contrato (${plural(d.campos, "dato", "datos")}).`;
+    case "ficha_confirmada":
+      return d.cambios ? `Editó y confirmó la ficha del contrato (${plural(d.cambios, "dato cambiado", "datos cambiados")}).` : "Confirmó la ficha del contrato.";
+    case "responsable_asignado":
+      return d.responsable ? "Asignó al abogado responsable del contrato." : "Quitó al abogado responsable del contrato.";
+    case "contrato_terminado":
+      return `Registró la terminación del contrato con fecha ${typeof d.fecha === "string" ? fecha(d.fecha) : ""}.`;
+    case "terminacion_revertida":
+      return "Revirtió la terminación del contrato.";
     case "firma_rechazada":
       return "Un firmante rechazó la firma en Mifiel.";
     case "datos_actualizados":
