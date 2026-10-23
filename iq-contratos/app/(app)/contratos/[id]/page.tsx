@@ -67,6 +67,7 @@ export default async function PaginaRevision({
                 contratoId={contrato.id}
                 cambios={datos.hallazgos.filter((x) => x.estado === "aceptado" || x.estado === "editado").length}
                 altosPendientes={datos.hallazgos.filter((x) => x.riesgo === "alto" && x.estado === "pendiente").length}
+                estado={contrato.estado}
                 habilitado
               />
             </>
@@ -125,7 +126,7 @@ export default async function PaginaRevision({
       {pestana === "versiones" && (
         <div className="space-y-4 px-8 py-6">
           {permisos.validar(usuario.rol) && contrato.estado !== "firmado" && <NuevaVersion contratoId={contrato.id} />}
-          <ListaVersiones versiones={datos.versiones} actual={contrato.version_actual_id} perfiles={datos.perfiles} contrapropuestas={datos.contrapropuestas} />
+          <ListaVersiones versiones={datos.versiones} actual={contrato.version_actual_id} perfiles={datos.perfiles} contrapropuestas={datos.contrapropuestas} estado={contrato.estado} />
         </div>
       )}
       {pestana === "historial" && (

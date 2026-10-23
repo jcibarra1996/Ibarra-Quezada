@@ -2,14 +2,18 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Boton } from "@/components/ui/boton";
+import { abreNegociacion } from "@/lib/tipos";
+import { abrirContrapropuesta } from "./descargar-contrapropuesta";
 
 export function BotonContrapropuesta({
   contratoId,
   cambios,
   altosPendientes,
   habilitado,
+  estado,
 }: {
   contratoId: string;
+  estado: string;
   cambios: number;
   altosPendientes: number;
   habilitado: boolean;
@@ -24,12 +28,21 @@ export function BotonContrapropuesta({
     setError("");
     const r = await fetch(`/api/contratos/${contratoId}/contrapropuesta`, { method: "POST" });
     const cuerpo = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      setGenerando(false);
+      return setError(cuerpo.error ?? "No fue posible generar la contrapropuesta.");
+    }
+    try {
+      await abrirContrapropuesta(cuerpo.id);
+      setAbierto(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No fue posible descargar la contrapropuesta.");
+    }
     setGenerando(false);
-    if (!r.ok) return setError(cuerpo.error ?? "No fue posible generar la contrapropuesta.");
-    window.location.href = `/api/contrapropuestas/${cuerpo.id}`;
-    setAbierto(false);
     router.refresh();
   }
+
+  const abre = abreNegociacion(estado);
 
   return (
     <>
@@ -39,7 +52,7 @@ export function BotonContrapropuesta({
         title={!habilitado ? "Solo Legal genera contrapropuestas" : cambios === 0 ? "Acepte o edite al menos un cambio" : undefined}
         onClick={() => setAbierto(true)}
       >
-        Enviar contrapropuesta
+        Descargar contrapropuesta
       </Boton>
       {abierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-tinta/30 px-4" onClick={() => !generando && setAbierto(false)}>
@@ -47,7 +60,14 @@ export function BotonContrapropuesta({
             <h2 id="titulo-cp" className="titulo text-[20px]">Contrapropuesta en Word</h2>
             <p className="mt-2 text-[13.5px] leading-relaxed text-secundario">
               Se genera un .docx con {cambios} cambio{cambios === 1 ? "" : "s"} validado{cambios === 1 ? "" : "s"} como control de cambios de Word, a nombre de quien los aceptó. No incluye
-              las explicaciones internas. Descárguelo, revíselo y envíelo a la contraparte; el contrato pasará a En negociación.
+              las explicaciones internas. Revíselo y envíelo a la contraparte.
+            </p>
+            <p className="mt-3 rounded-md bg-crema px-3 py-2 text-[13px] text-terracota-oscuro">
+              {abre
+                ? "Al descargarlo, el contrato pasa a En negociación y así lo verá quien lo solicitó."
+                : estado === "en_negociacion"
+                  ? "El contrato ya está En negociación; esta contrapropuesta queda registrada en Versiones."
+                  : "El estado del contrato no cambia; esta contrapropuesta queda registrada en Versiones."}
             </p>
             {altosPendientes > 0 && (
               <p className="mt-3 rounded-md bg-burgundy-suave px-3 py-2 text-[13px] text-burgundy">

@@ -32,6 +32,7 @@ export async function decidirHallazgo(hallazgoId: string, estado: EstadoHallazgo
 export async function cambiarEstado(contratoId: string, estado: EstadoContrato): Promise<Resultado> {
   const usuario = await exigirUsuario();
   if (!permisos.cambiarEstado(usuario.rol)) return { ok: false, error: "Su rol no permite cambiar el estado del contrato." };
+  if (estado === "en_negociacion") return { ok: false, error: "El contrato pasa a En negociación al descargar la contrapropuesta." };
   const supabase = await clienteSesion();
   const { data, error } = await supabase.from("contracts").update({ estado }).eq("id", contratoId).select("id").maybeSingle();
   if (error || !data) return { ok: false, error: mensajeDe(error, "No se pudo cambiar el estado.") };

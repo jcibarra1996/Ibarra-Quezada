@@ -18,7 +18,7 @@ organización) y la API de Anthropic llamada solo desde el servidor.
 | Análisis IA | Tipo y objeto del contrato, cláusulas ajenas al objeto, comparación contra el playbook, omisiones, fechas clave y resumen para negocio. Salida estructurada validada con zod. Cada cita se ubica en el texto; si no aparece textual, el hallazgo se descarta. Las normas mencionadas se marcan "Por verificar por el abogado". |
 | Revisión | Visor con citas resaltadas y numeradas, marcas al margen y paginación. Panel con resumen, contadores por riesgo y tarjetas con control de cambios: Aceptar cambio, Editar, Descartar. Barra de Validación de Legal. |
 | Validación | Cada hallazgo guarda estado, usuario y hora. La base de datos impide aprobar con hallazgos de riesgo alto pendientes y congela las validaciones de un contrato aprobado. |
-| Contrapropuesta | .docx con control de cambios real de Word (w:ins / w:del) a nombre de quien aceptó cada cambio. Las omisiones aceptadas entran como cláusulas nuevas numeradas. |
+| Contrapropuesta | .docx con control de cambios real de Word (w:ins / w:del) a nombre de quien aceptó cada cambio. Las omisiones aceptadas entran como cláusulas nuevas numeradas. Al descargarla Legal, queda marcada como descargada y el contrato pasa a En negociación; ese estado no se elige a mano. |
 | Vencimientos | Lista y calendario de plazos de aviso, fines de vigencia y periodos renovados, con área responsable y avisos programados. El correo está preparado y desactivado. |
 | Repositorio | Búsqueda por contraparte o título, tipo, estado, riesgo y fecha. Versiones, comentarios de Legal y de Negocio, historial completo. |
 | Reportes | Contratos en revisión, tiempo promedio de revisión, hallazgos por riesgo y por tema, próximos vencimientos. Todo calculado con los registros de la app. |
@@ -232,8 +232,9 @@ de perfil durante la demo, haga clic en el nombre en "Ver la demo como" de la ba
 3. **2:00 a 3:00. La validación.** Acepte intereses moratorios, edite la jurisdicción y descarte un
    hallazgo menor; muestre usuario y hora. Intente pasar el estado a *Aprobado*: se bloquea mientras
    haya riesgo alto pendiente. Muestre la barra de Validación de Legal.
-4. **3:00 a 3:45. La contrapropuesta.** *Enviar contrapropuesta* y ábrala en Word, en Revisar:
-   control de cambios real a nombre de Carlos Rivas, listo para la contraparte.
+4. **3:00 a 3:45. La contrapropuesta.** *Descargar contrapropuesta* y ábrala en Word, en Revisar:
+   control de cambios real a nombre de Carlos Rivas, listo para la contraparte. El contrato pasa
+   solo a *En negociación*, y en Versiones la contrapropuesta queda marcada como descargada.
 5. **3:45 a 4:15. Lo que no se olvida.** En *Vencimientos*, la fecha límite para el aviso de no
    renovación con el área de Compras responsable y sus avisos programados. Abra el calendario.
 6. **4:15 a 5:00. Su contrato.** *Subir contrato* con el documento del prospecto y deje que la IA
