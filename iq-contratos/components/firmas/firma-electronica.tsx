@@ -6,16 +6,20 @@ import { subirTemporal } from "@/lib/subir-archivo";
 import { fechaHora } from "@/lib/formato";
 import type { SolicitudFirma } from "@/lib/revision/cargar";
 import type { EstadoContrato } from "@/lib/tipos";
+import { WidgetMifiel } from "./widget-mifiel";
 
 interface Fila {
   nombre: string;
   correo: string;
   rfc: string;
   parte?: string;
+  // De la propia empresa: puede firmar desde el portal.
+  interno?: boolean;
 }
 
-// Firma electrónica con Mifiel: enviar el PDF final, seguir a los firmantes y descargar
-// el contrato firmado con su constancia de conservación (NOM-151).
+// Firma electrónica con Mifiel: enviar el PDF final (el Word vigente se convierte solo),
+// seguir a los firmantes, firmar desde el portal a quien es de la empresa y descargar el
+// contrato firmado con su constancia de conservación (NOM-151).
 export function FirmaElectronica({
   contratoId,
   estado,
@@ -37,6 +41,7 @@ export function FirmaElectronica({
   const [archivo, setArchivo] = useState<File | null>(null);
   const [trabajando, setTrabajando] = useState(false);
   const [mensaje, setMensaje] = useState("");
+  const [firmando, setFirmando] = useState<{ widgetId: string; nombre: string } | null>(null);
   const activa = solicitudes.find((s) => s.estado === "enviado");
   const firmada = solicitudes.find((s) => s.estado === "firmado");
   const ultima = solicitudes[0];
@@ -93,6 +98,40 @@ export function FirmaElectronica({
     const firmaron = activa.firmantes.filter((f) => f.firmado).length;
     return (
       <span className="relative">
+        {firmando && (
+          <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-tinta/30 px-4 py-8" onClick={() => setFirmando(null)}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-[1040px] rounded-xl border border-linea bg-white p-5 shadow-[var(--shadow-flotante)]"
+              role="dialog"
+              aria-modal
+              aria-labelledby="titulo-widget"
+            >
+              <div className="mb-3 flex items-start justify-between gap-4">
+                <div>
+                  <h2 id="titulo-widget" className="titulo text-[20px]">
+                    Firma de {firmando.nombre}
+                  </h2>
+                  <p className="mt-0.5 text-[12.5px] text-secundario">
+                    Revise el contrato y firme con la e.firma del SAT (archivos .cer y .key y su contraseña). La firma ocurre en Mifiel; el portal no recibe la e.firma.
+                  </p>
+                </div>
+                <Boton variante="fantasma" onClick={() => setFirmando(null)}>
+                  Cerrar
+                </Boton>
+              </div>
+              <WidgetMifiel
+                widgetId={firmando.widgetId}
+                entorno={activa.entorno}
+                alFirmar={() => actualizar(activa.id)}
+                alCerrar={() => {
+                  setFirmando(null);
+                  actualizar(activa.id);
+                }}
+              />
+            </div>
+          </div>
+        )}
         <Boton onClick={() => setAbierto(!abierto)}>
           En firma con Mifiel · {firmaron} de {activa.firmantes.length}
         </Boton>
@@ -105,14 +144,38 @@ export function FirmaElectronica({
                   <span className="min-w-0 truncate">
                     {f.nombre} <span className="text-secundario">{f.correo}</span>
                   </span>
-                  <span className={f.firmado ? "text-bajo" : "text-secundario"}>{f.firmado ? "Firmó" : "Pendiente"}</span>
+                  {f.firmado ? (
+                    <span className="text-bajo">Firmó</span>
+                  ) : f.interno && f.widget_id ? (
+                    <button
+                      type="button"
+                      className="shrink-0 font-medium text-terracota hover:underline"
+                      onClick={() => {
+                        setAbierto(false);
+                        setFirmando({ widgetId: f.widget_id!, nombre: f.nombre });
+                      }}
+                    >
+                      Ver y firmar
+                    </button>
+                  ) : (
+                    <span className="text-secundario">Pendiente</span>
+                  )}
                 </li>
               ))}
             </ul>
             <p className="mt-2 text-[11.5px] text-secundario">
               Enviado {fechaHora(activa.creado_en)}
-              {activa.entorno === "sandbox" ? " · ambiente de pruebas de Mifiel (sin validez legal)" : ""}. Mifiel envió las invitaciones por correo.
+              {activa.entorno === "sandbox" ? " · ambiente de pruebas de Mifiel (sin validez legal)" : ""}. Mifiel envió las invitaciones por correo; los
+              firmantes de su empresa también pueden firmar aquí con Ver y firmar.
             </p>
+            <a
+              href={`/api/firmas/${activa.id}/archivo?formato=enviado`}
+              target="_blank"
+              rel="noopener"
+              className="mt-2 inline-block text-[12.5px] font-medium text-terracota hover:underline"
+            >
+              Ver el PDF enviado a firma
+            </a>
             {mensaje && <p className="mt-2 text-[12px] text-medio">{mensaje}</p>}
             <Boton className="mt-3 w-full" disabled={trabajando} onClick={() => actualizar(activa.id)}>
               {trabajando ? "Consultando a Mifiel..." : "Actualizar estado"}
@@ -170,26 +233,38 @@ export function FirmaElectronica({
             <p className="mb-1.5 mt-4 text-[12px] font-semibold uppercase tracking-wider text-secundario">Firmantes</p>
             <div className="space-y-2">
               {filas.map((f, i) => (
-                <div key={i} className="grid grid-cols-[1fr_1fr_140px_24px] items-center gap-2">
+                <div key={i} className="grid grid-cols-[1fr_1fr_130px_auto_24px] items-center gap-2">
                   <input aria-label="Nombre completo" placeholder="Nombre completo" value={f.nombre} onChange={(e) => setFilas(filas.map((x, j) => (j === i ? { ...x, nombre: e.target.value } : x)))} className={control} />
                   <input aria-label="Correo" placeholder="correo@empresa.com" type="email" value={f.correo} onChange={(e) => setFilas(filas.map((x, j) => (j === i ? { ...x, correo: e.target.value } : x)))} className={control} />
                   <input aria-label="RFC del firmante (opcional)" placeholder="RFC (opcional)" value={f.rfc} maxLength={13} onChange={(e) => setFilas(filas.map((x, j) => (j === i ? { ...x, rfc: e.target.value.toUpperCase() } : x)))} className={`${control} font-mono`} />
+                  <label className="flex items-center gap-1.5 whitespace-nowrap text-[12px] text-secundario" title="Podrá firmar desde el portal con Ver y firmar">
+                    <input type="checkbox" checked={Boolean(f.interno)} onChange={(e) => setFilas(filas.map((x, j) => (j === i ? { ...x, interno: e.target.checked } : x)))} />
+                    Su empresa
+                  </label>
                   <button type="button" aria-label="Quitar firmante" className="text-secundario hover:text-burgundy" onClick={() => setFilas(filas.filter((_, j) => j !== i))}>
                     ×
                   </button>
-                  {f.parte && <span className="col-span-4 -mt-1 text-[11px] text-secundario">Representante de {f.parte}, según su expediente</span>}
+                  {f.parte && <span className="col-span-5 -mt-1 text-[11px] text-secundario">Representante de {f.parte}, según su expediente</span>}
                 </div>
               ))}
             </div>
             <button type="button" className="mt-2 text-[12.5px] font-medium text-terracota hover:underline" onClick={() => setFilas([...filas, { nombre: "", correo: "", rfc: "" }])}>
               Agregar firmante
             </button>
-            <p className="mt-1 text-[11.5px] text-secundario">El RFC es el de la persona que firma (el de su e.firma), no el de la empresa.</p>
+            <p className="mt-1 text-[11.5px] text-secundario">
+              El RFC es el de la persona que firma (el de su e.firma), no el de la empresa. Marque "Su empresa" en quienes firmarán desde el portal.
+            </p>
 
             <p className="mb-1.5 mt-4 text-[12px] font-semibold uppercase tracking-wider text-secundario">Documento</p>
             <p className="text-[12.5px] text-secundario">
-              {versionEsPdf ? "Se enviará la versión vigente (PDF). Si tiene un PDF final distinto, cárguelo aquí." : "Mifiel firma archivos PDF. Cargue el PDF final del contrato."}
+              {versionEsPdf
+                ? "Se enviará la versión vigente (PDF)."
+                : "La versión vigente es Word: se convierte automáticamente a PDF y ese PDF se sube a Mifiel. Conserva el texto completo, negritas y tablas, no el formato exacto del Word."}{" "}
+              <a href={`/api/contratos/${contratoId}/firma/pdf`} target="_blank" rel="noopener" className="font-medium text-terracota hover:underline">
+                Ver el PDF que se enviará
+              </a>
             </p>
+            <p className="mt-2 text-[12px] text-secundario">Si prefiere enviar otro PDF final (por ejemplo, con el formato de su despacho), cárguelo aquí:</p>
             <input
               type="file"
               accept=".pdf,application/pdf"
@@ -201,8 +276,8 @@ export function FirmaElectronica({
               <Boton variante="fantasma" disabled={trabajando} onClick={() => setAbierto(false)}>
                 Cancelar
               </Boton>
-              <Boton variante="primario" disabled={trabajando || !configurado || (!versionEsPdf && !archivo)} onClick={enviar}>
-                {trabajando ? "Enviando a Mifiel..." : "Enviar a firma"}
+              <Boton variante="primario" disabled={trabajando || !configurado} onClick={enviar}>
+                {trabajando ? (archivo || versionEsPdf ? "Enviando a Mifiel..." : "Convirtiendo y enviando...") : "Enviar a firma"}
               </Boton>
             </div>
           </div>

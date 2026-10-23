@@ -90,6 +90,8 @@ describe("Mifiel", () => {
     expect(() => validarFirmantes([{ nombre: "A", correo: "no-es-correo" }])).toThrow(/correo/);
     expect(() => validarFirmantes([{ nombre: "A", correo: "a@b.mx", rfc: "123" }])).toThrow(/RFC/);
     expect(() => validarFirmantes([{ nombre: "A", correo: "a@b.mx" }, { nombre: "B", correo: "A@B.mx" }])).toThrow(/repetidos/);
-    expect(validarFirmantes([{ nombre: " Ana ", correo: " ANA@B.MX ", rfc: "" }])).toEqual([{ nombre: "Ana", correo: "ana@b.mx", rfc: null }]);
+    expect(validarFirmantes([{ nombre: " Ana ", correo: " ANA@B.MX ", rfc: "" }])).toEqual([{ nombre: "Ana", correo: "ana@b.mx", rfc: null, interno: false }]);
+    // Quien es de la propia empresa queda marcado para firmar desde el portal.
+    expect(validarFirmantes([{ nombre: "Laura", correo: "laura@empresa.mx", interno: true }])[0].interno).toBe(true);
   });
 });

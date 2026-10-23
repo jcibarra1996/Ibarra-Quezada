@@ -99,7 +99,7 @@ export interface SolicitudFirma {
   id: string;
   estado: "enviado" | "firmado" | "rechazado" | "cancelado" | "error";
   entorno: string;
-  firmantes: { nombre: string; correo: string; rfc: string | null; firmado: boolean; widget_id: string | null }[];
+  firmantes: { nombre: string; correo: string; rfc: string | null; firmado: boolean; widget_id: string | null; interno?: boolean }[];
   firmado_pdf_path: string | null;
   firmado_xml_path: string | null;
   error: string | null;

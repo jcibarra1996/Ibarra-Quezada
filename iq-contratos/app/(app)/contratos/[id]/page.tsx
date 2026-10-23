@@ -173,6 +173,7 @@ async function firmantesSugeridos(propiaId: string | null, contraparteId: string
       correo: d.correo_notificaciones ?? "",
       rfc: "",
       parte: e.denominacion,
+      interno: e.id === propiaId,
     };
   });
 }
