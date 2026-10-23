@@ -72,16 +72,13 @@ describe("Mifiel", () => {
   });
 
   it("usa autenticación Basic y el servidor del ambiente configurado", async () => {
-    process.env.MIFIEL_APP_ID = "app";
-    process.env.MIFIEL_APP_SECRET = "secreto";
-    process.env.MIFIEL_ENTORNO = "sandbox";
     const llamadas: { url: string; init: RequestInit }[] = [];
     vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
       llamadas.push({ url, init });
       return new Response(JSON.stringify({ errors: [{ details: "not ready" }] }), { status: 423 });
     });
     const { descargarFirmado } = await import("@/lib/firmas/mifiel");
-    expect(await descargarFirmado("doc-1", "pdf")).toBeNull();
+    expect(await descargarFirmado({ entorno: "sandbox", appId: "app", secreto: "secreto", webhookClave: null }, "doc-1", "pdf")).toBeNull();
     expect(llamadas[0].url).toBe("https://app-sandbox.mifiel.com/api/v1/documents/doc-1/file_signed");
     expect((llamadas[0].init.headers as Record<string, string>).Authorization).toBe(`Basic ${Buffer.from("app:secreto").toString("base64")}`);
     vi.unstubAllGlobals();

@@ -158,8 +158,7 @@ export function FirmaElectronica({
             </p>
             {!configurado && (
               <p className="mt-3 rounded-md bg-medio-suave px-3 py-2 text-[12.5px] text-medio">
-                Mifiel aún no está conectado. Se necesitan MIFIEL_APP_ID y MIFIEL_APP_SECRET (de app-sandbox.mifiel.com o app.mifiel.com, en Ajustes, Access tokens) en las
-                variables de entorno de Vercel.
+                Mifiel aún no está conectado. La dirección jurídica lo conecta desde Firmas con el APP_ID y el APP_SECRET de la cuenta de la empresa.
               </p>
             )}
             {ultima?.estado === "error" || ultima?.estado === "rechazado" ? (

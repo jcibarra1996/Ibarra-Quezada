@@ -3,7 +3,7 @@ import { clienteSistema } from "@/lib/supabase/admin";
 import { BUCKET } from "@/lib/contratos/registrar";
 import { recogerSubida, descartarSubida } from "@/lib/subidas";
 import { registrar } from "@/lib/log";
-import { consultarEstado, crearDocumento, descargarFirmado, entornoMifiel, ErrorMifiel, type Firmante } from "./mifiel";
+import { consultarEstado, crearDocumento, descargarFirmado, ErrorMifiel, exigirCredenciales, type Firmante } from "./mifiel";
 import type { Usuario } from "@/lib/tipos";
 
 const RE_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,6 +30,7 @@ export async function enviarAFirma(p: { usuario: Usuario; contratoId: string; ru
   const firmantes = validarFirmantes(p.firmantes);
   const db = clienteSistema();
   const org = p.usuario.org_id;
+  const cred = await exigirCredenciales(org);
   const { data: contrato } = await db
     .from("contracts")
     .select("id, titulo, estado, version_actual_id, contract_versions!contract_versions_contract_id_fkey(id, mime, storage_path, nombre_archivo)")
@@ -64,7 +65,7 @@ export async function enviarAFirma(p: { usuario: Usuario; contratoId: string; ru
   if (subida.error) throw new Error("No se pudo guardar el PDF para firma.");
   if (p.rutaTemporal) await descartarSubida(p.rutaTemporal);
 
-  const doc = await crearDocumento({
+  const doc = await crearDocumento(cred, {
     pdf,
     nombreArchivo: nombre,
     firmantes,
@@ -76,7 +77,7 @@ export async function enviarAFirma(p: { usuario: Usuario; contratoId: string; ru
     id: solicitudId,
     org_id: org,
     contract_id: contrato.id,
-    entorno: entornoMifiel(),
+    entorno: cred.entorno,
     externo_id: doc.id,
     firmantes: firmantes.map((f) => {
       const s = doc.firmantes.find((x) => x.correo.toLowerCase() === f.correo);
@@ -91,7 +92,7 @@ export async function enviarAFirma(p: { usuario: Usuario; contratoId: string; ru
     contract_id: contrato.id,
     actor_id: p.usuario.id,
     accion: "firma_enviada",
-    detalle: { proveedor: "mifiel", firmantes: firmantes.length, entorno: entornoMifiel() },
+    detalle: { proveedor: "mifiel", firmantes: firmantes.length, entorno: cred.entorno },
   });
   registrar("firma_enviada", { org, contrato: contrato.id, solicitud: solicitudId });
   return { solicitudId };
@@ -106,7 +107,8 @@ export async function actualizarFirma(p: { orgId: string; solicitudId: string; a
   if (!s) throw new ErrorMifiel("Solicitud de firma no encontrada.");
   if (s.estado !== "enviado" || !s.externo_id) return { estado: s.estado as string };
 
-  const estado = await consultarEstado(s.externo_id);
+  const cred = await exigirCredenciales(p.orgId);
+  const estado = await consultarEstado(cred, s.externo_id);
   const firmantes = (s.firmantes as { correo: string; firmado: boolean }[]).map((f) => ({ ...f, firmado: f.firmado || estado.firmaron.includes(f.correo) }));
   if (estado.rechazado) {
     await db.from("signature_requests").update({ estado: "rechazado", firmantes, actualizado_en: new Date().toISOString() }).eq("id", s.id);
@@ -114,12 +116,12 @@ export async function actualizarFirma(p: { orgId: string; solicitudId: string; a
     return { estado: "rechazado" };
   }
 
-  const pdf = await descargarFirmado(s.externo_id, "pdf");
+  const pdf = await descargarFirmado(cred, s.externo_id, "pdf");
   if (!pdf) {
     await db.from("signature_requests").update({ firmantes, actualizado_en: new Date().toISOString() }).eq("id", s.id);
     return { estado: "enviado", firmaron: firmantes.filter((f) => f.firmado).length, total: firmantes.length };
   }
-  const xml = await descargarFirmado(s.externo_id, "xml");
+  const xml = await descargarFirmado(cred, s.externo_id, "xml");
   const base = `${p.orgId}/${s.contract_id}/firma/${s.id}`;
   await db.storage.from(BUCKET).upload(`${base}-firmado.pdf`, pdf, { contentType: "application/pdf", upsert: true });
   if (xml) await db.storage.from(BUCKET).upload(`${base}-firmado.xml`, xml, { contentType: "application/xml", upsert: true });

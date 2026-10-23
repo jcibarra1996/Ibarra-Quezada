@@ -5,14 +5,19 @@ import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
 import { fecha } from "@/lib/formato";
 import { permisos } from "@/lib/tipos";
-import { entornoMifiel, mifielConfigurado } from "@/lib/firmas/mifiel";
-import { ConectarAvisos } from "@/components/firmas/conectar-avisos";
+import { credencialesMifiel } from "@/lib/firmas/mifiel";
+import { ConexionMifiel } from "@/components/firmas/conexion-mifiel";
 
 export const metadata = { title: "Firmas" };
 
 export default async function Firmas() {
   const usuario = await exigirUsuario();
   const supabase = await clienteSesion();
+  const director = permisos.editarPlaybook(usuario.rol);
+  const [cred, { data: integracion }] = await Promise.all([
+    credencialesMifiel(usuario.org_id),
+    supabase.from("integraciones").select("app_id, avisos_conectados_en").eq("proveedor", "mifiel").maybeSingle(),
+  ]);
   const { data } = await supabase
     .from("contracts")
     .select("id, titulo, contraparte, estado, aprobado_en, firmado_en, signature_requests(id, estado, firmantes, creado_en)")
@@ -85,37 +90,19 @@ export default async function Firmas() {
                 está en el encabezado de cada contrato.
               </p>
             </div>
-            {mifielConfigurado() ? (
+            {cred ? (
               <span className="shrink-0 rounded-full bg-bajo-suave px-3 py-1 text-[12px] font-medium text-bajo">
-                Conectado{entornoMifiel() === "sandbox" ? " · ambiente de pruebas" : " · producción"}
+                Conectado · {cred.entorno === "sandbox" ? "pruebas" : "producción"}
+                {integracion?.app_id ? ` · APP_ID …${integracion.app_id.slice(-4)}` : ""}
               </span>
             ) : (
               <span className="shrink-0 rounded-full bg-medio-suave px-3 py-1 text-[12px] font-medium text-medio">Sin conectar</span>
             )}
           </div>
-          {mifielConfigurado() ? (
-            permisos.editarPlaybook(usuario.rol) && (
-              <p className="mt-3 text-[12.5px] text-secundario">
-                Para que el portal se entere en cuanto se firme: <ConectarAvisos />
-              </p>
-            )
+          {director ? (
+            <ConexionMifiel conectado={cred !== null} avisosConectados={Boolean(integracion?.avisos_conectados_en)} />
           ) : (
-            <ol className="mt-4 grid grid-cols-2 gap-x-8 gap-y-2 text-[13px]">
-              <li>
-                <span className="font-medium">1.</span> Cree una cuenta de pruebas en app-sandbox.mifiel.com (o en mifiel.com para producción).
-              </li>
-              <li>
-                <span className="font-medium">2.</span> En Mifiel, Ajustes, Access tokens, genere su APP_ID y APP_SECRET.
-              </li>
-              <li>
-                <span className="font-medium">3.</span> En Vercel, proyecto iq-contratos, Settings, Environment Variables, agregue <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_APP_ID</code>,{" "}
-                <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_APP_SECRET</code>, <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_ENTORNO</code> (sandbox o produccion) y{" "}
-                <code className="rounded bg-gris-100 px-1 text-[12px]">MIFIEL_WEBHOOK_CLAVE</code> (una clave propia de 16 caracteres o más).
-              </li>
-              <li>
-                <span className="font-medium">4.</span> Vuelva a desplegar el proyecto y, como dirección jurídica, regrese aquí para conectar los avisos automáticos.
-              </li>
-            </ol>
+            !cred && <p className="mt-3 text-[12.5px] text-secundario">La dirección jurídica conecta la cuenta de Mifiel de la empresa desde esta página.</p>
           )}
         </section>
         <section>
