@@ -9,7 +9,8 @@ import { detalleErrorMifiel } from "./error-mifiel";
 //  - Servidores: https://app.mifiel.com (producción) y https://app-sandbox.mifiel.com.
 //  - Autenticación Basic con APP_ID:APP_SECRET.
 //  - POST /api/v1/documents (multipart): file (PDF), signatories[i][name|email|tax_id],
-//    external_id, send_invites, days_to_expire, message_for_signers.
+//    external_id, send_invites, message_for_signers. No se manda days_to_expire: la
+//    expiración de documentos es una funcionalidad que no todos los planes incluyen.
 //  - GET /api/v1/documents/{id}/state; GET /api/v1/documents/{id}/file_signed (PDF, 423
 //    mientras no esté listo); GET /api/v1/documents/{id}/xml.
 //  - POST /api/v1/webhooks {url, callback_type}.
@@ -106,12 +107,15 @@ export interface Firmante {
   interno?: boolean;
 }
 
+// Rechazo porque el plan de la cuenta no incluye una funcionalidad.
+export const sinPermiso = (mensaje: string) => /permiso|permission|not allowed|no est[aá] habilitad/i.test(mensaje);
+
 export interface DocumentoMifiel {
   id: string;
   firmantes: { nombre: string; correo: string; rfc: string | null; widget_id: string | null; firmado: boolean }[];
 }
 
-export function formularioDocumento(p: { pdf: Buffer; nombreArchivo: string; firmantes: Firmante[]; externalId: string; mensaje?: string; diasParaVencer?: number }): FormData {
+export function formularioDocumento(p: { pdf: Buffer; nombreArchivo: string; firmantes: Firmante[]; externalId: string; mensaje?: string }): FormData {
   const f = new FormData();
   f.append("file", new Blob([new Uint8Array(p.pdf)], { type: "application/pdf" }), p.nombreArchivo);
   p.firmantes.forEach((s, i) => {
@@ -121,13 +125,19 @@ export function formularioDocumento(p: { pdf: Buffer; nombreArchivo: string; fir
   });
   f.append("external_id", p.externalId);
   f.append("send_invites", "true");
-  if (p.diasParaVencer) f.append("days_to_expire", String(p.diasParaVencer));
   if (p.mensaje) f.append("message_for_signers", p.mensaje);
   return f;
 }
 
 export async function crearDocumento(cred: CredencialesMifiel, p: Parameters<typeof formularioDocumento>[0]): Promise<DocumentoMifiel> {
-  const r = await llamar(cred, "/documents", { method: "POST", body: formularioDocumento(p) });
+  let r = await llamar(cred, "/documents", { method: "POST", body: formularioDocumento(p) });
+  if (!r.ok && p.mensaje) {
+    // El mensaje para firmantes es opcional. Si el plan de la cuenta no lo permite, se
+    // envía sin él una sola vez; Mifiel no creó nada en el intento rechazado.
+    const e = await errorDe(r, "Mifiel no aceptó el documento.");
+    if (!sinPermiso(e.message)) throw e;
+    r = await llamar(cred, "/documents", { method: "POST", body: formularioDocumento({ ...p, mensaje: undefined }) });
+  }
   if (!r.ok) throw await errorDe(r, "Mifiel no aceptó el documento.");
   const d = (await r.json()) as { id: string; signers?: { name?: string; email?: string; tax_id?: string; widget_id?: string; signed?: boolean }[] };
   return {

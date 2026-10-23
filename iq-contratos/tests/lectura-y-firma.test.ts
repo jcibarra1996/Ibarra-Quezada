@@ -59,7 +59,6 @@ describe("Mifiel", () => {
         { nombre: "Ricardo Ejemplo Salas", correo: "ricardo@empresa.example" },
       ],
       externalId: "sol-1",
-      diasParaVencer: 30,
     });
     expect((f.get("file") as File).name).toBe("contrato.pdf");
     expect(f.get("signatories[0][name]")).toBe("Héctor Demo Garza");
@@ -68,7 +67,8 @@ describe("Mifiel", () => {
     expect(f.get("signatories[1][tax_id]")).toBeNull();
     expect(f.get("external_id")).toBe("sol-1");
     expect(f.get("send_invites")).toBe("true");
-    expect(f.get("days_to_expire")).toBe("30");
+    // La expiración de documentos no está en todos los planes de Mifiel: no se manda.
+    expect(f.get("days_to_expire")).toBeNull();
   });
 
   it("usa autenticación Basic y el servidor del ambiente configurado", async () => {
@@ -81,6 +81,34 @@ describe("Mifiel", () => {
     expect(await descargarFirmado({ entorno: "sandbox", appId: "app", secreto: "secreto", webhookClave: null }, "doc-1", "pdf")).toBeNull();
     expect(llamadas[0].url).toBe("https://app-sandbox.mifiel.com/api/v1/documents/doc-1/file_signed");
     expect((llamadas[0].init.headers as Record<string, string>).Authorization).toBe(`Basic ${Buffer.from("app:secreto").toString("base64")}`);
+    vi.unstubAllGlobals();
+  });
+
+  it("si el plan no permite el mensaje para firmantes, reintenta una vez sin él", async () => {
+    const cuerpos: FormData[] = [];
+    const respuestas = [
+      new Response(JSON.stringify({ status: "error", errors: ["No cuentas con permiso para usar la funcionalidad 'Mensaje personalizado'"] }), { status: 403 }),
+      new Response(JSON.stringify({ id: "doc-9", signers: [{ name: "Ana", email: "ana@b.mx", widget_id: "w-1", signed: false }] }), { status: 201 }),
+    ];
+    vi.stubGlobal("fetch", async (_url: string, init: RequestInit) => {
+      cuerpos.push(init.body as FormData);
+      return respuestas.shift()!;
+    });
+    const { crearDocumento } = await import("@/lib/firmas/mifiel");
+    const cred = { entorno: "produccion" as const, appId: "app", secreto: "s", webhookClave: null };
+    const doc = await crearDocumento(cred, { pdf: Buffer.from("%PDF-1.7"), nombreArchivo: "c.pdf", firmantes: [{ nombre: "Ana", correo: "ana@b.mx" }], externalId: "e1", mensaje: "Hola" });
+    expect(doc).toMatchObject({ id: "doc-9", firmantes: [{ widget_id: "w-1" }] });
+    expect(cuerpos).toHaveLength(2);
+    expect(cuerpos[0].get("message_for_signers")).toBe("Hola");
+    expect(cuerpos[1].get("message_for_signers")).toBeNull();
+
+    // Cualquier otro rechazo no se reintenta y llega con la razón de Mifiel.
+    cuerpos.length = 0;
+    respuestas.push(new Response(JSON.stringify({ errors: [{ details: "File must be a PDF" }] }), { status: 400 }));
+    await expect(
+      crearDocumento(cred, { pdf: Buffer.from("x"), nombreArchivo: "c.pdf", firmantes: [{ nombre: "Ana", correo: "ana@b.mx" }], externalId: "e2", mensaje: "Hola" }),
+    ).rejects.toThrow(/File must be a PDF/);
+    expect(cuerpos).toHaveLength(1);
     vi.unstubAllGlobals();
   });
 

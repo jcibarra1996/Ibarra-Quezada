@@ -87,7 +87,6 @@ export async function enviarAFirma(p: { usuario: Usuario; contratoId: string; ru
     nombreArchivo: nombre,
     firmantes,
     externalId: solicitudId,
-    diasParaVencer: 30,
     mensaje: `${contrato.titulo}. Documento enviado a firma por la dirección legal.`,
   });
   const { error } = await db.from("signature_requests").insert({
