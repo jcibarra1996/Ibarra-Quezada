@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { EncabezadoPagina } from "@/components/ui/encabezado";
 import { AgregarPosicion, Posicion } from "@/components/playbook/posicion";
 import { CrearPlaybook } from "@/components/playbook/crear-playbook";
@@ -11,6 +12,7 @@ export const metadata = { title: "Playbook" };
 
 export default async function Playbook({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const usuario = await exigirUsuario();
+  if (!permisos.verBiblioteca(usuario.rol)) redirect("/inicio");
   const { tipo } = await searchParams;
   const supabase = await clienteSesion();
   const [{ data: playbooks }, { data: perfiles }] = await Promise.all([

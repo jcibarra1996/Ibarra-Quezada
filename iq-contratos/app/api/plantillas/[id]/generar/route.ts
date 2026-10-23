@@ -4,14 +4,17 @@ import { usuarioActual } from "@/lib/auth/sesion";
 import { ErrorPlantilla, generarDesdePlantilla } from "@/lib/plantillas/generar";
 import { ErrorDocumento } from "@/lib/parsing/extraer";
 import { registrar, registrarError } from "@/lib/log";
+import { permisos } from "@/lib/tipos";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-// Cualquier integrante puede solicitar un contrato desde plantilla; Legal lo revisa después.
+// Solo Legal genera contratos desde plantilla; el área de negocio solicita subiendo el
+// documento de la contraparte.
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const usuario = await usuarioActual();
   if (!usuario) return NextResponse.json({ error: "Sesión no válida." }, { status: 401 });
+  if (!permisos.verBiblioteca(usuario.rol)) return NextResponse.json({ error: "Las plantillas son de uso exclusivo de Legal." }, { status: 403 });
   const { id } = await params;
   const cuerpo = await request.json().catch(() => null);
   if (!cuerpo || typeof cuerpo !== "object") return NextResponse.json({ error: "Solicitud no válida." }, { status: 400 });
