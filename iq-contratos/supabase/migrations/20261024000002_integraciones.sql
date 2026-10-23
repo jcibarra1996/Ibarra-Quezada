@@ -55,20 +55,21 @@ language sql stable security definer set search_path = public, vault as $$
   where i.org_id = p_org and i.proveedor = p_proveedor
 $$;
 
-create or replace function public.borrar_integracion(p_org uuid, p_proveedor text) returns void
+-- Al desconectar, los secretos se sobrescriben y el servidor borra el registro.
+create or replace function public.vaciar_integracion(p_org uuid, p_proveedor text) returns void
 language plpgsql security definer set search_path = public, vault as $$
 declare
   v integraciones;
 begin
   select * into v from integraciones where org_id = p_org and proveedor = p_proveedor;
   if not found then return; end if;
-  delete from vault.secrets where id in (v.secreto_id, v.webhook_clave_id);
-  delete from integraciones where org_id = p_org and proveedor = p_proveedor;
+  perform vault.update_secret(v.secreto_id, '');
+  perform vault.update_secret(v.webhook_clave_id, '');
 end $$;
 
 revoke execute on function public.guardar_integracion(uuid, text, text, text, text, uuid) from public, anon, authenticated;
 revoke execute on function public.credenciales_integracion(uuid, text) from public, anon, authenticated;
-revoke execute on function public.borrar_integracion(uuid, text) from public, anon, authenticated;
+revoke execute on function public.vaciar_integracion(uuid, text) from public, anon, authenticated;
 grant execute on function public.guardar_integracion(uuid, text, text, text, text, uuid) to service_role;
 grant execute on function public.credenciales_integracion(uuid, text) to service_role;
-grant execute on function public.borrar_integracion(uuid, text) to service_role;
+grant execute on function public.vaciar_integracion(uuid, text) to service_role;

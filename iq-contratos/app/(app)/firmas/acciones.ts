@@ -38,7 +38,9 @@ export async function conectarMifiel(p: { appId: string; secreto: string; entorn
 export async function desconectarMifiel(): Promise<Resultado> {
   const usuario = await exigirUsuario();
   if (!permisos.editarPlaybook(usuario.rol)) return { ok: false, error: "Solo la dirección jurídica desconecta Mifiel." };
-  await clienteSistema().rpc("borrar_integracion", { p_org: usuario.org_id, p_proveedor: "mifiel" });
+  const db = clienteSistema();
+  await db.rpc("vaciar_integracion", { p_org: usuario.org_id, p_proveedor: "mifiel" });
+  await db.from("integraciones").delete().eq("org_id", usuario.org_id).eq("proveedor", "mifiel");
   revalidatePath("/firmas");
   return { ok: true };
 }

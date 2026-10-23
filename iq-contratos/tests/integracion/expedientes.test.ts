@@ -172,7 +172,10 @@ describe("credenciales de Mifiel en Vault", () => {
     expect(JSON.stringify(visible)).not.toContain("secreto-de-prueba");
     const { data: paraAbogado } = await abogado.from("integraciones").select("app_id");
     expect(paraAbogado).toEqual([]);
-    await db.rpc("borrar_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    await db.rpc("vaciar_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    const { data: vacio } = await db.rpc("credenciales_integracion", { p_org: orgId, p_proveedor: "mifiel" });
+    expect(vacio[0].secreto).toBe("");
+    await db.from("integraciones").delete().eq("org_id", orgId).eq("proveedor", "mifiel");
     const { data: borrado } = await db.rpc("credenciales_integracion", { p_org: orgId, p_proveedor: "mifiel" });
     expect(borrado).toEqual([]);
   });
