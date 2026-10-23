@@ -3,6 +3,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { clienteSistema } from "@/lib/supabase/admin";
 import { leerContrato, MIME_PDF } from "@/lib/parsing/extraer";
 import { contraparteDelProemio, tituloDelProemio } from "./datos-generales";
+import { tipoPorTitulo } from "./tipo-por-titulo";
 import { identificarPartes } from "@/lib/corporativo/vincular";
 import type { Usuario } from "@/lib/tipos";
 
@@ -55,11 +56,12 @@ export async function registrarContrato(e: Entrada) {
     const lista = expedientes ?? [];
     const valido = (id: string | null | undefined) => (id && lista.some((x) => x.id === id) ? id : null);
     const auto = identificarPartes({ proemio, contraparte, expedientes: lista });
+    const titulo = tituloDelProemio(proemio, e.nombreArchivo);
     const { data: nuevo, error } = await db
       .from("contracts")
       .insert({
         org_id: org,
-        titulo: tituloDelProemio(proemio, e.nombreArchivo),
+        titulo,
         contraparte,
         area_responsable_id: areaId,
         creado_por: e.usuario.id,
@@ -68,7 +70,8 @@ export async function registrarContrato(e: Entrada) {
         propia_id: valido(e.propiaId) ?? auto.propiaId,
         plantilla_id: e.plantillaId ?? null,
         datos_solicitud: e.solicitud ?? {},
-        ...(e.tipoContrato ? { tipo_contrato: e.tipoContrato } : {}),
+        // El tipo sale del título si lo dice expresamente; si no, lo identifica la IA.
+        tipo_contrato: e.tipoContrato ?? tipoPorTitulo(titulo),
         ...(e.recibidoEn ? { recibido_en: e.recibidoEn } : {}),
       })
       .select("id")

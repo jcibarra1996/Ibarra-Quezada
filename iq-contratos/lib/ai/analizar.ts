@@ -29,7 +29,7 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
   const db = clienteSistema();
   const { data: contrato } = await db
     .from("contracts")
-    .select("id, org_id, version_actual_id, contraparte, estado, area_responsable_id, contraparte_id, propia_id, organizations(nombre)")
+    .select("id, org_id, version_actual_id, contraparte, estado, area_responsable_id, contraparte_id, propia_id, ficha_fuentes, organizations(nombre)")
     .eq("id", p.contratoId)
     .eq("org_id", p.orgId)
     .single();
@@ -150,7 +150,8 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
     await db
       .from("contracts")
       .update({
-        tipo_contrato: r.tipo_contrato,
+        // El tipo que Legal capturó a mano en la ficha no lo cambia el análisis.
+        ...((contrato.ficha_fuentes as { tipo_contrato?: { origen?: string } } | null)?.tipo_contrato?.origen === "manual" ? {} : { tipo_contrato: r.tipo_contrato }),
         objeto: r.objeto,
         riesgo_max: r.riesgo_max,
         ...(contrato.contraparte ? {} : { contraparte: r.contraparte ?? "" }),

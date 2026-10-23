@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { aplicarFicha, procesarFicha, type FichaModelo } from "@/lib/ai/ficha-esquema";
 
-const texto = `SEGUNDA.- RENTA. LA ARRENDATARIA pagará una renta mensual de $180,000.00 (ciento ochenta mil pesos 00/100 M.N.), más el Impuesto al Valor Agregado.
+const texto = `CONTRATO DE ARRENDAMIENTO QUE CELEBRAN, POR UNA PARTE, ARRENDADORA DEMO, S.A. DE C.V.
+SEGUNDA.- RENTA. LA ARRENDATARIA pagará una renta mensual de $180,000.00 (ciento ochenta mil pesos 00/100 M.N.), más el Impuesto al Valor Agregado.
 QUINTA.- VIGENCIA. El presente contrato tendrá una vigencia forzosa para ambas partes de tres años, contados a partir del 1 de enero de 2027 y hasta el 31 de diciembre de 2029.
 SEXTA.- RENOVACIÓN. Si LA ARRENDATARIA desea renovar el arrendamiento, deberá notificarlo por escrito con al menos sesenta días naturales de anticipación al vencimiento.
 DÉCIMA.- JURISDICCIÓN. Las partes se someten a los tribunales competentes de la Ciudad de México.`;
 
 const salida = (c: Partial<FichaModelo> = {}): FichaModelo => ({
+  tipo: { tipo: "arrendamiento", cita: "CONTRATO DE ARRENDAMIENTO" },
   monto: { monto: 180000, moneda: "MXN", periodo: "mensual", cita: "pagará una renta mensual de $180,000.00" },
   vigencia: { inicio: "2027-01-01", fin: "2029-12-31", duracion_meses: 36, cita: "contados a partir del 1 de enero de 2027 y hasta el 31 de diciembre de 2029" },
   renovacion: { automatica: false, meses: null, cita: "Si LA ARRENDATARIA desea renovar el arrendamiento, deberá notificarlo por escrito" },
@@ -19,7 +21,7 @@ const salida = (c: Partial<FichaModelo> = {}): FichaModelo => ({
 describe("ficha extraída por la IA", () => {
   it("toma los datos con cita textual y guarda la cita como fuente", () => {
     const { valores, fuentes } = procesarFicha(salida(), texto);
-    expect(valores).toMatchObject({ monto: 180000, moneda: "MXN", monto_periodo: "mensual", inicio_vigencia: "2027-01-01", fin_vigencia: "2029-12-31", renovacion_automatica: false, aviso_dias: 60, jurisdiccion: "Tribunales competentes de la Ciudad de México" });
+    expect(valores).toMatchObject({ tipo_contrato: "arrendamiento", monto: 180000, moneda: "MXN", monto_periodo: "mensual", inicio_vigencia: "2027-01-01", fin_vigencia: "2029-12-31", renovacion_automatica: false, aviso_dias: 60, jurisdiccion: "Tribunales competentes de la Ciudad de México" });
     expect(valores.ley_aplicable).toBeUndefined();
     expect(fuentes.monto).toEqual({ origen: "ia", cita: "pagará una renta mensual de $180,000.00" });
   });

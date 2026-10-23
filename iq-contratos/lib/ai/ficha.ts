@@ -8,10 +8,11 @@ import { aplicarFicha, CAMPOS_FICHA, FichaSchema, procesarFicha, type FuentesFic
 
 export class ErrorFicha extends Error {}
 
-const INSTRUCCIONES = `Usted es un abogado corporativo mexicano. Llena la ficha de un contrato para el registro de contratos de una empresa: monto, vigencia, renovación, plazo de aviso, ley aplicable y jurisdicción. Un abogado del equipo revisa y confirma la ficha.
+const INSTRUCCIONES = `Usted es un abogado corporativo mexicano. Llena la ficha de un contrato para el registro de contratos de una empresa: tipo, monto, vigencia, renovación, plazo de aviso, ley aplicable y jurisdicción. Un abogado del equipo revisa y confirma la ficha.
 
 Reglas:
 - Extraiga solo lo que el contrato dice expresamente. Si un dato no está, déjelo en null. No suponga ni calcule fechas: si la vigencia se expresa como un plazo ("doce meses a partir de la firma"), use duracion_meses y deje las fechas en null.
+- Tipo: por la denominación del contrato y su objeto; cite la denominación (por ejemplo "CONTRATO DE PRESTACIÓN DE SERVICIOS DE LOGÍSTICA"). Use "otro" si no es ninguno de los tipos de la lista (por ejemplo, una licencia de uso).
 - Monto: la contraprestación principal (precio, renta, honorarios). Si hay varios importes (por ejemplo, renta y depósito en garantía), use el de la contraprestación recurrente o principal. Si el contrato separa el IVA, use el importe sin IVA.
 - Renovación: true solo si el contrato se renueva sin necesidad de un nuevo acuerdo.
 - Aviso: los días de anticipación para avisar que no se renovará o para terminar el contrato.
