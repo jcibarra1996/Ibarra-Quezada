@@ -15,12 +15,12 @@ const salida = (c: Partial<FichaModelo> = {}): FichaModelo => ({
     razon: "La obligación principal es conceder el uso y goce temporal del inmueble a cambio de una renta.",
     cita: "LA ARRENDADORA otorga en arrendamiento a LA ARRENDATARIA el uso y goce temporal de EL INMUEBLE",
   },
-  monto: { monto: 180000, moneda: "MXN", periodo: "mensual", cita: "pagará una renta mensual de $180,000.00" },
-  vigencia: { inicio: "2027-01-01", fin: "2029-12-31", duracion_meses: 36, cita: "contados a partir del 1 de enero de 2027 y hasta el 31 de diciembre de 2029" },
-  renovacion: { automatica: false, meses: null, cita: "Si LA ARRENDATARIA desea renovar el arrendamiento, deberá notificarlo por escrito" },
-  aviso: { dias: 60, habiles: false, cita: "con al menos sesenta días naturales de anticipación al vencimiento" },
-  ley_aplicable: { texto: null, cita: null },
-  jurisdiccion: { texto: "Tribunales competentes de la Ciudad de México", cita: "Las partes se someten a los tribunales competentes de la Ciudad de México." },
+  monto: { monto: 180000, moneda: "MXN", periodo: "mensual", analisis: "Renta mensual fija, más IVA.", cita: "pagará una renta mensual de $180,000.00" },
+  vigencia: { inicio: "2027-01-01", fin: "2029-12-31", duracion_meses: 36, analisis: "Vigencia forzosa de tres años con fechas expresas.", cita: "contados a partir del 1 de enero de 2027 y hasta el 31 de diciembre de 2029" },
+  renovacion: { automatica: false, meses: null, analisis: "La renovación requiere la aceptación de la arrendadora.", cita: "Si LA ARRENDATARIA desea renovar el arrendamiento, deberá notificarlo por escrito" },
+  aviso: { dias: 60, habiles: false, analisis: "Aviso de la arrendataria para pedir la renovación.", cita: "con al menos sesenta días naturales de anticipación al vencimiento" },
+  ley_aplicable: { texto: null, analisis: "El contrato no pacta ley aplicable.", cita: null },
+  jurisdiccion: { texto: "Tribunales competentes de la Ciudad de México", analisis: null, cita: "Las partes se someten a los tribunales competentes de la Ciudad de México." },
   ...c,
 });
 
@@ -29,7 +29,9 @@ describe("ficha extraída por la IA", () => {
     const { valores, fuentes } = procesarFicha(salida(), texto);
     expect(valores).toMatchObject({ tipo_contrato: "arrendamiento", monto: 180000, moneda: "MXN", monto_periodo: "mensual", inicio_vigencia: "2027-01-01", fin_vigencia: "2029-12-31", renovacion_automatica: false, aviso_dias: 60, jurisdiccion: "Tribunales competentes de la Ciudad de México" });
     expect(valores.ley_aplicable).toBeUndefined();
-    expect(fuentes.monto).toEqual({ origen: "ia", cita: "pagará una renta mensual de $180,000.00" });
+    // Sin valor, pero con análisis: queda la nota para mostrarla en lugar de "Sin dato".
+    expect(fuentes.ley_aplicable).toEqual({ origen: "ia", nota: "El contrato no pacta ley aplicable." });
+    expect(fuentes.monto).toEqual({ origen: "ia", cita: "pagará una renta mensual de $180,000.00", nota: "Renta mensual fija, más IVA." });
     // El tipo sale del objeto: guarda la cita de la cláusula, el objeto y por qué.
     expect(valores.objeto).toBe("Uso y goce temporal de un inmueble para oficinas a cambio de una renta mensual.");
     expect(fuentes.tipo_contrato).toMatchObject({ origen: "ia", nota: "La obligación principal es conceder el uso y goce temporal del inmueble a cambio de una renta." });
@@ -38,7 +40,10 @@ describe("ficha extraída por la IA", () => {
 
   it("descarta el grupo cuya cita no aparece en el contrato y las fechas inválidas", () => {
     const { valores } = procesarFicha(
-      salida({ monto: { monto: 250000, moneda: "MXN", periodo: "mensual", cita: "renta mensual de $250,000.00" }, vigencia: { inicio: "2027-02-30", fin: null, duracion_meses: 36, cita: "contados a partir del 1 de enero de 2027" } }),
+      salida({
+        monto: { monto: 250000, moneda: "MXN", periodo: "mensual", analisis: null, cita: "renta mensual de $250,000.00" },
+        vigencia: { inicio: "2027-02-30", fin: null, duracion_meses: 36, analisis: null, cita: "contados a partir del 1 de enero de 2027" },
+      }),
       texto,
     );
     expect(valores.monto).toBeUndefined();
@@ -92,5 +97,35 @@ describe("tipo provisional por el título", () => {
     const r = aplicarFicha({ tipo_contrato: "prestacion_servicios", ficha_fuentes: { tipo_contrato: { origen: "titulo" } }, ficha_confirmada_en: null }, extraida);
     expect(r.cambios.tipo_contrato).toBe("suministro");
     expect(r.fuentes.tipo_contrato?.origen).toBe("ia");
+  });
+});
+
+describe("análisis de cada campo", () => {
+  it("calcula el término con el inicio y el plazo, sin depender del modelo", () => {
+    const { valores } = procesarFicha(
+      salida({ vigencia: { inicio: "2027-01-01", fin: "2029-12-30", duracion_meses: 36, analisis: "Tres años desde el 1 de enero de 2027.", cita: "contados a partir del 1 de enero de 2027" } }),
+      texto,
+    );
+    expect(valores.fin_vigencia).toBe("2029-12-31");
+  });
+
+  it("sin monto fijo guarda el análisis con su cita, y rechaza una cita inventada", () => {
+    const conAnexo = procesarFicha(
+      salida({ monto: { monto: null, moneda: null, periodo: null, analisis: "La renta se fija en un anexo que no viene en el documento.", cita: "pagará una renta mensual" } }),
+      texto,
+    );
+    expect(conAnexo.valores.monto).toBeUndefined();
+    expect(conAnexo.fuentes.monto).toEqual({ origen: "ia", nota: "La renta se fija en un anexo que no viene en el documento.", cita: "pagará una renta mensual" });
+    const inventada = procesarFicha(salida({ monto: { monto: null, moneda: null, periodo: null, analisis: "Precio en el Anexo B.", cita: "conforme a la lista del Anexo B" } }), texto);
+    expect(inventada.fuentes.monto).toBeUndefined();
+  });
+
+  it("la nota sin valor no borra un dato que ya existe", () => {
+    const extraida = procesarFicha(salida({ ley_aplicable: { texto: null, analisis: "No se pacta.", cita: null } }), texto);
+    const r = aplicarFicha({ ley_aplicable: "Código Civil Federal", ficha_fuentes: { ley_aplicable: { origen: "ia", cita: "x" } }, ficha_confirmada_en: null }, extraida);
+    expect(r.cambios.ley_aplicable).toBeUndefined();
+    expect(r.fuentes.ley_aplicable).toEqual({ origen: "ia", cita: "x" });
+    const vacia = aplicarFicha({ ley_aplicable: null, ficha_fuentes: {}, ficha_confirmada_en: null }, extraida);
+    expect(vacia.fuentes.ley_aplicable).toEqual({ origen: "ia", nota: "No se pacta." });
   });
 });

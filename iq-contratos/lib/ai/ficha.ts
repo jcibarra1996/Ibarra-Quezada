@@ -8,10 +8,13 @@ import { aplicarFicha, CAMPOS_FICHA, FichaSchema, procesarFicha, type FuentesFic
 
 export class ErrorFicha extends Error {}
 
-const INSTRUCCIONES = `Usted es un abogado corporativo mexicano. Llena la ficha de un contrato para el registro de contratos de una empresa: tipo, monto, vigencia, renovación, plazo de aviso, ley aplicable y jurisdicción. Un abogado del equipo revisa y confirma la ficha.
+const INSTRUCCIONES = `Usted es un abogado corporativo mexicano. Analiza un contrato y llena su ficha para el registro de contratos de una empresa: tipo, monto, vigencia, renovación, plazo de aviso, ley aplicable y jurisdicción. Un abogado del equipo revisa y confirma la ficha.
 
 Reglas:
-- Extraiga solo lo que el contrato dice expresamente. Si un dato no está, déjelo en null. No suponga ni calcule fechas: si la vigencia se expresa como un plazo ("doce meses a partir de la firma"), use duracion_meses y deje las fechas en null.
+- Lea y analice el contrato completo, no solo la cláusula que lleva el nombre del dato: el aviso puede estar en la terminación anticipada, el precio en una cláusula de pago o en un anexo, la vigencia en la renovación.
+- Para cada grupo dé el valor que resulta del contrato y explique en analisis, en una oración, cómo lo leyó. Si lo calculó (por ejemplo, el término a partir del inicio y el plazo), dígalo.
+- Si el dato no tiene un valor fijo (remite a un anexo que no viene en el documento, es variable, depende de órdenes de compra) o el contrato no lo regula, deje el valor en null y dígalo en analisis, con la cita de la cláusula que lo trata si la hay. Nunca invente ni suponga un dato que el contrato no da.
+- No cite artículos de ley por su cuenta; solo lo que el contrato dice.
 - Tipo: determínelo leyendo el objeto del contrato, es decir, la obligación principal que asume cada parte, no el título. Criterios:
   - transmitir la propiedad de bienes a cambio de un precio, en una operación: compraventa;
   - entregas periódicas o continuas de bienes a cambio de un precio: suministro;
@@ -22,9 +25,10 @@ Reglas:
   - si no corresponde a ninguno (licencia de uso, mandato, comodato, entre otros): otro.
   Si el contrato combina varias obligaciones, elija la que prevalece y dígalo en razon. Si el título y el objeto no coinciden, prevalece el objeto y señálelo en razon. La cita es la cláusula u oración del objeto; objeto es ese objeto en una oración.
 - Monto: la contraprestación principal (precio, renta, honorarios). Si hay varios importes (por ejemplo, renta y depósito en garantía), use el de la contraprestación recurrente o principal. Si el contrato separa el IVA, use el importe sin IVA.
-- Renovación: true solo si el contrato se renueva sin necesidad de un nuevo acuerdo.
-- Aviso: los días de anticipación para avisar que no se renovará o para terminar el contrato.
-- Para cada grupo, cita es la copia exacta, carácter por carácter, del fragmento continuo del contrato del que sale el dato. Sin puntos suspensivos ni paráfrasis. Si no puede citar, deje el grupo en null.
+- Renovación: true solo si el contrato se renueva sin necesidad de un nuevo acuerdo; false si requiere un convenio nuevo o el contrato concluye a su término.
+- Aviso: los días de anticipación para avisar que no se renovará o para terminar el contrato. En analisis diga para qué es el aviso y quién puede darlo; si solo una de las partes puede terminar anticipadamente o los plazos son distintos para cada parte, señálelo.
+- Ley aplicable: solo si el contrato la pacta; si se remite a "las leyes aplicables" sin decir cuáles, o no dice nada, deje el valor en null y dígalo en analisis.
+- Para cada grupo, cita es la copia exacta, carácter por carácter, del fragmento continuo del contrato del que sale el dato o su análisis. Sin puntos suspensivos ni paráfrasis. Un valor sin cita no se guarda.
 - No use rayas largas (em dash).`;
 
 // Lee la versión vigente y llena la ficha. No pisa lo que Legal capturó a mano.
@@ -45,10 +49,10 @@ export async function llenarFicha(p: { contratoId: string; orgId: string; usuari
   const cliente = new Anthropic({ apiKey: env.anthropicKey(), timeout: 4 * 60 * 1000 });
   const stream = cliente.beta.messages.stream({
     model: env.modelo(),
-    max_tokens: 4000,
+    max_tokens: 8000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: { effort: "low", format: betaZodOutputFormat(FichaSchema) },
+    output_config: { effort: "medium", format: betaZodOutputFormat(FichaSchema) },
     system: INSTRUCCIONES,
     messages: [{ role: "user", content: `<contrato>\n${version.texto_extraido}\n</contrato>\n\nLlene la ficha de este contrato.` }],
   });
