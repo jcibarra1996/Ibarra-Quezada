@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: { default: "IQ Contratos", template: "%s | IQ Contratos" },
-  description: "La IA hace la primera lectura. Su equipo decide.",
+  description: "Gestión y revisión de contratos para la dirección jurídica.",
   robots: { index: false, follow: false },
 };
 

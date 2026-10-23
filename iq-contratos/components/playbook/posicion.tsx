@@ -2,6 +2,8 @@
 import { useState, useTransition } from "react";
 import { Boton } from "@/components/ui/boton";
 import { eliminarPosicion, guardarPosicion, type CamposPosicion } from "@/app/(app)/playbook/acciones";
+import type { SugerenciaPosicion } from "@/lib/ai/sugerencia-playbook";
+import { camposDe, NotaSugerencia, pedirSugerencias } from "./ia";
 
 const CAMPOS: { clave: keyof CamposPosicion; etiqueta: string; filas: number; serif?: boolean }[] = [
   { clave: "preferida", etiqueta: "Posición preferida", filas: 3 },
@@ -21,12 +23,29 @@ export function Posicion({
   posicion: CamposPosicion & { id?: string };
   editable: boolean;
   nueva?: boolean;
-  alTerminar?: () => void;
+  // Recibe si la posición se guardó (true) o se canceló (false).
+  alTerminar?: (guardada: boolean) => void;
 }) {
   const [editando, setEditando] = useState(nueva);
   const [valores, setValores] = useState<CamposPosicion>(posicion);
   const [error, setError] = useState("");
   const [pendiente, iniciar] = useTransition();
+  const [sugiriendo, setSugiriendo] = useState(false);
+  const [nota, setNota] = useState<SugerenciaPosicion | null>(null);
+
+  async function sugerir() {
+    setSugiriendo(true);
+    setError("");
+    try {
+      const [s] = await pedirSugerencias({ playbook_id: playbookId, tema: valores.tema, posicion_id: posicion.id, borrador: valores });
+      if (!s) throw new Error("La IA no devolvió una propuesta. Intente de nuevo.");
+      setValores({ ...camposDe(s), tema: valores.tema });
+      setNota(s);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No fue posible obtener la sugerencia.");
+    }
+    setSugiriendo(false);
+  }
 
   const guardar = () =>
     iniciar(async () => {
@@ -34,7 +53,8 @@ export function Posicion({
       if (!r.ok) return setError(r.error);
       setError("");
       setEditando(false);
-      alTerminar?.();
+      setNota(null);
+      alTerminar?.(true);
     });
 
   if (!editando) {
@@ -83,6 +103,11 @@ export function Posicion({
           className="h-9 w-full rounded-md border border-linea-fuerte px-2.5 text-[14px] font-medium outline-none focus:border-terracota"
         />
       </label>
+      {nota && (
+        <div className="mb-3">
+          <NotaSugerencia s={nota} />
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         {CAMPOS.map((c) => (
           <label key={c.clave} className={`block ${c.clave === "clausula_modelo" ? "col-span-2" : ""}`}>
@@ -98,19 +123,27 @@ export function Posicion({
       </div>
       {error && <p className="mt-2 text-[13px] text-burgundy">{error}</p>}
       <footer className="mt-4 flex items-center gap-2">
-        <Boton variante="primario" onClick={guardar} disabled={pendiente}>
+        <Boton variante="primario" onClick={guardar} disabled={pendiente || sugiriendo}>
           Guardar
         </Boton>
         <Boton
           variante="fantasma"
-          disabled={pendiente}
+          disabled={pendiente || sugiriendo}
           onClick={() => {
             setValores(posicion);
+            setNota(null);
             setEditando(false);
-            alTerminar?.();
+            alTerminar?.(false);
           }}
         >
           Cancelar
+        </Boton>
+        <Boton
+          onClick={sugerir}
+          disabled={pendiente || sugiriendo || !valores.tema.trim()}
+          title={valores.tema.trim() ? "La IA propone o mejora esta posición; usted revisa antes de guardar" : "Escriba primero el tema"}
+        >
+          {sugiriendo ? "Preparando sugerencia..." : "Sugerir con IA"}
         </Boton>
         {posicion.id && (
           <Boton

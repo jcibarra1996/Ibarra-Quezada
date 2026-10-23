@@ -56,7 +56,7 @@ export function EstadoAnalisis({
         <div className="mb-3 h-1 overflow-hidden rounded bg-gris-100">
           <div className="h-full w-1/3 animate-[avance_1.6s_ease-in-out_infinite] rounded bg-terracota" />
         </div>
-        <p className="text-[13.5px] font-medium">La IA está haciendo la primera lectura</p>
+        <p className="text-[13.5px] font-medium">Análisis en curso</p>
         <p className="mt-1 text-[12.5px] text-secundario">
           Identifica el tipo y objeto del contrato, compara cada cláusula con el playbook y verifica que cada cita exista en el documento. Suele tardar entre uno y tres minutos.
         </p>

@@ -212,7 +212,6 @@ export default async function Inicio() {
       <h1 className="titulo mt-1 text-[32px] leading-tight">
         {saludo()}, {nombre}
       </h1>
-      <p className="mt-1 text-[14px] text-secundario">La IA hace la primera lectura. Su equipo decide.</p>
 
       <section className="mt-6 overflow-hidden rounded-xl border border-linea bg-white">
         <h2 className="border-b border-linea px-5 py-3 titulo text-[18px]">Para hoy</h2>
