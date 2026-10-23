@@ -75,7 +75,7 @@ export function lineaTiempo(p: {
 
 // El proceso completo, tal como lo ve quien solicita el contrato.
 export const PROCESO: Record<EstadoContrato, { titulo: string; corto: string; quien: string; que: string }> = {
-  recibido: { titulo: "Solicitud recibida", corto: "Solicitud", quien: "Legal", que: "Legal recibe su solicitud con el contrato o la plantilla y los documentos corporativos." },
+  recibido: { titulo: "Solicitud recibida", corto: "Solicitud", quien: "Legal", que: "Legal recibe su solicitud con el contrato de la contraparte y los documentos corporativos." },
   en_revision: { titulo: "Revisión legal", corto: "Revisión", quien: "Legal", que: "Un abogado revisa cada cláusula y verifica los datos de las partes contra sus expedientes." },
   en_negociacion: { titulo: "Negociación", corto: "Negociación", quien: "Legal y la contraparte", que: "Solo si hay cambios por acordar: Legal envía la contrapropuesta y negocia con la contraparte." },
   aprobado: { titulo: "Aprobación", corto: "Aprobación", quien: "Legal", que: "Legal autoriza la versión final. A partir de aquí ya puede firmarse." },

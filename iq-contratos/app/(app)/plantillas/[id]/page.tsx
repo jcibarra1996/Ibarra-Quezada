@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { EncabezadoPagina } from "@/components/ui/encabezado";
 import { FormularioSolicitud } from "@/components/plantillas/formulario-solicitud";
 import { EditorPlantilla } from "@/components/plantillas/editor-plantilla";
@@ -9,6 +9,7 @@ import type { CampoNegocio, RolPlantilla } from "@/lib/plantillas/llenar";
 
 export default async function PaginaPlantilla({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ editar?: string }> }) {
   const usuario = await exigirUsuario();
+  if (!permisos.verBiblioteca(usuario.rol)) redirect("/inicio");
   const { id } = await params;
   const { editar } = await searchParams;
   const supabase = await clienteSesion();

@@ -138,7 +138,7 @@ export default async function Inicio() {
           <div>
             <h2 className="titulo text-[22px] text-white">¿Necesita un contrato?</h2>
             <p className="mt-1.5 max-w-xl text-[13.5px] leading-relaxed text-sobre-tinta-tenue">
-              Use una plantilla de la empresa o suba el contrato que le envió la contraparte. Legal lo revisa y aquí verá en qué va.
+              Suba el contrato que le envió la contraparte. Legal lo revisa y aquí verá en qué va.
             </p>
           </div>
           <Link href="/solicitar" className="inline-flex h-10 shrink-0 items-center rounded-md bg-terracota px-5 text-[14px] font-medium text-white hover:bg-terracota-oscuro">

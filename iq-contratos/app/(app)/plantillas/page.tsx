@@ -1,15 +1,17 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { EncabezadoPagina } from "@/components/ui/encabezado";
 import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
 import { fecha } from "@/lib/formato";
-import { TIPOS_CONTRATO, type TipoContrato } from "@/lib/tipos";
+import { permisos, TIPOS_CONTRATO, type TipoContrato } from "@/lib/tipos";
 import type { CampoNegocio, RolPlantilla } from "@/lib/plantillas/llenar";
 
 export const metadata = { title: "Plantillas" };
 
 export default async function PaginaPlantillas() {
-  await exigirUsuario();
+  const usuario = await exigirUsuario();
+  if (!permisos.verBiblioteca(usuario.rol)) redirect("/inicio");
   const supabase = await clienteSesion();
   const { data: plantillas } = await supabase
     .from("templates")

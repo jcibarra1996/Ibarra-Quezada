@@ -25,9 +25,9 @@ organización) y la API de Anthropic llamada solo desde el servidor.
 | Expedientes corporativos | Por cada parte (la empresa y sus contrapartes): acta constitutiva, poderes, constancia de situación fiscal, identificación y comprobante de domicilio. Acepta PDF (también escaneado), Word o fotografía. La IA extrae escritura, notaría, folio mercantil, representante, poder y facultades, RFC y domicilio, cada dato con su documento y cita; Legal lo corrige y lo valida. |
 | Verificación de declaraciones | Al analizar un contrato, la IA compara las declaraciones de cada parte contra su expediente. Si un dato no coincide o es de relleno ("escritura número 00000"), propone corregirlo; si falta y el expediente lo tiene, propone agregarlo. Son hallazgos normales: con cita exacta, control de cambios y decisión de Legal. |
 | Plantillas | Prestación de servicios, suministro, compraventa, arrendamiento y convenio de confidencialidad, alineadas con el playbook. Se llenan solas con los expedientes (proemio, declaraciones, firmas) y los datos del negocio (importes y plazos con letra). Lo que falte queda marcado como pendiente. La dirección jurídica edita las plantillas y cada cambio sube la versión. |
-| Solicitudes | Quien solicita (área de negocio) elige plantilla y contraparte, carga los documentos corporativos y genera el borrador, que entra como "Recibido" a revisión de Legal. También puede subir el contrato de la contraparte. |
+| Solicitudes | Quien solicita (área de negocio) sube el contrato que le envió la contraparte y carga los documentos corporativos; entra como "Recibido" a revisión de Legal. Los contratos desde plantilla los genera Legal. |
 | Firma electrónica | Integración con Mifiel: Legal envía el PDF final de un contrato aprobado, Mifiel invita a cada firmante a firmar con su e.firma, y al concluir el portal guarda el PDF firmado y el XML con la constancia de conservación NOM-151 y marca el contrato como firmado. También se puede registrar una firma autógrafa a mano. |
-| Roles | Abogado (revisa y valida), Director jurídico (todo, más playbook, plantillas y reportes), Negocio (solicita contratos, sube documentos, comenta y ve en qué va su solicitud; no ve el análisis de la IA, los riesgos ni los comentarios internos de Legal, y la base de datos lo impide aunque se intente por la API). En una organización de demostración se cambia de perfil con un clic en la barra lateral. |
+| Roles | Abogado (revisa y valida), Director jurídico (todo, más editar playbook y plantillas, y reportes), Negocio (solicita contratos subiendo el de la contraparte, sube documentos, comenta y ve en qué va su solicitud; no ve el análisis de la IA, los riesgos, los comentarios internos de Legal, las plantillas ni el playbook, y la base de datos lo impide aunque se intente por la API). En una organización de demostración se cambia de perfil con un clic en la barra lateral. |
 
 ## Correr en local
 
@@ -243,10 +243,11 @@ de perfil durante la demo, haga clic en el nombre en "Ver la demo como" de la ba
 
 Recorrido opcional del ciclo completo (3 minutos más):
 
-7. **La solicitud.** Cambie a **Sofía Herrera (Negocio)**: *Solicitar contrato*, plantilla de
-   prestación de servicios, contraparte *LOGÍSTICA DEMO*, descripción y monto. La vista previa ya
-   trae proemio, declaraciones con escritura, poder, RFC y domicilio, y el monto con letra.
-   *Generar contrato*: entra a Legal como "Recibido".
+7. **La plantilla.** Como Carlos, *Nuevo contrato*, *Desde plantilla*: prestación de servicios,
+   contraparte *LOGÍSTICA DEMO*, descripción y monto. La vista previa ya trae proemio,
+   declaraciones con escritura, poder, RFC y domicilio, y el monto con letra. *Generar contrato*:
+   entra como "Recibido". Sofía Herrera (Negocio) no ve plantillas ni playbook: solicita subiendo
+   el contrato de la contraparte.
 8. **Los documentos.** En *Expedientes corporativos*, abra *PROVEEDOR XYZ*: cada dato muestra de qué
    documento sale y su cita. Regrese al contrato de suministro como Carlos y use *Volver a
    analizar*: la IA propone corregir la "escritura pública número 00000" y la notaría con los datos

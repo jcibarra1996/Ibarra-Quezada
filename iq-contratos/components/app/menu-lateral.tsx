@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/logo";
-import { ROLES, type Rol, type Usuario } from "@/lib/tipos";
+import { permisos, ROLES, type Rol, type Usuario } from "@/lib/tipos";
 import { iniciales } from "@/lib/formato";
 import { cambiarPerfil, cerrarSesion } from "@/app/login/acciones";
 import { SubirContrato } from "./subir-contrato";
@@ -14,6 +14,7 @@ interface Entrada {
   icono: string;
   contador?: boolean;
   soloDirector?: boolean;
+  soloLegal?: boolean;
 }
 
 // Menú agrupado por lo que hace cada quien: el trabajo del día, la biblioteca de la
@@ -30,8 +31,8 @@ const GRUPOS: { titulo: string; entradas: Entrada[] }[] = [
   {
     titulo: "Biblioteca",
     entradas: [
-      { href: "/plantillas", texto: "Plantillas", icono: "M5 2.5h10v15H5zM8 6h4M8 9h4M8 12h2" },
-      { href: "/playbook", texto: "Playbook", icono: "M4 4.5h5a2 2 0 0 1 2 2V17a1.5 1.5 0 0 0-1.5-1.5H4zM16 4.5h-5" },
+      { href: "/plantillas", texto: "Plantillas", icono: "M5 2.5h10v15H5zM8 6h4M8 9h4M8 12h2", soloLegal: true },
+      { href: "/playbook", texto: "Playbook", icono: "M4 4.5h5a2 2 0 0 1 2 2V17a1.5 1.5 0 0 0-1.5-1.5H4zM16 4.5h-5", soloLegal: true },
     ],
   },
   {
@@ -199,7 +200,9 @@ export function MenuLateral({
       </div>
       <nav className="flex-1 space-y-5 overflow-y-auto px-3" aria-label="Principal">
         {GRUPOS.map((g) => {
-          const entradas = g.entradas.filter((e) => !e.soloDirector || usuario.rol === "director_juridico");
+          const entradas = g.entradas.filter(
+            (e) => (!e.soloDirector || usuario.rol === "director_juridico") && (!e.soloLegal || permisos.verBiblioteca(usuario.rol)),
+          );
           if (!entradas.length) return null;
           return (
             <div key={g.titulo}>

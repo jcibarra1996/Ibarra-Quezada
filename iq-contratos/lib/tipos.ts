@@ -66,5 +66,7 @@ export const permisos = {
   validar: (rol: Rol) => rol === "abogado" || rol === "director_juridico",
   editarPlaybook: (rol: Rol) => rol === "director_juridico",
   verReportes: (rol: Rol) => rol === "director_juridico",
+  // Plantillas y playbook son la biblioteca interna de Legal; el área de negocio no los ve.
+  verBiblioteca: (rol: Rol) => rol === "abogado" || rol === "director_juridico",
   cambiarEstado: (rol: Rol) => rol === "abogado" || rol === "director_juridico",
 };
