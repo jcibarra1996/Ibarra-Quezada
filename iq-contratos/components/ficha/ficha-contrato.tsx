@@ -40,22 +40,31 @@ export interface ContratoFicha {
 const PERIODO: Record<string, string> = { total: "total del contrato", mensual: "al mes", anual: "al año" };
 const plural = (n: number, uno: string, varios: string) => `${n} ${n === 1 ? uno : varios}`;
 
-function Fuente({ fuentes, campos, perfiles }: { fuentes: FuentesFicha; campos: CampoFicha[]; perfiles: Record<string, { nombre: string }> }) {
+function Fuente({ fuentes, campos, perfiles, sinValor = false }: { fuentes: FuentesFicha; campos: CampoFicha[]; perfiles: Record<string, { nombre: string }>; sinValor?: boolean }) {
   const lista = campos.map((c) => fuentes[c]).filter(Boolean);
   const manual = lista.find((f) => f!.origen === "manual");
   if (manual) return <p className="mt-1 text-[11.5px] text-secundario">Capturado por {manual.por ? (perfiles[manual.por]?.nombre ?? "Legal") : "Legal"}</p>;
-  const ia = lista.find((f) => f!.origen === "ia" && f!.cita);
+  const ia = lista.find((f) => f!.origen === "ia" && (f!.cita || f!.nota));
   if (!ia) {
     if (lista.some((f) => f!.origen === "titulo")) return <p className="mt-1 text-[11.5px] text-secundario">Provisional, según el título. La IA lo revisa contra el objeto del contrato.</p>;
     return null;
   }
   return (
     <>
-      {ia.nota && <p className="mt-1 text-[12.5px] text-secundario">Por su objeto: {ia.nota}</p>}
-      <details className="mt-1 text-[11.5px] text-secundario">
-        <summary className="cursor-pointer select-none hover:text-tinta">Leído por la IA · ver cita</summary>
-        <blockquote className="mt-1 border-l-2 border-linea pl-2 font-serif text-[12.5px] leading-relaxed text-tinta">{ia.cita}</blockquote>
-      </details>
+      {/* Sin valor, la nota ya se muestra en lugar del dato. */}
+      {ia.nota && !sinValor && (
+        <p className="mt-1 text-[12.5px] text-secundario">
+          {campos.includes("tipo_contrato") ? "Por su objeto" : "Análisis"}: {ia.nota}
+        </p>
+      )}
+      {ia.cita ? (
+        <details className="mt-1 text-[11.5px] text-secundario">
+          <summary className="cursor-pointer select-none hover:text-tinta">Leído por la IA · ver cita</summary>
+          <blockquote className="mt-1 border-l-2 border-linea pl-2 font-serif text-[12.5px] leading-relaxed text-tinta">{ia.cita}</blockquote>
+        </details>
+      ) : (
+        <p className="mt-1 text-[11.5px] text-secundario">Análisis de la IA</p>
+      )}
     </>
   );
 }
@@ -100,7 +109,12 @@ export function FichaContrato({
   const anual = valorAnual({ monto, monto_periodo: c.monto_periodo }, vigencia);
   const conDatos = Object.keys(fuentes).length > 0;
   // De dónde sale cada dato (la cita que leyó la IA o quién lo capturó) es trabajo de Legal.
-  const fuente = (...campos: CampoFicha[]) => (legal ? <Fuente fuentes={fuentes} campos={campos} perfiles={perfiles} /> : null);
+  const fuente = (...campos: CampoFicha[]) => (legal ? <Fuente fuentes={fuentes} campos={campos} perfiles={perfiles} sinValor={campos.every((k) => c[k as keyof ContratoFicha] == null)} /> : null);
+  // Sin valor, Legal ve el análisis de la IA (por ejemplo, "el precio está en el Anexo B").
+  const vacio = (campo: CampoFicha) => {
+    const nota = legal && fuentes[campo]?.origen === "ia" ? fuentes[campo]?.nota : undefined;
+    return nota ? <span className="text-secundario">{nota}</span> : sinDato;
+  };
   const v = vigencia;
   const dias = (f: string) => {
     const n = diasEntre(hoy, f);
@@ -206,11 +220,11 @@ export function FichaContrato({
             {c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : <span className="text-secundario">Por identificar</span>}
           </Dato>
           <Dato etiqueta="Objeto" fuente={fuente("objeto")}>
-            {c.objeto ?? sinDato}
+            {c.objeto ?? vacio("objeto")}
           </Dato>
           <Dato etiqueta="Monto" fuente={fuente("monto", "moneda", "monto_periodo")}>
             {monto == null ? (
-              sinDato
+              vacio("monto")
             ) : (
               <>
                 <span className="font-medium">{dinero(monto, c.moneda)}</span> <span className="text-secundario">{PERIODO[c.monto_periodo ?? "total"]}</span>
@@ -227,24 +241,24 @@ export function FichaContrato({
             ) : c.duracion_meses ? (
               <>{plural(c.duracion_meses, "mes", "meses")} {c.firmado_en ? `desde la firma (${fecha(c.firmado_en)})` : "a partir de la firma"}</>
             ) : (
-              sinDato
+              vacio("inicio_vigencia")
             )}
           </Dato>
           <Dato etiqueta="Renovación" fuente={fuente("renovacion_automatica", "renovacion_meses")}>
             {c.renovacion_automatica == null
-              ? sinDato
+              ? vacio("renovacion_automatica")
               : c.renovacion_automatica
                 ? `Automática${c.renovacion_meses ? `, por periodos de ${plural(c.renovacion_meses, "mes", "meses")}` : ""}`
                 : "No se renueva automáticamente"}
           </Dato>
           <Dato etiqueta="Aviso de no renovación o terminación" fuente={fuente("aviso_dias", "aviso_habiles")}>
-            {c.aviso_dias == null ? sinDato : `${plural(c.aviso_dias, c.aviso_habiles ? "día hábil" : "día natural", c.aviso_habiles ? "días hábiles" : "días naturales")} antes del vencimiento`}
+            {c.aviso_dias == null ? vacio("aviso_dias") : `${plural(c.aviso_dias, c.aviso_habiles ? "día hábil" : "día natural", c.aviso_habiles ? "días hábiles" : "días naturales")} de anticipación`}
           </Dato>
           <Dato etiqueta="Ley aplicable" fuente={fuente("ley_aplicable")}>
-            {c.ley_aplicable ?? sinDato}
+            {c.ley_aplicable ?? vacio("ley_aplicable")}
           </Dato>
           <Dato etiqueta="Jurisdicción" fuente={fuente("jurisdiccion")}>
-            {c.jurisdiccion ?? sinDato}
+            {c.jurisdiccion ?? vacio("jurisdiccion")}
           </Dato>
         </dl>
       </TerminosEditables>

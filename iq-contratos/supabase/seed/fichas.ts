@@ -3,7 +3,9 @@
 // otras pendientes, para mostrar ambos casos.
 import type { CampoFicha, FuentesFicha, ValoresFicha } from "../../lib/ai/ficha-esquema";
 
-type Grupo = { valores: ValoresFicha; cita: string; nota?: string };
+// Un grupo sin valores es solo el análisis de la IA sobre un campo (por ejemplo, "el precio
+// está en el Anexo B"); se guarda en el campo principal.
+type Grupo = { valores: ValoresFicha; cita: string; nota?: string; principal?: CampoFicha };
 export interface FichaDemo {
   grupos: Grupo[];
   responsable: "directora" | "abogado" | null;
@@ -23,7 +25,9 @@ export const FICHAS: Record<string, FichaDemo> = {
       { valores: { tipo_contrato: "suministro", objeto: "Entrega periódica de empaques de cartón corrugado y materiales de embalaje según las órdenes de compra." }, nota: "La obligación principal es entregar bienes de forma periódica a cambio de un precio.", cita: "EL PROVEEDOR se obliga a suministrar a EL CLIENTE, de manera periódica, los empaques de cartón corrugado y materiales de embalaje descritos en el Anexo A" },
       { valores: { inicio_vigencia: "2026-02-01", fin_vigencia: "2027-01-31", duracion_meses: 12 }, cita: "tendrá una vigencia de un año contado a partir del 1 de febrero de 2026 y concluirá el 31 de enero de 2027" },
       { valores: { renovacion_automatica: true, renovacion_meses: 12 }, cita: "el contrato se renovará automáticamente por periodos sucesivos de un año" },
-      { valores: { aviso_dias: 90, aviso_habiles: false }, cita: "con al menos noventa días naturales de anticipación a la fecha de vencimiento del periodo que corresponda" },
+      { valores: {}, principal: "monto", nota: "No hay un monto fijo: el precio es el de la lista del Anexo B, que EL PROVEEDOR puede actualizar con un simple aviso.", cita: "El precio de LOS PRODUCTOS será el establecido en la lista de precios del Anexo B" },
+      { valores: { aviso_dias: 90, aviso_habiles: false }, nota: "Aviso para no renovar, que puede dar cualquiera de las partes. Además, solo EL PROVEEDOR puede terminar anticipadamente sin responsabilidad, con quince días de aviso.", cita: "con al menos noventa días naturales de anticipación a la fecha de vencimiento del periodo que corresponda" },
+      { valores: {}, principal: "ley_aplicable", nota: "El contrato remite a \"las leyes aplicables\" sin decir cuáles.", cita: "LAS PARTES se someten a las leyes aplicables" },
       { valores: { jurisdiccion: "Tribunales competentes de Monterrey, Nuevo León" }, cita: "a la jurisdicción de los tribunales competentes de la ciudad de Monterrey, Nuevo León" },
     ],
   },
@@ -34,7 +38,8 @@ export const FICHAS: Record<string, FichaDemo> = {
       { valores: { tipo_contrato: "prestacion_servicios", objeto: "Mantenimiento preventivo y correctivo de aire acondicionado, elevadores e instalaciones eléctricas." }, nota: "La obligación principal es realizar servicios de mantenimiento a cambio de una contraprestación mensual.", cita: "EL PRESTADOR se obliga a prestar a LA EMPRESA los servicios de mantenimiento preventivo y correctivo de los equipos de aire acondicionado, elevadores e instalaciones eléctricas" },
       { valores: { monto: 85000, moneda: "MXN", monto_periodo: "mensual" }, cita: "una contraprestación mensual de $85,000.00 (ochenta y cinco mil pesos 00/100 M.N.)" },
       { valores: { inicio_vigencia: "2026-04-01", fin_vigencia: "2027-03-31" }, cita: "tendrá una vigencia del 1 de abril de 2026 al 31 de marzo de 2027" },
-      { valores: { aviso_dias: 60, aviso_habiles: false }, cita: "mediante aviso por escrito con sesenta días naturales de anticipación" },
+      { valores: { renovacion_automatica: false }, nota: "El contrato no prevé renovación: concluye el 31 de marzo de 2027.", cita: "tendrá una vigencia del 1 de abril de 2026 al 31 de marzo de 2027" },
+      { valores: { aviso_dias: 60, aviso_habiles: false }, nota: "Es aviso de terminación anticipada, que puede dar cualquiera de las partes en cualquier momento.", cita: "mediante aviso por escrito con sesenta días naturales de anticipación" },
       JURISDICCION_CDMX,
     ],
   },
@@ -55,7 +60,7 @@ export const FICHAS: Record<string, FichaDemo> = {
     confirmada: "directora",
     grupos: [
       { valores: { tipo_contrato: "confidencialidad", objeto: "Obligaciones de las partes sobre la información confidencial que se entreguen con motivo de un proyecto." }, nota: "La obligación principal es guardar reserva sobre la información que una parte entrega a la otra.", cita: "tiene por objeto establecer las obligaciones de LAS PARTES respecto de la información confidencial" },
-      { valores: { inicio_vigencia: "2026-05-15", duracion_meses: 24 }, cita: "tendrá una vigencia de dos años contados a partir del 15 de mayo de 2026" },
+      { valores: { inicio_vigencia: "2026-05-15", fin_vigencia: "2028-05-14", duracion_meses: 24 }, nota: "Dos años desde el 15 de mayo de 2026; el término se calculó con el plazo. La confidencialidad sigue cinco años después de que termine.", cita: "tendrá una vigencia de dos años contados a partir del 15 de mayo de 2026" },
       { valores: { jurisdiccion: "Tribunales competentes de la Ciudad de México" }, cita: "LAS PARTES se someten a la jurisdicción de los tribunales competentes de la Ciudad de México" },
     ],
   },
@@ -64,6 +69,7 @@ export const FICHAS: Record<string, FichaDemo> = {
     confirmada: "abogado",
     grupos: [
       { valores: { tipo_contrato: "prestacion_servicios", objeto: "Almacenaje, preparación de pedidos y distribución de mercancías en el Valle de México." }, nota: "La obligación principal es realizar servicios de almacenaje y distribución a cambio de tarifas.", cita: "EL PRESTADOR se obliga a prestar a LA EMPRESA servicios de almacenaje, preparación de pedidos y distribución de mercancías" },
+      { valores: {}, principal: "monto", nota: "No hay un monto fijo: se pagan las tarifas del Anexo B, que EL PRESTADOR factura cada mes.", cita: "LA EMPRESA pagará a EL PRESTADOR las tarifas establecidas en el Anexo B" },
       { valores: { inicio_vigencia: "2026-01-01", fin_vigencia: "2026-12-31" }, cita: "tendrá una vigencia del 1 de enero de 2026 al 31 de diciembre de 2026" },
       { valores: { renovacion_automatica: false }, cita: "podrá renovarse por un año adicional mediante convenio por escrito firmado por ambas partes" },
       { valores: { aviso_dias: 30, aviso_habiles: false }, cita: "con al menos treinta días naturales de anticipación al vencimiento" },
@@ -105,9 +111,13 @@ export function fichaDemo(f: FichaDemo, texto: string): { valores: ValoresFicha;
   const fuentes: FuentesFicha = {};
   for (const g of f.grupos) {
     if (!plano.includes(g.cita)) throw new Error(`La cita de la ficha no aparece en el contrato: ${g.cita}`);
+    if (g.principal && !Object.keys(g.valores).length) {
+      fuentes[g.principal] = { origen: "ia", cita: g.cita, ...(g.nota ? { nota: g.nota } : {}) };
+      continue;
+    }
     for (const [k, v] of Object.entries(g.valores)) {
       valores[k as CampoFicha] = v;
-      fuentes[k as CampoFicha] = { origen: "ia", cita: g.cita, ...(g.nota && k === "tipo_contrato" ? { nota: g.nota } : {}) };
+      fuentes[k as CampoFicha] = { origen: "ia", cita: g.cita, ...(g.nota && k !== "objeto" ? { nota: g.nota } : {}) };
     }
   }
   return { valores, fuentes };
