@@ -45,12 +45,18 @@ function Fuente({ fuentes, campos, perfiles }: { fuentes: FuentesFicha; campos: 
   const manual = lista.find((f) => f!.origen === "manual");
   if (manual) return <p className="mt-1 text-[11.5px] text-secundario">Capturado por {manual.por ? (perfiles[manual.por]?.nombre ?? "Legal") : "Legal"}</p>;
   const ia = lista.find((f) => f!.origen === "ia" && f!.cita);
-  if (!ia) return null;
+  if (!ia) {
+    if (lista.some((f) => f!.origen === "titulo")) return <p className="mt-1 text-[11.5px] text-secundario">Provisional, según el título. La IA lo revisa contra el objeto del contrato.</p>;
+    return null;
+  }
   return (
-    <details className="mt-1 text-[11.5px] text-secundario">
-      <summary className="cursor-pointer select-none hover:text-tinta">Leído por la IA · ver cita</summary>
-      <blockquote className="mt-1 border-l-2 border-linea pl-2 font-serif text-[12.5px] leading-relaxed text-tinta">{ia.cita}</blockquote>
-    </details>
+    <>
+      {ia.nota && <p className="mt-1 text-[12.5px] text-secundario">Por su objeto: {ia.nota}</p>}
+      <details className="mt-1 text-[11.5px] text-secundario">
+        <summary className="cursor-pointer select-none hover:text-tinta">Leído por la IA · ver cita</summary>
+        <blockquote className="mt-1 border-l-2 border-linea pl-2 font-serif text-[12.5px] leading-relaxed text-tinta">{ia.cita}</blockquote>
+      </details>
+    </>
   );
 }
 
@@ -103,6 +109,7 @@ export function FichaContrato({
 
   const valores: ValoresFormulario = {
     tipo_contrato: c.tipo_contrato ?? "",
+    objeto: c.objeto ?? "",
     monto: monto == null ? "" : String(monto),
     moneda: c.moneda ?? "MXN",
     monto_periodo: c.monto_periodo ?? "total",
@@ -198,7 +205,9 @@ export function FichaContrato({
           <Dato etiqueta="Tipo de contrato" fuente={fuente("tipo_contrato")}>
             {c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : <span className="text-secundario">Por identificar</span>}
           </Dato>
-          {c.objeto && <Dato etiqueta="Objeto">{c.objeto}</Dato>}
+          <Dato etiqueta="Objeto" fuente={fuente("objeto")}>
+            {c.objeto ?? sinDato}
+          </Dato>
           <Dato etiqueta="Monto" fuente={fuente("monto", "moneda", "monto_periodo")}>
             {monto == null ? (
               sinDato

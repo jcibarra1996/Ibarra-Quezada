@@ -9,6 +9,7 @@ const control = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.
 
 export interface ValoresFormulario {
   tipo_contrato: string;
+  objeto: string;
   monto: string;
   moneda: string;
   monto_periodo: string;
@@ -74,7 +75,11 @@ export function TerminosEditables({ contratoId, valores, editable, children }: {
             ))}
           </select>
         </Campo>
-        <span className="hidden sm:col-span-2 sm:block" aria-hidden />
+        <div className="sm:col-span-2">
+          <Campo etiqueta="Objeto">
+            <input className={control} value={v.objeto} onChange={cambiar("objeto")} placeholder="Qué se obligan a hacer o dar las partes, en una oración" />
+          </Campo>
+        </div>
         <Campo etiqueta="Monto">
           <input className={control} inputMode="decimal" placeholder="180000.00" value={v.monto} onChange={cambiar("monto")} />
         </Campo>

@@ -12,7 +12,15 @@ const INSTRUCCIONES = `Usted es un abogado corporativo mexicano. Llena la ficha 
 
 Reglas:
 - Extraiga solo lo que el contrato dice expresamente. Si un dato no está, déjelo en null. No suponga ni calcule fechas: si la vigencia se expresa como un plazo ("doce meses a partir de la firma"), use duracion_meses y deje las fechas en null.
-- Tipo: por la denominación del contrato y su objeto; cite la denominación (por ejemplo "CONTRATO DE PRESTACIÓN DE SERVICIOS DE LOGÍSTICA"). Use "otro" si no es ninguno de los tipos de la lista (por ejemplo, una licencia de uso).
+- Tipo: determínelo leyendo el objeto del contrato, es decir, la obligación principal que asume cada parte, no el título. Criterios:
+  - transmitir la propiedad de bienes a cambio de un precio, en una operación: compraventa;
+  - entregas periódicas o continuas de bienes a cambio de un precio: suministro;
+  - conceder el uso o goce temporal de un bien a cambio de una renta: arrendamiento;
+  - realizar actividades o servicios a cambio de una contraprestación: prestacion_servicios;
+  - ejecutar o construir una obra determinada: obra;
+  - la obligación principal es guardar reserva sobre información: confidencialidad;
+  - si no corresponde a ninguno (licencia de uso, mandato, comodato, entre otros): otro.
+  Si el contrato combina varias obligaciones, elija la que prevalece y dígalo en razon. Si el título y el objeto no coinciden, prevalece el objeto y señálelo en razon. La cita es la cláusula u oración del objeto; objeto es ese objeto en una oración.
 - Monto: la contraprestación principal (precio, renta, honorarios). Si hay varios importes (por ejemplo, renta y depósito en garantía), use el de la contraprestación recurrente o principal. Si el contrato separa el IVA, use el importe sin IVA.
 - Renovación: true solo si el contrato se renueva sin necesidad de un nuevo acuerdo.
 - Aviso: los días de anticipación para avisar que no se renovará o para terminar el contrato.
