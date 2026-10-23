@@ -4,6 +4,12 @@ function requerida(nombre: string, valor: string | undefined): string {
   return valor;
 }
 
+export type TareaIA = "analisis" | "ficha" | "expediente" | "sugerencias";
+type Esfuerzo = "low" | "medium" | "high";
+
+// La revisión del contrato pide más juicio que leer datos o llenar la ficha.
+const ESFUERZO_POR_DEFECTO: Record<TareaIA, Esfuerzo> = { analisis: "medium", ficha: "low", expediente: "low", sugerencias: "medium" };
+
 export const env = {
   supabaseUrl: () => requerida("NEXT_PUBLIC_SUPABASE_URL", process.env.NEXT_PUBLIC_SUPABASE_URL),
   supabasePublica: () =>
@@ -11,5 +17,11 @@ export const env = {
   supabaseSecreta: () => requerida("SUPABASE_SECRET_KEY", process.env.SUPABASE_SECRET_KEY),
   anthropicKey: () => requerida("ANTHROPIC_API_KEY", process.env.ANTHROPIC_API_KEY),
   modelo: () => process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
+  // Nivel de razonamiento por tarea (ahorro de tokens de salida). Se puede subir con
+  // ANTHROPIC_ESFUERZO_<TAREA> (low, medium, high) sin tocar el código.
+  esfuerzo: (tarea: TareaIA): Esfuerzo => {
+    const v = process.env[`ANTHROPIC_ESFUERZO_${tarea.toUpperCase()}`];
+    return v === "low" || v === "medium" || v === "high" ? v : ESFUERZO_POR_DEFECTO[tarea];
+  },
   correoAlertasActivo: () => process.env.ALERTAS_CORREO_ACTIVAS === "true",
 };

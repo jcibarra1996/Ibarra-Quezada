@@ -4,6 +4,7 @@ import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { clienteSistema } from "@/lib/supabase/admin";
 import { env } from "@/lib/env";
 import { registrar, registrarError } from "@/lib/log";
+import { registrarUso } from "./uso";
 import { AnalisisSchema } from "./esquema";
 import {
   INSTRUCCIONES_SISTEMA,
@@ -12,6 +13,7 @@ import {
   textoContrato,
   textoExpedientes,
   textoPlaybooks,
+  playbooksParaAnalisis,
   type ExpedientePrompt,
   type PlaybookPrompt,
 } from "./prompt";
@@ -29,7 +31,7 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
   const db = clienteSistema();
   const { data: contrato } = await db
     .from("contracts")
-    .select("id, org_id, version_actual_id, contraparte, estado, area_responsable_id, contraparte_id, propia_id, ficha_fuentes, organizations(nombre)")
+    .select("id, org_id, version_actual_id, contraparte, estado, tipo_contrato, area_responsable_id, contraparte_id, propia_id, ficha_fuentes, organizations(nombre)")
     .eq("id", p.contratoId)
     .eq("org_id", p.orgId)
     .single();
@@ -53,7 +55,8 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
   ]);
   if (!version || !secciones) throw new ErrorAnalisis("No se encontró el texto del contrato.");
 
-  const playbooksPrompt: PlaybookPrompt[] = (playbooks ?? []).map((pb) => ({
+  const fuenteTipo = (contrato.ficha_fuentes as { tipo_contrato?: { origen?: string } } | null)?.tipo_contrato?.origen;
+  const playbooksPrompt: PlaybookPrompt[] = playbooksParaAnalisis(playbooks ?? [], contrato.tipo_contrato, fuenteTipo).map((pb) => ({
     tipo_contrato: pb.tipo_contrato,
     nombre: pb.nombre,
     posiciones: [...(pb.playbook_positions ?? [])].sort((a, b) => a.orden - b.orden),
@@ -83,7 +86,7 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
       // Si el modelo declina, la API reintenta con el modelo recomendado (solo en la API de Anthropic).
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
-      output_config: { effort: "high", format: betaZodOutputFormat(AnalisisSchema) },
+      output_config: { effort: env.esfuerzo("analisis"), format: betaZodOutputFormat(AnalisisSchema) },
       system: [
         { type: "text", text: INSTRUCCIONES_SISTEMA },
         // El playbook cambia poco: se guarda en caché entre análisis de la misma organización.
@@ -102,6 +105,7 @@ export async function analizarContrato(p: { contratoId: string; orgId: string; u
       ],
     });
     const mensaje = await stream.finalMessage();
+    registrarUso("analisis", mensaje.usage, { contrato: contrato.id, playbooks: playbooksPrompt.length });
 
     if (mensaje.stop_reason === "refusal") throw new ErrorAnalisis("El modelo declinó analizar este documento. Revíselo manualmente.");
     if (mensaje.stop_reason === "max_tokens") throw new ErrorAnalisis("El contrato es demasiado extenso para un solo análisis.");

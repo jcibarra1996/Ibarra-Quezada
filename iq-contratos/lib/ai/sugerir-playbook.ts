@@ -4,6 +4,7 @@ import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { env } from "@/lib/env";
 import { TIPOS_CONTRATO, type TipoContrato } from "@/lib/tipos";
 import { limpiarSugerencias, RespuestaSchema, type SugerenciaPosicion } from "./sugerencia-playbook";
+import { registrarUso } from "./uso";
 
 // Sugerencias de la IA para el playbook: qué se prefiere, qué se acepta como respaldo y qué
 // nunca se acepta en cada tema. Nada se guarda solo: la dirección jurídica revisa, ajusta y
@@ -61,7 +62,7 @@ export async function sugerirPosiciones(p: {
     max_tokens: 16000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: { effort: "medium", format: betaZodOutputFormat(RespuestaSchema) },
+    output_config: { effort: env.esfuerzo("sugerencias"), format: betaZodOutputFormat(RespuestaSchema) },
     system: INSTRUCCIONES,
     messages: [
       {
@@ -71,6 +72,7 @@ export async function sugerirPosiciones(p: {
     ],
   });
   const mensaje = await stream.finalMessage();
+  registrarUso("sugerencias", mensaje.usage, { tema: p.tema ? 1 : 0 });
   if (mensaje.stop_reason === "refusal") throw new ErrorSugerencia("El modelo declinó proponer posiciones. Intente con otro tema.");
   if (mensaje.stop_reason === "max_tokens") throw new ErrorSugerencia("La propuesta quedó incompleta. Intente de nuevo.");
   const texto = mensaje.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("");

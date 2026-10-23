@@ -1,7 +1,7 @@
 // Instrucciones del análisis. Cambiar VERSION_PROMPT cada vez que cambie el texto,
 // para saber con qué instrucciones se generó cada análisis guardado.
 
-export const VERSION_PROMPT = "2026-10-23.1";
+export const VERSION_PROMPT = "2026-10-25.1";
 
 export const INSTRUCCIONES_SISTEMA = `Usted es un abogado corporativo mexicano con amplia experiencia en revisión de contratos mercantiles y civiles. Hace la primera lectura de un contrato para la dirección legal de una empresa. Su trabajo es una propuesta: un abogado del equipo valida cada punto antes de que tenga efecto. Nada de lo que usted entregue se aplica sin esa validación.
 
@@ -52,6 +52,19 @@ export interface PlaybookPrompt {
   posiciones: PosicionPrompt[];
 }
 
+// Ahorro de tokens: si el tipo ya lo determinó la IA por el objeto o lo capturó Legal, solo
+// va el playbook de ese tipo. Si el tipo es provisional (por el título), no se conoce o no
+// tiene playbook con posiciones, van todos para que el análisis elija.
+export function playbooksParaAnalisis<T extends { tipo_contrato: string; playbook_positions?: unknown[] | null }>(
+  playbooks: T[],
+  tipo: string | null,
+  origenTipo: string | undefined,
+): T[] {
+  if (!tipo || (origenTipo !== "ia" && origenTipo !== "manual")) return playbooks;
+  const delTipo = playbooks.filter((pb) => pb.tipo_contrato === tipo && (pb.playbook_positions ?? []).length > 0);
+  return delTipo.length ? delTipo : playbooks;
+}
+
 export function textoPlaybooks(playbooks: PlaybookPrompt[]): string {
   if (playbooks.length === 0) return "La dirección legal aún no ha configurado playbooks. Analice con criterios generales de protección para la empresa y deje posicion_playbook_id en null.";
   return playbooks
@@ -69,8 +82,11 @@ export function textoPlaybooks(playbooks: PlaybookPrompt[]): string {
     .join("\n\n");
 }
 
+// Sin espacios repetidos ni renglones en blanco de más (ahorro de tokens). Las citas se
+// ubican igual: la búsqueda de citas ya ignora las diferencias de espacios.
 export function textoContrato(secciones: { etiqueta: string; texto: string }[]): string {
-  return secciones.map((s) => `[${s.etiqueta}]\n${s.texto}`).join("\n\n");
+  const limpio = (t: string) => t.replace(/[ \t\u00a0]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  return secciones.map((s) => `[${s.etiqueta}]\n${limpio(s.texto)}`).join("\n\n");
 }
 
 export interface ExpedientePrompt {

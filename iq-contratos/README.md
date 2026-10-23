@@ -75,6 +75,8 @@ contrato de servicios. El playbook precargado es un ejemplo y debe revisarlo la 
 | `SUPABASE_SECRET_KEY` | solo servidor | Llave secreta (secret o service_role). Solo para escrituras del sistema |
 | `ANTHROPIC_API_KEY` | solo servidor | Llave de la API de Anthropic. Nunca llega al navegador |
 | `ANTHROPIC_MODEL` | solo servidor | Modelo del análisis. Por defecto `claude-sonnet-5-5` |
+| `ANTHROPIC_ESFUERZO_ANALISIS` | solo servidor | Opcional. Nivel de razonamiento de la revisión del contrato: `low`, `medium` (por defecto) o `high`. Más alto, más tokens de salida |
+| `ANTHROPIC_ESFUERZO_FICHA`, `ANTHROPIC_ESFUERZO_EXPEDIENTE`, `ANTHROPIC_ESFUERZO_SUGERENCIAS` | solo servidor | Opcionales. Lo mismo para la ficha (`low` por defecto), la lectura de documentos corporativos (`low`) y las sugerencias del playbook (`medium`) |
 | `MODO_DEMO` | servidor | `true` muestra los usuarios demo en el ingreso. Nunca en un ambiente con datos reales |
 | `ALERTAS_CORREO_ACTIVAS` | servidor | `false` en la demo: las alertas solo se muestran en la app |
 | `CRON_SECRET` | servidor | Secreto de la tarea diaria de avisos (`/api/alertas/cron`) |
