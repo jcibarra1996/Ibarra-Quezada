@@ -70,8 +70,9 @@ export async function registrarContrato(e: Entrada) {
         propia_id: valido(e.propiaId) ?? auto.propiaId,
         plantilla_id: e.plantillaId ?? null,
         datos_solicitud: e.solicitud ?? {},
-        // El tipo sale del título si lo dice expresamente; si no, lo identifica la IA.
+        // Provisional mientras la IA lee el objeto: el tipo que dice el título, si lo dice.
         tipo_contrato: e.tipoContrato ?? tipoPorTitulo(titulo),
+        ...(!e.tipoContrato && tipoPorTitulo(titulo) ? { ficha_fuentes: { tipo_contrato: { origen: "titulo" } } } : {}),
         ...(e.recibidoEn ? { recibido_en: e.recibidoEn } : {}),
       })
       .select("id")

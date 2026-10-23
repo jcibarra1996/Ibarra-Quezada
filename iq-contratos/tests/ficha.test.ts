@@ -2,13 +2,19 @@ import { describe, expect, it } from "vitest";
 import { aplicarFicha, procesarFicha, type FichaModelo } from "@/lib/ai/ficha-esquema";
 
 const texto = `CONTRATO DE ARRENDAMIENTO QUE CELEBRAN, POR UNA PARTE, ARRENDADORA DEMO, S.A. DE C.V.
+PRIMERA.- OBJETO. LA ARRENDADORA otorga en arrendamiento a LA ARRENDATARIA el uso y goce temporal de EL INMUEBLE, para destinarlo a oficinas.
 SEGUNDA.- RENTA. LA ARRENDATARIA pagará una renta mensual de $180,000.00 (ciento ochenta mil pesos 00/100 M.N.), más el Impuesto al Valor Agregado.
 QUINTA.- VIGENCIA. El presente contrato tendrá una vigencia forzosa para ambas partes de tres años, contados a partir del 1 de enero de 2027 y hasta el 31 de diciembre de 2029.
 SEXTA.- RENOVACIÓN. Si LA ARRENDATARIA desea renovar el arrendamiento, deberá notificarlo por escrito con al menos sesenta días naturales de anticipación al vencimiento.
 DÉCIMA.- JURISDICCIÓN. Las partes se someten a los tribunales competentes de la Ciudad de México.`;
 
 const salida = (c: Partial<FichaModelo> = {}): FichaModelo => ({
-  tipo: { tipo: "arrendamiento", cita: "CONTRATO DE ARRENDAMIENTO" },
+  tipo: {
+    tipo: "arrendamiento",
+    objeto: "Uso y goce temporal de un inmueble para oficinas a cambio de una renta mensual.",
+    razon: "La obligación principal es conceder el uso y goce temporal del inmueble a cambio de una renta.",
+    cita: "LA ARRENDADORA otorga en arrendamiento a LA ARRENDATARIA el uso y goce temporal de EL INMUEBLE",
+  },
   monto: { monto: 180000, moneda: "MXN", periodo: "mensual", cita: "pagará una renta mensual de $180,000.00" },
   vigencia: { inicio: "2027-01-01", fin: "2029-12-31", duracion_meses: 36, cita: "contados a partir del 1 de enero de 2027 y hasta el 31 de diciembre de 2029" },
   renovacion: { automatica: false, meses: null, cita: "Si LA ARRENDATARIA desea renovar el arrendamiento, deberá notificarlo por escrito" },
@@ -24,6 +30,10 @@ describe("ficha extraída por la IA", () => {
     expect(valores).toMatchObject({ tipo_contrato: "arrendamiento", monto: 180000, moneda: "MXN", monto_periodo: "mensual", inicio_vigencia: "2027-01-01", fin_vigencia: "2029-12-31", renovacion_automatica: false, aviso_dias: 60, jurisdiccion: "Tribunales competentes de la Ciudad de México" });
     expect(valores.ley_aplicable).toBeUndefined();
     expect(fuentes.monto).toEqual({ origen: "ia", cita: "pagará una renta mensual de $180,000.00" });
+    // El tipo sale del objeto: guarda la cita de la cláusula, el objeto y por qué.
+    expect(valores.objeto).toBe("Uso y goce temporal de un inmueble para oficinas a cambio de una renta mensual.");
+    expect(fuentes.tipo_contrato).toMatchObject({ origen: "ia", nota: "La obligación principal es conceder el uso y goce temporal del inmueble a cambio de una renta." });
+    expect(fuentes.objeto?.nota).toBeUndefined();
   });
 
   it("descarta el grupo cuya cita no aparece en el contrato y las fechas inválidas", () => {
@@ -70,5 +80,17 @@ describe("captura de la ficha", async () => {
     expect(leerCamposFicha({ monto: "mucho" })).toEqual({ error: "El monto debe ser un número." });
     expect(leerCamposFicha({ fin_vigencia: "2027-02-30" })).toEqual({ error: "Revise las fechas de la vigencia." });
     expect(leerCamposFicha({ aviso_dias: "1.5" })).toEqual({ error: "Los plazos deben ser números enteros." });
+  });
+});
+
+describe("tipo provisional por el título", () => {
+  it("la IA lo reemplaza con el que determina el objeto", () => {
+    const extraida = procesarFicha(
+      salida({ tipo: { tipo: "suministro", objeto: "Entregas periódicas de empaques.", razon: "El objeto son entregas periódicas de bienes, aunque el título dice prestación de servicios.", cita: "LA ARRENDADORA otorga en arrendamiento" } }),
+      texto,
+    );
+    const r = aplicarFicha({ tipo_contrato: "prestacion_servicios", ficha_fuentes: { tipo_contrato: { origen: "titulo" } }, ficha_confirmada_en: null }, extraida);
+    expect(r.cambios.tipo_contrato).toBe("suministro");
+    expect(r.fuentes.tipo_contrato?.origen).toBe("ia");
   });
 });

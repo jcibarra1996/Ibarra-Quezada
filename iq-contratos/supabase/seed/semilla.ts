@@ -140,8 +140,6 @@ async function main() {
         .from("contracts")
         .update({
           ...valores,
-          // En una carga real el tipo lo identifica el análisis de la IA.
-          tipo_contrato: ficha.tipo,
           ficha_fuentes: fuentes,
           responsable_id: quien(ficha.responsable),
           ficha_confirmada_por: quien(ficha.confirmada),

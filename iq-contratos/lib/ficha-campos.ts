@@ -23,6 +23,9 @@ export function leerCamposFicha(entrada: Record<string, string>): { valores: Val
         if (v && !["suministro", "prestacion_servicios", "obra", "arrendamiento", "confidencialidad", "compraventa", "otro"].includes(v)) return { error: "Tipo de contrato no válido." };
         valores.tipo_contrato = v || null;
         break;
+      case "objeto":
+        valores.objeto = v.replace(/\s*\u2014\s*/g, ", ").slice(0, 600) || null;
+        break;
       case "moneda":
         if (v && !["MXN", "USD", "EUR"].includes(v)) return { error: "Moneda no válida." };
         valores.moneda = v || null;

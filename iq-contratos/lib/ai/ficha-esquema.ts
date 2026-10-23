@@ -8,8 +8,13 @@ const cita = z.string().nullable().describe("Copia exacta, carácter por caráct
 
 export const FichaSchema = z.object({
   tipo: z.object({
-    tipo: z.enum(["suministro", "prestacion_servicios", "obra", "arrendamiento", "confidencialidad", "compraventa", "otro"]).nullable().describe("Tipo del contrato según su denominación y su objeto."),
-    cita,
+    tipo: z
+      .enum(["suministro", "prestacion_servicios", "obra", "arrendamiento", "confidencialidad", "compraventa", "otro"])
+      .nullable()
+      .describe("Tipo del contrato según su objeto (la obligación principal de las partes), no según su título."),
+    objeto: z.string().nullable().describe("El objeto del contrato en una oración."),
+    razon: z.string().nullable().describe("En una oración: qué obligación principal del objeto determina el tipo; si el título dice otra cosa, señálelo."),
+    cita: z.string().nullable().describe("Copia exacta, carácter por carácter, de la cláusula u oración del objeto del contrato."),
   }),
   monto: z.object({
     monto: z.number().nullable().describe("Importe de la contraprestación principal, sin IVA si el contrato lo separa. Solo número, sin símbolos."),
@@ -41,6 +46,7 @@ export type FichaModelo = z.infer<typeof FichaSchema>;
 
 export const CAMPOS_FICHA = [
   "tipo_contrato",
+  "objeto",
   "monto",
   "moneda",
   "monto_periodo",
@@ -57,8 +63,11 @@ export const CAMPOS_FICHA = [
 export type CampoFicha = (typeof CAMPOS_FICHA)[number];
 export type ValoresFicha = Partial<Record<CampoFicha, string | number | boolean | null>>;
 export interface FuenteFicha {
-  origen: "ia" | "manual";
+  // "titulo": provisional, tomado de la denominación al registrar; la IA lo revisa contra el objeto.
+  origen: "ia" | "manual" | "titulo";
   cita?: string;
+  // Por qué la IA eligió el valor (para el tipo: la obligación principal del objeto).
+  nota?: string;
   por?: string;
   en?: string;
 }
@@ -72,15 +81,15 @@ export function procesarFicha(salida: unknown, textoContrato: string): { valores
   const f = FichaSchema.parse(salida);
   const valores: ValoresFicha = {};
   const fuentes: FuentesFicha = {};
-  const poner = (grupo: { cita: string | null }, campos: ValoresFicha) => {
+  const poner = (grupo: { cita: string | null }, campos: ValoresFicha, nota?: string | null) => {
     const definidos = Object.entries(campos).filter(([, v]) => v != null);
     if (!definidos.length || !grupo.cita || !localizarCita(textoContrato, grupo.cita)) return;
     for (const [k, v] of definidos) {
       valores[k as CampoFicha] = v;
-      fuentes[k as CampoFicha] = { origen: "ia", cita: grupo.cita.slice(0, 600) };
+      fuentes[k as CampoFicha] = { origen: "ia", cita: grupo.cita.slice(0, 600), ...(nota && k === "tipo_contrato" ? { nota: sinRayas(nota).slice(0, 400) } : {}) };
     }
   };
-  if (f.tipo.tipo) poner(f.tipo, { tipo_contrato: f.tipo.tipo });
+  if (f.tipo.tipo) poner(f.tipo, { tipo_contrato: f.tipo.tipo, objeto: f.tipo.objeto ? sinRayas(f.tipo.objeto).slice(0, 600) : null }, f.tipo.razon);
   const m = f.monto;
   if (m.monto != null && m.monto > 0) poner(m, { monto: Math.round(m.monto * 100) / 100, moneda: m.moneda ?? "MXN", monto_periodo: m.periodo ?? "total" });
   const v = f.vigencia;
