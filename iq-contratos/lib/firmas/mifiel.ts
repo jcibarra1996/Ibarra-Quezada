@@ -1,5 +1,7 @@
 import "server-only";
 import { clienteSistema } from "@/lib/supabase/admin";
+import { registrar } from "@/lib/log";
+import { detalleErrorMifiel } from "./error-mifiel";
 
 // Cliente mínimo de la API v1 de Mifiel (firma electrónica avanzada con e.firma y
 // constancia de conservación NOM-151), según su especificación pública
@@ -81,9 +83,18 @@ export async function probarCredenciales(cred: Omit<CredencialesMifiel, "webhook
 }
 
 async function errorDe(r: Response, porDefecto: string): Promise<ErrorMifiel> {
-  const cuerpo = (await r.json().catch(() => null)) as { errors?: { details?: string; title?: string }[] } | null;
-  const detalle = cuerpo?.errors?.map((e) => e.details || e.title).filter(Boolean).join(" ");
-  return new ErrorMifiel(detalle ? `${porDefecto} Mifiel indica: ${detalle}` : porDefecto, r.status);
+  const texto = await r.text().catch(() => "");
+  let cuerpo: unknown = null;
+  try {
+    cuerpo = JSON.parse(texto);
+  } catch {
+    cuerpo = null;
+  }
+  const detalle = detalleErrorMifiel(cuerpo);
+  // Solo el código y la razón de Mifiel; nunca el contenido del contrato.
+  registrar("mifiel_rechazo", { estado: r.status, ruta: new URL(r.url || "http://x").pathname, detalle: detalle ?? (cuerpo ? null : texto.slice(0, 200)) });
+  if (detalle) return new ErrorMifiel(`${porDefecto} Mifiel indica: ${detalle}`, r.status);
+  return new ErrorMifiel(`${porDefecto} Mifiel respondió con el código ${r.status} sin dar la razón.`, r.status);
 }
 
 export interface Firmante {
