@@ -8,8 +8,8 @@ export const metadata = { title: "Ingresar" };
 
 const PASOS = [
   ["Solicitud", "Negocio pide el contrato y adjunta los documentos corporativos."],
-  ["Primera lectura", "La IA compara contra su playbook y verifica declaraciones."],
-  ["Decisión", "Legal valida cada hallazgo, aprueba y envía a firma."],
+  ["Revisión", "La IA compara el contrato con el playbook y verifica las declaraciones contra los expedientes."],
+  ["Aprobación y firma", "Legal valida cada hallazgo, aprueba y envía a firma."],
 ];
 
 export default async function PaginaIngreso() {
@@ -20,8 +20,7 @@ export default async function PaginaIngreso() {
       <section className="relative hidden flex-col justify-between overflow-hidden bg-tinta px-12 py-10 text-sobre-tinta lg:flex">
         <Logo invertido />
         <div className="max-w-[460px]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-terracota">Gestión de contratos con revisión por IA</p>
-          <h2 className="titulo mt-4 text-[40px] leading-[1.12] text-white">La IA hace la primera lectura. Su equipo decide.</h2>
+          <h2 className="titulo text-[32px] leading-[1.15] text-white">Gestión de contratos de la dirección jurídica</h2>
           <ol className="mt-10 space-y-5">
             {PASOS.map(([t, d], i) => (
               <li key={t} className="flex gap-4">
@@ -34,7 +33,7 @@ export default async function PaginaIngreso() {
             ))}
           </ol>
         </div>
-        <p className="text-[12px] text-sobre-tinta-tenue">Derecho mexicano · Documentos en almacenamiento privado · Bitácora de acceso</p>
+        <span aria-hidden />
       </section>
       <section className="flex items-center justify-center px-5 py-12">
         <div className="w-full max-w-[400px]">

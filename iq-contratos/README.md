@@ -3,8 +3,8 @@
 Plataforma de gestión del ciclo de vida de contratos (CLM) con revisión por inteligencia artificial,
 hecha para direcciones legales en México: solicitud, plantilla, revisión, negociación, aprobación,
 firma y vigencia.
-**La IA hace la primera lectura. Su equipo decide.** La herramienta nunca aprueba ni firma
-nada sola: propone, y un abogado del equipo valida cada punto.
+La herramienta nunca aprueba ni firma nada sola: propone, y un abogado del equipo valida cada
+punto.
 
 Demo funcional construida para crecer a producción: Next.js 16 (App Router) con TypeScript y
 Tailwind CSS 4, Supabase (Postgres, autenticación y almacenamiento con Row Level Security por
@@ -223,9 +223,9 @@ Preparación: `npm run seed -- --analizar` (deja analizado el contrato de sumini
 **Carlos Rivas (Abogado)** y tenga a mano un contrato real del prospecto en PDF o Word. Para cambiar
 de perfil durante la demo, haga clic en el nombre en "Ver la demo como" de la barra lateral.
 
-1. **Minuto 0 a 0:30. La promesa.** En Inicio: "La IA hace la primera lectura. Su equipo decide."
-   Señale el aviso al pie: la herramienta propone, el abogado decide.
-2. **0:30 a 2:00. La primera lectura.** Abra *Contrato de suministro*. Muestre el resumen para el
+1. **Minuto 0 a 0:30. Inicio.** Muestre la lista de pendientes y el aviso al pie: la herramienta
+   propone, el abogado decide.
+2. **0:30 a 2:00. El análisis.** Abra *Contrato de suministro*. Muestre el resumen para el
    negocio y los contadores. Haga clic en las tarjetas de **Intereses moratorios**, **Renovación
    automática** y **Jurisdicción**: el documento salta a la cita exacta resaltada. Explique que si
    la IA no puede citar el texto exacto, el hallazgo no se muestra.
@@ -238,7 +238,7 @@ de perfil durante la demo, haga clic en el nombre en "Ver la demo como" de la ba
 5. **3:45 a 4:15. Lo que no se olvida.** En *Vencimientos*, la fecha límite para el aviso de no
    renovación con el área de Compras responsable y sus avisos programados. Abra el calendario.
 6. **4:15 a 5:00. Su contrato.** *Subir contrato* con el documento del prospecto y deje que la IA
-   haga la primera lectura frente a él. Cierre con *Playbook* (cambiando a Laura
+   analice el contrato frente a él. Cierre con *Playbook* (cambiando a Laura
    Méndez si hay tiempo): el criterio es el de su dirección legal, no el de la herramienta.
 
 Recorrido opcional del ciclo completo (3 minutos más):

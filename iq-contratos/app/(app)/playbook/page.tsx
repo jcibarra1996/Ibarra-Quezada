@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { EncabezadoPagina } from "@/components/ui/encabezado";
 import { AgregarPosicion, Posicion } from "@/components/playbook/posicion";
 import { CrearPlaybook } from "@/components/playbook/crear-playbook";
+import { SugerirPosiciones } from "@/components/playbook/sugerencias";
 import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
 import { fechaHora } from "@/lib/formato";
@@ -32,7 +33,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
     <div>
       <EncabezadoPagina
         titulo="Playbook"
-        descripcion="Posiciones estándar de la dirección legal por tipo de contrato. La IA compara cada cláusula contra estas posiciones y propone redacción con base en la cláusula modelo."
+        descripcion="Posiciones estándar de la dirección legal por tipo de contrato. La IA compara cada cláusula contra estas posiciones y propone redacción con base en la cláusula modelo. También puede sugerir posiciones nuevas; la dirección jurídica decide cuáles se agregan."
         acciones={editable ? <CrearPlaybook disponibles={disponibles} /> : undefined}
       />
       <nav className="flex gap-1 border-b border-linea bg-white px-8" aria-label="Tipos de contrato">
@@ -59,6 +60,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
               Última actualización: {fechaHora(actual.actualizado_en)}
               {autor ? ` por ${autor}` : ""}.
             </p>
+            {editable && <SugerirPosiciones key={actual.id} playbookId={actual.id} />}
             {[...(actual.playbook_positions ?? [])]
               .sort((a, b) => a.orden - b.orden)
               .map((pos) => (

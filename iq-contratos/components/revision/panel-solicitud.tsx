@@ -3,7 +3,7 @@ import { ESTADOS, ORDEN_ESTADOS, type EstadoContrato } from "@/lib/tipos";
 import { fecha } from "@/lib/formato";
 
 const MENSAJE: Record<EstadoContrato, string> = {
-  recibido: "Legal recibió su solicitud. La primera lectura empieza en breve.",
+  recibido: "Legal recibió su solicitud y la va a revisar.",
   en_revision: "Legal está revisando el contrato. Si necesita algo de usted, se lo pedirá en Comentarios.",
   en_negociacion: "Legal está negociando cambios con la contraparte.",
   aprobado: "Legal aprobó el contrato. Sigue la firma de las partes.",
