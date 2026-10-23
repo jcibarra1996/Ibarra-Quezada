@@ -11,13 +11,18 @@ export function SubirContrato({
   ancho = true,
   texto = "Subir contrato",
   variante = "primario",
+  control,
 }: {
+  // Abierto desde otro lugar (menú "Nuevo contrato"): sin botón propio.
+  control?: { abierto: boolean; alCambiar: (abierto: boolean) => void };
   areas: { id: string; nombre: string }[];
   ancho?: boolean;
   texto?: string;
   variante?: "primario" | "secundario";
 }) {
-  const [abierto, setAbierto] = useState(false);
+  const [abiertoPropio, setAbiertoPropio] = useState(false);
+  const abierto = control ? control.abierto : abiertoPropio;
+  const setAbierto = control ? control.alCambiar : setAbiertoPropio;
   const [archivo, setArchivo] = useState<File | null>(null);
   const [fase, setFase] = useState<Fase>("inactivo");
   const [error, setError] = useState("");
@@ -67,24 +72,26 @@ export function SubirContrato({
 
   return (
     <>
+      {!control && (
       <Boton variante={variante} className={ancho ? "w-full h-9" : ""} onClick={() => setAbierto(true)}>
         <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" aria-hidden>
           <path d="M10 13.5V4M6 7.5 10 3.5l4 4M4 16.5h12" />
         </svg>
         {texto}
       </Boton>
+      )}
 
       {abierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-tinta/30 px-4" onClick={cerrar}>
           <form
             onSubmit={enviar}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[520px] rounded-lg border border-linea bg-white p-6 shadow-xl"
+            className="w-full max-w-[520px] rounded-xl border border-linea bg-white p-6 text-tinta shadow-[var(--shadow-flotante)]"
             role="dialog"
             aria-modal
             aria-labelledby="titulo-subir"
           >
-            <h2 id="titulo-subir" className="text-[17px] font-semibold tracking-tight">Subir contrato</h2>
+            <h2 id="titulo-subir" className="titulo text-[20px]">Subir contrato</h2>
             <p className="mt-1 text-[13px] text-secundario">PDF con texto seleccionable o Word (.docx), hasta 20 MB. El archivo se guarda en almacenamiento privado.</p>
 
             <div

@@ -43,8 +43,8 @@ export function BotonContrapropuesta({
       </Boton>
       {abierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-tinta/30 px-4" onClick={() => !generando && setAbierto(false)}>
-          <div className="w-full max-w-[480px] rounded-lg border border-linea bg-white p-6 shadow-xl" role="dialog" aria-modal aria-labelledby="titulo-cp" onClick={(e) => e.stopPropagation()}>
-            <h2 id="titulo-cp" className="text-[17px] font-semibold tracking-tight">Contrapropuesta en Word</h2>
+          <div className="w-full max-w-[480px] rounded-xl border border-linea bg-white p-6 shadow-[var(--shadow-flotante)]" role="dialog" aria-modal aria-labelledby="titulo-cp" onClick={(e) => e.stopPropagation()}>
+            <h2 id="titulo-cp" className="titulo text-[20px]">Contrapropuesta en Word</h2>
             <p className="mt-2 text-[13.5px] leading-relaxed text-secundario">
               Se genera un .docx con {cambios} cambio{cambios === 1 ? "" : "s"} validado{cambios === 1 ? "" : "s"} como control de cambios de Word, a nombre de quien los aceptó. No incluye
               las explicaciones internas. Descárguelo, revíselo y envíelo a la contraparte; el contrato pasará a En negociación.

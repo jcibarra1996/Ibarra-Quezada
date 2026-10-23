@@ -142,7 +142,7 @@ export default async function Vencimientos({ searchParams }: { searchParams: Pro
           <section className="overflow-hidden rounded-lg border border-linea bg-white">
             <div className="flex items-center justify-between border-b border-linea px-4 py-3">
               <Link href={enlace({ mes: mesVecino(mes, -1) })} className="text-[13px] text-secundario hover:text-tinta">Mes anterior</Link>
-              <h2 className="text-[15px] font-semibold">{MESES[Number(mes.slice(5)) - 1]} {mes.slice(0, 4)}</h2>
+              <h2 className="titulo text-[18px]">{MESES[Number(mes.slice(5)) - 1]} {mes.slice(0, 4)}</h2>
               <Link href={enlace({ mes: mesVecino(mes, 1) })} className="text-[13px] text-secundario hover:text-tinta">Mes siguiente</Link>
             </div>
             <div className="grid grid-cols-7 border-b border-linea bg-lienzo text-center text-[11.5px] font-medium text-secundario">

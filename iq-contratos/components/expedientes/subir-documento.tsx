@@ -65,7 +65,7 @@ export function SubirDocumento({ expedienteId, alTerminar }: { expedienteId: str
         type="file"
         accept=".pdf,.docx,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
         onChange={(e) => setArchivo(e.target.files?.[0] ?? null)}
-        className="block w-full text-[12.5px] file:mr-2 file:rounded file:border file:border-linea-fuerte file:bg-white file:px-2 file:py-1 file:text-[12.5px]"
+        className="block w-full text-[12.5px] text-secundario file:mr-3 file:h-8 file:cursor-pointer file:rounded-md file:border file:border-linea-fuerte file:bg-white file:px-3 file:text-[12.5px] file:font-medium file:text-tinta hover:file:bg-gris-50"
       />
       <p className="text-[11.5px] text-secundario">PDF (también escaneado), Word o fotografía JPG/PNG, hasta 20 MB.</p>
       <Boton variante="primario" className="w-full" disabled={!archivo || enviando} onClick={enviar}>

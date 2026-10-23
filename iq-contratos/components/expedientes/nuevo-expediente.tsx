@@ -39,8 +39,8 @@ export function NuevoExpediente({
       </Boton>
       {abierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-tinta/30 px-4" onClick={() => !pendiente && setAbierto(false)}>
-          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-[460px] rounded-lg border border-linea bg-white p-6 shadow-xl" role="dialog" aria-modal aria-labelledby="titulo-expediente">
-            <h2 id="titulo-expediente" className="text-[17px] font-semibold tracking-tight">Nuevo expediente corporativo</h2>
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-[460px] rounded-xl border border-linea bg-white p-6 shadow-[var(--shadow-flotante)]" role="dialog" aria-modal aria-labelledby="titulo-expediente">
+            <h2 id="titulo-expediente" className="titulo text-[20px]">Nuevo expediente corporativo</h2>
             <p className="mt-1 text-[13px] text-secundario">Después podrá cargar el acta constitutiva, poderes y demás documentos. La IA extrae los datos y Legal los valida.</p>
             <div className="mt-5 space-y-3">
               <div className="flex gap-2">

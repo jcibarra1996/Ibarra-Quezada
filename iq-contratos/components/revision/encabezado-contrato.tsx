@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { EtiquetaEstado } from "@/components/ui/etiquetas";
 import { fecha } from "@/lib/formato";
 import { TIPOS_CONTRATO, type EstadoContrato, type TipoContrato } from "@/lib/tipos";
@@ -14,13 +15,19 @@ export function EncabezadoContrato({
 }) {
   const area = (contrato.areas as { nombre: string } | null)?.nombre;
   return (
-    <header className="border-b border-linea bg-white px-8 pb-4 pt-6">
+    <header className="border-b border-linea bg-white px-8 pb-5 pt-6">
       <div className="flex items-start justify-between gap-6">
         <div className="min-w-0">
-          <p className="mb-1 text-[12px] font-medium uppercase tracking-wider text-secundario">
-            {contrato.tipo_contrato ? TIPOS_CONTRATO[contrato.tipo_contrato as TipoContrato] : "Tipo por identificar"}
+          <p className="mb-1.5 flex items-center gap-1.5 text-[11.5px] font-semibold uppercase tracking-[0.12em]">
+            <Link href="/contratos" className="text-secundario hover:text-tinta">
+              Contratos
+            </Link>
+            <span className="text-linea-fuerte" aria-hidden>
+              /
+            </span>
+            <span className="text-terracota-oscuro">{contrato.tipo_contrato ? TIPOS_CONTRATO[contrato.tipo_contrato as TipoContrato] : "Tipo por identificar"}</span>
           </p>
-          <h1 className="truncate text-[21px] font-semibold tracking-tight">{contrato.titulo}</h1>
+          <h1 className="titulo truncate text-[26px] leading-tight">{contrato.titulo}</h1>
           <dl className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-[13px] text-secundario">
             <div className="flex gap-1.5">
               <dt>Contraparte:</dt>

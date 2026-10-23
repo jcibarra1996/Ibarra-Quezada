@@ -77,18 +77,18 @@ export default async function Inicio() {
     const enCurso = (mias ?? []).filter((c) => c.estado !== "firmado").length;
     return (
       <div className="mx-auto max-w-[1100px] px-8 py-8">
-        <p className="text-[13px] text-secundario">{fechaLargaHoy()}</p>
-        <h1 className="mt-1 text-[26px] font-semibold tracking-tight">
+        <p className="text-[11.5px] font-semibold uppercase tracking-[0.12em] text-terracota-oscuro">{fechaLargaHoy()}</p>
+        <h1 className="titulo mt-1 text-[32px] leading-tight">
           {saludo()}, {nombre}
         </h1>
         <p className="mt-1 text-[14px] text-secundario">
           {enCurso === 0 ? "No tiene solicitudes en curso." : `Tiene ${enCurso} ${enCurso === 1 ? "solicitud en curso" : "solicitudes en curso"} con Legal.`}
         </p>
 
-        <section className="mt-6 flex items-center justify-between gap-6 rounded-xl border border-linea bg-white p-6">
+        <section className="mt-7 flex items-center justify-between gap-6 rounded-xl bg-tinta p-7 text-sobre-tinta">
           <div>
-            <h2 className="text-[18px] font-semibold">¿Necesita un contrato?</h2>
-            <p className="mt-1 max-w-xl text-[13.5px] text-secundario">
+            <h2 className="titulo text-[22px] text-white">¿Necesita un contrato?</h2>
+            <p className="mt-1.5 max-w-xl text-[13.5px] leading-relaxed text-sobre-tinta-tenue">
               Use una plantilla de la empresa o suba el contrato que le envió la contraparte. Legal lo revisa y aquí verá en qué va.
             </p>
           </div>
@@ -97,7 +97,7 @@ export default async function Inicio() {
           </Link>
         </section>
 
-        <h2 className="mb-3 mt-8 text-[15px] font-semibold">Mis solicitudes</h2>
+        <h2 className="mb-3 mt-8 titulo text-[18px]">Mis solicitudes</h2>
         {(mias ?? []).length === 0 ? (
           <p className="rounded-lg border border-dashed border-linea-fuerte bg-white px-5 py-10 text-center text-[13.5px] text-secundario">
             Aún no tiene solicitudes. Cuando pida un contrato, aquí verá cada paso.
@@ -106,7 +106,7 @@ export default async function Inicio() {
           <ul className="grid grid-cols-2 gap-3">
             {mias!.map((c) => (
               <li key={c.id}>
-                <Link href={`/contratos/${c.id}`} className="block rounded-lg border border-linea bg-white p-4 hover:border-linea-fuerte">
+                <Link href={`/contratos/${c.id}`} className="block rounded-lg border border-linea bg-white p-4 shadow-[var(--shadow-tarjeta)] transition-colors hover:border-terracota/40">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="truncate text-[14px] font-semibold">{c.titulo}</p>
@@ -151,14 +151,14 @@ export default async function Inicio() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-8 py-8">
-      <p className="text-[13px] text-secundario">{fechaLargaHoy()}</p>
-      <h1 className="mt-1 text-[26px] font-semibold tracking-tight">
+      <p className="text-[11.5px] font-semibold uppercase tracking-[0.12em] text-terracota-oscuro">{fechaLargaHoy()}</p>
+      <h1 className="titulo mt-1 text-[32px] leading-tight">
         {saludo()}, {nombre}
       </h1>
       <p className="mt-1 text-[14px] text-secundario">La IA hace la primera lectura. Su equipo decide.</p>
 
       <section className="mt-6 overflow-hidden rounded-xl border border-linea bg-white">
-        <h2 className="border-b border-linea px-5 py-3 text-[15px] font-semibold">Para hoy</h2>
+        <h2 className="border-b border-linea px-5 py-3 titulo text-[18px]">Para hoy</h2>
         {tareas.length ? (
           <ul className="divide-y divide-linea">
             {tareas.map((t) => (
@@ -171,12 +171,12 @@ export default async function Inicio() {
       </section>
 
       <section className="mt-6" aria-label="Ciclo de vida de los contratos">
-        <h2 className="mb-3 text-[15px] font-semibold">Ciclo de vida</h2>
+        <h2 className="mb-3 titulo text-[18px]">Ciclo de vida</h2>
         <ol className="flex items-stretch gap-2">
           {ORDEN_ESTADOS.map((e, i) => (
             <li key={e} className="flex flex-1 items-center gap-2">
-              <Link href={`/contratos?estado=${e}`} className="flex-1 rounded-lg border border-linea bg-white px-4 py-3 hover:border-linea-fuerte">
-                <p className="text-[24px] font-semibold leading-none tabular-nums">{porEstado(e)}</p>
+              <Link href={`/contratos?estado=${e}`} className="flex-1 rounded-lg border border-linea bg-white px-4 py-3.5 shadow-[var(--shadow-tarjeta)] transition-colors hover:border-terracota/40">
+                <p className="font-serif text-[28px] font-semibold leading-none tabular-nums">{porEstado(e)}</p>
                 <p className="mt-1.5 text-[12.5px] text-secundario">{ESTADOS[e]}</p>
               </Link>
               {i < ORDEN_ESTADOS.length - 1 && (
@@ -191,7 +191,7 @@ export default async function Inicio() {
 
       <div className="mt-6 grid grid-cols-[minmax(0,1fr)_380px] gap-6">
         <section>
-          <h2 className="mb-3 text-[15px] font-semibold">Contratos recientes</h2>
+          <h2 className="mb-3 titulo text-[18px]">Contratos recientes</h2>
           <ul className="divide-y divide-linea overflow-hidden rounded-xl border border-linea bg-white">
             {(recientes ?? []).map((c) => (
               <li key={c.id}>
@@ -210,7 +210,7 @@ export default async function Inicio() {
           </ul>
         </section>
         <section>
-          <h2 className="mb-3 text-[15px] font-semibold">Actividad reciente</h2>
+          <h2 className="mb-3 titulo text-[18px]">Actividad reciente</h2>
           <ol className="space-y-3 rounded-xl border border-linea bg-white p-5">
             {(actividad ?? []).map((e) => {
               const texto = describir(e as unknown as Evento);

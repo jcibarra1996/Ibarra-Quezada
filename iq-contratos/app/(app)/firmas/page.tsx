@@ -83,7 +83,7 @@ export default async function Firmas() {
         <section className="rounded-xl border border-linea bg-white p-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-[16px] font-semibold">Firma electrónica con Mifiel</h2>
+              <h2 className="titulo text-[18px]">Firma electrónica con Mifiel</h2>
               <p className="mt-1 max-w-3xl text-[13px] leading-relaxed text-secundario">
                 Legal envía el PDF final de un contrato aprobado; cada firmante recibe un correo de Mifiel y firma con su e.firma del SAT. Al concluir, el portal guarda el
                 PDF firmado y el XML con la constancia de conservación (NOM-151) y marca el contrato como firmado. El botón <span className="font-medium text-tinta">Firmar con Mifiel</span>{" "}

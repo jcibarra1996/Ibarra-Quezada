@@ -91,11 +91,11 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
                     <Link href={`/contratos/${c.id}`} className="font-medium hover:text-terracota">{c.titulo}</Link>
                   </td>
                   <td className="px-4 py-3 text-secundario">{c.contraparte || "Sin identificar"}</td>
-                  <td className="px-4 py-3 text-secundario">{c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : "Por analizar"}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-secundario">{c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : "Por analizar"}</td>
                   {legal && <td className="px-4 py-3">{c.riesgo_max ? <EtiquetaRiesgo riesgo={c.riesgo_max as Riesgo} /> : <span className="text-secundario">-</span>}</td>}
                   <td className="px-4 py-3"><EtiquetaEstado estado={c.estado as EstadoContrato} /></td>
                   <td className="px-4 py-3 text-secundario">{(c.areas as unknown as { nombre: string } | null)?.nombre ?? "Sin asignar"}</td>
-                  <td className="px-4 py-3 text-secundario">{fecha(c.recibido_en)}</td>
+                  <td className="whitespace-nowrap px-4 py-3 text-secundario">{fecha(c.recibido_en)}</td>
                 </tr>
               ))}
               {(contratos ?? []).length === 0 && (
