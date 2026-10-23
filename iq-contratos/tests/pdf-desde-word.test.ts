@@ -7,7 +7,7 @@ import { textoADocx } from "@/lib/docx/desde-texto";
 import { extraerTextoDocx } from "@/lib/parsing/extraer-docx";
 import { bloquesDesdeHtml, pdfDesdeWord } from "@/lib/pdf/desde-word";
 
-const sinEspacios = (s: string) => s.replace(/\s+/g, "");
+const palabras = (s: string) => s.split(/\s+/).filter(Boolean);
 
 async function textoDelPdf(pdf: Buffer) {
   const doc = await getDocumentProxy(new Uint8Array(pdf));
@@ -16,16 +16,17 @@ async function textoDelPdf(pdf: Buffer) {
 }
 
 describe("Word a PDF para firma", () => {
-  it("conserva todo el texto del contrato, con acentos y signos", async () => {
-    const original = readFileSync(path.join(__dirname, "../supabase/seed/contratos/01-suministro-proveedor-xyz.txt"), "utf8");
-    const word = await textoADocx(original, "Contrato de suministro");
-    const pdf = await pdfDesdeWord(word, "Contrato de suministro");
+  it.each(["01-suministro-proveedor-xyz.txt", "03-arrendamiento-oficinas.txt"])("conserva el texto de %s palabra por palabra", async (archivo) => {
+    const original = readFileSync(path.join(__dirname, "../supabase/seed/contratos", archivo), "utf8");
+    const word = await textoADocx(original, "Contrato");
+    const pdf = await pdfDesdeWord(word, "Contrato");
     expect(pdf.subarray(0, 5).toString("latin1")).toBe("%PDF-");
     const { texto, paginas } = await textoDelPdf(pdf);
     expect(paginas).toBeGreaterThan(1);
-    const delWord = (await extraerTextoDocx(word)).replace(/[ ]/g, " ");
-    // Sin contar espacios, el PDF dice exactamente lo mismo que el Word, más la paginación.
-    expect(sinEspacios(texto.replace(/Página \d+ de \d+/g, ""))).toBe(sinEspacios(delWord));
+    const delWord = (await extraerTextoDocx(word)).replace(/[\u00a0]/g, " ");
+    // Sin la paginación, el PDF dice lo mismo que el Word con los mismos espacios entre
+    // palabras (una palabra encimada con la siguiente aparecería pegada).
+    expect(palabras(texto.replace(/Página \d+ de \d+/g, ""))).toEqual(palabras(delWord));
   });
 
   it("lleva las tablas (bloques de firmas) y numera las páginas", async () => {
