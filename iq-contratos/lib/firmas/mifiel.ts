@@ -90,6 +90,9 @@ export interface Firmante {
   nombre: string;
   correo: string;
   rfc?: string | null;
+  // Firmante de la propia empresa: puede firmar desde el portal con el componente de
+  // Mifiel. No se manda a Mifiel.
+  interno?: boolean;
 }
 
 export interface DocumentoMifiel {

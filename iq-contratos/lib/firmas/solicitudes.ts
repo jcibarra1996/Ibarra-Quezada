@@ -4,6 +4,8 @@ import { BUCKET } from "@/lib/contratos/registrar";
 import { recogerSubida, descartarSubida } from "@/lib/subidas";
 import { registrar } from "@/lib/log";
 import { consultarEstado, crearDocumento, descargarFirmado, ErrorMifiel, exigirCredenciales, type Firmante } from "./mifiel";
+import { MIME_DOCX, MIME_PDF } from "@/lib/parsing/extraer";
+import { pdfDesdeWord } from "@/lib/pdf/desde-word";
 import type { Usuario } from "@/lib/tipos";
 
 const RE_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,7 +13,12 @@ const RE_RFC = /^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/;
 
 export function validarFirmantes(lista: Firmante[]): Firmante[] {
   const limpios = lista
-    .map((f) => ({ nombre: f.nombre.trim().slice(0, 200), correo: f.correo.trim().toLowerCase().slice(0, 200), rfc: f.rfc?.trim().toUpperCase() || null }))
+    .map((f) => ({
+      nombre: f.nombre.trim().slice(0, 200),
+      correo: f.correo.trim().toLowerCase().slice(0, 200),
+      rfc: f.rfc?.trim().toUpperCase() || null,
+      interno: Boolean(f.interno),
+    }))
     .filter((f) => f.nombre || f.correo);
   if (limpios.length === 0) throw new ErrorMifiel("Agregue al menos un firmante.");
   if (limpios.length > 10) throw new ErrorMifiel("Máximo diez firmantes por documento.");
@@ -22,6 +29,20 @@ export function validarFirmantes(lista: Firmante[]): Firmante[] {
   }
   if (new Set(limpios.map((f) => f.correo)).size !== limpios.length) throw new ErrorMifiel("Hay correos repetidos entre los firmantes.");
   return limpios;
+}
+
+type VersionArchivo = { id: string; mime: string; storage_path: string; nombre_archivo: string };
+
+// El PDF que se firma: la versión vigente tal cual si es PDF, o convertida si es Word.
+export async function pdfDeVersion(titulo: string, version: VersionArchivo | undefined): Promise<{ pdf: Buffer; nombre: string; convertido: boolean }> {
+  if (!version) throw new ErrorMifiel("El contrato no tiene documento.");
+  if (version.mime !== MIME_PDF && version.mime !== MIME_DOCX) throw new ErrorMifiel("Mifiel firma archivos PDF. Cargue el PDF final del contrato.");
+  const { data } = await clienteSistema().storage.from(BUCKET).download(version.storage_path);
+  if (!data) throw new ErrorMifiel("No se encontró el archivo del contrato.");
+  const datos = Buffer.from(await data.arrayBuffer());
+  const nombre = `${version.nombre_archivo.replace(/\.[a-z0-9]+$/i, "")}.pdf`;
+  if (version.mime === MIME_PDF) return { pdf: datos, nombre, convertido: false };
+  return { pdf: await pdfDesdeWord(datos, titulo), nombre, convertido: true };
 }
 
 // Envía a Mifiel el PDF final de un contrato aprobado. Mifiel manda las invitaciones.
@@ -48,13 +69,9 @@ export async function enviarAFirma(p: { usuario: Usuario; contratoId: string; ru
     pdf = await recogerSubida(p.usuario, p.rutaTemporal);
     nombre = p.nombreArchivo ?? `${contrato.titulo}.pdf`;
   } else {
-    const versiones = (contrato.contract_versions ?? []) as { id: string; mime: string; storage_path: string; nombre_archivo: string }[];
-    const vigente = versiones.find((v) => v.id === contrato.version_actual_id);
-    if (!vigente || vigente.mime !== "application/pdf") throw new ErrorMifiel("Mifiel firma archivos PDF. Cargue el PDF final del contrato.");
-    const { data } = await db.storage.from(BUCKET).download(vigente.storage_path);
-    if (!data) throw new ErrorMifiel("No se encontró el archivo del contrato.");
-    pdf = Buffer.from(await data.arrayBuffer());
-    nombre = vigente.nombre_archivo;
+    // Si la versión vigente es Word, se convierte a PDF aquí mismo.
+    const versiones = (contrato.contract_versions ?? []) as VersionArchivo[];
+    ({ pdf, nombre } = await pdfDeVersion(contrato.titulo, versiones.find((v) => v.id === contrato.version_actual_id)));
   }
   if (pdf.subarray(0, 5).toString("latin1") !== "%PDF-") throw new ErrorMifiel("Mifiel firma archivos PDF. El archivo cargado no es un PDF.");
   if (!/\.pdf$/i.test(nombre)) nombre = `${nombre.replace(/\.[a-z0-9]+$/i, "")}.pdf`;
