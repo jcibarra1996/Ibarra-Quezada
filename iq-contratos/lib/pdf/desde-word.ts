@@ -130,6 +130,21 @@ interface Fuentes {
   negritaCursiva: PDFFont;
 }
 
+// Ancho tal como se dibuja: drawText no aplica interletraje (kerning) y widthOfTextAtSize
+// sí, así que se suma letra por letra para que las palabras no se encimen.
+const anchos = new Map<PDFFont, Map<string, number>>();
+function anchoDe(fuente: PDFFont, texto: string, tamano = TAMANO) {
+  let porLetra = anchos.get(fuente);
+  if (!porLetra) anchos.set(fuente, (porLetra = new Map()));
+  let total = 0;
+  for (const ch of texto) {
+    let w = porLetra.get(ch);
+    if (w === undefined) porLetra.set(ch, (w = fuente.widthOfTextAtSize(ch, 1)));
+    total += w;
+  }
+  return total * tamano;
+}
+
 const fuenteDe = (f: Fuentes, frag: Fragmento) =>
   frag.negrita && frag.cursiva ? f.negritaCursiva : frag.negrita ? f.negrita : frag.cursiva ? f.cursiva : f.normal;
 
@@ -174,7 +189,7 @@ function palabras(fragmentos: Fragmento[], f: Fuentes, cache: Map<string, boolea
       } else if (/^\s+$/.test(pieza)) espacioPendiente = true;
       else if (pieza) {
         const actual = renglones[renglones.length - 1];
-        actual.push({ texto: pieza, fuente, ancho: fuente.widthOfTextAtSize(pieza, TAMANO), pegada: actual.length > 0 && !espacioPendiente });
+        actual.push({ texto: pieza, fuente, ancho: anchoDe(fuente, pieza), pegada: actual.length > 0 && !espacioPendiente });
         espacioPendiente = false;
       }
     }
@@ -189,7 +204,7 @@ interface Linea {
 }
 
 function partirEnLineas(fragmentos: Fragmento[], ancho: number, f: Fuentes, cache: Map<string, boolean>): Linea[] {
-  const espacio = f.normal.widthOfTextAtSize(" ", TAMANO);
+  const espacio = anchoDe(f.normal, " ");
   const lineas: Linea[] = [];
   for (const renglon of palabras(fragmentos, f, cache)) {
     let actual: Palabra[] = [];
@@ -203,12 +218,12 @@ function partirEnLineas(fragmentos: Fragmento[], ancho: number, f: Fuentes, cach
       // Una palabra más ancha que la línea (por ejemplo, una URL) se corta por caracteres.
       while (p.ancho > ancho) {
         let n = p.texto.length - 1;
-        while (n > 1 && p.fuente.widthOfTextAtSize(p.texto.slice(0, n), TAMANO) > ancho) n--;
+        while (n > 1 && anchoDe(p.fuente, p.texto.slice(0, n)) > ancho) n--;
         if (actual.length) cerrar(false);
-        actual = [{ ...p, texto: p.texto.slice(0, n), ancho: p.fuente.widthOfTextAtSize(p.texto.slice(0, n), TAMANO), pegada: false }];
+        actual = [{ ...p, texto: p.texto.slice(0, n), ancho: anchoDe(p.fuente, p.texto.slice(0, n)), pegada: false }];
         anchoActual = actual[0].ancho;
         cerrar(false);
-        p = { ...p, texto: p.texto.slice(n), ancho: p.fuente.widthOfTextAtSize(p.texto.slice(n), TAMANO), pegada: false };
+        p = { ...p, texto: p.texto.slice(n), ancho: anchoDe(p.fuente, p.texto.slice(n)), pegada: false };
       }
       const extra = (actual.length && !p.pegada ? espacio : 0) + p.ancho;
       if (actual.length && anchoActual + extra > ancho && !p.pegada) cerrar(false);
@@ -244,7 +259,7 @@ export async function pdfDesdeBloques(bloques: Bloque[], meta: { titulo: string 
     negritaCursiva: await doc.embedFont(StandardFonts.TimesRomanBoldItalic),
   };
   const cache = new Map<string, boolean>();
-  const espacio = f.normal.widthOfTextAtSize(" ", TAMANO);
+  const espacio = anchoDe(f.normal, " ");
   const anchoTexto = CARTA[0] - 2 * MARGEN;
   let pagina = doc.addPage(CARTA);
   let y = CARTA[1] - MARGEN;
@@ -295,7 +310,7 @@ export async function pdfDesdeBloques(bloques: Bloque[], meta: { titulo: string 
   const paginas = doc.getPages();
   paginas.forEach((p, i) => {
     const texto = `Página ${i + 1} de ${paginas.length}`;
-    p.drawText(texto, { x: (CARTA[0] - f.normal.widthOfTextAtSize(texto, 9)) / 2, y: MARGEN / 2, size: 9, font: f.normal, color: rgb(0.43, 0.41, 0.39) });
+    p.drawText(texto, { x: (CARTA[0] - anchoDe(f.normal, texto, 9)) / 2, y: MARGEN / 2, size: 9, font: f.normal, color: rgb(0.43, 0.41, 0.39) });
   });
   return doc.save();
 }
