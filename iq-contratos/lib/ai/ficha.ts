@@ -4,6 +4,7 @@ import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { clienteSistema } from "@/lib/supabase/admin";
 import { env } from "@/lib/env";
 import { registrar, registrarError } from "@/lib/log";
+import { registrarUso } from "./uso";
 import { aplicarFicha, CAMPOS_FICHA, FichaSchema, procesarFicha, type FuentesFicha, type ValoresFicha } from "./ficha-esquema";
 
 export class ErrorFicha extends Error {}
@@ -52,11 +53,12 @@ export async function llenarFicha(p: { contratoId: string; orgId: string; usuari
     max_tokens: 8000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: { effort: "medium", format: betaZodOutputFormat(FichaSchema) },
+    output_config: { effort: env.esfuerzo("ficha"), format: betaZodOutputFormat(FichaSchema) },
     system: INSTRUCCIONES,
     messages: [{ role: "user", content: `<contrato>\n${version.texto_extraido}\n</contrato>\n\nLlene la ficha de este contrato.` }],
   });
   const mensaje = await stream.finalMessage();
+  registrarUso("ficha", mensaje.usage, { contrato: c.id });
   if (mensaje.stop_reason === "refusal") throw new ErrorFicha("El modelo declinó leer este contrato. Capture la ficha a mano.");
   const texto = mensaje.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("");
   let extraida: ReturnType<typeof procesarFicha>;

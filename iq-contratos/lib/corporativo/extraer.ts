@@ -9,6 +9,7 @@ import { PDFDocument } from "pdf-lib";
 import { paginasSinTexto, seleccionarPaginas, seRecorta, tieneTexto } from "./paginas";
 import { ExtraccionSchema, ErrorExtraccion, procesarExtraccion, type ExtraccionLista } from "./esquema";
 import { CAMPOS, TIPOS_DOCUMENTO, type TipoDocumento } from "./campos";
+import { registrarUso } from "@/lib/ai/uso";
 
 export const VERSION_PROMPT_EXTRACCION = "2026-10-23.3";
 
@@ -91,11 +92,12 @@ export async function leerDocumentoCorporativo(p: {
     max_tokens: 16000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: { effort: "medium", format: betaZodOutputFormat(ExtraccionSchema) },
+    output_config: { effort: env.esfuerzo("expediente"), format: betaZodOutputFormat(ExtraccionSchema) },
     system: INSTRUCCIONES,
     messages: [{ role: "user", content: contenido }],
   });
   const mensaje = await stream.finalMessage();
+  registrarUso("expediente", mensaje.usage, { tipo: p.tipoDeclarado, paginas: lectura.paginas?.length ?? lectura.total ?? null });
   if (mensaje.stop_reason === "refusal") throw new ErrorExtraccion("El modelo declinó leer este documento. Capture los datos manualmente.");
   if (mensaje.stop_reason === "max_tokens") throw new ErrorExtraccion("El documento es demasiado extenso para leerse completo.");
   const texto = mensaje.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("");
