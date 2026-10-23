@@ -23,7 +23,7 @@ export default async function Solicitar() {
           <div className="mb-3 flex items-baseline gap-3">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-terracota text-[13px] font-semibold text-white">1</span>
             <div>
-              <h2 className="text-[16px] font-semibold">Usar una plantilla de la empresa</h2>
+              <h2 className="titulo text-[18px]">Usar una plantilla de la empresa</h2>
               <p className="text-[13px] text-secundario">El contrato se llena solo con los datos de la contraparte y los del negocio. Es la opción más rápida.</p>
             </div>
           </div>
@@ -43,7 +43,7 @@ export default async function Solicitar() {
           <div className="flex items-baseline gap-3">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-tinta text-[13px] font-semibold text-white">2</span>
             <div>
-              <h2 className="text-[16px] font-semibold">La contraparte me envió su contrato</h2>
+              <h2 className="titulo text-[18px]">La contraparte me envió su contrato</h2>
               <p className="text-[13px] text-secundario">Súbalo en PDF o Word. Legal hace la revisión y le avisa si hay que negociar algo.</p>
             </div>
           </div>

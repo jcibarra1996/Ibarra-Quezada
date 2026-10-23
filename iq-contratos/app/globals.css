@@ -24,6 +24,19 @@
   --color-medio-suave: #fbf1e1;
   --color-bajo: #4b6b5c;
   --color-bajo-suave: #e9f0ec;
+
+  /* Barra lateral en tinta */
+  --color-tinta-claro: #2c2320;
+  --color-tinta-borde: #3a302c;
+  --color-sobre-tinta: #e9e1dd;
+  --color-sobre-tinta-tenue: #a89d97;
+
+  /* Esquinas y sombras del sistema */
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --shadow-tarjeta: 0 1px 2px rgb(32 24 22 / 0.04), 0 1px 1px rgb(32 24 22 / 0.03);
+  --shadow-flotante: 0 12px 32px -8px rgb(32 24 22 / 0.18), 0 2px 6px rgb(32 24 22 / 0.06);
 }
 
 html,
@@ -34,6 +47,8 @@ body {
 
 body {
   font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
   font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
 }
@@ -77,4 +92,28 @@ mark.resaltado[data-activo="true"] {
 
 del + ins {
   margin-left: 3px;
+}
+
+/* Las tarjetas blancas del sistema llevan una sombra muy suave para separarse del lienzo. */
+@layer components {
+  .bg-white.border-linea.rounded-lg,
+  .bg-white.border-linea.rounded-xl {
+    box-shadow: var(--shadow-tarjeta);
+  }
+}
+
+/* Foco visible y consistente para teclado. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-terracota);
+  outline-offset: 2px;
+}
+
+/* Títulos con la tipografía del contrato: la voz editorial de la marca. */
+/* En la capa de componentes para que las utilidades (p. ej. text-white) puedan sobrescribirla. */
+@layer components {
+  .titulo {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
 }

@@ -97,7 +97,7 @@ export function FirmaElectronica({
           En firma con Mifiel · {firmaron} de {activa.firmantes.length}
         </Boton>
         {abierto && (
-          <div className="absolute right-0 top-10 z-40 w-[360px] rounded-lg border border-linea bg-white p-4 shadow-xl">
+          <div className="absolute right-0 top-11 z-40 w-[360px] rounded-xl border border-linea bg-white p-4 shadow-[var(--shadow-flotante)]">
             <p className="text-[13px] font-semibold">Firmantes</p>
             <ul className="mt-2 space-y-1.5">
               {activa.firmantes.map((f) => (
@@ -130,7 +130,7 @@ export function FirmaElectronica({
       <span className="relative">
         <Boton onClick={() => setAbierto(!abierto)}>Firmar con Mifiel</Boton>
         {abierto && (
-          <div className="absolute right-0 top-10 z-40 w-[340px] rounded-lg border border-linea bg-white p-4 text-[12.5px] shadow-xl">
+          <div className="absolute right-0 top-11 z-40 w-[340px] rounded-xl border border-linea bg-white p-4 text-[12.5px] shadow-[var(--shadow-flotante)]">
             <p className="text-[13px] font-semibold">Firma electrónica con Mifiel</p>
             <p className="mt-1.5 leading-relaxed text-secundario">
               Se habilita cuando Legal aprueba el contrato: cambie el estado a <span className="font-medium text-tinta">Aprobado</span> (sin hallazgos de riesgo alto pendientes) y
@@ -150,8 +150,8 @@ export function FirmaElectronica({
       </Boton>
       {abierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-tinta/30 px-4" onClick={() => !trabajando && setAbierto(false)}>
-          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-[640px] rounded-lg border border-linea bg-white p-6 shadow-xl" role="dialog" aria-modal aria-labelledby="titulo-firma">
-            <h2 id="titulo-firma" className="text-[17px] font-semibold tracking-tight">Enviar a firma electrónica con Mifiel</h2>
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-[640px] rounded-xl border border-linea bg-white p-6 shadow-[var(--shadow-flotante)]" role="dialog" aria-modal aria-labelledby="titulo-firma">
+            <h2 id="titulo-firma" className="titulo text-[20px]">Enviar a firma electrónica con Mifiel</h2>
             <p className="mt-1 text-[13px] text-secundario">
               Cada firmante recibe un correo de Mifiel y firma con su e.firma del SAT. Al completarse, el portal guarda el PDF firmado y el XML con la constancia de
               conservación (NOM-151) y marca el contrato como firmado.
@@ -193,7 +193,7 @@ export function FirmaElectronica({
             <input
               type="file"
               accept=".pdf,application/pdf"
-              className="mt-2 block w-full text-[12.5px] file:mr-2 file:rounded file:border file:border-linea-fuerte file:bg-white file:px-2 file:py-1 file:text-[12.5px]"
+              className="mt-2 block w-full text-[12.5px] text-secundario file:mr-3 file:h-8 file:cursor-pointer file:rounded-md file:border file:border-linea-fuerte file:bg-white file:px-3 file:text-[12.5px] file:font-medium file:text-tinta hover:file:bg-gris-50"
               onChange={(e) => setArchivo(e.target.files?.[0] ?? null)} />
 
             {mensaje && <p className="mt-3 text-[13px] text-burgundy">{mensaje}</p>}

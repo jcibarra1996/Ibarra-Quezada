@@ -29,7 +29,7 @@ export default async function PaginaPlantillas() {
           return (
             <Link key={p.id} href={`/plantillas/${p.id}`} className="flex flex-col rounded-lg border border-linea bg-white p-5 hover:border-linea-fuerte">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-terracota-oscuro">{TIPOS_CONTRATO[p.tipo_contrato as TipoContrato]}</p>
-              <h2 className="mt-1 text-[15px] font-semibold">{p.nombre}</h2>
+              <h2 className="mt-1 titulo text-[18px]">{p.nombre}</h2>
               <p className="mt-1.5 flex-1 text-[13px] leading-relaxed text-secundario">{p.descripcion}</p>
               <p className="mt-4 text-[12px] text-secundario">
                 {roles.map((r) => r.termino).join(" y ")} · {(p.campos as CampoNegocio[]).length} datos del negocio · versión {p.version}, {fecha(p.actualizado_en)}
