@@ -24,9 +24,10 @@ export function SelectorEstado({ contratoId, estado, editable }: { contratoId: s
         }}
         className="h-7 rounded-full border border-linea-fuerte bg-white pl-2.5 pr-7 text-[12px] font-medium outline-none focus:border-terracota"
       >
+        {/* En negociación no se elige a mano: lo marca la descarga de la contrapropuesta. */}
         {ORDEN_ESTADOS.map((e) => (
-          <option key={e} value={e}>
-            {ESTADOS[e]}
+          <option key={e} value={e} disabled={e === "en_negociacion" && estado !== e}>
+            {e === "en_negociacion" && estado !== e ? `${ESTADOS[e]} (al descargar la contrapropuesta)` : ESTADOS[e]}
           </option>
         ))}
       </select>

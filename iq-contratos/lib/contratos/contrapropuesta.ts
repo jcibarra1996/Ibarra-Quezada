@@ -1,10 +1,13 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { clienteSistema } from "@/lib/supabase/admin";
+import { clienteSesion } from "@/lib/supabase/server";
 import { generarContrapropuesta } from "@/lib/docx/contrapropuesta";
 import { fechaLarga } from "@/lib/fechas/calcular";
+import { registrarError } from "@/lib/log";
+import { abreNegociacion, permisos, type Usuario } from "@/lib/tipos";
 import { BUCKET } from "./registrar";
-import type { Usuario } from "@/lib/tipos";
+import { registrarAcceso } from "./bitacora";
 
 export class ErrorContrapropuesta extends Error {}
 
@@ -81,5 +84,39 @@ export async function crearContrapropuesta(usuario: Usuario, contratoId: string)
     accion: "contrapropuesta_generada",
     detalle: { cambios: validados.length },
   });
-  return { id, cambios: validados.length, estadoPrevio: contrato.estado as string };
+  return { id, cambios: validados.length };
+}
+
+// Descarga de una contrapropuesta: enlace firmado de 5 minutos y registro en bitácora.
+// Cuando la descarga Legal, queda marcada como descargada y el contrato pasa a En
+// negociación; ese cambio se hace con la sesión del usuario para que el historial
+// registre quién lo movió.
+export async function descargarContrapropuesta(usuario: Usuario, id: string) {
+  const supabase = await clienteSesion();
+  const { data: cp } = await supabase
+    .from("counterproposals")
+    .select("id, contract_id, storage_path, creado_en, descargada_en, contracts(titulo, estado)")
+    .eq("id", id)
+    .maybeSingle();
+  if (!cp) throw new ErrorContrapropuesta("Documento no encontrado.");
+
+  const contrato = cp.contracts as unknown as { titulo: string; estado: string } | null;
+  const nombre = `Contrapropuesta - ${contrato?.titulo ?? "Contrato"} - ${cp.creado_en.slice(0, 10)}.docx`.replace(/[\\/:*?"<>|]/g, "");
+  const db = clienteSistema();
+  const { data: firmado, error } = await db.storage.from(BUCKET).createSignedUrl(cp.storage_path, 300, { download: nombre });
+  if (error || !firmado) throw new Error("No fue posible generar el enlace de la contrapropuesta.");
+  await registrarAcceso({ orgId: usuario.org_id, actorId: usuario.id, accion: "descargar", contrapropuestaId: cp.id });
+
+  let estado = contrato?.estado ?? null;
+  if (permisos.validar(usuario.rol)) {
+    if (!cp.descargada_en) {
+      await db.from("counterproposals").update({ descargada_en: new Date().toISOString(), descargada_por: usuario.id }).eq("id", cp.id);
+    }
+    if (estado && abreNegociacion(estado)) {
+      const { error: e } = await supabase.from("contracts").update({ estado: "en_negociacion" }).eq("id", cp.contract_id);
+      if (e) registrarError("negociacion_no_marcada", e, { contrato: cp.contract_id });
+      else estado = "en_negociacion";
+    }
+  }
+  return { url: firmado.signedUrl, estado };
 }

@@ -38,7 +38,7 @@ export async function cargarRevision(contratoId: string) {
       supabase.from("audit_events").select("id, accion, detalle, actor_id, creado_en").eq("contract_id", contratoId).order("creado_en", { ascending: false }).limit(200),
       supabase.from("profiles").select("id, nombre, rol"),
       supabase.from("comments").select("id, autor_id, audiencia, cuerpo, creado_en, finding_id").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
-      supabase.from("counterproposals").select("id, generado_por, creado_en, hallazgos_incluidos").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
+      supabase.from("counterproposals").select("id, generado_por, creado_en, hallazgos_incluidos, descargada_en, descargada_por").eq("contract_id", contratoId).order("creado_en", { ascending: false }),
       supabase
         .from("signature_requests")
         .select("id, estado, entorno, firmantes, firmado_pdf_path, firmado_xml_path, error, enviado_por, creado_en, actualizado_en")

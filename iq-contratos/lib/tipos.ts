@@ -56,6 +56,12 @@ export interface Usuario {
   correo: string;
 }
 
+// Etapas desde las que descargar la contrapropuesta pasa el contrato a En negociación. Un
+// contrato aprobado o firmado no regresa por volver a descargarla.
+export function abreNegociacion(estado: string) {
+  return estado === "recibido" || estado === "en_revision";
+}
+
 export const permisos = {
   validar: (rol: Rol) => rol === "abogado" || rol === "director_juridico",
   editarPlaybook: (rol: Rol) => rol === "director_juridico",

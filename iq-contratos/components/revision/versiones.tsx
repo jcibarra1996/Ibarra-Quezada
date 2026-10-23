@@ -1,4 +1,5 @@
 import { fechaHora } from "@/lib/formato";
+import { DescargarContrapropuesta } from "./descargar-contrapropuesta";
 
 type Version = {
   id: string;
@@ -12,19 +13,30 @@ type Version = {
   creado_en: string;
 };
 
-type Contrapropuesta = { id: string; generado_por: string | null; creado_en: string; hallazgos_incluidos: string[] };
+type Contrapropuesta = {
+  id: string;
+  generado_por: string | null;
+  creado_en: string;
+  hallazgos_incluidos: string[];
+  descargada_en: string | null;
+  descargada_por: string | null;
+};
 
 export function ListaVersiones({
   versiones,
   actual,
   perfiles,
   contrapropuestas,
+  estado,
 }: {
   versiones: Version[];
   actual: string | null;
   perfiles: Record<string, { nombre: string }>;
   contrapropuestas: Contrapropuesta[];
+  estado: string;
 }) {
+  // La negociación vigente corresponde a la contrapropuesta descargada más reciente.
+  const vigente = estado === "en_negociacion" ? contrapropuestas.find((c) => c.descargada_en)?.id : undefined;
   return (
     <div className="space-y-6">
       {contrapropuestas.length > 0 && (
@@ -32,18 +44,23 @@ export function ListaVersiones({
           <h2 className="mb-2 text-[14px] font-semibold">Contrapropuestas generadas</h2>
           <ul className="divide-y divide-linea overflow-hidden rounded-lg border border-linea bg-white">
             {contrapropuestas.map((c) => (
-              <li key={c.id} className="flex items-center justify-between px-4 py-3 text-[13.5px]">
-                <span>
-                  <span className="font-medium">Contrapropuesta en Word</span>
-                  <span className="text-secundario">
-                    {" "}
-                    · {c.hallazgos_incluidos.length} cambio{c.hallazgos_incluidos.length === 1 ? "" : "s"} ·{" "}
-                    {c.generado_por ? perfiles[c.generado_por]?.nombre : ""} · {fechaHora(c.creado_en)}
+              <li key={c.id} className="flex items-center justify-between gap-4 px-4 py-3 text-[13.5px]">
+                <span className="min-w-0">
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="font-medium">Contrapropuesta en Word</span>
+                    {c.id === vigente && (
+                      <span className="rounded-full bg-terracota-suave px-2 py-px text-[11.5px] font-medium text-terracota-oscuro">En negociación</span>
+                    )}
+                  </span>
+                  <span className="block text-[12.5px] text-secundario">
+                    {c.hallazgos_incluidos.length} cambio{c.hallazgos_incluidos.length === 1 ? "" : "s"} · generada por{" "}
+                    {c.generado_por ? perfiles[c.generado_por]?.nombre : "Legal"} el {fechaHora(c.creado_en)} ·{" "}
+                    {c.descargada_en
+                      ? `descargada${c.descargada_por ? ` por ${perfiles[c.descargada_por]?.nombre ?? "Legal"}` : ""} el ${fechaHora(c.descargada_en)}`
+                      : "sin descargar"}
                   </span>
                 </span>
-                <a href={`/api/contrapropuestas/${c.id}`} className="text-[13px] font-medium text-terracota hover:underline">
-                  Descargar .docx
-                </a>
+                <DescargarContrapropuesta id={c.id} />
               </li>
             ))}
           </ul>

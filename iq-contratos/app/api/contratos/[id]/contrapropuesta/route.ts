@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { usuarioActual } from "@/lib/auth/sesion";
-import { clienteSesion } from "@/lib/supabase/server";
 import { permisos } from "@/lib/tipos";
 import { crearContrapropuesta, ErrorContrapropuesta } from "@/lib/contratos/contrapropuesta";
 import { registrarError } from "@/lib/log";
 
 export const runtime = "nodejs";
 
+// Genera la contrapropuesta. El estado del contrato no cambia aquí: cambia al descargarla.
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const usuario = await usuarioActual();
   if (!usuario) return NextResponse.json({ error: "Sesión no válida." }, { status: 401 });
@@ -14,12 +14,6 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
   const { id } = await params;
   try {
     const r = await crearContrapropuesta(usuario, id);
-    // Al preparar la contrapropuesta, el contrato pasa a negociación. Se hace con la sesión
-    // del usuario para que el historial registre quién lo movió.
-    if (r.estadoPrevio === "recibido" || r.estadoPrevio === "en_revision") {
-      const supabase = await clienteSesion();
-      await supabase.from("contracts").update({ estado: "en_negociacion" }).eq("id", id);
-    }
     return NextResponse.json({ id: r.id, cambios: r.cambios });
   } catch (e) {
     if (e instanceof ErrorContrapropuesta) return NextResponse.json({ error: e.message }, { status: 422 });
