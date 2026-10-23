@@ -45,3 +45,8 @@ export function fechaLargaHoy(): string {
   const t = new Date().toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long", timeZone: zona });
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
+
+// "21 oct", para líneas de tiempo compactas.
+export function fechaCorta(valor: string | Date): string {
+  return new Date(valor).toLocaleDateString("es-MX", { day: "numeric", month: "short", timeZone: zona }).replace(".", "");
+}

@@ -3,7 +3,8 @@ import { EtiquetaEstado } from "@/components/ui/etiquetas";
 import { describir, type Evento } from "@/components/revision/historial";
 import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
-import { fecha, fechaLargaHoy, haceCuanto } from "@/lib/formato";
+import { fecha, fechaCorta, fechaLargaHoy, haceCuanto } from "@/lib/formato";
+import { diasEntre, duracion, lineaTiempo, PROCESO, type EstadoPaso, type LineaTiempo } from "@/lib/linea-tiempo";
 import { hallazgosVigentes } from "@/lib/reportes/consultas";
 import { ESTADOS, ORDEN_ESTADOS, permisos, type EstadoContrato } from "@/lib/tipos";
 
@@ -22,14 +23,46 @@ const MENSAJE: Record<EstadoContrato, string> = {
   firmado: "Firmado y en seguimiento",
 };
 
-function Pasos({ estado }: { estado: EstadoContrato }) {
-  const actual = ORDEN_ESTADOS.indexOf(estado);
+// Línea de tiempo de una solicitud: nombre de cada etapa, fecha en que entró y tiempo en la actual.
+function LineaSolicitud({ linea }: { linea: LineaTiempo }) {
+  const barra: Record<EstadoPaso, string> = { hecho: "bg-bajo", actual: "bg-terracota", omitido: "bg-bajo/35", pendiente: "bg-gris-100" };
   return (
-    <div className="flex items-center gap-1" aria-label={`Paso ${actual + 1} de ${ORDEN_ESTADOS.length}`}>
-      {ORDEN_ESTADOS.map((e, i) => (
-        <span key={e} title={ESTADOS[e]} className={`h-1.5 w-8 rounded-full ${i < actual || estado === "firmado" ? "bg-bajo" : i === actual ? "bg-terracota" : "bg-gris-100"}`} />
+    <ol className="grid grid-cols-5 gap-1.5">
+      {linea.pasos.map((p) => (
+        <li key={p.estado} aria-current={p.situacion === "actual" ? "step" : undefined}>
+          <span className={`block h-1.5 rounded-full ${barra[p.situacion]}`} />
+          <span className={`mt-1.5 block truncate text-[11.5px] leading-tight ${p.situacion === "actual" ? "font-semibold text-tinta" : p.situacion === "pendiente" ? "text-secundario/80" : "text-tinta"}`}>
+            {PROCESO[p.estado].corto}
+          </span>
+          <span className="block text-[11px] leading-tight text-secundario">
+            {p.situacion === "pendiente" ? "Pendiente" : p.situacion === "omitido" ? (p.estado === "en_negociacion" ? "No fue necesaria" : "Sin fecha") : p.desde ? fechaCorta(p.desde) : ""}
+          </span>
+        </li>
       ))}
-    </div>
+    </ol>
+  );
+}
+
+function ProcesoCompleto() {
+  return (
+    <section className="mt-8" aria-labelledby="titulo-proceso">
+      <h2 id="titulo-proceso" className="titulo text-[18px]">
+        Así avanza su solicitud
+      </h2>
+      <p className="mt-1 text-[13px] text-secundario">El proceso completo, de la solicitud a la firma. En cada solicitud verá la fecha en que entró a cada etapa y cuánto lleva en la actual.</p>
+      <ol className="mt-3 grid grid-cols-5 gap-3">
+        {ORDEN_ESTADOS.map((e, i) => (
+          <li key={e} className="rounded-lg border border-linea bg-white p-3.5">
+            <span className="flex items-center gap-2">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-crema font-serif text-[12px] font-semibold text-terracota-oscuro">{i + 1}</span>
+              <span className="text-[13px] font-semibold leading-tight">{PROCESO[e].titulo}</span>
+            </span>
+            <span className="mt-2 block text-[12px] leading-relaxed text-secundario">{PROCESO[e].que}</span>
+            <span className="mt-2 block text-[11px] font-medium uppercase tracking-wide text-secundario">{PROCESO[e].quien}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
 
@@ -70,10 +103,26 @@ export default async function Inicio() {
   if (!legal) {
     const { data: mias } = await supabase
       .from("contracts")
-      .select("id, titulo, contraparte, estado, recibido_en")
+      .select("id, titulo, contraparte, estado, recibido_en, aprobado_en, firmado_en")
       .or(`solicitado_por.eq.${usuario.id},creado_por.eq.${usuario.id}`)
       .order("recibido_en", { ascending: false })
       .limit(12);
+    const ids = (mias ?? []).map((c) => c.id);
+    const { data: cambios } = ids.length
+      ? await supabase.from("audit_events").select("contract_id, detalle, creado_en").eq("accion", "estado_cambiado").in("contract_id", ids)
+      : { data: [] };
+    const lineas = new Map(
+      (mias ?? []).map((c) => [
+        c.id,
+        lineaTiempo({
+          estado: c.estado as EstadoContrato,
+          recibido_en: c.recibido_en,
+          aprobado_en: c.aprobado_en,
+          firmado_en: c.firmado_en,
+          cambios: (cambios ?? []).filter((e) => e.contract_id === c.id).map((e) => ({ a: String((e.detalle as { a?: string })?.a ?? ""), creado_en: e.creado_en })),
+        }),
+      ]),
+    );
     const enCurso = (mias ?? []).filter((c) => c.estado !== "firmado").length;
     return (
       <div className="mx-auto max-w-[1100px] px-8 py-8">
@@ -97,6 +146,8 @@ export default async function Inicio() {
           </Link>
         </section>
 
+        <ProcesoCompleto />
+
         <h2 className="mb-3 mt-8 titulo text-[18px]">Mis solicitudes</h2>
         {(mias ?? []).length === 0 ? (
           <p className="rounded-lg border border-dashed border-linea-fuerte bg-white px-5 py-10 text-center text-[13.5px] text-secundario">
@@ -114,11 +165,17 @@ export default async function Inicio() {
                     </div>
                     <EtiquetaEstado estado={c.estado as EstadoContrato} />
                   </div>
-                  <div className="mt-3 flex items-center justify-between gap-3">
-                    <Pasos estado={c.estado as EstadoContrato} />
-                    <span className="text-[12px] text-secundario">Solicitado {fecha(c.recibido_en)}</span>
+                  <div className="mt-4">
+                    <LineaSolicitud linea={lineas.get(c.id)!} />
                   </div>
-                  <p className="mt-2 text-[12.5px]">{MENSAJE[c.estado as EstadoContrato]}</p>
+                  <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-linea pt-3 text-[12.5px]">
+                    <span>{MENSAJE[c.estado as EstadoContrato]}</span>
+                    <span className="shrink-0 text-[12px] text-secundario">
+                      {c.estado === "firmado"
+                        ? `Firmado en ${duracion(lineas.get(c.id)!.diasTotales)}`
+                        : `${duracion(diasEntre(lineas.get(c.id)!.enEtapaDesde))} en esta etapa · ${duracion(lineas.get(c.id)!.diasTotales)} en total`}
+                    </span>
+                  </div>
                 </Link>
               </li>
             ))}
