@@ -63,7 +63,7 @@ export function SubirContrato({
       setError(cuerpo.error ?? "No fue posible procesar el archivo.");
       return;
     }
-    router.push(`/contratos/${cuerpo.id}`);
+    router.push(`/contratos/${cuerpo.id}?pestana=documento`);
     router.refresh();
     setAbierto(false);
     setArchivo(null);

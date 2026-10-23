@@ -19,6 +19,8 @@ import { Historial } from "@/components/revision/historial";
 import { Comentarios } from "@/components/revision/comentarios";
 import { NuevaVersion } from "@/components/revision/nueva-version";
 import { BotonContrapropuesta } from "@/components/revision/boton-contrapropuesta";
+import { FichaContrato, type ContratoFicha } from "@/components/ficha/ficha-contrato";
+import { calcularVigencia } from "@/lib/vigencia";
 
 export default async function PaginaRevision({
   params,
@@ -32,8 +34,10 @@ export default async function PaginaRevision({
   const { pestana: p, h } = await searchParams;
   // El análisis de la IA es trabajo interno de Legal: Negocio no ve la pestaña de hallazgos.
   const legal = permisos.validar(usuario.rol);
-  const pestana: Pestana = PESTANAS.some((x) => x.clave === p) && (legal || p !== "hallazgos") ? (p as Pestana) : "documento";
+  // La ficha es la portada del contrato; un enlace a un hallazgo (?h=) abre el documento.
+  const pestana: Pestana = PESTANAS.some((x) => x.clave === p) && (legal || p !== "hallazgos") ? (p as Pestana) : h ? "documento" : "ficha";
   const datos = await cargarRevision(id);
+  const hoy = new Date().toLocaleDateString("en-CA", { timeZone: "America/Mexico_City" });
   const { contrato, version } = datos;
 
   if (version && pestana === "documento") {
@@ -76,6 +80,19 @@ export default async function PaginaRevision({
       />
       <Pestanas base={`/contratos/${id}`} activa={pestana} ocultar={legal ? [] : ["hallazgos"]} conteos={{ partes: [contrato.propia_id, contrato.contraparte_id].filter(Boolean).length, versiones: datos.versiones.length + datos.contrapropuestas.length, hallazgos: datos.hallazgos.length, comentarios: datos.comentarios.length }} />
 
+      {pestana === "ficha" && (
+        <FichaContrato
+          c={contrato as unknown as ContratoFicha}
+          vigencia={calcularVigencia(contrato, hoy)}
+          hoy={hoy}
+          legal={legal}
+          perfiles={datos.perfiles}
+          abogados={Object.values(datos.perfiles).filter((x) => x.rol === "abogado" || x.rol === "director_juridico")}
+          partes={await nombresPartes(contrato.propia_id, contrato.contraparte_id)}
+          area={(contrato.areas as unknown as { nombre: string } | null)?.nombre ?? null}
+          hallazgosPendientes={datos.hallazgos.filter((x) => x.estado === "pendiente").length}
+        />
+      )}
       {pestana === "documento" && (
         version ? (
           <EspacioRevision
@@ -141,6 +158,15 @@ export default async function PaginaRevision({
       )}
     </div>
   );
+}
+
+async function nombresPartes(propiaId: string | null, contraparteId: string | null) {
+  const ids = [propiaId, contraparteId].filter(Boolean) as string[];
+  if (!ids.length) return { propia: null, contraparte: null };
+  const supabase = await clienteSesion();
+  const { data } = await supabase.from("companies").select("id, denominacion").in("id", ids);
+  const nombre = (id: string | null) => data?.find((x) => x.id === id)?.denominacion ?? null;
+  return { propia: nombre(propiaId), contraparte: nombre(contraparteId) };
 }
 
 async function cargarPartes(propiaId: string | null, contraparteId: string | null) {

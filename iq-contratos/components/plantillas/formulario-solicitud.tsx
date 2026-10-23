@@ -75,7 +75,7 @@ export function FormularioSolicitud({
       setEnviando(false);
       return setError(cuerpo.error ?? "No fue posible generar el contrato.");
     }
-    router.push(`/contratos/${cuerpo.id}`);
+    router.push(`/contratos/${cuerpo.id}?pestana=documento`);
   }
 
   const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";

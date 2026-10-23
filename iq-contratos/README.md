@@ -20,7 +20,9 @@ organización) y la API de Anthropic llamada solo desde el servidor.
 | Validación | Cada hallazgo guarda estado, usuario y hora. La base de datos impide aprobar con hallazgos de riesgo alto pendientes y congela las validaciones de un contrato aprobado. |
 | Contrapropuesta | .docx con control de cambios real de Word (w:ins / w:del) a nombre de quien aceptó cada cambio. Las omisiones aceptadas entran como cláusulas nuevas numeradas. Al descargarla Legal, queda marcada como descargada y el contrato pasa a En negociación; ese estado no se elige a mano. |
 | Vencimientos | Lista y calendario de plazos de aviso, fines de vigencia y periodos renovados, con área responsable y avisos programados. El correo está preparado y desactivado. |
-| Repositorio | Búsqueda por contraparte o título, tipo, estado, riesgo y fecha. Versiones, comentarios de Legal y de Negocio, historial completo. |
+| Ficha del contrato | Portada de cada contrato: monto (total, mensual o anual), vigencia, renovación automática, plazo de aviso, ley aplicable, jurisdicción, abogado responsable y área. La IA la llena desde el documento al cargarlo, cada dato con la cita textual de donde sale (sin cita no se guarda); Legal la confirma o la edita, y lo capturado a mano ya no lo cambia la IA. |
+| Vigencia | Para los contratos firmados se calcula sola: por iniciar, vigente, renovado (con renovación automática avanza el periodo), por vencer (90 días o el último día de aviso a 30 días), vencido o terminado. Legal registra la terminación anticipada con fecha y motivo. |
+| Contratos | Cartera vigente, en proceso, por vencer, vencidos y terminados, con monto, término, situación y responsable; resumen con contratos vigentes, valor anual estimado, por vencer y sin responsable. Búsqueda por contraparte o título, tipo, área y "solo los míos". Versiones, comentarios de Legal y de Negocio, historial completo. |
 | Reportes | Contratos en revisión, tiempo promedio de revisión, hallazgos por riesgo y por tema, próximos vencimientos. Todo calculado con los registros de la app. |
 | Expedientes corporativos | Por cada parte (la empresa y sus contrapartes): acta constitutiva, poderes, constancia de situación fiscal, identificación y comprobante de domicilio. Acepta PDF (también escaneado), Word o fotografía. La IA extrae escritura, notaría, folio mercantil, representante, poder y facultades, RFC y domicilio, cada dato con su documento y cita; Legal lo corrige y lo valida. |
 | Verificación de declaraciones | Al analizar un contrato, la IA compara las declaraciones de cada parte contra su expediente. Si un dato no coincide o es de relleno ("escritura número 00000"), propone corregirlo; si falta y el expediente lo tiene, propone agregarlo. Son hallazgos normales: con cita exacta, control de cambios y decisión de Legal. |
@@ -39,7 +41,7 @@ npm install
 npx supabase start            # Postgres, Auth y Storage locales
 npx supabase db reset         # aplica supabase/migrations
 cp .env.example .env.local    # complete los valores (ver abajo)
-npm run seed                  # empresa ficticia, 3 usuarios, playbook, plantillas, expedientes y 5 contratos
+npm run seed                  # empresa ficticia, 3 usuarios, playbook, plantillas, expedientes y 7 contratos
 npm run dev                   # http://localhost:3000
 ```
 
@@ -56,8 +58,10 @@ rápidos en la pantalla de ingreso):
 | abogado@empresa-cliente.example | Carlos Rivas | Abogado |
 | compras@empresa-cliente.example | Sofía Herrera | Negocio |
 
-Datos de la demo: EMPRESA CLIENTE, S.A. DE C.V. y cinco contratos ficticios con contrapartes
-genéricas (PROVEEDOR XYZ, S.A. DE C.V. y otras "DEMO"). El contrato de suministro trae a propósito
+Datos de la demo: EMPRESA CLIENTE, S.A. DE C.V. y siete contratos ficticios con contrapartes
+genéricas (PROVEEDOR XYZ, S.A. DE C.V. y otras "DEMO" o "EJEMPLO"), con su ficha llenada como la
+dejaría la IA: tres en proceso de revisión, uno vigente, uno renovado automáticamente, uno por
+vencer y uno vencido. El contrato de suministro trae a propósito
 intereses moratorios solo a cargo del cliente, renovación automática anual con aviso de 90 días
 naturales y jurisdicción en Monterrey; el de mantenimiento trae cláusulas de obra dentro de un
 contrato de servicios. El playbook precargado es un ejemplo y debe revisarlo la dirección legal.
