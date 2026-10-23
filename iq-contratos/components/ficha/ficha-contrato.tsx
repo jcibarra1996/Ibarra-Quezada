@@ -102,6 +102,7 @@ export function FichaContrato({
   };
 
   const valores: ValoresFormulario = {
+    tipo_contrato: c.tipo_contrato ?? "",
     monto: monto == null ? "" : String(monto),
     moneda: c.moneda ?? "MXN",
     monto_periodo: c.monto_periodo ?? "total",
@@ -194,7 +195,9 @@ export function FichaContrato({
             <span className="text-secundario"> con </span>
             {partes.contraparte ?? c.contraparte}
           </Dato>
-          <Dato etiqueta="Tipo de contrato">{c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : <span className="text-secundario">Por identificar</span>}</Dato>
+          <Dato etiqueta="Tipo de contrato" fuente={fuente("tipo_contrato")}>
+            {c.tipo_contrato ? TIPOS_CONTRATO[c.tipo_contrato as TipoContrato] : <span className="text-secundario">Por identificar</span>}
+          </Dato>
           {c.objeto && <Dato etiqueta="Objeto">{c.objeto}</Dato>}
           <Dato etiqueta="Monto" fuente={fuente("monto", "moneda", "monto_periodo")}>
             {monto == null ? (

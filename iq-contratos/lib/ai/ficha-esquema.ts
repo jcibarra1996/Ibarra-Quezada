@@ -7,6 +7,10 @@ import { localizarCita } from "./verificar-citas";
 const cita = z.string().nullable().describe("Copia exacta, carácter por carácter, del fragmento del contrato del que sale el dato. Null si el contrato no lo dice.");
 
 export const FichaSchema = z.object({
+  tipo: z.object({
+    tipo: z.enum(["suministro", "prestacion_servicios", "obra", "arrendamiento", "confidencialidad", "compraventa", "otro"]).nullable().describe("Tipo del contrato según su denominación y su objeto."),
+    cita,
+  }),
   monto: z.object({
     monto: z.number().nullable().describe("Importe de la contraprestación principal, sin IVA si el contrato lo separa. Solo número, sin símbolos."),
     moneda: z.enum(["MXN", "USD", "EUR"]).nullable(),
@@ -36,6 +40,7 @@ export const FichaSchema = z.object({
 export type FichaModelo = z.infer<typeof FichaSchema>;
 
 export const CAMPOS_FICHA = [
+  "tipo_contrato",
   "monto",
   "moneda",
   "monto_periodo",
@@ -75,6 +80,7 @@ export function procesarFicha(salida: unknown, textoContrato: string): { valores
       fuentes[k as CampoFicha] = { origen: "ia", cita: grupo.cita.slice(0, 600) };
     }
   };
+  if (f.tipo.tipo) poner(f.tipo, { tipo_contrato: f.tipo.tipo });
   const m = f.monto;
   if (m.monto != null && m.monto > 0) poner(m, { monto: Math.round(m.monto * 100) / 100, moneda: m.moneda ?? "MXN", monto_periodo: m.periodo ?? "total" });
   const v = f.vigencia;

@@ -3,10 +3,12 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactNode } from "react";
 import { Boton } from "@/components/ui/boton";
 import { asignarResponsable, confirmarFicha, guardarFicha, terminarContrato } from "@/app/(app)/contratos/[id]/ficha-acciones";
+import { TIPOS_CONTRATO } from "@/lib/tipos";
 
 const control = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13.5px] outline-none focus:border-terracota";
 
 export interface ValoresFormulario {
+  tipo_contrato: string;
   monto: string;
   moneda: string;
   monto_periodo: string;
@@ -62,6 +64,17 @@ export function TerminosEditables({ contratoId, valores, editable, children }: {
         <p className="text-[12.5px] text-secundario">Lo que usted cambie queda como capturado a mano y la IA ya no lo modifica. Al guardar, la ficha queda confirmada a su nombre.</p>
       </header>
       <div className="grid grid-cols-1 gap-x-5 gap-y-4 p-5 sm:grid-cols-3">
+        <Campo etiqueta="Tipo de contrato">
+          <select className={control} value={v.tipo_contrato} onChange={cambiar("tipo_contrato")}>
+            <option value="">Por identificar</option>
+            {Object.entries(TIPOS_CONTRATO).map(([k, t]) => (
+              <option key={k} value={k}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </Campo>
+        <span className="hidden sm:col-span-2 sm:block" aria-hidden />
         <Campo etiqueta="Monto">
           <input className={control} inputMode="decimal" placeholder="180000.00" value={v.monto} onChange={cambiar("monto")} />
         </Campo>
