@@ -12,7 +12,7 @@ export function ConexionMifiel({ conectado, avisosConectados }: { conectado: boo
   const [entorno, setEntorno] = useState<"sandbox" | "produccion">("sandbox");
   const [mensaje, setMensaje] = useState("");
   const [pendiente, iniciar] = useTransition();
-  const control = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";
+  const control = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina";
 
   if (!editando) {
     return (
@@ -22,7 +22,7 @@ export function ConexionMifiel({ conectado, avisosConectados }: { conectado: boo
           Cambiar credenciales
         </button>
         <button
-          className="text-secundario hover:text-burgundy hover:underline"
+          className="text-secundario hover:text-riesgo hover:underline"
           disabled={pendiente}
           onClick={() => {
             if (!window.confirm("¿Desconectar Mifiel? Los contratos que ya están en firma no se cancelan en Mifiel.")) return;
@@ -80,7 +80,7 @@ export function ConexionMifiel({ conectado, avisosConectados }: { conectado: boo
       <p className="col-span-4 text-[12px] text-secundario">
         Se generan en Mifiel, en Ajustes, Access tokens. Antes de guardarlas se comprueban con Mifiel; quedan cifradas y no vuelven a mostrarse.
       </p>
-      {mensaje && <p className="col-span-4 text-[12.5px] text-burgundy">{mensaje}</p>}
+      {mensaje && <p className="col-span-4 text-[12.5px] text-riesgo">{mensaje}</p>}
     </form>
   );
 }

@@ -23,7 +23,7 @@ export function FormularioIngreso({ demo }: { demo: { usuarios: UsuarioDemo[]; c
           type="email"
           autoComplete="username"
           required
-          className="h-10 w-full rounded-md border border-linea-fuerte bg-white px-3 text-[14px] outline-none focus:border-terracota"
+          className="h-10 w-full rounded-md border border-linea-fuerte bg-white px-3 text-[14px] outline-none focus:border-mandarina"
         />
       </label>
       <label className="block">
@@ -34,13 +34,13 @@ export function FormularioIngreso({ demo }: { demo: { usuarios: UsuarioDemo[]; c
           type="password"
           autoComplete="current-password"
           required
-          className="h-10 w-full rounded-md border border-linea-fuerte bg-white px-3 text-[14px] outline-none focus:border-terracota"
+          className="h-10 w-full rounded-md border border-linea-fuerte bg-white px-3 text-[14px] outline-none focus:border-mandarina"
         />
       </label>
-      {estado?.error && <p className="text-[13px] text-burgundy">{estado.error}</p>}
+      {estado?.error && <p className="text-[13px] text-riesgo">{estado.error}</p>}
       <button
         disabled={enviando}
-        className="h-10 w-full rounded-md bg-terracota text-[14px] font-medium text-white shadow-[0_1px_2px_rgb(32_24_22/0.15)] hover:bg-terracota-oscuro disabled:opacity-60"
+        className="h-10 w-full rounded-md bg-mandarina text-[14px] font-medium text-tinta hover:bg-mandarina-oscuro disabled:opacity-60"
       >
         {enviando ? "Ingresando..." : "Ingresar"}
       </button>
@@ -58,7 +58,7 @@ export function FormularioIngreso({ demo }: { demo: { usuarios: UsuarioDemo[]; c
                   if (correo.current) correo.current.value = u.correo;
                   if (contrasena.current) contrasena.current.value = demo.contrasena;
                 }}
-                className="flex w-full items-center justify-between rounded-lg border border-linea bg-white px-3 py-2.5 text-left transition-colors hover:border-terracota/50 hover:bg-terracota-suave/40"
+                className="flex w-full items-center justify-between rounded-lg border border-linea bg-white px-3 py-2.5 text-left transition-colors hover:border-mandarina/50 hover:bg-mandarina-suave/40"
               >
                 <span className="text-[13px] font-medium">{u.nombre}</span>
                 <span className="text-[12px] text-secundario">{u.rol}</span>

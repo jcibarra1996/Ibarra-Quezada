@@ -57,7 +57,7 @@ export function WidgetMifiel({
     };
   }, [listo, alFirmar, alCerrar]);
 
-  if (error) return <p className="rounded-md bg-burgundy-suave px-3 py-2 text-[13px] text-burgundy">{error}</p>;
+  if (error) return <p className="rounded-md bg-riesgo-suave px-3 py-2 text-[13px] text-riesgo">{error}</p>;
   if (!listo) return <p className="py-10 text-center text-[13px] text-secundario">Cargando el documento desde Mifiel...</p>;
   return createElement("mifiel-widget", {
     ref,

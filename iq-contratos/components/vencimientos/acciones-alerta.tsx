@@ -11,7 +11,7 @@ export function AreaAlerta({ alertaId, areaId, areas, editable }: { alertaId: st
       defaultValue={areaId ?? ""}
       disabled={pendiente}
       onChange={(e) => iniciar(async () => void (await actualizarAlerta(alertaId, { area_id: e.target.value || null })))}
-      className="h-7 rounded-md border border-linea-fuerte bg-white px-1.5 text-[12.5px] outline-none focus:border-terracota"
+      className="h-7 rounded-md border border-linea-fuerte bg-white px-1.5 text-[12.5px] outline-none focus:border-mandarina"
     >
       <option value="">Sin asignar</option>
       {areas.map((a) => (

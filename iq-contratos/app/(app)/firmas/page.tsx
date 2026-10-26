@@ -43,7 +43,7 @@ export default async function Firmas() {
         <tbody>
           {filas.map((c) => (
             <tr key={c.id} className="border-b border-linea last:border-0">
-              <td className="px-4 py-3"><Link href={`/contratos/${c.id}`} className="font-medium hover:text-terracota">{c.titulo}</Link></td>
+              <td className="px-4 py-3"><Link href={`/contratos/${c.id}`} className="font-medium hover:text-mandarina-texto">{c.titulo}</Link></td>
               <td className="px-4 py-3 text-secundario">{c.contraparte}</td>
               <td className="px-4 py-3 text-secundario">{fecha(c.aprobado_en)}</td>
               <td className="px-4 py-3">{estadoFirma(c.signature_requests)}</td>
@@ -51,7 +51,7 @@ export default async function Firmas() {
                 {pendiente ? (
                   puede ? (
                     <span className="inline-flex items-center gap-3">
-                      <Link href={`/contratos/${c.id}`} className="text-[13px] font-medium text-terracota hover:underline">
+                      <Link href={`/contratos/${c.id}`} className="text-[13px] font-medium text-mandarina-texto hover:underline">
                         Firmar con Mifiel
                       </Link>
                       <RegistrarFirma contratoId={c.id} hoy={hoy} />
@@ -123,5 +123,5 @@ function estadoFirma(lista: { estado: string; firmantes: { firmado: boolean }[];
   if (!s) return <span className="text-secundario">Sin enviar</span>;
   if (s.estado === "firmado") return <span className="text-bajo">Firmado con Mifiel</span>;
   if (s.estado === "enviado") return <span className="text-medio">En Mifiel: {s.firmantes.filter((f) => f.firmado).length} de {s.firmantes.length} firmaron</span>;
-  return <span className="text-burgundy">{s.estado === "rechazado" ? "Rechazado por un firmante" : "Error al enviar"}</span>;
+  return <span className="text-riesgo">{s.estado === "rechazado" ? "Rechazado por un firmante" : "Error al enviar"}</span>;
 }

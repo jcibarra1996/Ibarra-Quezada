@@ -20,7 +20,7 @@ export function NuevoExpediente({
   const [error, setError] = useState("");
   const [pendiente, iniciar] = useTransition();
   const router = useRouter();
-  const campo = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";
+  const campo = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina";
 
   const crear = () =>
     iniciar(async () => {
@@ -49,7 +49,7 @@ export function NuevoExpediente({
                     key={t}
                     type="button"
                     onClick={() => setTipo(t)}
-                    className={`h-8 flex-1 rounded-md border text-[13px] ${tipo === t ? "border-terracota bg-terracota-suave font-medium" : "border-linea-fuerte text-secundario"}`}
+                    className={`h-8 flex-1 rounded-md border text-[13px] ${tipo === t ? "border-mandarina bg-mandarina-suave font-medium" : "border-linea-fuerte text-secundario"}`}
                   >
                     {t === "moral" ? "Persona moral" : "Persona física"}
                   </button>
@@ -64,7 +64,7 @@ export function NuevoExpediente({
                 <input value={rfc} onChange={(e) => setRfc(e.target.value)} className={`${campo} font-mono uppercase`} maxLength={13} />
               </label>
             </div>
-            {error && <p className="mt-3 text-[13px] text-burgundy">{error}</p>}
+            {error && <p className="mt-3 text-[13px] text-riesgo">{error}</p>}
             <div className="mt-6 flex justify-end gap-2">
               <Boton type="button" variante="fantasma" onClick={() => setAbierto(false)} disabled={pendiente}>
                 Cancelar

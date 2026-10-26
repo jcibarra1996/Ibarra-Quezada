@@ -22,7 +22,7 @@ export function RegistrarFirma({ contratoId, hoy }: { contratoId: string; hoy: s
       >
         Registrar firma
       </Boton>
-      {error && <span className="text-[12px] text-burgundy">{error}</span>}
+      {error && <span className="text-[12px] text-riesgo">{error}</span>}
     </span>
   );
 }

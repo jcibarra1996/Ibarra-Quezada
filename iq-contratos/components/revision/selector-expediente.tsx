@@ -35,7 +35,7 @@ export function SelectorExpediente({
         value={actual ?? ""}
         disabled={pendiente}
         onChange={(e) => vincular(e.target.value || null)}
-        className="h-8 max-w-[260px] rounded-md border border-linea-fuerte bg-white px-2 text-[13px] outline-none focus:border-terracota"
+        className="h-8 max-w-[260px] rounded-md border border-linea-fuerte bg-white px-2 text-[13px] outline-none focus:border-mandarina"
       >
         <option value="">Sin expediente</option>
         {opciones.map((o) => (
@@ -45,7 +45,7 @@ export function SelectorExpediente({
         ))}
       </select>
       {parte === "contraparte" && <NuevoExpediente texto="Crear expediente" variante="secundario" alCrear={(id) => vincular(id)} />}
-      {error && <span className="text-[12px] text-burgundy">{error}</span>}
+      {error && <span className="text-[12px] text-riesgo">{error}</span>}
     </div>
   );
 }

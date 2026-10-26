@@ -101,12 +101,12 @@ export default async function PaginaExpediente({ params }: { params: Promise<{ i
                       {d.nombre_archivo} · {nombre(d.creado_por)} · {fecha(d.creado_en)}
                     </p>
                   </div>
-                  <a href={`/api/documentos-corporativos/${d.id}`} className="shrink-0 text-[12px] text-terracota hover:underline">
+                  <a href={`/api/documentos-corporativos/${d.id}`} className="shrink-0 text-[12px] text-mandarina-texto hover:underline">
                     Descargar
                   </a>
                 </div>
                 {d.estado === "en_proceso" && <p className="mt-2 text-[12.5px] text-secundario">La IA está leyendo el documento...</p>}
-                {d.estado === "error" && <p className="mt-2 rounded bg-burgundy-suave px-2 py-1.5 text-[12.5px] text-burgundy">{d.error}</p>}
+                {d.estado === "error" && <p className="mt-2 rounded bg-riesgo-suave px-2 py-1.5 text-[12.5px] text-riesgo">{d.error}</p>}
                 {d.estado === "completado" && !puedeValidar && (
                   <p className="mt-2 text-[12.5px] text-secundario">Documento recibido. Legal revisa los datos que se extrajeron.</p>
                 )}
@@ -148,7 +148,7 @@ export default async function PaginaExpediente({ params }: { params: Promise<{ i
               <ul className="space-y-2">
                 {contratos!.map((c) => (
                   <li key={c.id} className="flex items-center justify-between gap-2">
-                    <Link href={`/contratos/${c.id}?pestana=partes`} className="truncate text-[13px] hover:text-terracota">
+                    <Link href={`/contratos/${c.id}?pestana=partes`} className="truncate text-[13px] hover:text-mandarina-texto">
                       {c.titulo}
                     </Link>
                     <EtiquetaEstado estado={c.estado as EstadoContrato} />

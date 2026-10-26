@@ -34,7 +34,7 @@ export default async function PaginaExpedientes({ searchParams }: { searchParams
             name="q"
             defaultValue={q}
             placeholder="Buscar por denominación"
-            className="h-8 w-72 rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota"
+            className="h-8 w-72 rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina"
           />
         </form>
         <div className="overflow-hidden rounded-lg border border-linea bg-white">
@@ -58,7 +58,7 @@ export default async function PaginaExpedientes({ searchParams }: { searchParams
                 return (
                   <tr key={e.id} className="hover:bg-lienzo">
                     <td className="px-4 py-3">
-                      <Link href={`/expedientes/${e.id}`} className="font-medium hover:text-terracota">
+                      <Link href={`/expedientes/${e.id}`} className="font-medium hover:text-mandarina-texto">
                         {e.denominacion}
                       </Link>
                       <span className="block text-[12px] text-secundario">

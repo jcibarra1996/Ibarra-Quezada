@@ -52,7 +52,7 @@ export default async function Reportes() {
 
   return (
     <div>
-      <EncabezadoPagina titulo="Reportes" descripcion={`Tablero para la dirección general. Calculado con los datos registrados en IQ Contratos al ${fecha(hoy)}.`} />
+      <EncabezadoPagina titulo="Reportes" descripcion={`Tablero para la dirección general. Calculado con los datos registrados en Qlaro al ${fecha(hoy)}.`} />
       <div className="space-y-6 px-8 py-6">
         <section className="grid grid-cols-4 gap-4">
           <Indicador titulo="Contratos en revisión" valor={String(estados.recibido + estados.en_revision)} nota={`${estados.recibido} recibidos sin revisar`} />
@@ -74,7 +74,7 @@ export default async function Reportes() {
             <Barras
               vacio="Aún no hay contratos analizados."
               filas={[
-                { etiqueta: "Riesgo alto", valor: riesgos.alto, color: "bg-burgundy" },
+                { etiqueta: "Riesgo alto", valor: riesgos.alto, color: "bg-riesgo" },
                 { etiqueta: "Riesgo medio", valor: riesgos.medio, color: "bg-medio" },
                 { etiqueta: "Riesgo bajo", valor: riesgos.bajo, color: "bg-bajo" },
               ]}
@@ -102,7 +102,7 @@ export default async function Reportes() {
                       <td className="px-5 py-3 text-secundario">En {diasEntre(hoy, a.fecha_limite)} días</td>
                       <td className="px-5 py-3 font-medium">{a.titulo}</td>
                       <td className="px-5 py-3">
-                        <Link href={`/contratos/${a.contract_id}`} className="hover:text-terracota">{c?.titulo}</Link>
+                        <Link href={`/contratos/${a.contract_id}`} className="hover:text-mandarina-texto">{c?.titulo}</Link>
                         <span className="text-secundario"> · {c?.contraparte}</span>
                       </td>
                       <td className="px-5 py-3 text-secundario">{(a.areas as unknown as { nombre: string } | null)?.nombre ?? "Sin área"}</td>

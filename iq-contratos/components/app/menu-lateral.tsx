@@ -32,7 +32,7 @@ const GRUPOS: { titulo: string; entradas: Entrada[] }[] = [
     titulo: "Biblioteca",
     entradas: [
       { href: "/plantillas", texto: "Plantillas", icono: "M5 2.5h10v15H5zM8 6h4M8 9h4M8 12h2", soloLegal: true },
-      { href: "/playbook", texto: "Playbook", icono: "M4 4.5h5a2 2 0 0 1 2 2V17a1.5 1.5 0 0 0-1.5-1.5H4zM16 4.5h-5", soloLegal: true },
+      { href: "/playbook", texto: "Reglas", icono: "M4 4.5h5a2 2 0 0 1 2 2V17a1.5 1.5 0 0 0-1.5-1.5H4zM16 4.5h-5", soloLegal: true },
     ],
   },
   {
@@ -80,7 +80,7 @@ function NuevoContrato({ areas }: { areas: { id: string; nombre: string }[] }) {
         onClick={() => setMenu(!menu)}
         aria-expanded={menu}
         aria-haspopup="menu"
-        className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-terracota text-[14px] font-medium text-white shadow-[0_1px_2px_rgb(0_0_0/0.3)] hover:bg-terracota-oscuro"
+        className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-mandarina text-[14px] font-medium text-tinta hover:bg-mandarina-oscuro"
       >
         <Icono d="M10 4.5v11M4.5 10h11" />
         Nuevo contrato
@@ -95,14 +95,14 @@ function NuevoContrato({ areas }: { areas: { id: string; nombre: string }[] }) {
             }}
             className="flex w-full items-start gap-3 rounded-md px-3 py-2.5 text-left hover:bg-gris-50"
           >
-            <Icono d="M10 13.5V4M6 7.5 10 3.5l4 4M4 16.5h12" className="mt-0.5 text-terracota" />
+            <Icono d="M10 13.5V4M6 7.5 10 3.5l4 4M4 16.5h12" className="mt-0.5 text-mandarina-texto" />
             <span>
               <span className="block text-[13.5px] font-medium text-tinta">Subir contrato</span>
               <span className="block text-[12px] text-secundario">El que envió la contraparte</span>
             </span>
           </button>
           <Link role="menuitem" href="/plantillas" onClick={() => setMenu(false)} className="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-gris-50">
-            <Icono d="M5 2.5h10v15H5zM8 6h4M8 9h4M8 12h2" className="mt-0.5 text-terracota" />
+            <Icono d="M5 2.5h10v15H5zM8 6h4M8 9h4M8 12h2" className="mt-0.5 text-mandarina-texto" />
             <span>
               <span className="block text-[13.5px] font-medium text-tinta">Desde plantilla</span>
               <span className="block text-[12px] text-secundario">Se llena con los expedientes</span>
@@ -151,7 +151,7 @@ function Perfil({ usuario, equipo, demo }: { usuario: Usuario; equipo: { id: str
         className="flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left hover:bg-tinta-claro"
         title={demo ? "Cambiar de perfil o cerrar sesión" : "Cerrar sesión"}
       >
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-terracota text-[12px] font-semibold text-white">{iniciales(usuario.nombre)}</span>
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-mandarina text-[12px] font-semibold text-tinta">{iniciales(usuario.nombre)}</span>
         <span className="min-w-0 flex-1 leading-tight">
           <span className="block truncate text-[13px] font-medium text-white">{usuario.nombre}</span>
           <span className="block truncate text-[11.5px] text-sobre-tinta-tenue">{ROLES[usuario.rol]}</span>
@@ -189,7 +189,7 @@ export function MenuLateral({
           // Quien pide un contrato no lo "sube" ni lo "crea": lo solicita, y Legal lo revisa.
           <Link
             href="/solicitar"
-            className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-terracota text-[14px] font-medium text-white shadow-[0_1px_2px_rgb(0_0_0/0.3)] hover:bg-terracota-oscuro"
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-mandarina text-[14px] font-medium text-tinta hover:bg-mandarina-oscuro"
           >
             <Icono d="M10 4.5v11M4.5 10h11" />
             Solicitar nuevo contrato
@@ -219,11 +219,11 @@ export function MenuLateral({
                         activa ? "bg-tinta-claro font-medium text-white" : "text-sobre-tinta hover:bg-tinta-claro/70 hover:text-white"
                       }`}
                     >
-                      {activa && <span className="absolute left-0 top-2 h-5 w-[3px] rounded-r bg-terracota" aria-hidden />}
-                      <Icono d={e.icono} className={activa ? "text-terracota" : "text-sobre-tinta-tenue"} />
+                      {activa && <span className="absolute left-0 top-2 h-5 w-[3px] rounded-r bg-mandarina" aria-hidden />}
+                      <Icono d={e.icono} className={activa ? "text-mandarina-texto" : "text-sobre-tinta-tenue"} />
                       <span className="flex-1">{e.texto}</span>
                       {e.contador && vencimientos > 0 && (
-                        <span className="rounded-full bg-terracota px-1.5 py-px text-[11px] font-semibold text-white" aria-label={`${vencimientos} vencimientos próximos`}>
+                        <span className="rounded-full bg-mandarina px-1.5 py-px text-[11px] font-semibold text-tinta" aria-label={`${vencimientos} vencimientos próximos`}>
                           {vencimientos}
                         </span>
                       )}

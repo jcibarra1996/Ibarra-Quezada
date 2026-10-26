@@ -28,7 +28,7 @@ export default async function PaginaPlantilla({ params, searchParams }: { params
         descripcion={`${TIPOS_CONTRATO[plantilla.tipo_contrato as TipoContrato]} · versión ${plantilla.version}. ${plantilla.descripcion}`}
         acciones={
           director ? (
-            <a href={editar ? `/plantillas/${id}` : `/plantillas/${id}?editar=1`} className="text-[13px] font-medium text-terracota hover:underline">
+            <a href={editar ? `/plantillas/${id}` : `/plantillas/${id}?editar=1`} className="text-[13px] font-medium text-mandarina-texto hover:underline">
               {editar ? "Usar la plantilla" : "Editar plantilla"}
             </a>
           ) : undefined

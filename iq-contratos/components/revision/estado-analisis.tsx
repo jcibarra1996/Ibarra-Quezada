@@ -54,20 +54,20 @@ export function EstadoAnalisis({
     return (
       <div className="rounded-lg border border-linea bg-lienzo p-4">
         <div className="mb-3 h-1 overflow-hidden rounded bg-gris-100">
-          <div className="h-full w-1/3 animate-[avance_1.6s_ease-in-out_infinite] rounded bg-terracota" />
+          <div className="h-full w-1/3 animate-[avance_1.6s_ease-in-out_infinite] rounded bg-mandarina" />
         </div>
         <p className="text-[13.5px] font-medium">Análisis en curso</p>
         <p className="mt-1 text-[12.5px] text-secundario">
-          Identifica el tipo y objeto del contrato, compara cada cláusula con el playbook y verifica que cada cita exista en el documento. Suele tardar entre uno y tres minutos.
+          Identifica el tipo y objeto del contrato, compara cada cláusula con las reglas de la empresa y verifica que cada cita exista en el documento. Suele tardar entre uno y tres minutos.
         </p>
       </div>
     );
   }
   if (fallo) {
     return (
-      <div className="rounded-lg border border-burgundy/30 bg-burgundy-suave p-4">
-        <p className="text-[13.5px] font-medium text-burgundy">El análisis no se completó</p>
-        <p className="mt-1 text-[12.5px] text-burgundy">{fallo}</p>
+      <div className="rounded-lg border border-riesgo/30 bg-riesgo-suave p-4">
+        <p className="text-[13.5px] font-medium text-riesgo">El análisis no se completó</p>
+        <p className="mt-1 text-[12.5px] text-riesgo">{fallo}</p>
         {puedeReintentar && (
           <Boton className="mt-3" onClick={analizar}>
             Intentar de nuevo

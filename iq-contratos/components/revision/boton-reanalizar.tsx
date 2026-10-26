@@ -11,7 +11,7 @@ export function BotonReanalizar({ contratoId }: { contratoId: string }) {
       className="text-[11.5px] text-secundario underline-offset-2 hover:text-tinta hover:underline disabled:opacity-50"
       disabled={enviando}
       onClick={() => {
-        if (!window.confirm("Se hará un análisis nuevo con el playbook y los expedientes vigentes. Las validaciones del análisis actual quedarán en el historial y los hallazgos nuevos empezarán pendientes. ¿Continuar?")) return;
+        if (!window.confirm("Se hará un análisis nuevo con las reglas y los expedientes vigentes. Las validaciones del análisis actual quedarán en el historial y los hallazgos nuevos empezarán pendientes. ¿Continuar?")) return;
         setEnviando(true);
         void fetch(`/api/contratos/${contratoId}/analizar`, { method: "POST" }).finally(() => router.refresh());
         setTimeout(() => router.refresh(), 1500);

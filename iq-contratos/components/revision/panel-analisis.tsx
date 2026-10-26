@@ -21,7 +21,7 @@ export function Contadores({ hallazgos }: { hallazgos: Hallazgo[] }) {
   return (
     <div className="flex gap-2">
       <div className={caja}>
-        <p className="text-[20px] font-semibold leading-none text-burgundy">{n("alto")}</p>
+        <p className="text-[20px] font-semibold leading-none text-riesgo">{n("alto")}</p>
         <p className="mt-1 text-[11.5px] text-secundario">Riesgo alto</p>
       </div>
       <div className={caja}>
@@ -50,7 +50,7 @@ export function ValidacionLegal({ hallazgos }: { hallazgos: Hallazgo[] }) {
         </p>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-gris-100" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-        <div className="h-full rounded-full bg-terracota transition-all" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-mandarina transition-all" style={{ width: `${pct}%` }} />
       </div>
       <p className="mt-1.5 text-[12px] text-secundario">
         {altos > 0
@@ -86,8 +86,8 @@ export function PanelAnalisis({
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="min-h-0 flex-1 space-y-4 overflow-auto px-5 py-4">
         {analisis.resumen_negocio && (
-          <section className="rounded-lg bg-crema px-4 py-3">
-            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-terracota-oscuro">Resumen para el negocio</p>
+          <section className="rounded-lg bg-mandarina-suave px-4 py-3">
+            <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-mandarina-texto">Resumen para el negocio</p>
             <p className="text-[13.5px] leading-relaxed">{analisis.resumen_negocio}</p>
           </section>
         )}
@@ -103,7 +103,7 @@ export function PanelAnalisis({
             citó el texto exacto del contrato.
           </p>
         )}
-        {hallazgos.length === 0 && <p className="text-[13px] text-secundario">La IA no encontró desviaciones respecto del playbook. Revise el documento de todas formas.</p>}
+        {hallazgos.length === 0 && <p className="text-[13px] text-secundario">La IA no encontró desviaciones respecto de las reglas. Revise el documento de todas formas.</p>}
         <div className="space-y-3">
           {hallazgos.map((h) => (
             <TarjetaHallazgo key={h.id} h={h} activa={activa === h.id} puedeValidar={puedeValidar} perfiles={perfiles} alSeleccionar={() => alSeleccionar(h.id)} />

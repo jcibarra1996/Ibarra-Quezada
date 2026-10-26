@@ -1,23 +1,28 @@
-export function Monograma({ tamano = 32, invertido = false }: { tamano?: number; invertido?: boolean }) {
+// Logo de Qlaro: el símbolo q en mandarina más "laro" en trazos (Manrope 800). Sin slogan ni descriptor.
+const LARO =
+  "M101.0 88.0V-22.25H121.4V88.0ZM163.4 90.25Q154.7 90.25 148.66 86.91Q142.63 83.58 139.51 77.99Q136.4 72.4 136.4 65.65Q136.4 60.03 138.13 55.38Q139.85 50.73 143.71 47.16Q147.58 43.6 154.1 41.2Q158.6 39.55 164.83 38.28Q171.05 37.0 178.93 35.84Q186.8 34.68 196.25 33.25L188.9 37.3Q188.9 30.1 185.45 26.73Q182.0 23.35 173.9 23.35Q169.4 23.35 164.53 25.53Q159.65 27.7 157.7 33.25L139.25 27.4Q142.33 17.35 150.8 11.05Q159.28 4.75 173.9 4.75Q184.63 4.75 192.95 8.05Q201.28 11.35 205.55 19.45Q207.95 23.95 208.4 28.45Q208.85 32.95 208.85 38.5V88.0H191.0V71.35L193.55 74.8Q187.63 82.98 180.76 86.61Q173.9 90.25 163.4 90.25ZM167.75 74.2Q173.38 74.2 177.24 72.21Q181.1 70.23 183.39 67.68Q185.68 65.13 186.5 63.4Q188.08 60.1 188.34 55.71Q188.6 51.33 188.6 48.4L194.6 49.9Q185.53 51.4 179.9 52.41Q174.28 53.43 170.83 54.25Q167.38 55.08 164.75 56.05Q161.75 57.25 159.91 58.64Q158.08 60.03 157.21 61.68Q156.35 63.33 156.35 65.35Q156.35 68.13 157.74 70.11Q159.13 72.1 161.68 73.15Q164.23 74.2 167.75 74.2ZM225.35 88.0V7.0H243.35V26.8L241.4 24.25Q242.98 20.05 245.6 16.6Q248.23 13.15 252.05 10.9Q254.98 9.1 258.43 8.09Q261.88 7.08 265.55 6.81Q269.23 6.55 272.9 7.0V26.05Q269.53 25.0 265.06 25.34Q260.6 25.68 257.0 27.4Q253.4 29.05 250.93 31.79Q248.45 34.53 247.18 38.24Q245.9 41.95 245.9 46.6V88.0ZM320.6 90.25Q308.38 90.25 299.15 84.78Q289.93 79.3 284.79 69.66Q279.65 60.03 279.65 47.5Q279.65 34.83 284.9 25.19Q290.15 15.55 299.38 10.15Q308.6 4.75 320.6 4.75Q332.83 4.75 342.09 10.23Q351.35 15.7 356.53 25.34Q361.7 34.98 361.7 47.5Q361.7 60.1 356.49 69.74Q351.28 79.38 342.01 84.81Q332.75 90.25 320.6 90.25ZM320.6 71.2Q330.43 71.2 335.26 64.56Q340.1 57.93 340.1 47.5Q340.1 36.7 335.19 30.25Q330.28 23.8 320.6 23.8Q313.93 23.8 309.65 26.8Q305.38 29.8 303.31 35.13Q301.25 40.45 301.25 47.5Q301.25 58.38 306.16 64.79Q311.08 71.2 320.6 71.2Z";
+
+const Q = "M4,46a42,42 0 1,0 84,0a42,42 0 1,0 -84,0ZM27,46a19,19 0 1,0 38,0a19,19 0 1,0 -38,0Z";
+
+export function Monograma({ tamano = 32 }: { tamano?: number }) {
   return (
-    <span
-      aria-hidden
-      className={`inline-flex items-center justify-center rounded-[8px] font-serif font-semibold ${invertido ? "bg-crema text-tinta" : "bg-tinta text-white"}`}
-      style={{ width: tamano, height: tamano, fontSize: tamano * 0.46, letterSpacing: "-0.02em" }}
-    >
-      I<span className="text-terracota">Q</span>
-    </span>
+    <svg aria-hidden width={tamano} height={tamano} viewBox="0 0 92 128" className="shrink-0">
+      <path fill="#FF5C00" fillRule="evenodd" d={Q} />
+      <rect fill="#FF5C00" x="60" y="4" width="28" height="120" />
+    </svg>
   );
 }
 
 export function Logo({ invertido = false }: { invertido?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-2.5">
-      <Monograma invertido={invertido} />
-      <span className="leading-none">
-        <span className={`block font-serif text-[16px] font-semibold tracking-tight ${invertido ? "text-white" : "text-tinta"}`}>IQ Contratos</span>
-        <span className={`mt-1 block text-[10.5px] uppercase tracking-[0.14em] ${invertido ? "text-sobre-tinta-tenue" : "text-secundario"}`}>Ibarra Quezada</span>
-      </span>
-    </span>
+    <svg role="img" aria-label="Qlaro" viewBox="0 0 371.7 152.2" className="block h-[30px] w-auto self-start">
+      <g transform="translate(0,24.2)">
+        <g transform="translate(0,8.8) scale(0.9)">
+          <path fill="#FF5C00" fillRule="evenodd" d={Q} />
+          <rect fill="#FF5C00" x="60" y="4" width="28" height="120" />
+        </g>
+        <path fill={invertido ? "#F4F5F7" : "#121418"} d={LARO} />
+      </g>
+    </svg>
   );
 }

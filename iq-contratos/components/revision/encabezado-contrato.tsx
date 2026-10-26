@@ -25,7 +25,7 @@ export function EncabezadoContrato({
             <span className="text-linea-fuerte" aria-hidden>
               /
             </span>
-            <span className="text-terracota-oscuro">{contrato.tipo_contrato ? TIPOS_CONTRATO[contrato.tipo_contrato as TipoContrato] : "Tipo por identificar"}</span>
+            <span className="text-mandarina-texto">{contrato.tipo_contrato ? TIPOS_CONTRATO[contrato.tipo_contrato as TipoContrato] : "Tipo por identificar"}</span>
           </p>
           <h1 className="titulo truncate text-[26px] leading-tight">{contrato.titulo}</h1>
           <dl className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1 text-[13px] text-secundario">

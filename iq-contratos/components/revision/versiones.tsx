@@ -49,7 +49,7 @@ export function ListaVersiones({
                   <span className="flex flex-wrap items-center gap-2">
                     <span className="font-medium">Contrapropuesta en Word</span>
                     {c.id === vigente && (
-                      <span className="rounded-full bg-terracota-suave px-2 py-px text-[11.5px] font-medium text-terracota-oscuro">En negociación</span>
+                      <span className="rounded-full bg-mandarina-suave px-2 py-px text-[11.5px] font-medium text-mandarina-texto">En negociación</span>
                     )}
                   </span>
                   <span className="block text-[12.5px] text-secundario">
@@ -86,7 +86,7 @@ export function ListaVersiones({
                   <td className="px-4 py-3 font-medium">
                     v{v.numero}{" "}
                     {v.id === actual && (
-                      <span className="ml-1 rounded bg-crema px-1.5 py-px text-[11px] text-terracota-oscuro">vigente</span>
+                      <span className="ml-1 rounded bg-mandarina-suave px-1.5 py-px text-[11px] text-mandarina-texto">vigente</span>
                     )}
                   </td>
                   <td className="px-4 py-3">{v.nombre_archivo}</td>
@@ -94,7 +94,7 @@ export function ListaVersiones({
                   <td className="px-4 py-3 text-secundario">{v.creado_por ? perfiles[v.creado_por]?.nombre : "Sistema"}</td>
                   <td className="px-4 py-3 text-secundario">{fechaHora(v.creado_en)}</td>
                   <td className="px-4 py-3 text-right">
-                    <a href={`/api/documentos/${v.id}`} className="text-[13px] font-medium text-terracota hover:underline">
+                    <a href={`/api/documentos/${v.id}`} className="text-[13px] font-medium text-mandarina-texto hover:underline">
                       Descargar original
                     </a>
                   </td>

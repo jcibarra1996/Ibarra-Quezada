@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import "@fontsource-variable/inter";
-import "@fontsource-variable/source-serif-4";
+import "@fontsource-variable/manrope";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "IQ Contratos", template: "%s | IQ Contratos" },
+  title: { default: "Qlaro", template: "%s | Qlaro" },
   description: "Gestión y revisión de contratos para la dirección jurídica.",
   robots: { index: false, follow: false },
 };

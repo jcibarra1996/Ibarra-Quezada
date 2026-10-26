@@ -10,7 +10,7 @@ export function CrearPlaybook({ disponibles }: { disponibles: TipoContrato[] }) 
   if (disponibles.length === 0) return null;
   return (
     <select
-      aria-label="Crear playbook para otro tipo de contrato"
+      aria-label="Crear reglas para otro tipo de contrato"
       disabled={pendiente}
       value=""
       onChange={(e) => {
@@ -22,7 +22,7 @@ export function CrearPlaybook({ disponibles }: { disponibles: TipoContrato[] }) 
       }}
       className="h-8 rounded-md border border-linea-fuerte bg-white px-2 text-[13px]"
     >
-      <option value="">Nuevo playbook para...</option>
+      <option value="">Nuevas reglas para...</option>
       {disponibles.map((t) => (
         <option key={t} value={t}>
           {TIPOS_CONTRATO[t]}

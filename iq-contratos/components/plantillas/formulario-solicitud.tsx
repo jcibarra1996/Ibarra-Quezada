@@ -78,7 +78,7 @@ export function FormularioSolicitud({
     router.push(`/contratos/${cuerpo.id}?pestana=documento`);
   }
 
-  const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";
+  const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina";
   return (
     <div className="flex min-h-0 flex-1">
       <div className="w-[440px] shrink-0 space-y-5 overflow-auto border-r border-linea bg-white px-6 py-5">
@@ -99,7 +99,7 @@ export function FormularioSolicitud({
             {contraparte ? (
               <span className="flex items-center gap-2 text-[12px]">
                 <EtiquetaValidacion estado={contraparte.estado} />
-                <Link href={`/expedientes/${contraparte.id}`} className="text-terracota hover:underline" target="_blank">
+                <Link href={`/expedientes/${contraparte.id}`} className="text-mandarina-texto hover:underline" target="_blank">
                   Ver expediente y documentos
                 </Link>
               </span>
@@ -187,7 +187,7 @@ export function FormularioSolicitud({
               todas formas; Legal los verá resaltados.
             </p>
           )}
-          {error && <p className="text-[13px] text-burgundy">{error}</p>}
+          {error && <p className="text-[13px] text-riesgo">{error}</p>}
           <Boton variante="primario" className="h-9 w-full" disabled={!contraparte || requeridosVacios.length > 0 || enviando} onClick={generar}>
             {enviando ? "Generando el contrato..." : "Generar contrato y enviar a revisión"}
           </Boton>

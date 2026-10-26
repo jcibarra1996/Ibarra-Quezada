@@ -36,7 +36,7 @@ export function NuevaVersion({ contratoId }: { contratoId: string }) {
   return (
     <div className="flex items-center gap-3 rounded-lg border border-linea bg-white px-4 py-3">
       <p className="flex-1 text-[13px] text-secundario">¿La contraparte respondió? Cargue su versión: se convierte en la vigente y la IA la analiza de nuevo.</p>
-      {error && <span className="text-[12.5px] text-burgundy">{error}</span>}
+      {error && <span className="text-[12.5px] text-riesgo">{error}</span>}
       <Boton onClick={() => input.current?.click()} disabled={subiendo}>
         {subiendo ? "Leyendo..." : "Cargar nueva versión"}
       </Boton>

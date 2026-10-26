@@ -24,7 +24,7 @@ async function director() {
 
 export async function guardarPosicion(playbookId: string, posicionId: string | null, c: CamposPosicion): Promise<Resultado> {
   const usuario = await director();
-  if (!usuario) return { ok: false, error: "Solo la dirección jurídica edita el playbook." };
+  if (!usuario) return { ok: false, error: "Solo la dirección jurídica edita las reglas." };
   const campos = {
     tema: c.tema.trim().slice(0, 120),
     preferida: c.preferida.trim().slice(0, LIMITE),
@@ -55,7 +55,7 @@ export async function guardarPosicion(playbookId: string, posicionId: string | n
 }
 
 export async function eliminarPosicion(posicionId: string): Promise<Resultado> {
-  if (!(await director())) return { ok: false, error: "Solo la dirección jurídica edita el playbook." };
+  if (!(await director())) return { ok: false, error: "Solo la dirección jurídica edita las reglas." };
   const supabase = await clienteSesion();
   const { error } = await supabase.from("playbook_positions").delete().eq("id", posicionId);
   if (error) return { ok: false, error: "No se pudo eliminar la posición." };
@@ -65,7 +65,7 @@ export async function eliminarPosicion(posicionId: string): Promise<Resultado> {
 
 export async function crearPlaybook(tipo: TipoContrato): Promise<Resultado> {
   const usuario = await director();
-  if (!usuario) return { ok: false, error: "Solo la dirección jurídica edita el playbook." };
+  if (!usuario) return { ok: false, error: "Solo la dirección jurídica edita las reglas." };
   if (!(tipo in TIPOS_CONTRATO)) return { ok: false, error: "Tipo de contrato no válido." };
   const supabase = await clienteSesion();
   const { data, error } = await supabase
@@ -73,7 +73,7 @@ export async function crearPlaybook(tipo: TipoContrato): Promise<Resultado> {
     .insert({ org_id: usuario.org_id, tipo_contrato: tipo, nombre: `Contratos de ${TIPOS_CONTRATO[tipo].toLowerCase()}`, actualizado_por: usuario.id })
     .select("id")
     .single();
-  if (error || !data) return { ok: false, error: "No se pudo crear el playbook." };
+  if (error || !data) return { ok: false, error: "No se pudieron crear las reglas." };
   revalidatePath("/playbook");
   return { ok: true, id: data.id };
 }

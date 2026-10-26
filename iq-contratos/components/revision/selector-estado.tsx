@@ -22,7 +22,7 @@ export function SelectorEstado({ contratoId, estado, editable }: { contratoId: s
             if (!r.ok) setError(r.error);
           });
         }}
-        className="h-7 rounded-full border border-linea-fuerte bg-white pl-2.5 pr-7 text-[12px] font-medium outline-none focus:border-terracota"
+        className="h-7 rounded-full border border-linea-fuerte bg-white pl-2.5 pr-7 text-[12px] font-medium outline-none focus:border-mandarina"
       >
         {/* En negociación no se elige a mano: lo marca la descarga de la contrapropuesta. */}
         {ORDEN_ESTADOS.map((e) => (
@@ -31,7 +31,7 @@ export function SelectorEstado({ contratoId, estado, editable }: { contratoId: s
           </option>
         ))}
       </select>
-      {error && <span role="alert" className="text-[12px] text-burgundy">{error}</span>}
+      {error && <span role="alert" className="text-[12px] text-riesgo">{error}</span>}
     </span>
   );
 }

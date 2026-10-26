@@ -25,8 +25,8 @@ export const camposDe = (s: SugerenciaPosicion): CamposPosicion => ({
 // Lo que la dirección jurídica debe revisar de una sugerencia antes de adoptarla.
 export function NotaSugerencia({ s }: { s: Pick<SugerenciaPosicion, "referencias_normativas" | "por_verificar"> }) {
   return (
-    <div className="rounded-md bg-crema px-3 py-2 text-[12.5px] leading-relaxed">
-      <p className="font-medium text-terracota-oscuro">Sugerencia de la IA: revísela antes de guardarla.</p>
+    <div className="rounded-md bg-mandarina-suave px-3 py-2 text-[12.5px] leading-relaxed">
+      <p className="font-medium text-mandarina-texto">Sugerencia de la IA: revísela antes de guardarla.</p>
       {s.referencias_normativas.length > 0 && <p className="mt-1 text-secundario">Relacionado con: {s.referencias_normativas.join("; ")}.</p>}
       {s.por_verificar && <p className="mt-1 text-secundario">Por verificar: {s.por_verificar}</p>}
     </div>

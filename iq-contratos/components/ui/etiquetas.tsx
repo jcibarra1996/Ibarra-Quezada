@@ -2,7 +2,7 @@ import { ESTADOS, RIESGOS, type EstadoContrato, type Riesgo } from "@/lib/tipos"
 import { SITUACIONES, type SituacionVigencia } from "@/lib/vigencia";
 
 const colorRiesgo: Record<Riesgo, string> = {
-  alto: "bg-burgundy text-white",
+  alto: "bg-riesgo text-white",
   medio: "bg-medio-suave text-medio",
   bajo: "bg-bajo-suave text-bajo",
 };
@@ -17,7 +17,7 @@ export function EtiquetaRiesgo({ riesgo }: { riesgo: Riesgo }) {
 
 const colorEstado: Record<EstadoContrato, { fondo: string; punto: string }> = {
   recibido: { fondo: "bg-gris-100 text-tinta", punto: "bg-secundario" },
-  en_revision: { fondo: "bg-terracota-suave text-terracota-oscuro", punto: "bg-terracota" },
+  en_revision: { fondo: "bg-mandarina-suave text-mandarina-texto", punto: "bg-mandarina" },
   en_negociacion: { fondo: "bg-medio-suave text-medio", punto: "bg-medio" },
   aprobado: { fondo: "bg-bajo-suave text-bajo", punto: "bg-bajo" },
   firmado: { fondo: "bg-tinta text-white", punto: "bg-white" },
@@ -39,7 +39,7 @@ const colorVigencia: Record<SituacionVigencia, { fondo: string; punto: string }>
   vigente: { fondo: "bg-bajo-suave text-bajo", punto: "bg-bajo" },
   renovado: { fondo: "bg-bajo-suave text-bajo", punto: "bg-bajo" },
   por_vencer: { fondo: "bg-medio-suave text-medio", punto: "bg-medio" },
-  vencido: { fondo: "bg-burgundy-suave text-burgundy", punto: "bg-burgundy" },
+  vencido: { fondo: "bg-riesgo-suave text-riesgo", punto: "bg-riesgo" },
   terminado: { fondo: "bg-gris-100 text-secundario", punto: "bg-secundario" },
 };
 
