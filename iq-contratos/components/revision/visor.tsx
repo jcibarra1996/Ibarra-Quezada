@@ -38,7 +38,7 @@ function Parrafos({ seccion, marcas, activa, alSeleccionar }: { seccion: Seccion
             onClick={() => alSeleccionar(f.marca!.id)}
           >
             {f.texto}
-            <sup className="ml-0.5 select-none font-sans text-[10px] font-semibold text-terracota">{f.marca.numero}</sup>
+            <sup className="ml-0.5 select-none font-sans text-[10px] font-semibold text-mandarina-texto">{f.marca.numero}</sup>
           </mark>
         ) : (
           <Fragment key={i}>{f.texto}</Fragment>
@@ -102,7 +102,7 @@ export function VisorContrato({
                         onClick={() => alSeleccionar(n.id)}
                         title={n.tema}
                         className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold ${
-                          activa === n.id ? "bg-terracota text-white" : n.riesgo === "alto" ? "bg-burgundy text-white" : "bg-crema text-terracota-oscuro"
+                          activa === n.id ? "bg-mandarina text-tinta" : n.riesgo === "alto" ? "bg-riesgo text-white" : "bg-mandarina-suave text-mandarina-texto"
                         } ${n.estado !== "pendiente" ? "opacity-50" : ""}`}
                       >
                         {n.numero}

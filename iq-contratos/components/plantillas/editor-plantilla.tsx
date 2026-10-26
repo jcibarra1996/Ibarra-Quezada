@@ -11,7 +11,7 @@ export function EditorPlantilla(p: { id: string; nombre: string; descripcion: st
   const [cuerpo, setCuerpo] = useState(p.cuerpo);
   const [mensaje, setMensaje] = useState<{ ok: boolean; texto: string } | null>(null);
   const [pendiente, iniciar] = useTransition();
-  const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";
+  const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina";
   const codigo = "rounded bg-gris-100 px-1 font-mono text-[11.5px]";
   return (
     <div className="flex min-h-0 flex-1">
@@ -26,9 +26,9 @@ export function EditorPlantilla(p: { id: string; nombre: string; descripcion: st
             <input value={descripcion} onChange={(e) => setDescripcion(e.target.value)} className={`${control} h-9`} />
           </label>
         </div>
-        <textarea value={cuerpo} onChange={(e) => setCuerpo(e.target.value)} className={`${control} min-h-0 flex-1 py-3 font-serif text-[14px] leading-relaxed`} aria-label="Texto de la plantilla" />
+        <textarea value={cuerpo} onChange={(e) => setCuerpo(e.target.value)} className={`${control} min-h-0 flex-1 py-3 font-titulo text-[14px] leading-relaxed`} aria-label="Texto de la plantilla" />
         <div className="flex items-center justify-end gap-3">
-          {mensaje && <span className={`text-[12.5px] ${mensaje.ok ? "text-bajo" : "text-burgundy"}`}>{mensaje.texto}</span>}
+          {mensaje && <span className={`text-[12.5px] ${mensaje.ok ? "text-bajo" : "text-riesgo"}`}>{mensaje.texto}</span>}
           <Boton
             variante="primario"
             disabled={pendiente}
@@ -79,7 +79,7 @@ export function EditorPlantilla(p: { id: string; nombre: string; descripcion: st
             <code className={codigo}>{"{{lugar_firma}}"}</code> <code className={codigo}>{"{{fecha_firma}}"}</code> <code className={codigo}>{"{{firmas}}"}</code>
           </p>
         </section>
-        <p className="rounded-md bg-crema px-3 py-2 text-secundario">
+        <p className="rounded-md bg-mandarina-suave px-3 py-2 text-secundario">
           Use el formato mexicano: proemio, declaraciones y cláusulas. Un dato que falte en el expediente aparece como pendiente en el contrato generado.
         </p>
       </aside>

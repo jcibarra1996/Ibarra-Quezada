@@ -62,7 +62,7 @@ export function BotonContrapropuesta({
               Se genera un .docx con {cambios} cambio{cambios === 1 ? "" : "s"} validado{cambios === 1 ? "" : "s"} como control de cambios de Word, a nombre de quien los aceptó. No incluye
               las explicaciones internas. Revíselo y envíelo a la contraparte.
             </p>
-            <p className="mt-3 rounded-md bg-crema px-3 py-2 text-[13px] text-terracota-oscuro">
+            <p className="mt-3 rounded-md bg-mandarina-suave px-3 py-2 text-[13px] text-mandarina-texto">
               {abre
                 ? "Al descargarlo, el contrato pasa a En negociación y así lo verá quien lo solicitó."
                 : estado === "en_negociacion"
@@ -70,11 +70,11 @@ export function BotonContrapropuesta({
                   : "El estado del contrato no cambia; esta contrapropuesta queda registrada en Versiones."}
             </p>
             {altosPendientes > 0 && (
-              <p className="mt-3 rounded-md bg-burgundy-suave px-3 py-2 text-[13px] text-burgundy">
+              <p className="mt-3 rounded-md bg-riesgo-suave px-3 py-2 text-[13px] text-riesgo">
                 Quedan {altosPendientes} hallazgo{altosPendientes === 1 ? "" : "s"} de riesgo alto sin validar. No se incluirán en la contrapropuesta.
               </p>
             )}
-            {error && <p className="mt-3 text-[13px] text-burgundy">{error}</p>}
+            {error && <p className="mt-3 text-[13px] text-riesgo">{error}</p>}
             <div className="mt-6 flex justify-end gap-2">
               <Boton variante="fantasma" onClick={() => setAbierto(false)} disabled={generando}>
                 Cancelar

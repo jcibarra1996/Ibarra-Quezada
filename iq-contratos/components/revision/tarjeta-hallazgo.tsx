@@ -9,7 +9,7 @@ import type { Hallazgo } from "@/lib/revision/cargar";
 import { decidirHallazgo } from "@/app/(app)/contratos/[id]/acciones";
 
 const TIPO: Record<Hallazgo["tipo"], string> = {
-  desviacion_playbook: "Desviación del playbook",
+  desviacion_playbook: "Fuera de las reglas",
   ajena_al_objeto: "No corresponde al objeto del contrato",
   dato_corporativo: "Dato corporativo contra expediente",
   omision: "Falta en el contrato",
@@ -17,10 +17,10 @@ const TIPO: Record<Hallazgo["tipo"], string> = {
 
 export function ControlDeCambios({ original, propuesto }: { original: string; propuesto: string }) {
   return (
-    <p className="font-serif text-[14px] leading-relaxed">
+    <p className="font-titulo text-[14px] leading-relaxed">
       {diferencias(original, propuesto).map((t, i) =>
         t.tipo === "eliminado" ? (
-          <del key={i} className="text-burgundy decoration-burgundy/70">{t.texto}</del>
+          <del key={i} className="text-riesgo decoration-riesgo/70">{t.texto}</del>
         ) : t.tipo === "agregado" ? (
           <ins key={i} className="bg-bajo-suave text-bajo underline decoration-bajo underline-offset-2">{t.texto}</ins>
         ) : (
@@ -64,12 +64,12 @@ export function TarjetaHallazgo({
     <article
       id={`hallazgo-${h.id}`}
       onClick={alSeleccionar}
-      className={`rounded-lg border bg-white p-4 transition-colors ${activa ? "border-terracota ring-1 ring-terracota" : "border-linea hover:border-linea-fuerte"} ${
+      className={`rounded-lg border bg-white p-4 transition-colors ${activa ? "border-mandarina ring-1 ring-mandarina" : "border-linea hover:border-linea-fuerte"} ${
         decidido && !activa ? "opacity-75" : ""
       }`}
     >
       <header className="mb-2 flex items-start gap-2.5">
-        <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold ${h.riesgo === "alto" ? "bg-burgundy text-white" : "bg-crema text-terracota-oscuro"}`}>
+        <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold ${h.riesgo === "alto" ? "bg-riesgo text-white" : "bg-mandarina-suave text-mandarina-texto"}`}>
           {h.numero}
         </span>
         <div className="min-w-0 flex-1">
@@ -106,7 +106,7 @@ export function TarjetaHallazgo({
             onChange={(e) => setTexto(e.target.value)}
             onClick={(e) => e.stopPropagation()}
             rows={6}
-            className="w-full rounded border border-linea-fuerte bg-white p-2 font-serif text-[14px] leading-relaxed outline-none focus:border-terracota"
+            className="w-full rounded border border-linea-fuerte bg-white p-2 font-titulo text-[14px] leading-relaxed outline-none focus:border-mandarina"
             aria-label="Redacción final"
           />
         ) : (
@@ -114,7 +114,7 @@ export function TarjetaHallazgo({
         )}
       </div>
 
-      {error && <p className="mt-2 text-[12.5px] text-burgundy">{error}</p>}
+      {error && <p className="mt-2 text-[12.5px] text-riesgo">{error}</p>}
 
       <footer className="mt-3 flex flex-wrap items-center gap-2" onClick={(e) => e.stopPropagation()}>
         {decidido ? (

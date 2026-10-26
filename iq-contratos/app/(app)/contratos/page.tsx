@@ -73,7 +73,7 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
   if (vista === "concluidos") lista.sort((a, b) => fin(b).localeCompare(fin(a)));
   const enProceso = vista === "proceso";
 
-  const campo = "h-8 rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";
+  const campo = "h-8 rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina";
   const enlaceVista = (k: Vista) => {
     const p = new URLSearchParams(Object.entries({ ...f, vista: k }).filter(([, v]) => v) as [string, string][]);
     if (k === "cartera") p.delete("vista");
@@ -107,7 +107,7 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
               key={k}
               href={enlaceVista(k)}
               aria-current={vista === k ? "page" : undefined}
-              className={`-mb-px flex h-10 items-center gap-1.5 border-b-2 px-3 text-[13.5px] ${vista === k ? "border-terracota font-medium" : "border-transparent text-secundario hover:text-tinta"}`}
+              className={`-mb-px flex h-10 items-center gap-1.5 border-b-2 px-3 text-[13.5px] ${vista === k ? "border-mandarina font-medium" : "border-transparent text-secundario hover:text-tinta"}`}
             >
               {VISTAS[k].texto}
               <span className="rounded bg-gris-100 px-1.5 text-[11px] font-medium text-secundario">{conteo(k)}</span>
@@ -183,7 +183,7 @@ export default async function PaginaContratos({ searchParams }: { searchParams: 
               {lista.map((c) => (
                 <tr key={c.id} className="border-b border-linea last:border-0 hover:bg-lienzo">
                   <td className="px-4 py-3">
-                    <Link href={`/contratos/${c.id}`} className="font-medium hover:text-terracota">
+                    <Link href={`/contratos/${c.id}`} className="font-medium hover:text-mandarina-texto">
                       {c.titulo}
                     </Link>
                     <span className="block text-[12.5px] text-secundario">{c.contraparte || "Contraparte sin identificar"}</span>
@@ -244,7 +244,7 @@ function Tarjeta({ titulo, valor, nota, alerta = false, href }: { titulo: string
   );
   const clase = "block rounded-xl border border-linea bg-white p-4";
   return href ? (
-    <Link href={href} className={`${clase} transition-colors hover:border-terracota/40`}>
+    <Link href={href} className={`${clase} transition-colors hover:border-mandarina/40`}>
       {contenido}
     </Link>
   ) : (
@@ -260,7 +260,7 @@ function Termino({ v, hoy }: { v: Vigencia; hoy: string }) {
     <>
       {fecha(v.fin)}
       {v.situacion !== "terminado" && (
-        <span className={`block text-[12px] ${n < 0 ? "text-burgundy" : n <= 90 ? "text-medio" : "text-secundario"}`}>
+        <span className={`block text-[12px] ${n < 0 ? "text-riesgo" : n <= 90 ? "text-medio" : "text-secundario"}`}>
           {n === 0 ? "vence hoy" : n > 0 ? `en ${n} ${n === 1 ? "día" : "días"}` : `hace ${-n} ${n === -1 ? "día" : "días"}`}
         </span>
       )}

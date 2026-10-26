@@ -44,7 +44,7 @@ export function Comentarios({
           rows={3}
           placeholder="Escriba un comentario para el equipo legal o el área de negocio"
           aria-label="Comentario"
-          className="w-full rounded-md border border-linea-fuerte p-2.5 text-[13.5px] outline-none focus:border-terracota"
+          className="w-full rounded-md border border-linea-fuerte p-2.5 text-[13.5px] outline-none focus:border-mandarina"
         />
         <div className="mt-2 flex items-center gap-2">
           <select value={hallazgo} onChange={(e) => setHallazgo(e.target.value)} aria-label="Hallazgo relacionado" className="h-8 rounded-md border border-linea-fuerte bg-white px-2 text-[13px]">
@@ -55,7 +55,7 @@ export function Comentarios({
               </option>
             ))}
           </select>
-          {error && <span className="text-[12.5px] text-burgundy">{error}</span>}
+          {error && <span className="text-[12.5px] text-riesgo">{error}</span>}
           <Boton type="submit" variante="primario" className="ml-auto" disabled={pendiente || !texto.trim()}>
             Comentar
           </Boton>
@@ -73,7 +73,7 @@ export function Comentarios({
               <div className="min-w-0 flex-1">
                 <p className="text-[13px]">
                   <span className="font-medium">{autor?.nombre ?? "Usuario"}</span>
-                  <span className={`ml-2 rounded px-1.5 py-px text-[11px] font-medium ${c.audiencia === "negocio" ? "bg-crema text-terracota-oscuro" : "bg-gris-100 text-secundario"}`}>
+                  <span className={`ml-2 rounded px-1.5 py-px text-[11px] font-medium ${c.audiencia === "negocio" ? "bg-mandarina-suave text-mandarina-texto" : "bg-gris-100 text-secundario"}`}>
                     {c.audiencia === "negocio" ? "Negocio" : "Legal"}
                   </span>
                   <span className="ml-2 text-[12px] text-secundario">{fechaHora(c.creado_en)}</span>

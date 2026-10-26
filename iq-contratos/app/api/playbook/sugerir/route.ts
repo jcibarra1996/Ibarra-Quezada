@@ -13,18 +13,18 @@ export const maxDuration = 300;
 export async function POST(request: Request) {
   const usuario = await usuarioActual();
   if (!usuario) return NextResponse.json({ error: "Sesión no válida." }, { status: 401 });
-  if (!permisos.editarPlaybook(usuario.rol)) return NextResponse.json({ error: "Solo la dirección jurídica edita el playbook." }, { status: 403 });
+  if (!permisos.editarPlaybook(usuario.rol)) return NextResponse.json({ error: "Solo la dirección jurídica edita las reglas." }, { status: 403 });
   const cuerpo = await request.json().catch(() => null);
   const texto = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
   const playbookId = texto(cuerpo?.playbook_id, 64);
-  if (!playbookId) return NextResponse.json({ error: "Indique el playbook." }, { status: 400 });
+  if (!playbookId) return NextResponse.json({ error: "Indique las reglas." }, { status: 400 });
 
   const supabase = await clienteSesion();
   const [{ data: playbook }, { data: org }] = await Promise.all([
     supabase.from("playbooks").select("id, tipo_contrato, playbook_positions(id, tema, preferida, respaldo, nunca_se_acepta, orden)").eq("id", playbookId).maybeSingle(),
     supabase.from("organizations").select("nombre").eq("id", usuario.org_id).maybeSingle(),
   ]);
-  if (!playbook) return NextResponse.json({ error: "Playbook no encontrado." }, { status: 404 });
+  if (!playbook) return NextResponse.json({ error: "Reglas no encontradas." }, { status: 404 });
 
   const tema = texto(cuerpo?.tema, 120) || undefined;
   const b = cuerpo?.borrador ?? {};

@@ -78,14 +78,14 @@ export function Posicion({
             <dd className="leading-relaxed">{posicion.respaldo || "Sin definir"}</dd>
           </div>
           <div>
-            <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-burgundy">Nunca se acepta</dt>
+            <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-riesgo">Nunca se acepta</dt>
             <dd className="leading-relaxed">{posicion.nunca_se_acepta || "Sin definir"}</dd>
           </div>
         </dl>
         {posicion.clausula_modelo && (
           <div className="mt-4 rounded-md border border-linea bg-lienzo p-3">
             <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-secundario">Cláusula modelo aprobada</p>
-            <p className="font-serif text-[14px] leading-relaxed">{posicion.clausula_modelo}</p>
+            <p className="font-titulo text-[14px] leading-relaxed">{posicion.clausula_modelo}</p>
           </div>
         )}
       </article>
@@ -93,14 +93,14 @@ export function Posicion({
   }
 
   return (
-    <article className="rounded-lg border border-terracota bg-white p-5">
+    <article className="rounded-lg border border-mandarina bg-white p-5">
       <label className="mb-3 block">
         <span className="mb-1 block text-[12px] font-medium text-secundario">Tema</span>
         <input
           value={valores.tema}
           onChange={(e) => setValores({ ...valores, tema: e.target.value })}
           placeholder="Por ejemplo: Intereses moratorios"
-          className="h-9 w-full rounded-md border border-linea-fuerte px-2.5 text-[14px] font-medium outline-none focus:border-terracota"
+          className="h-9 w-full rounded-md border border-linea-fuerte px-2.5 text-[14px] font-medium outline-none focus:border-mandarina"
         />
       </label>
       {nota && (
@@ -116,12 +116,12 @@ export function Posicion({
               value={valores[c.clave]}
               onChange={(e) => setValores({ ...valores, [c.clave]: e.target.value })}
               rows={c.filas}
-              className={`w-full rounded-md border border-linea-fuerte p-2.5 text-[13px] leading-relaxed outline-none focus:border-terracota ${c.serif ? "font-serif text-[14px]" : ""}`}
+              className={`w-full rounded-md border border-linea-fuerte p-2.5 text-[13px] leading-relaxed outline-none focus:border-mandarina ${c.serif ? "font-titulo text-[14px]" : ""}`}
             />
           </label>
         ))}
       </div>
-      {error && <p className="mt-2 text-[13px] text-burgundy">{error}</p>}
+      {error && <p className="mt-2 text-[13px] text-riesgo">{error}</p>}
       <footer className="mt-4 flex items-center gap-2">
         <Boton variante="primario" onClick={guardar} disabled={pendiente || sugiriendo}>
           Guardar
@@ -151,7 +151,7 @@ export function Posicion({
             className="ml-auto"
             disabled={pendiente}
             onClick={() => {
-              if (!confirm(`¿Eliminar la posición "${posicion.tema}" del playbook?`)) return;
+              if (!confirm(`¿Eliminar la posición "${posicion.tema}" de las reglas?`)) return;
               iniciar(async () => {
                 const r = await eliminarPosicion(posicion.id!);
                 if (!r.ok) setError(r.error);

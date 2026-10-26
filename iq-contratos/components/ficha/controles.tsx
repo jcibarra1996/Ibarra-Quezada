@@ -5,7 +5,7 @@ import { Boton } from "@/components/ui/boton";
 import { asignarResponsable, confirmarFicha, guardarFicha, terminarContrato } from "@/app/(app)/contratos/[id]/ficha-acciones";
 import { TIPOS_CONTRATO } from "@/lib/tipos";
 
-const control = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13.5px] outline-none focus:border-terracota";
+const control = "h-9 w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13.5px] outline-none focus:border-mandarina";
 
 export interface ValoresFormulario {
   tipo_contrato: string;
@@ -59,7 +59,7 @@ export function TerminosEditables({ contratoId, valores, editable, children }: {
   }
 
   return (
-    <section className="rounded-xl border border-terracota bg-white">
+    <section className="rounded-xl border border-mandarina bg-white">
       <header className="border-b border-linea px-5 py-3">
         <h2 className="titulo text-[18px]">Términos clave</h2>
         <p className="text-[12.5px] text-secundario">Lo que usted cambie queda como capturado a mano y la IA ya no lo modifica. Al guardar, la ficha queda confirmada a su nombre.</p>
@@ -134,7 +134,7 @@ export function TerminosEditables({ contratoId, valores, editable, children }: {
           </Campo>
         </div>
       </div>
-      {error && <p className="px-5 pb-2 text-[13px] text-burgundy">{error}</p>}
+      {error && <p className="px-5 pb-2 text-[13px] text-riesgo">{error}</p>}
       <footer className="flex gap-2 border-t border-linea px-5 py-3">
         <Boton
           variante="primario"
@@ -171,7 +171,7 @@ export function ConfirmarFicha({ contratoId }: { contratoId: string }) {
   const [error, setError] = useState("");
   return (
     <span className="inline-flex items-center gap-2">
-      {error && <span className="text-[12.5px] text-burgundy">{error}</span>}
+      {error && <span className="text-[12.5px] text-riesgo">{error}</span>}
       <Boton
         variante="primario"
         disabled={pendiente}
@@ -238,7 +238,7 @@ export function SelectorResponsable({ contratoId, actual, opciones }: { contrato
           </option>
         ))}
       </select>
-      {error && <span className="mt-1 block text-[12px] text-burgundy">{error}</span>}
+      {error && <span className="mt-1 block text-[12px] text-riesgo">{error}</span>}
     </span>
   );
 }
@@ -276,7 +276,7 @@ export function Terminacion({ contratoId, terminado, hoy }: { contratoId: string
           <input className={control} value={motivo} maxLength={500} onChange={(e) => setMotivo(e.target.value)} placeholder="Por ejemplo: terminación por mutuo acuerdo, convenio del 15 de octubre" />
         </Campo>
       </div>
-      {error && <p className="text-[13px] text-burgundy">{error}</p>}
+      {error && <p className="text-[13px] text-riesgo">{error}</p>}
       <div className="flex gap-2">
         <Boton variante="peligro" disabled={pendiente} onClick={() => enviar(fecha)}>
           {pendiente ? "Registrando..." : "Registrar terminación"}

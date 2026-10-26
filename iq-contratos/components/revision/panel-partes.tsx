@@ -41,7 +41,7 @@ function Tarjeta({
         <>
           <div className="mt-1 flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <Link href={`/expedientes/${expediente.id}`} className="text-[15px] font-semibold hover:text-terracota">
+              <Link href={`/expedientes/${expediente.id}`} className="text-[15px] font-semibold hover:text-mandarina-texto">
                 {expediente.denominacion}
               </Link>
               <p className="font-mono text-[12px] text-secundario">{expediente.rfc ?? "Sin RFC"}</p>

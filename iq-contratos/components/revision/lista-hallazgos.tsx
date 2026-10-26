@@ -25,7 +25,7 @@ export function ListaHallazgos({ contratoId, hallazgos, perfiles }: { contratoId
               <td className="px-4 py-3 text-secundario">{h.numero}</td>
               <td className="px-4 py-3">{h.tipo === "omision" ? "Cláusula nueva" : h.clausula}</td>
               <td className="px-4 py-3">
-                <Link href={`/contratos/${contratoId}?h=${h.id}`} className="font-medium hover:text-terracota">
+                <Link href={`/contratos/${contratoId}?h=${h.id}`} className="font-medium hover:text-mandarina-texto">
                   {h.tema}
                 </Link>
               </td>

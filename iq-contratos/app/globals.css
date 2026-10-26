@@ -1,42 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+  /* Marca Qlaro: Manrope para todo lo que se lee, IBM Plex Mono para etiquetas y cifras. */
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-titulo: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
-  --color-terracota: #d8551d;
-  --color-terracota-oscuro: #b8461a;
-  --color-terracota-suave: #fbeee7;
-  --color-burgundy: #8f2926;
-  --color-burgundy-suave: #f6e6e5;
-  --color-tinta: #201816;
-  --color-secundario: #6e6864;
-  --color-crema: #f6eeeb;
+  /* Mandarina: relleno de marca. Para texto en color de marca, mandarina-texto (contraste 4.5:1). */
+  --color-mandarina: #ff5c00;
+  --color-mandarina-oscuro: #e65200;
+  --color-mandarina-suave: #ffe7d6;
+  --color-mandarina-texto: #b83a00;
+  --color-riesgo: #b4231b;
+  --color-riesgo-suave: #fbe3e1;
+  --color-tinta: #121418;
+  --color-secundario: #5b6270;
 
-  /* Grises cálidos para el área de trabajo */
-  --color-lienzo: #faf8f7;
-  --color-linea: #e9e3e0;
-  --color-linea-fuerte: #d9d1cd;
-  --color-gris-50: #f4f1ef;
-  --color-gris-100: #ece7e4;
+  /* Neutros del área de trabajo */
+  --color-lienzo: #f5f6f8;
+  --color-linea: #e3e5ea;
+  --color-linea-fuerte: #8a909b;
+  --color-gris-50: #f5f6f8;
+  --color-gris-100: #eceef2;
 
   --color-medio: #a3640f;
   --color-medio-suave: #fbf1e1;
-  --color-bajo: #4b6b5c;
-  --color-bajo-suave: #e9f0ec;
+  --color-bajo: #2e6b4a;
+  --color-bajo-suave: #e4f1ea;
 
-  /* Barra lateral en tinta */
-  --color-tinta-claro: #2c2320;
-  --color-tinta-borde: #3a302c;
-  --color-sobre-tinta: #e9e1dd;
-  --color-sobre-tinta-tenue: #a89d97;
+  /* Barra lateral en tema Noche */
+  --color-tinta-claro: #1c1f25;
+  --color-tinta-borde: #2a2e36;
+  --color-sobre-tinta: #f4f5f7;
+  --color-sobre-tinta-tenue: #9aa0ab;
 
-  /* Esquinas y sombras del sistema */
-  --radius-md: 0.5rem;
+  /* Esquinas del sistema (radius-md de 12px en botones, campos y tarjetas). Sin sombras: se separa con línea. */
+  --radius-md: 0.75rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
-  --shadow-tarjeta: 0 1px 2px rgb(32 24 22 / 0.04), 0 1px 1px rgb(32 24 22 / 0.03);
-  --shadow-flotante: 0 12px 32px -8px rgb(32 24 22 / 0.18), 0 2px 6px rgb(32 24 22 / 0.06);
+  --shadow-tarjeta: none;
+  --shadow-flotante: 0 12px 32px -8px rgb(18 20 24 / 0.16), 0 0 0 1px rgb(18 20 24 / 0.06);
 }
 
 html,
@@ -49,17 +52,16 @@ body {
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.5;
-  font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--color-terracota-suave);
+  background: var(--color-mandarina-suave);
 }
 
 /* Texto del contrato */
 .texto-contrato {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 15.5px;
   line-height: 1.7;
   color: var(--color-tinta);
@@ -68,20 +70,20 @@ body {
 mark.resaltado {
   background: transparent;
   color: inherit;
-  border-bottom: 2px solid var(--color-terracota);
-  background-image: linear-gradient(var(--color-terracota-suave), var(--color-terracota-suave));
+  border-bottom: 2px solid var(--color-mandarina);
+  background-image: linear-gradient(var(--color-mandarina-suave), var(--color-mandarina-suave));
   padding: 1px 0;
 }
 mark.resaltado[data-riesgo="alto"] {
-  border-bottom-color: var(--color-burgundy);
-  background-image: linear-gradient(var(--color-burgundy-suave), var(--color-burgundy-suave));
+  border-bottom-color: var(--color-riesgo);
+  background-image: linear-gradient(var(--color-riesgo-suave), var(--color-riesgo-suave));
 }
 mark.resaltado[data-riesgo="bajo"] {
   border-bottom-color: var(--color-bajo);
   background-image: linear-gradient(var(--color-bajo-suave), var(--color-bajo-suave));
 }
 mark.resaltado[data-activo="true"] {
-  outline: 2px solid var(--color-terracota);
+  outline: 2px solid var(--color-mandarina-texto);
   outline-offset: 2px;
 }
 
@@ -104,16 +106,16 @@ del + ins {
 
 /* Foco visible y consistente para teclado. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-terracota);
+  outline: 2px solid var(--color-mandarina-texto);
   outline-offset: 2px;
 }
 
-/* Títulos con la tipografía del contrato: la voz editorial de la marca. */
+/* Títulos en Manrope 800: la voz de la marca, igual que el logo. */
 /* En la capa de componentes para que las utilidades (p. ej. text-white) puedan sobrescribirla. */
 @layer components {
   .titulo {
-    font-family: var(--font-serif);
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-family: var(--font-titulo);
+    font-weight: 800;
+    letter-spacing: -0.025em;
   }
 }

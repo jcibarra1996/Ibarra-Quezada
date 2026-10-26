@@ -29,10 +29,10 @@ function TarjetaSugerencia({ playbookId, s, alQuitar }: { playbookId: string; s:
   }
 
   return (
-    <article className="rounded-lg border border-dashed border-terracota bg-white p-5">
+    <article className="rounded-lg border border-dashed border-mandarina bg-white p-5">
       <header className="mb-3 flex items-center justify-between gap-3">
         <h3 className="text-[15px] font-semibold">{s.tema}</h3>
-        <span className="rounded-full bg-terracota-suave px-2 py-px text-[11.5px] font-medium text-terracota-oscuro">Sugerida por la IA</span>
+        <span className="rounded-full bg-mandarina-suave px-2 py-px text-[11.5px] font-medium text-mandarina-texto">Sugerida por la IA</span>
       </header>
       <dl className="grid grid-cols-3 gap-4 text-[13px]">
         <div>
@@ -44,20 +44,20 @@ function TarjetaSugerencia({ playbookId, s, alQuitar }: { playbookId: string; s:
           <dd className="leading-relaxed">{s.respaldo}</dd>
         </div>
         <div>
-          <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-burgundy">Nunca se acepta</dt>
+          <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-riesgo">Nunca se acepta</dt>
           <dd className="leading-relaxed">{s.nunca_se_acepta}</dd>
         </div>
       </dl>
       {s.clausula_modelo && (
         <div className="mt-4 rounded-md border border-linea bg-lienzo p-3">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-secundario">Cláusula modelo</p>
-          <p className="whitespace-pre-line font-serif text-[14px] leading-relaxed">{s.clausula_modelo}</p>
+          <p className="whitespace-pre-line font-titulo text-[14px] leading-relaxed">{s.clausula_modelo}</p>
         </div>
       )}
       <div className="mt-3">
         <NotaSugerencia s={s} />
       </div>
-      {error && <p className="mt-2 text-[13px] text-burgundy">{error}</p>}
+      {error && <p className="mt-2 text-[13px] text-riesgo">{error}</p>}
       <footer className="mt-4 flex items-center gap-2">
         <Boton
           variante="primario"
@@ -71,7 +71,7 @@ function TarjetaSugerencia({ playbookId, s, alQuitar }: { playbookId: string; s:
             })
           }
         >
-          Agregar al playbook
+          Agregar a las reglas
         </Boton>
         <Boton disabled={pendiente} onClick={() => setEditando(true)}>
           Editar antes de agregar
@@ -95,7 +95,7 @@ export function SugerirPosiciones({ playbookId }: { playbookId: string }) {
     try {
       const nuevas = await pedirSugerencias({ playbook_id: playbookId });
       setSugerencias(nuevas.map((s, i) => ({ ...s, clave: Date.now() + i })));
-      if (nuevas.length === 0) setError("La IA no encontró temas nuevos para este playbook.");
+      if (nuevas.length === 0) setError("La IA no encontró temas nuevos para estas reglas.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "No fue posible obtener sugerencias.");
     }
@@ -106,7 +106,7 @@ export function SugerirPosiciones({ playbookId }: { playbookId: string }) {
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-4 rounded-lg border border-linea bg-white px-4 py-3">
         <p className="text-[13px] text-secundario">
-          La IA revisa los temas de este playbook y propone los que faltan, con qué preferir, qué aceptar de respaldo y qué nunca aceptar. Nada se agrega sin su
+          La IA revisa los temas de estas reglas y propone los que faltan, con qué preferir, qué aceptar de respaldo y qué nunca aceptar. Nada se agrega sin su
           revisión.
         </p>
         <Boton onClick={sugerir} disabled={cargando} className="shrink-0">
@@ -114,7 +114,7 @@ export function SugerirPosiciones({ playbookId }: { playbookId: string }) {
         </Boton>
       </div>
       {cargando && <p className="text-[12.5px] text-secundario">Suele tardar menos de un minuto.</p>}
-      {error && <p className="text-[13px] text-burgundy">{error}</p>}
+      {error && <p className="text-[13px] text-riesgo">{error}</p>}
       {sugerencias.map((s) => (
         <TarjetaSugerencia key={s.clave} playbookId={playbookId} s={s} alQuitar={() => setSugerencias((l) => l.filter((x) => x.clave !== s.clave))} />
       ))}

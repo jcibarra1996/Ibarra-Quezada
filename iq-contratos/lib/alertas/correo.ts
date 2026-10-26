@@ -19,7 +19,7 @@ export function redactarAviso(p: { area: string; correo: string; titulo: string;
       "",
       `El contrato "${p.contrato}" con ${p.contraparte} tiene la siguiente fecha límite: ${p.titulo.toLowerCase()} el ${fechaLarga(p.fechaLimite)}.`,
       "",
-      `Revise el detalle en IQ Contratos: ${p.enlace}`,
+      `Revise el detalle en Qlaro: ${p.enlace}`,
       "",
       "Este aviso es automático. La decisión sobre el contrato corresponde a la dirección legal.",
     ].join("\n"),

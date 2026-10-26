@@ -51,7 +51,7 @@ export function SubirDocumento({ expedienteId, alTerminar }: { expedienteId: str
       <select
         value={tipo}
         onChange={(e) => setTipo(e.target.value as TipoDocumento)}
-        className="h-8 w-full rounded-md border border-linea-fuerte bg-white px-2 text-[13px] outline-none focus:border-terracota"
+        className="h-8 w-full rounded-md border border-linea-fuerte bg-white px-2 text-[13px] outline-none focus:border-mandarina"
         aria-label="Tipo de documento"
       >
         {Object.entries(TIPOS_DOCUMENTO).map(([k, v]) => (
@@ -71,7 +71,7 @@ export function SubirDocumento({ expedienteId, alTerminar }: { expedienteId: str
       <Boton variante="primario" className="w-full" disabled={!archivo || enviando} onClick={enviar}>
         {enviando ? "La IA está leyendo el documento..." : "Subir y extraer datos"}
       </Boton>
-      {mensaje && <p className={`text-[12.5px] ${mensaje.tipo === "ok" ? "text-bajo" : "text-burgundy"}`}>{mensaje.texto}</p>}
+      {mensaje && <p className={`text-[12.5px] ${mensaje.tipo === "ok" ? "text-bajo" : "text-riesgo"}`}>{mensaje.texto}</p>}
     </div>
   );
 }

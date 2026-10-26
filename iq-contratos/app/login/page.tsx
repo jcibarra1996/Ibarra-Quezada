@@ -8,7 +8,7 @@ export const metadata = { title: "Ingresar" };
 
 const PASOS = [
   ["Solicitud", "Negocio pide el contrato y adjunta los documentos corporativos."],
-  ["Revisión", "La IA compara el contrato con el playbook y verifica las declaraciones contra los expedientes."],
+  ["Revisión", "La IA compara el contrato con las reglas de la empresa y verifica las declaraciones contra los expedientes."],
   ["Aprobación y firma", "Legal valida cada hallazgo, aprueba y envía a firma."],
 ];
 
@@ -24,7 +24,7 @@ export default async function PaginaIngreso() {
           <ol className="mt-10 space-y-5">
             {PASOS.map(([t, d], i) => (
               <li key={t} className="flex gap-4">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-tinta-borde font-serif text-[13px] text-white">{i + 1}</span>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-tinta-borde font-titulo text-[13px] text-white">{i + 1}</span>
                 <span>
                   <span className="block text-[14px] font-medium text-white">{t}</span>
                   <span className="block text-[13px] leading-relaxed text-sobre-tinta-tenue">{d}</span>

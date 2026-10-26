@@ -25,7 +25,7 @@ const MENSAJE: Record<EstadoContrato, string> = {
 
 // Línea de tiempo de una solicitud: nombre de cada etapa, fecha en que entró y tiempo en la actual.
 function LineaSolicitud({ linea }: { linea: LineaTiempo }) {
-  const barra: Record<EstadoPaso, string> = { hecho: "bg-bajo", actual: "bg-terracota", omitido: "bg-bajo/35", pendiente: "bg-gris-100" };
+  const barra: Record<EstadoPaso, string> = { hecho: "bg-bajo", actual: "bg-mandarina", omitido: "bg-bajo/35", pendiente: "bg-gris-100" };
   return (
     <ol className="grid grid-cols-5 gap-1.5">
       {linea.pasos.map((p) => (
@@ -54,7 +54,7 @@ function ProcesoCompleto() {
         {ORDEN_ESTADOS.map((e, i) => (
           <li key={e} className="rounded-lg border border-linea bg-white p-3.5">
             <span className="flex items-center gap-2">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-crema font-serif text-[12px] font-semibold text-terracota-oscuro">{i + 1}</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-mandarina-suave font-titulo text-[12px] font-semibold text-mandarina-texto">{i + 1}</span>
               <span className="text-[13px] font-semibold leading-tight">{PROCESO[e].titulo}</span>
             </span>
             <span className="mt-2 block text-[12px] leading-relaxed text-secundario">{PROCESO[e].que}</span>
@@ -78,7 +78,7 @@ function Tarea({ n, texto, href, accion, icono, urgente }: { n: number; texto: s
   return (
     <li>
       <Link href={href} className="group flex items-center gap-4 px-5 py-3.5 hover:bg-lienzo">
-        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${urgente ? "bg-burgundy-suave text-burgundy" : "bg-crema text-terracota-oscuro"}`}>
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${urgente ? "bg-riesgo-suave text-riesgo" : "bg-mandarina-suave text-mandarina-texto"}`}>
           <svg viewBox="0 0 20 20" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d={ICONOS[icono]} />
           </svg>
@@ -86,7 +86,7 @@ function Tarea({ n, texto, href, accion, icono, urgente }: { n: number; texto: s
         <span className="flex-1 text-[14px]">
           <span className="font-semibold tabular-nums">{n}</span> {texto}
         </span>
-        <span className="text-[13px] font-medium text-terracota group-hover:underline">{accion}</span>
+        <span className="text-[13px] font-medium text-mandarina-texto group-hover:underline">{accion}</span>
       </Link>
     </li>
   );
@@ -126,7 +126,7 @@ export default async function Inicio() {
     const enCurso = (mias ?? []).filter((c) => c.estado !== "firmado").length;
     return (
       <div className="mx-auto max-w-[1100px] px-8 py-8">
-        <p className="text-[11.5px] font-semibold uppercase tracking-[0.12em] text-terracota-oscuro">{fechaLargaHoy()}</p>
+        <p className="text-[11.5px] font-semibold uppercase tracking-[0.12em] text-mandarina-texto">{fechaLargaHoy()}</p>
         <h1 className="titulo mt-1 text-[32px] leading-tight">
           {saludo()}, {nombre}
         </h1>
@@ -141,7 +141,7 @@ export default async function Inicio() {
               Suba el contrato que le envió la contraparte. Legal lo revisa y aquí verá en qué va.
             </p>
           </div>
-          <Link href="/solicitar" className="inline-flex h-10 shrink-0 items-center rounded-md bg-terracota px-5 text-[14px] font-medium text-white hover:bg-terracota-oscuro">
+          <Link href="/solicitar" className="inline-flex h-10 shrink-0 items-center rounded-md bg-mandarina px-5 text-[14px] font-medium text-tinta hover:bg-mandarina-oscuro">
             Solicitar nuevo contrato
           </Link>
         </section>
@@ -157,7 +157,7 @@ export default async function Inicio() {
           <ul className="grid grid-cols-2 gap-3">
             {mias!.map((c) => (
               <li key={c.id}>
-                <Link href={`/contratos/${c.id}`} className="block rounded-lg border border-linea bg-white p-4 shadow-[var(--shadow-tarjeta)] transition-colors hover:border-terracota/40">
+                <Link href={`/contratos/${c.id}`} className="block rounded-lg border border-linea bg-white p-4 shadow-[var(--shadow-tarjeta)] transition-colors hover:border-mandarina/40">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="truncate text-[14px] font-semibold">{c.titulo}</p>
@@ -208,7 +208,7 @@ export default async function Inicio() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-8 py-8">
-      <p className="text-[11.5px] font-semibold uppercase tracking-[0.12em] text-terracota-oscuro">{fechaLargaHoy()}</p>
+      <p className="text-[11.5px] font-semibold uppercase tracking-[0.12em] text-mandarina-texto">{fechaLargaHoy()}</p>
       <h1 className="titulo mt-1 text-[32px] leading-tight">
         {saludo()}, {nombre}
       </h1>
@@ -231,8 +231,8 @@ export default async function Inicio() {
         <ol className="flex items-stretch gap-2">
           {ORDEN_ESTADOS.map((e, i) => (
             <li key={e} className="flex flex-1 items-center gap-2">
-              <Link href={`/contratos?estado=${e}`} className="flex-1 rounded-lg border border-linea bg-white px-4 py-3.5 shadow-[var(--shadow-tarjeta)] transition-colors hover:border-terracota/40">
-                <p className="font-serif text-[28px] font-semibold leading-none tabular-nums">{porEstado(e)}</p>
+              <Link href={`/contratos?estado=${e}`} className="flex-1 rounded-lg border border-linea bg-white px-4 py-3.5 shadow-[var(--shadow-tarjeta)] transition-colors hover:border-mandarina/40">
+                <p className="font-titulo text-[28px] font-semibold leading-none tabular-nums">{porEstado(e)}</p>
                 <p className="mt-1.5 text-[12.5px] text-secundario">{ESTADOS[e]}</p>
               </Link>
               {i < ORDEN_ESTADOS.length - 1 && (
@@ -272,7 +272,7 @@ export default async function Inicio() {
               const texto = describir(e as unknown as Evento);
               return (
                 <li key={e.id} className="text-[13px] leading-snug">
-                  <Link href={`/contratos/${e.contract_id}?pestana=historial`} className="hover:text-terracota">
+                  <Link href={`/contratos/${e.contract_id}?pestana=historial`} className="hover:text-mandarina-texto">
                     <span className="font-medium">{nombreDe(e.actor_id)}</span> <span className="text-secundario">{texto.charAt(0).toLowerCase() + texto.slice(1)}</span>
                   </Link>
                   <span className="block text-[11.5px] text-secundario">

@@ -13,9 +13,9 @@ export const metadata = { title: "Vencimientos" };
 const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const COLOR: Record<Urgencia, string> = {
   vencida: "bg-gris-100 text-secundario",
-  critica: "bg-burgundy text-white",
-  proxima: "bg-terracota-suave text-terracota-oscuro",
-  lejana: "bg-crema text-tinta",
+  critica: "bg-riesgo text-white",
+  proxima: "bg-mandarina-suave text-mandarina-texto",
+  lejana: "bg-mandarina-suave text-tinta",
 };
 
 function mesVecino(mes: string, delta: number) {
@@ -116,7 +116,7 @@ export default async function Vencimientos({ searchParams }: { searchParams: Pro
                         <p className="text-[12.5px] leading-snug text-secundario">{k?.descripcion}</p>
                       </td>
                       <td className="px-4 py-3">
-                        <Link href={`/contratos/${a.contract_id}`} className="font-medium hover:text-terracota">{c?.titulo}</Link>
+                        <Link href={`/contratos/${a.contract_id}`} className="font-medium hover:text-mandarina-texto">{c?.titulo}</Link>
                         <p className="text-[12.5px] text-secundario">{c?.contraparte}</p>
                       </td>
                       <td className="px-4 py-3"><AreaAlerta alertaId={a.id} areaId={a.area_id} areas={areas ?? []} editable={editable} /></td>
@@ -155,8 +155,8 @@ export default async function Vencimientos({ searchParams }: { searchParams: Pro
                 {semana.map((dia, j) => {
                   const delDia = dia ? lista.filter((a) => a.fecha_limite === dia) : [];
                   return (
-                    <div key={j} className={`min-h-[104px] border-r border-linea p-1.5 last:border-0 ${dia === hoy ? "bg-crema" : ""}`}>
-                      {dia && <p className={`mb-1 text-right text-[12px] ${dia === hoy ? "font-semibold text-terracota" : "text-secundario"}`}>{Number(dia.slice(8))}</p>}
+                    <div key={j} className={`min-h-[104px] border-r border-linea p-1.5 last:border-0 ${dia === hoy ? "bg-mandarina-suave" : ""}`}>
+                      {dia && <p className={`mb-1 text-right text-[12px] ${dia === hoy ? "font-semibold text-mandarina-texto" : "text-secundario"}`}>{Number(dia.slice(8))}</p>}
                       {delDia.map((a) => (
                         <Link
                           key={a.id}

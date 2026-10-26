@@ -7,7 +7,7 @@ export function ConectarAvisos() {
   return (
     <span className="flex items-center gap-2">
       <button
-        className="font-medium text-terracota hover:underline disabled:opacity-50"
+        className="font-medium text-mandarina-texto hover:underline disabled:opacity-50"
         disabled={estado === "enviando"}
         onClick={async () => {
           setEstado("enviando");
@@ -19,7 +19,7 @@ export function ConectarAvisos() {
         Conectar avisos automáticos
       </button>
       {estado === "ok" && <span className="text-bajo">Avisos conectados</span>}
-      {estado && estado !== "ok" && estado !== "enviando" && <span className="text-burgundy">{estado}</span>}
+      {estado && estado !== "ok" && estado !== "enviando" && <span className="text-riesgo">{estado}</span>}
     </span>
   );
 }

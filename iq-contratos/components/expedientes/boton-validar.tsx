@@ -8,7 +8,7 @@ export function BotonValidar({ id, validado }: { id: string; validado: boolean }
   const [error, setError] = useState("");
   return (
     <span className="flex items-center gap-2">
-      {error && <span className="text-[12px] text-burgundy">{error}</span>}
+      {error && <span className="text-[12px] text-riesgo">{error}</span>}
       <Boton
         variante={validado ? "secundario" : "primario"}
         disabled={pendiente}

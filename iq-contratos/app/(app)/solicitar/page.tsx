@@ -25,7 +25,7 @@ export default async function Solicitar() {
           </div>
         </section>
 
-        <section className="rounded-lg bg-crema px-5 py-4">
+        <section className="rounded-lg bg-mandarina-suave px-5 py-4">
           <h2 className="text-[14px] font-semibold">Para avanzar más rápido, tenga a la mano de la contraparte</h2>
           <ul className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-[13px]">
             <li>Acta constitutiva</li>
@@ -35,7 +35,7 @@ export default async function Solicitar() {
             <li>Comprobante de domicilio</li>
           </ul>
           <p className="mt-2 text-[12.5px] text-secundario">
-            Cárguelos en <Link href="/expedientes" className="font-medium text-terracota hover:underline">Expedientes corporativos</Link>. Legal usa esos datos para revisar las declaraciones del
+            Cárguelos en <Link href="/expedientes" className="font-medium text-mandarina-texto hover:underline">Expedientes corporativos</Link>. Legal usa esos datos para revisar las declaraciones del
             contrato.
           </p>
         </section>

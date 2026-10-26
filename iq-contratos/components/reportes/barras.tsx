@@ -2,7 +2,7 @@
 // muestra el valor exacto, así que el color nunca es la única fuente de información.
 export function Barras({
   filas,
-  color = "bg-terracota",
+  color = "bg-mandarina",
   vacio,
 }: {
   filas: { etiqueta: string; valor: number; detalle?: string; color?: string }[];

@@ -60,7 +60,7 @@ function Fuente({ fuentes, campos, perfiles, sinValor = false }: { fuentes: Fuen
       {ia.cita ? (
         <details className="mt-1 text-[11.5px] text-secundario">
           <summary className="cursor-pointer select-none hover:text-tinta">Leído por la IA · ver cita</summary>
-          <blockquote className="mt-1 border-l-2 border-linea pl-2 font-serif text-[12.5px] leading-relaxed text-tinta">{ia.cita}</blockquote>
+          <blockquote className="mt-1 border-l-2 border-linea pl-2 font-titulo text-[12.5px] leading-relaxed text-tinta">{ia.cita}</blockquote>
         </details>
       ) : (
         <p className="mt-1 text-[11.5px] text-secundario">Análisis de la IA</p>
@@ -288,7 +288,7 @@ export function FichaContrato({
             <p className="mt-2 text-[13.5px] leading-relaxed">
               {hallazgosPendientes > 0 ? `Quedan ${plural(hallazgosPendientes, "hallazgo", "hallazgos")} de la IA por validar.` : "No hay hallazgos pendientes de validar."}
             </p>
-            <Link href={`/contratos/${c.id}?pestana=documento`} className="mt-3 inline-block text-[13.5px] font-medium text-terracota hover:underline">
+            <Link href={`/contratos/${c.id}?pestana=documento`} className="mt-3 inline-block text-[13.5px] font-medium text-mandarina-texto hover:underline">
               Ir al documento y la revisión
             </Link>
           </section>

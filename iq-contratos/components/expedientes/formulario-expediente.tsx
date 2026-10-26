@@ -31,7 +31,7 @@ export function FormularioExpediente({
   const campos = camposDe(tipo);
   const cambiado =
     denominacion !== denominacionInicial || rfc !== rfcInicial || campos.some((c) => (datos[c.clave] ?? "") !== (datosIniciales[c.clave] ?? ""));
-  const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-terracota";
+  const control = "w-full rounded-md border border-linea-fuerte bg-white px-2.5 text-[13px] outline-none focus:border-mandarina";
 
   const guardar = () =>
     iniciar(async () => {
@@ -93,7 +93,7 @@ export function FormularioExpediente({
                       />
                     )}
                     {f?.cita && (
-                      <span className="mt-1 block truncate font-serif text-[12px] italic text-secundario" title={`${documentos[f.documento_id] ?? ""}: ${f.cita}`}>
+                      <span className="mt-1 block truncate font-titulo text-[12px] italic text-secundario" title={`${documentos[f.documento_id] ?? ""}: ${f.cita}`}>
                         «{f.cita}»
                       </span>
                     )}
@@ -105,7 +105,7 @@ export function FormularioExpediente({
         );
       })}
       <div className="flex items-center justify-end gap-3 border-t border-linea bg-lienzo px-5 py-3">
-        {mensaje && <span className={`text-[12.5px] ${mensaje.ok ? "text-bajo" : "text-burgundy"}`}>{mensaje.texto}</span>}
+        {mensaje && <span className={`text-[12.5px] ${mensaje.ok ? "text-bajo" : "text-riesgo"}`}>{mensaje.texto}</span>}
         <Boton variante="primario" onClick={guardar} disabled={!cambiado || pendiente}>
           {pendiente ? "Guardando..." : "Guardar cambios"}
         </Boton>

@@ -27,8 +27,8 @@ export function PanelSolicitud({
   const actual = ORDEN_ESTADOS.indexOf(estado);
   return (
     <div className="space-y-5 p-5">
-      <section className="rounded-lg bg-crema px-4 py-3.5">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-terracota-oscuro">Estado de su solicitud</p>
+      <section className="rounded-lg bg-mandarina-suave px-4 py-3.5">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-mandarina-texto">Estado de su solicitud</p>
         <p className="mt-1 text-[15px] font-semibold">{ESTADOS[estado]}</p>
         <p className="mt-1 text-[13px] leading-relaxed">{firmaEnCurso && estado === "aprobado" ? "El contrato está en firma electrónica con Mifiel." : MENSAJE[estado]}</p>
       </section>
@@ -41,7 +41,7 @@ export function PanelSolicitud({
               <div className="flex flex-col items-center">
                 <span
                   className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold ${
-                    hecho ? "bg-bajo text-white" : ahora ? "bg-terracota text-white" : "border border-linea-fuerte bg-white text-secundario"
+                    hecho ? "bg-bajo text-white" : ahora ? "bg-mandarina text-tinta" : "border border-linea-fuerte bg-white text-secundario"
                   }`}
                 >
                   {hecho ? "✓" : i + 1}
@@ -62,7 +62,7 @@ export function PanelSolicitud({
           {comentariosLegal > 0 ? `Legal le dejó ${comentariosLegal} ${comentariosLegal === 1 ? "mensaje" : "mensajes"}. ` : ""}
           Escriba a Legal desde Comentarios.
         </p>
-        <Link href={`/contratos/${contratoId}?pestana=comentarios`} className="mt-2 inline-block text-[13px] font-medium text-terracota hover:underline">
+        <Link href={`/contratos/${contratoId}?pestana=comentarios`} className="mt-2 inline-block text-[13px] font-medium text-mandarina-texto hover:underline">
           Ir a Comentarios
         </Link>
       </div>

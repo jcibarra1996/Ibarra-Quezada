@@ -9,7 +9,7 @@ import { clienteSesion } from "@/lib/supabase/server";
 import { fechaHora } from "@/lib/formato";
 import { permisos, TIPOS_CONTRATO, type TipoContrato } from "@/lib/tipos";
 
-export const metadata = { title: "Playbook" };
+export const metadata = { title: "Reglas" };
 
 export default async function Playbook({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const usuario = await exigirUsuario();
@@ -32,7 +32,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
   return (
     <div>
       <EncabezadoPagina
-        titulo="Playbook"
+        titulo="Reglas"
         descripcion="Posiciones estándar de la dirección legal por tipo de contrato. La IA compara cada cláusula contra estas posiciones y propone redacción con base en la cláusula modelo. También puede sugerir posiciones nuevas; la dirección jurídica decide cuáles se agregan."
         acciones={editable ? <CrearPlaybook disponibles={disponibles} /> : undefined}
       />
@@ -42,7 +42,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
             key={p.id}
             href={`/playbook?tipo=${p.tipo_contrato}`}
             className={`-mb-px flex h-10 items-center border-b-2 px-3 text-[13.5px] ${
-              actual?.id === p.id ? "border-terracota font-medium" : "border-transparent text-secundario hover:text-tinta"
+              actual?.id === p.id ? "border-mandarina font-medium" : "border-transparent text-secundario hover:text-tinta"
             }`}
           >
             {TIPOS_CONTRATO[p.tipo_contrato as TipoContrato]}
@@ -52,7 +52,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
       </nav>
       <div className="mx-auto max-w-[1100px] space-y-4 px-8 py-6">
         {!editable && (
-          <p className="rounded-md border border-linea bg-white px-4 py-2.5 text-[13px] text-secundario">Solo la dirección jurídica puede modificar el playbook.</p>
+          <p className="rounded-md border border-linea bg-white px-4 py-2.5 text-[13px] text-secundario">Solo la dirección jurídica puede modificar las reglas.</p>
         )}
         {actual ? (
           <>
@@ -69,7 +69,7 @@ export default async function Playbook({ searchParams }: { searchParams: Promise
             {editable && <AgregarPosicion playbookId={actual.id} />}
           </>
         ) : (
-          <p className="text-[13.5px] text-secundario">Aún no hay playbooks configurados.</p>
+          <p className="text-[13.5px] text-secundario">Aún no hay reglas configuradas.</p>
         )}
       </div>
     </div>

@@ -17,7 +17,7 @@ export function DescargarContrapropuesta({ id }: { id: string }) {
   const router = useRouter();
   return (
     <span className="inline-flex items-center gap-2">
-      {error && <span role="alert" className="text-[12.5px] text-burgundy">{error}</span>}
+      {error && <span role="alert" className="text-[12.5px] text-riesgo">{error}</span>}
       <button
         type="button"
         disabled={descargando}
@@ -32,7 +32,7 @@ export function DescargarContrapropuesta({ id }: { id: string }) {
           }
           setDescargando(false);
         }}
-        className="text-[13px] font-medium text-terracota hover:underline disabled:opacity-60"
+        className="text-[13px] font-medium text-mandarina-texto hover:underline disabled:opacity-60"
       >
         {descargando ? "Preparando..." : "Descargar .docx"}
       </button>
