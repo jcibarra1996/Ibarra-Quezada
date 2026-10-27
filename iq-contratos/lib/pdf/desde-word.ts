@@ -250,8 +250,8 @@ function dibujarLinea(pagina: PDFPage, l: Linea, x: number, y: number, ancho: nu
 export async function pdfDesdeBloques(bloques: Bloque[], meta: { titulo: string }): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   doc.setTitle(meta.titulo);
-  doc.setCreator("Qlaro");
-  doc.setProducer("Qlaro");
+  doc.setCreator("Veredo");
+  doc.setProducer("Veredo");
   const f: Fuentes = {
     normal: await doc.embedFont(StandardFonts.TimesRoman),
     negrita: await doc.embedFont(StandardFonts.TimesRomanBold),

@@ -5,7 +5,7 @@ import "@fontsource/ibm-plex-mono/500.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Qlaro", template: "%s | Qlaro" },
+  title: { default: "Veredo", template: "%s | Veredo" },
   description: "Gestión y revisión de contratos para la dirección jurídica.",
   robots: { index: false, follow: false },
 };
