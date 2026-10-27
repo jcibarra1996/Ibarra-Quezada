@@ -1,5 +1,5 @@
 // Expedientes corporativos ficticios de la demostración. Todos los nombres, números de
-// escritura, notarías, folios y RFC son inventados: las notarías 901 a 903 no existen y
+// escritura, notarías, folios y RFC son inventados: las notarías 901 a 904 no existen y
 // los documentos son extractos de demostración, no testimonios reales.
 //
 // El escenario: el expediente de PROVEEDOR XYZ trae los datos reales de su escritura y su
@@ -217,5 +217,142 @@ En la Ciudad de México, a 3 de abril de 2019, ante mí, Beatriz Ejemplo Torres,
     validado: false,
     datos: {},
     documentos: [],
+  },
+  // Contraparte del contrato 08 (el caso de la presentación). Su expediente trae a propósito
+  // dos diferencias contra el contrato: el poder es la escritura 24,971 (el contrato declara
+  // 24,917) y limita al apoderado a contratos de hasta $5,000,000.00 por operación.
+  {
+    denominacion: "RESINAS TÉCNICAS ORVALLE, S.A. DE C.V.",
+    rfc: "RTO190314KJ8",
+    es_propia: false,
+    validado: false,
+    datos: {},
+    documentos: [
+      {
+        tipo: "acta_constitutiva",
+        archivo: "Acta constitutiva Resinas Técnicas Orvalle (extracto).docx",
+        resumen: "Extracto de la escritura constitutiva de RESINAS TÉCNICAS ORVALLE, S.A. DE C.V., con objeto social, administración e inscripción.",
+        texto: `${AVISO}
+
+NOTARÍA PÚBLICA NÚMERO 904
+
+LIC. GONZALO ITURBE MEDINA · SANTIAGO DE QUERÉTARO, QUERÉTARO
+
+ESCRITURA PÚBLICA NÚMERO 18,442
+
+VOLUMEN 612 · CONSTITUCIÓN DE SOCIEDAD ANÓNIMA DE CAPITAL VARIABLE
+
+En la ciudad de Santiago de Querétaro, Querétaro, a 14 de marzo de 2019, ante mí, Gonzalo Iturbe Medina, titular de la Notaría Pública número 904 de Santiago de Querétaro, comparecen la señora Mariana Orvañanos Valle y el señor Héctor Valle Ibargüen, y dijeron que es su voluntad constituir una sociedad anónima de capital variable, de nacionalidad mexicana, que se regirá por los siguientes estatutos.
+
+PRIMERA. DENOMINACIÓN.
+
+La sociedad se denominará RESINAS TÉCNICAS ORVALLE, denominación que irá seguida de las palabras SOCIEDAD ANÓNIMA DE CAPITAL VARIABLE o de su abreviatura S.A. DE C.V.
+
+SEGUNDA. OBJETO SOCIAL.
+
+La sociedad tiene por objeto la fabricación, importación, distribución y comercialización de resinas plásticas, compuestos de polietileno y polipropileno y aditivos para la industria de la transformación, así como la celebración de todos los actos y contratos necesarios para la realización de dicho objeto.
+
+TERCERA. DOMICILIO Y DURACIÓN.
+
+El domicilio de la sociedad será el municipio de El Marqués, Querétaro. La duración de la sociedad será indefinida.
+
+CUARTA. NACIONALIDAD.
+
+La sociedad es mexicana y conviene con cláusula de admisión de extranjeros.
+
+QUINTA. CAPITAL SOCIAL.
+
+El capital social mínimo fijo sin derecho a retiro es de $100,000.00 (cien mil pesos 00/100 M.N.), representado por cien acciones nominativas, íntegramente suscritas y pagadas. El capital variable es ilimitado.
+
+CLÁUSULAS TRANSITORIAS.
+
+Los accionistas designan como Administradora Única a la señora Mariana Orvañanos Valle y como Comisario al contador público Fernando Lugo Arriaga.
+
+INSCRIPCIÓN.
+
+El primer testimonio de esta escritura quedó inscrito en el Registro Público de Comercio de Querétaro bajo el folio mercantil electrónico N-2019021553, el 2 de abril de 2019.
+
+DOY FE.`,
+        campos: [
+          { clave: "nacionalidad", valor: "mexicana", cita: "La sociedad es mexicana", pagina: 1 },
+          { clave: "constitucion_escritura", valor: "18,442", cita: "ESCRITURA PÚBLICA NÚMERO 18,442", pagina: 1 },
+          { clave: "constitucion_fecha", valor: "2019-03-14", cita: "a 14 de marzo de 2019", pagina: 1 },
+          { clave: "constitucion_notario", valor: "Gonzalo Iturbe Medina", cita: "ante mí, Gonzalo Iturbe Medina", pagina: 1 },
+          { clave: "constitucion_notaria", valor: "904", cita: "titular de la Notaría Pública número 904", pagina: 1 },
+          { clave: "constitucion_lugar", valor: "Santiago de Querétaro, Querétaro", cita: "Notaría Pública número 904 de Santiago de Querétaro", pagina: 1 },
+          { clave: "folio_mercantil", valor: "N-2019021553", cita: "folio mercantil electrónico N-2019021553", pagina: 1 },
+          { clave: "objeto_social", valor: "la fabricación, importación, distribución y comercialización de resinas plásticas, compuestos de polietileno y polipropileno y aditivos para la industria de la transformación", cita: "La sociedad tiene por objeto la fabricación, importación, distribución y comercialización de resinas plásticas", pagina: 1 },
+        ],
+      },
+      {
+        tipo: "poder",
+        archivo: "Poder Arturo Benavides Quiroga (extracto).docx",
+        resumen: "Extracto del poder otorgado por RESINAS TÉCNICAS ORVALLE, S.A. DE C.V. a su Apoderado Legal y Gerente Comercial, con límite de monto por operación.",
+        texto: `${AVISO}
+
+NOTARÍA PÚBLICA NÚMERO 904
+
+LIC. GONZALO ITURBE MEDINA · SANTIAGO DE QUERÉTARO, QUERÉTARO
+
+ESCRITURA PÚBLICA NÚMERO 24,971
+
+VOLUMEN 788 · OTORGAMIENTO DE PODER
+
+En la ciudad de Santiago de Querétaro, Querétaro, a 2 de agosto de 2023, ante mí, Gonzalo Iturbe Medina, titular de la Notaría Pública número 904 de Santiago de Querétaro, comparece RESINAS TÉCNICAS ORVALLE, S.A. DE C.V., representada por su Administradora Única, la señora Mariana Orvañanos Valle, y otorga a favor del señor Arturo Benavides Quiroga, en su carácter de Apoderado Legal y Gerente Comercial, las siguientes facultades.
+
+PRIMERA. PLEITOS Y COBRANZAS.
+
+Poder general para pleitos y cobranzas, con todas las facultades generales y aun las especiales que conforme a la ley requieran cláusula especial, en términos del primer párrafo del artículo 2554 del Código Civil Federal y sus correlativos de los Códigos Civiles de las entidades federativas.
+
+SEGUNDA. ACTOS DE ADMINISTRACIÓN.
+
+Poder general para actos de administración, en términos del segundo párrafo del artículo 2554 del Código Civil Federal y sus correlativos, con la limitación de que el apoderado solo podrá celebrar contratos cuyo monto no exceda de $5,000,000.00 (cinco millones de pesos 00/100 M.N.) por operación. Para operaciones de monto mayor deberá actuar de forma mancomunada con la Administradora Única.
+
+TERCERA. LIMITACIONES.
+
+El apoderado no tendrá facultades para actos de dominio ni para otorgar, suscribir, endosar o avalar títulos de crédito.
+
+DOY FE.`,
+        campos: [
+          { clave: "representante_nombre", valor: "Arturo Benavides Quiroga", cita: "otorga a favor del señor Arturo Benavides Quiroga", pagina: 1 },
+          { clave: "representante_cargo", valor: "Apoderado Legal y Gerente Comercial", cita: "en su carácter de Apoderado Legal y Gerente Comercial", pagina: 1 },
+          { clave: "poder_escritura", valor: "24,971", cita: "ESCRITURA PÚBLICA NÚMERO 24,971", pagina: 1 },
+          { clave: "poder_fecha", valor: "2023-08-02", cita: "a 2 de agosto de 2023", pagina: 1 },
+          { clave: "poder_notario", valor: "Gonzalo Iturbe Medina", cita: "ante mí, Gonzalo Iturbe Medina", pagina: 1 },
+          { clave: "poder_notaria", valor: "904", cita: "titular de la Notaría Pública número 904", pagina: 1 },
+          { clave: "poder_lugar", valor: "Santiago de Querétaro, Querétaro", cita: "Notaría Pública número 904 de Santiago de Querétaro", pagina: 1 },
+          { clave: "poder_facultades", valor: "Poder general para pleitos y cobranzas y para actos de administración; solo puede celebrar contratos de hasta $5,000,000.00 por operación (montos mayores, de forma mancomunada con la Administradora Única); sin actos de dominio ni títulos de crédito", cita: "solo podrá celebrar contratos cuyo monto no exceda de $5,000,000.00", pagina: 1 },
+        ],
+      },
+      {
+        tipo: "constancia_fiscal",
+        archivo: "Constancia de situación fiscal Resinas Técnicas Orvalle (demo).docx",
+        resumen: "Constancia de situación fiscal ficticia con RFC, régimen y domicilio fiscal.",
+        rfc: "RTO190314KJ8",
+        texto: `${AVISO}
+
+CONSTANCIA DE SITUACIÓN FISCAL
+
+FORMATO DE DEMOSTRACIÓN
+
+RFC: RTO190314KJ8
+Denominación o razón social: RESINAS TÉCNICAS ORVALLE
+Régimen capital: SOCIEDAD ANÓNIMA DE CAPITAL VARIABLE
+Fecha de inicio de operaciones: 20 de marzo de 2019
+Estatus en el padrón: ACTIVO
+Régimen: Régimen General de Ley Personas Morales
+Actividad económica: Fabricación de resinas sintéticas y compuestos plásticos
+
+DATOS DEL DOMICILIO REGISTRADO
+
+Domicilio fiscal: Avenida de la Industria número 1240, Parque Industrial Bernardo Quintana, Código Postal 76246, El Marqués, Querétaro.
+
+Lugar y fecha de emisión: El Marqués, Querétaro, a 6 de octubre de 2026.`,
+        campos: [
+          { clave: "domicilio_fiscal", valor: "Avenida de la Industria número 1240, Parque Industrial Bernardo Quintana, Código Postal 76246, El Marqués, Querétaro", cita: "Domicilio fiscal: Avenida de la Industria número 1240", pagina: 1 },
+          { clave: "domicilio", valor: "Avenida de la Industria número 1240, Parque Industrial Bernardo Quintana, Código Postal 76246, El Marqués, Querétaro", cita: "Avenida de la Industria número 1240, Parque Industrial Bernardo Quintana, Código Postal 76246", pagina: 1 },
+        ],
+      },
+    ],
   },
 ];
