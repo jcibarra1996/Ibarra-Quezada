@@ -12,13 +12,13 @@ interface Entrada {
   href: string;
   texto: string;
   icono: string;
-  contador?: boolean;
   soloDirector?: boolean;
   soloLegal?: boolean;
 }
 
 // Menú agrupado por lo que hace cada quien: el trabajo del día, la biblioteca de la
-// dirección legal y el seguimiento posterior a la firma.
+// dirección legal y el seguimiento posterior a la firma. Negocio solo ve lo suyo:
+// inicio, sus contratos y los expedientes a los que sube documentos.
 const GRUPOS: { titulo: string; entradas: Entrada[] }[] = [
   {
     titulo: "Trabajo",
@@ -38,8 +38,8 @@ const GRUPOS: { titulo: string; entradas: Entrada[] }[] = [
   {
     titulo: "Seguimiento",
     entradas: [
-      { href: "/firmas", texto: "Firmas", icono: "M3 15c2-1 3-5 5-5s0 5 2 5 2-3 3.5-3 1 2 2.5 2M3 17.5h14" },
-      { href: "/vencimientos", texto: "Vencimientos", icono: "M4 5h12v12H4zM4 8.5h12M7.5 3v3M12.5 3v3", contador: true },
+      { href: "/firmas", texto: "Firmas", icono: "M3 15c2-1 3-5 5-5s0 5 2 5 2-3 3.5-3 1 2 2.5 2M3 17.5h14", soloLegal: true },
+      { href: "/vencimientos", texto: "Vencimientos", icono: "M4 5h12v12H4zM4 8.5h12M7.5 3v3M12.5 3v3", soloLegal: true },
       { href: "/reportes", texto: "Reportes", icono: "M4 16.5V10M8.5 16.5V5M13 16.5v-8M17 16.5H3", soloDirector: true },
     ],
   },
@@ -165,24 +165,48 @@ function Perfil({ usuario, equipo, demo }: { usuario: Usuario; equipo: { id: str
   );
 }
 
+export interface Destacado {
+  etiqueta: string;
+  titulo: string;
+  detalle: string;
+  urgente: boolean;
+  href: string;
+}
+
+// Tarjeta al pie del menú con lo único que conviene tener siempre a la vista.
+function TarjetaDestacada({ d }: { d: Destacado }) {
+  return (
+    <Link href={d.href} className="mx-3 mb-3 block rounded-lg border border-tinta-borde bg-tinta-claro/60 px-3.5 py-3 hover:bg-tinta-claro">
+      <span className="block text-[10.5px] font-semibold uppercase tracking-[0.14em] text-sobre-tinta-tenue">{d.etiqueta}</span>
+      <span className="mt-1 line-clamp-2 block text-[13px] font-medium leading-snug text-white">{d.titulo}</span>
+      <span className={`mt-1 block text-[12px] ${d.urgente ? "font-semibold text-mandarina" : "text-sobre-tinta-tenue"}`}>{d.detalle}</span>
+    </Link>
+  );
+}
+
 export function MenuLateral({
   usuario,
   equipo,
-  vencimientos,
   areas,
   demo,
+  organizacion,
+  contadores,
+  destacado,
 }: {
   demo: boolean;
   usuario: Usuario;
   equipo: { id: string; nombre: string; puesto: string | null; rol: Rol }[];
-  vencimientos: number;
   areas: { id: string; nombre: string }[];
+  organizacion: string;
+  contadores: Record<string, { n: number; texto: string }>;
+  destacado: Destacado | null;
 }) {
   const ruta = usePathname();
   return (
     <aside className="flex w-[252px] shrink-0 flex-col bg-tinta text-sobre-tinta">
       <div className="px-5 pb-5 pt-6">
         <Logo invertido />
+        {organizacion && <p className="mt-2.5 truncate text-[11.5px] text-sobre-tinta-tenue" title={organizacion}>{organizacion}</p>}
       </div>
       <div className="px-4 pb-5">
         {usuario.rol === "negocio" ? (
@@ -210,6 +234,7 @@ export function MenuLateral({
               <div className="space-y-0.5">
                 {entradas.map((e) => {
                   const activa = ruta === e.href || ruta.startsWith(`${e.href}/`);
+                  const c = contadores[e.href];
                   return (
                     <Link
                       key={e.href}
@@ -222,9 +247,9 @@ export function MenuLateral({
                       {activa && <span className="absolute left-0 top-2 h-5 w-[3px] rounded-r bg-mandarina" aria-hidden />}
                       <Icono d={e.icono} className={activa ? "text-mandarina-texto" : "text-sobre-tinta-tenue"} />
                       <span className="flex-1">{e.texto}</span>
-                      {e.contador && vencimientos > 0 && (
-                        <span className="rounded-full bg-mandarina px-1.5 py-px text-[11px] font-semibold text-tinta" aria-label={`${vencimientos} vencimientos próximos`}>
-                          {vencimientos}
+                      {c && c.n > 0 && (
+                        <span className="rounded-full bg-mandarina px-1.5 py-px text-[11px] font-semibold tabular-nums text-tinta" title={`${c.n} ${c.texto}`} aria-label={`${c.n} ${c.texto}`}>
+                          {c.n}
                         </span>
                       )}
                     </Link>
@@ -235,6 +260,7 @@ export function MenuLateral({
           );
         })}
       </nav>
+      {destacado && <TarjetaDestacada d={destacado} />}
       {/* La clave cierra el menú al cambiar de perfil. */}
       <Perfil key={usuario.id} usuario={usuario} equipo={equipo} demo={demo} />
     </aside>
