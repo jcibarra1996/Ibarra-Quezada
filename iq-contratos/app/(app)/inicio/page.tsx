@@ -4,10 +4,13 @@ import { exigirUsuario } from "@/lib/auth/sesion";
 import { clienteSesion } from "@/lib/supabase/server";
 import { fecha, fechaCorta, fechaLargaHoy } from "@/lib/formato";
 import { diasEntre, duracion, lineaTiempo, PROCESO, type EstadoPaso, type LineaTiempo } from "@/lib/linea-tiempo";
-import { DIAS_VENCIMIENTOS, hoyMx, pendientes, sumarDiasIso, type ContratoResumen } from "@/lib/inicio/pendientes";
+import { COLUMNAS, DIAS_VENCIMIENTOS, hoyMx, pendientes, sumarDiasIso, type ContratoResumen } from "@/lib/inicio/pendientes";
 import { ESTADOS, ORDEN_ESTADOS, type EstadoContrato } from "@/lib/tipos";
 
 export const metadata = { title: "Inicio" };
+
+// Firmados que la directora ve en el inicio, además de todos los contratos en curso.
+const FIRMADOS_EN_INICIO = 10;
 
 const saludo = () => {
   const h = Number(new Date().toLocaleString("en-US", { hour: "numeric", hour12: false, timeZone: "America/Mexico_City" }));
@@ -190,7 +193,6 @@ async function InicioNegocio({ nombre, usuarioId, enCurso }: { nombre: string; u
 
 const ICONOS = {
   revisar: "M6 2.5h6l4 4V17a.5.5 0 0 1-.5.5h-9A.5.5 0 0 1 6 17zM12 2.5V7h4",
-  alerta: "M10 3.5 17.5 16.5h-15zM10 8.5v3.5M10 14.5v.01",
   persona: "M10 9.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM4 17c.8-3 3.2-4.5 6-4.5s5.2 1.5 6 4.5",
   expediente: "M3 6.5h5l1.5 1.5H17v8.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5z",
   firma: "M3 15c2-1 3-5 5-5s0 5 2 5 2-3 3.5-3 1 2 2.5 2M3 17.5h14",
@@ -224,7 +226,7 @@ function Vence({ dias }: { dias: number }) {
 async function InicioLegal({ nombre, usuarioId, director, p }: { nombre: string; usuarioId: string; director: boolean; p: Awaited<ReturnType<typeof pendientes>> }) {
   const supabase = await clienteSesion();
   const hoy = hoyMx();
-  const [{ data: proximos }, { data: perfiles }, { count: firmadosMes }] = await Promise.all([
+  const [{ data: proximos }, { data: perfiles }, { count: firmadosMes }, { data: firmados }] = await Promise.all([
     supabase
       .from("alerts")
       .select("id, titulo, fecha_limite, contract_id, contracts(titulo)")
@@ -234,11 +236,14 @@ async function InicioLegal({ nombre, usuarioId, director, p }: { nombre: string;
       .limit(5),
     supabase.from("profiles").select("id, nombre"),
     supabase.from("contracts").select("id", { count: "exact", head: true }).eq("estado", "firmado").gte("firmado_en", `${hoy.slice(0, 7)}-01`),
+    // La directora ve también los firmados más recientes, con su línea de tiempo completa.
+    director
+      ? supabase.from("contracts").select(COLUMNAS).eq("estado", "firmado").order("firmado_en", { ascending: false }).limit(FIRMADOS_EN_INICIO)
+      : Promise.resolve({ data: [] as ContratoResumen[] }),
   ]);
   const nombreDe = (id: string | null) => (id ? (perfiles?.find((x) => x.id === id)?.nombre ?? "") : "");
 
   const tareas = [
-    { n: p.altos, texto: p.altos === 1 ? "hallazgo de riesgo alto sin validar" : "hallazgos de riesgo alto sin validar", href: "/contratos?vista=proceso&riesgo=alto", accion: "Validar", icono: "alerta" as const, urgente: true },
     { n: p.porRevisar, texto: p.porRevisar === 1 ? "contrato espera revisión" : "contratos esperan revisión", href: "/contratos?vista=proceso", accion: "Revisar", icono: "revisar" as const },
     { n: p.sinResponsable, texto: p.sinResponsable === 1 ? "contrato en curso sin abogado responsable" : "contratos en curso sin abogado responsable", href: "/contratos?vista=proceso", accion: "Asignar", icono: "persona" as const },
     { n: p.paraFirma, texto: p.paraFirma === 1 ? "contrato aprobado listo para firma" : "contratos aprobados listos para firma", href: "/firmas", accion: "Enviar a firma", icono: "firma" as const },
@@ -246,12 +251,12 @@ async function InicioLegal({ nombre, usuarioId, director, p }: { nombre: string;
     { n: p.expedientes, texto: p.expedientes === 1 ? "expediente corporativo por validar" : "expedientes corporativos por validar", href: "/expedientes", accion: "Validar", icono: "expediente" as const },
   ].filter((t) => t.n > 0);
 
-  // Contratos en curso, los que llevan más tiempo en su etapa primero.
-  const lineas = await lineasDe(p.enCurso);
-  const enCurso = p.enCurso
-    .map((c) => ({ ...c, dias: diasEntre(lineas.get(c.id)!.enEtapaDesde), altos: p.altosPorContrato.get(c.id) ?? 0 }))
-    .sort((a, b) => b.altos - a.altos || b.dias - a.dias)
-    .slice(0, 6);
+  // Contratos en curso, los que llevan más tiempo en su etapa primero. El abogado ve los
+  // primeros seis; la directora, todos.
+  const firmadosRecientes = (firmados ?? []) as ContratoResumen[];
+  const lineas = await lineasDe([...p.enCurso, ...firmadosRecientes]);
+  const ordenados = p.enCurso.map((c) => ({ ...c, dias: diasEntre(lineas.get(c.id)!.enEtapaDesde) })).sort((a, b) => b.dias - a.dias);
+  const enCurso = director ? ordenados : ordenados.slice(0, 6);
   const porEstado = (e: EstadoContrato) => p.enCurso.filter((c) => c.estado === e).length;
 
   return (
@@ -278,6 +283,9 @@ async function InicioLegal({ nombre, usuarioId, director, p }: { nombre: string;
 
       <div className="mt-6 grid grid-cols-[minmax(0,1fr)_360px] items-start gap-6">
         <div className="space-y-6">
+          {tareas.length === 0 && director && (
+            <p className="rounded-xl border border-linea bg-white px-5 py-8 text-center text-[13.5px] text-secundario">Sin pendientes para hoy.</p>
+          )}
           {tareas.length > 0 && (
             <section className="overflow-hidden rounded-xl border border-linea bg-white">
               <h2 className="border-b border-linea px-5 py-3 titulo text-[18px]">Para hoy</h2>
@@ -289,39 +297,38 @@ async function InicioLegal({ nombre, usuarioId, director, p }: { nombre: string;
             </section>
           )}
 
-          <section>
-            <div className="mb-3 flex items-baseline justify-between">
-              <h2 className="titulo text-[18px]">{director ? "En curso, los más detenidos primero" : "A su cargo y sin asignar"}</h2>
-              <Link href={director ? "/contratos?vista=proceso" : "/contratos?vista=proceso&mios=1"} className="text-[13px] font-medium text-mandarina-texto hover:underline">
-                Ver todos
-              </Link>
-            </div>
-            {enCurso.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-linea-fuerte bg-white px-5 py-10 text-center text-[13.5px] text-secundario">
-                No hay contratos en curso{director ? "." : " a su cargo ni sin asignar."}
-              </p>
-            ) : (
-              <ul className="divide-y divide-linea overflow-hidden rounded-xl border border-linea bg-white">
-                {enCurso.map((c) => (
-                  <li key={c.id}>
-                    <Link href={`/contratos/${c.id}`} className="flex items-center gap-4 px-5 py-3 hover:bg-lienzo">
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[14px] font-medium">{c.titulo}</span>
-                        <span className="block truncate text-[12.5px] text-secundario">
-                          {c.contraparte || "Contraparte sin identificar"} · {c.responsable_id ? (c.responsable_id === usuarioId ? "A su cargo" : nombreDe(c.responsable_id)) : "Sin responsable"}
+          {!director && (
+            <section>
+              <div className="mb-3 flex items-baseline justify-between">
+                <h2 className="titulo text-[18px]">A su cargo y sin asignar</h2>
+                <Link href="/contratos?vista=proceso&mios=1" className="text-[13px] font-medium text-mandarina-texto hover:underline">
+                  Ver todos
+                </Link>
+              </div>
+              {enCurso.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-linea-fuerte bg-white px-5 py-10 text-center text-[13.5px] text-secundario">
+                  No hay contratos en curso a su cargo ni sin asignar.
+                </p>
+              ) : (
+                <ul className="divide-y divide-linea overflow-hidden rounded-xl border border-linea bg-white">
+                  {enCurso.map((c) => (
+                    <li key={c.id}>
+                      <Link href={`/contratos/${c.id}`} className="flex items-center gap-4 px-5 py-3 hover:bg-lienzo">
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[14px] font-medium">{c.titulo}</span>
+                          <span className="block truncate text-[12.5px] text-secundario">
+                            {c.contraparte || "Contraparte sin identificar"} · {c.responsable_id === usuarioId ? "A su cargo" : "Sin responsable"}
+                          </span>
                         </span>
-                      </span>
-                      {c.altos > 0 && (
-                        <span className="shrink-0 rounded-full bg-riesgo-suave px-2 py-0.5 text-[11.5px] font-semibold text-riesgo">{plural(c.altos, "riesgo alto", "riesgos altos")}</span>
-                      )}
-                      <span className="w-[92px] shrink-0 text-right text-[12.5px] tabular-nums text-secundario">{duracion(c.dias)}</span>
-                      <EtiquetaEstado estado={c.estado} />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+                        <span className="shrink-0 text-[12.5px] tabular-nums text-secundario">{duracion(c.dias)} en la etapa</span>
+                        <EtiquetaEstado estado={c.estado} />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
         </div>
 
         <section className="rounded-xl border border-linea bg-white">
@@ -352,6 +359,44 @@ async function InicioLegal({ nombre, usuarioId, director, p }: { nombre: string;
           )}
         </section>
       </div>
+
+      {director && (
+        <section className="mt-8">
+          <div className="mb-3 flex items-baseline justify-between">
+            <h2 className="titulo text-[18px]">Todos los contratos</h2>
+            <Link href="/contratos?vista=todos" className="text-[13px] font-medium text-mandarina-texto hover:underline">
+              Ver registro completo
+            </Link>
+          </div>
+          <ul className="divide-y divide-linea overflow-hidden rounded-xl border border-linea bg-white">
+            {[...enCurso, ...firmadosRecientes].map((c) => {
+              const l = lineas.get(c.id)!;
+              return (
+                <li key={c.id}>
+                  <Link href={`/contratos/${c.id}`} className="grid grid-cols-[minmax(0,280px)_minmax(0,1fr)_150px] items-center gap-6 px-5 py-4 hover:bg-lienzo">
+                    <span className="min-w-0">
+                      <span className="block truncate text-[14px] font-medium">{c.titulo}</span>
+                      <span className="block truncate text-[12.5px] text-secundario">{c.contraparte || "Contraparte sin identificar"}</span>
+                      <span className="block truncate text-[12px] text-secundario">{c.responsable_id ? nombreDe(c.responsable_id) : "Sin abogado responsable"}</span>
+                    </span>
+                    <LineaSolicitud linea={l} />
+                    <span className="flex flex-col items-end gap-1 text-right">
+                      <EtiquetaEstado estado={c.estado} />
+                      <span className="text-[12px] tabular-nums text-secundario">
+                        {c.estado === "firmado" ? `En ${duracion(l.diasTotales)}` : `${duracion(diasEntre(l.enEtapaDesde))} en la etapa`}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+            {enCurso.length + firmadosRecientes.length === 0 && <li className="px-5 py-10 text-center text-[13.5px] text-secundario">Aún no hay contratos.</li>}
+          </ul>
+          {firmadosRecientes.length === FIRMADOS_EN_INICIO && (
+            <p className="mt-2 text-[12px] text-secundario">Se muestran todos los contratos en curso y los {FIRMADOS_EN_INICIO} firmados más recientes.</p>
+          )}
+        </section>
+      )}
     </div>
   );
 }
