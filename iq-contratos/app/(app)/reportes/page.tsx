@@ -52,7 +52,7 @@ export default async function Reportes() {
 
   return (
     <div>
-      <EncabezadoPagina titulo="Reportes" descripcion={`Tablero para la dirección general. Calculado con los datos registrados en Qlaro al ${fecha(hoy)}.`} />
+      <EncabezadoPagina titulo="Reportes" descripcion={`Tablero para la dirección general. Calculado con los datos registrados en Veredo al ${fecha(hoy)}.`} />
       <div className="space-y-6 px-8 py-6">
         <section className="grid grid-cols-4 gap-4">
           <Indicador titulo="Contratos en revisión" valor={String(estados.recibido + estados.en_revision)} nota={`${estados.recibido} recibidos sin revisar`} />

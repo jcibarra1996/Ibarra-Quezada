@@ -2,7 +2,7 @@
   "name": "iq-contratos",
   "version": "0.1.0",
   "private": true,
-  "description": "Qlaro: revisión y gestión de contratos con IA para direcciones legales.",
+  "description": "Veredo: revisión y gestión de contratos con IA para direcciones legales.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

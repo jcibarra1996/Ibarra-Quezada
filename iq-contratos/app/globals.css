@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* Marca Qlaro: Manrope para todo lo que se lee, IBM Plex Mono para etiquetas y cifras. */
+  /* Marca Veredo: Manrope para todo lo que se lee, IBM Plex Mono para etiquetas y cifras. */
   --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
   --font-titulo: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
