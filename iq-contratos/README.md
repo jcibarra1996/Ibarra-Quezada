@@ -41,7 +41,7 @@ npm install
 npx supabase start            # Postgres, Auth y Storage locales
 npx supabase db reset         # aplica supabase/migrations
 cp .env.example .env.local    # complete los valores (ver abajo)
-npm run seed                  # empresa ficticia, 3 usuarios, playbook, plantillas, expedientes y 7 contratos
+npm run seed                  # empresa ficticia, 3 usuarios, playbook, plantillas, expedientes y 8 contratos
 npm run dev                   # http://localhost:3000
 ```
 
@@ -58,13 +58,18 @@ rápidos en la pantalla de ingreso):
 | abogado@empresa-cliente.example | Carlos Rivas | Abogado |
 | compras@empresa-cliente.example | Sofía Herrera | Negocio |
 
-Datos de la demo: EMPRESA CLIENTE, S.A. DE C.V. y siete contratos ficticios con contrapartes
+Datos de la demo: EMPRESA CLIENTE, S.A. DE C.V. y ocho contratos ficticios con contrapartes
 genéricas (PROVEEDOR XYZ, S.A. DE C.V. y otras "DEMO" o "EJEMPLO"), con su ficha llenada como la
 dejaría la IA: tres en proceso de revisión, uno vigente, uno renovado automáticamente, uno por
 vencer y uno vencido. El contrato de suministro trae a propósito
 intereses moratorios solo a cargo del cliente, renovación automática anual con aviso de 90 días
 naturales y jurisdicción en Monterrey; el de mantenimiento trae cláusulas de obra dentro de un
-contrato de servicios. El playbook precargado es un ejemplo y debe revisarlo la dirección legal.
+contrato de servicios. El octavo, suministro de resina con RESINAS TÉCNICAS ORVALLE, S.A. DE C.V.,
+es el caso de la presentación (Compras lo sube un viernes a las 2:50 p.m.) y trae a propósito tope
+de responsabilidad igual a la orden de compra, pena por cancelación solo a cargo del cliente,
+terminación del proveedor con 30 días, cesión libre para el proveedor y una cláusula de bitácora de
+obra ajena al objeto. Todos los contratos de la demo quedan a cargo de Carlos Rivas. El playbook
+precargado es un ejemplo y debe revisarlo la dirección legal.
 
 ## Variables de entorno
 
