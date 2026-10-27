@@ -1,5 +1,5 @@
 // Datos semilla de la demostración: una empresa ficticia, 3 usuarios, áreas,
-// el playbook de ejemplo, plantillas, expedientes corporativos y 7 contratos ficticios
+// el playbook de ejemplo, plantillas, expedientes corporativos y 8 contratos ficticios
 // en formato mexicano, con su ficha (monto, vigencia, renovación, aviso, jurisdicción).
 //
 // Uso:  npm run seed
@@ -42,6 +42,8 @@ const ESCENARIO: Record<string, { estado: string; recibido: string; area: string
   "05-servicios-logistica.txt": { estado: "firmado", recibido: "2025-11-25T11:30:00-06:00", area: "Operaciones", aprobado: "2025-12-03T18:10:00-06:00", firmado: "2025-12-12T12:00:00-06:00" },
   "06-servicios-limpieza.txt": { estado: "firmado", recibido: "2025-02-10T10:00:00-06:00", area: "Administración", aprobado: "2025-02-20T17:00:00-06:00", firmado: "2025-02-25T12:00:00-06:00" },
   "07-licencia-software.txt": { estado: "firmado", recibido: "2024-05-10T09:30:00-06:00", area: "Operaciones", aprobado: "2024-05-20T16:00:00-06:00", firmado: "2024-05-28T12:00:00-06:00" },
+  // El caso de la presentación: Compras lo sube un viernes a las 2:50 p.m. porque se acaba la materia prima.
+  "08-suministro-resinas-orvalle.txt": { estado: "recibido", recibido: "2026-10-23T14:50:00-06:00", area: "Compras" },
 };
 
 // Con --analizar se corre el análisis real (requiere ANTHROPIC_API_KEY) del contrato de
@@ -148,6 +150,9 @@ async function main() {
         .eq("id", contratoId);
       if (error) throw error;
     }
+    // En la demo, todos los contratos están a cargo del abogado (Carlos Rivas).
+    const { error: errResp } = await db.from("contracts").update({ responsable_id: abogado.id }).eq("id", contratoId);
+    if (errResp) throw errResp;
     console.log(`  ${archivo} -> ${contratoId}`);
     if (ANALIZAR && archivo.startsWith("01-")) {
       console.log("    Analizando con la API de Anthropic (1 a 3 minutos)...");
